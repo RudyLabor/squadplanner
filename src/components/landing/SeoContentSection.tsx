@@ -51,24 +51,24 @@ export function SeoContentSection() {
         >
           <m.p variants={staggerItemVariants}>
             <strong className="text-text-primary">
-              Squad Planner est le calendrier gaming concu pour les joueurs qui jouent en equipe.
+              Squad Planner est le calendrier gaming conçu pour les joueurs qui jouent en équipe.
             </strong>{' '}
-            Pense a un Calendly ou un Doodle, mais pense pour le gaming : au lieu de planifier des
-            reunions de bureau, tu planifies tes sessions de jeu avec ta squad. Tu crees un
-            creneau, tes coequipiers confirment leur presence en un clic, et tu sais exactement qui
-            sera la le soir venu. Plus besoin de relancer tout le monde sur Discord ou WhatsApp
+            Pense à un Calendly ou un Doodle, mais pensé pour le gaming : au lieu de planifier des
+            réunions de bureau, tu planifies tes sessions de jeu avec ta squad. Tu crées un
+            créneau, tes coéquipiers confirment leur présence en un clic, et tu sais exactement qui
+            sera là le soir venu. Plus besoin de relancer tout le monde sur Discord ou WhatsApp
             pour savoir si la session tient.
           </m.p>
 
           <m.p variants={staggerItemVariants}>
-            Si tu joues regulierement en equipe, tu connais le probleme : organiser un 5-stack sur
-            Valorant ou une equipe complete sur League of Legends tourne souvent au casse-tete. Les
-            messages se perdent dans les channels Discord, personne ne repond au sondage, et au
-            moment de lancer la partie, il manque toujours quelqu'un. Resultat : des sessions
-            annulees, du temps perdu, et une frustration qui s'accumule. Le{' '}
-            <strong className="text-text-primary">score de fiabilite</strong> de Squad Planner
-            rend chaque joueur responsable : chaque confirmation de presence est tracee, chaque
-            no-show est visible. Tes coequipiers savent que leur engagement compte, et la pression
+            Si tu joues régulièrement en équipe, tu connais le problème : organiser un 5-stack sur
+            Valorant ou une équipe complète sur League of Legends tourne souvent au casse-tête. Les
+            messages se perdent dans les channels Discord, personne ne répond au sondage, et au
+            moment de lancer la partie, il manque toujours quelqu'un. Résultat : des sessions
+            annulées, du temps perdu, et une frustration qui s'accumule. Le{' '}
+            <strong className="text-text-primary">score de fiabilité</strong> de Squad Planner
+            rend chaque joueur responsable : chaque confirmation de présence est tracée, chaque
+            no-show est visible. Tes coéquipiers savent que leur engagement compte, et la pression
             sociale positive fait le reste.
           </m.p>
 
@@ -77,32 +77,32 @@ export function SeoContentSection() {
               Un outil complet pour organiser ta squad
             </h3>
             <p>
-              Squad Planner reunit tout ce dont tu as besoin pour planifier tes sessions gaming au
-              meme endroit. Le <strong className="text-text-primary">calendrier partage</strong>{' '}
-              te permet de proposer des creneaux et de voir qui est disponible. Le systeme de{' '}
-              <strong className="text-text-primary">RSVP en un clic</strong> (present, absent,
-              peut-etre) simplifie la confirmation de presence. Quand suffisamment de joueurs ont
-              confirme, la session se confirme automatiquement grace au seuil que tu definis.
+              Squad Planner réunit tout ce dont tu as besoin pour planifier tes sessions gaming au
+              même endroit. Le <strong className="text-text-primary">calendrier partagé</strong>{' '}
+              te permet de proposer des créneaux et de voir qui est disponible. Le système de{' '}
+              <strong className="text-text-primary">RSVP en un clic</strong> (présent, absent,
+              peut-être) simplifie la confirmation de présence. Quand suffisamment de joueurs ont
+              confirmé, la session se confirme automatiquement grâce au seuil que tu définis.
               Tu retrouves aussi un{' '}
-              <strong className="text-text-primary">chat integre</strong> pour coordonner ta
+              <strong className="text-text-primary">chat intégré</strong> pour coordonner ta
               squad, un <strong className="text-text-primary">vocal HD</strong> pour tes parties, et
-              un systeme de <strong className="text-text-primary">gamification</strong> avec XP,
-              challenges et classements pour garder ta squad motivee semaine apres semaine.
+              un système de <strong className="text-text-primary">gamification</strong> avec XP,
+              challenges et classements pour garder ta squad motivée semaine après semaine.
             </p>
           </m.div>
 
           <m.div variants={staggerItemVariants}>
             <h3 className="text-lg font-semibold text-text-primary pt-2 mb-3">
-              Organise tes sessions sur tes jeux preferes
+              Organise tes sessions sur tes jeux préférés
             </h3>
             <p className="mb-4">
-              Que tu cherches a{' '}
+              Que tu cherches à{' '}
               <Link to="/lfg/valorant" className="text-primary hover:underline">
                 trouver des joueurs sur Valorant
               </Link>
-              , a monter un roster ranked sur League of Legends, ou a organiser des sessions
-              detente sur Minecraft avec tes amis, Squad Planner s'adapte a tous les jeux
-              competitifs et cooperatifs. Consulte nos guides par jeu pour decouvrir comment
+              , à monter un roster ranked sur League of Legends, ou à organiser des sessions
+              détente sur Minecraft avec tes amis, Squad Planner s'adapte à tous les jeux
+              compétitifs et coopératifs. Consulte nos guides par jeu pour découvrir comment
               optimiser tes sessions :
             </p>
           </m.div>
@@ -111,7 +111,7 @@ export function SeoContentSection() {
             variants={staggerItemVariants}
             className="flex flex-wrap gap-2 py-1"
             role="list"
-            aria-label="Jeux supportes"
+            aria-label="Jeux supportés"
           >
             {gameLinks.map((g) => (
               <Link
@@ -126,35 +126,35 @@ export function SeoContentSection() {
           </m.div>
 
           <m.p variants={staggerItemVariants}>
-            Tu utilises deja un autre outil pour organiser tes sessions ? Squad Planner va plus
-            loin que les solutions generiques comme Google Calendar ou Doodle, qui ne sont pas
-            concues pour le gaming. Et contrairement a{' '}
+            Tu utilises déjà un autre outil pour organiser tes sessions ? Squad Planner va plus
+            loin que les solutions génériques comme Google Calendar ou Doodle, qui ne sont pas
+            conçues pour le gaming. Et contrairement à{' '}
             <Link to="/alternative/guilded" className="text-primary hover:underline">
               Guilded
             </Link>{' '}
             ou aux{' '}
             <Link to="/alternative/discord-events" className="text-primary hover:underline">
-              evenements Discord
+              évènements Discord
             </Link>
-            , Squad Planner integre un vrai systeme de confirmation de presence avec score de
-            fiabilite, des check-ins en session, et un coach IA qui analyse les habitudes de ta
-            squad pour suggerer les meilleurs creneaux.
+            , Squad Planner integre un vrai système de confirmation de présence avec score de
+            fiabilité, des check-ins en session, et un coach IA qui analyse les habitudes de ta
+            squad pour suggérer les meilleurs créneaux.
           </m.p>
 
           <m.p variants={staggerItemVariants}>
             L'essentiel est{' '}
             <strong className="text-text-primary">100% gratuit</strong> : 1 squad, 5 membres, 2
-            sessions par semaine, confirmation de presence, chat et vocal. Pour les squads qui
+            sessions par semaine, confirmation de présence, chat et vocal. Pour les squads qui
             veulent aller plus loin, les{' '}
             <Link to="/premium" className="text-primary hover:underline">
               plans Premium
             </Link>{' '}
-            ajoutent des squads illimitees, le coaching IA, les heatmaps de presence et l'audio
-            HD. Decouvre nos{' '}
+            ajoutent des squads illimitées, le coaching IA, les heatmaps de présence et l'audio
+            HD. Découvre nos{' '}
             <Link to="/blog" className="text-primary hover:underline">
               conseils pour organiser ta squad
             </Link>{' '}
-            et commence a planifier tes sessions gaming des maintenant.
+            et commence à planifier tes sessions gaming dès maintenant.
           </m.p>
         </m.div>
       </div>

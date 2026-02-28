@@ -288,7 +288,7 @@ function PlanSessionIllustration() {
         fontWeight="600"
         fontFamily="system-ui"
       >
-        Fevrier 2026
+        Février 2026
       </text>
       {[0, 1, 2, 3, 4].map((row) =>
         [0, 1, 2, 3, 4, 5, 6].map((col) => {

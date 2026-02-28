@@ -98,7 +98,7 @@ export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
           <div>
             <h2 className="text-lg font-bold text-text-primary">Importer depuis Guilded</h2>
             <p className="text-sm text-text-secondary">
-              Cree une squad a partir de ton serveur Guilded
+              Crée une squad à partir de ton serveur Guilded
             </p>
           </div>
         </div>
@@ -119,7 +119,7 @@ export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
                 <Check className="w-8 h-8 text-success" />
               </div>
               <h3 className="text-xl font-bold text-text-primary mb-2">
-                Squad creee !
+                Squad créée !
               </h3>
               <p className="text-text-secondary">
                 Partage ce code avec tes membres :
@@ -317,7 +317,7 @@ export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
               ) : (
                 <>
                   <Users className="w-4 h-4" />
-                  Creer la squad
+                  Créer la squad
                 </>
               )}
             </Button>

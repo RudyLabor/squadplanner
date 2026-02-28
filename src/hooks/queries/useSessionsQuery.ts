@@ -82,7 +82,7 @@ export function useCreateSessionMutation() {
         old ? [...old, tempSession] : [tempSession]
       )
     },
-    errorMessage: 'Erreur lors de la creation de la session',
+    errorMessage: 'Erreur lors de la création de la session',
     invalidateKeys: (_data, vars) => [
       queryKeys.sessions.list(vars.squad_id),
       queryKeys.sessions.upcoming(),
@@ -124,7 +124,7 @@ export function useCreateSessionMutation() {
     onMutate: optimistic.onMutate,
     onError: optimistic.onError,
     onSuccess: () => {
-      showSuccess('Session creee ! Tes potes vont etre notifies.')
+      showSuccess('Session créée ! Tes potes vont être notifiés.')
       queryClient.invalidateQueries({ queryKey: ['challenges'] })
       // Gamification: award XP for creating a session
       import('../../stores/useGamificationStore').then(({ useGamificationStore }) => {
@@ -275,7 +275,7 @@ export function useRsvpMutation() {
               queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })
               if (data.squadId)
                 queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
-              showSuccess('Session auto-confirmee ! Le seuil de joueurs est atteint.')
+              showSuccess('Session auto-confirmée ! Le seuil de joueurs est atteint.')
             }
           }
         } catch {
@@ -352,7 +352,7 @@ export function useConfirmSessionMutation() {
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })
       if (data.squadId)
         queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
-      showSuccess('Session confirmee !')
+      showSuccess('Session confirmée !')
     },
     onError: () => {
       showError('Erreur lors de la confirmation')
@@ -425,7 +425,7 @@ export function useCancelSessionMutation() {
       if (data.squadId)
         queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.upcoming() })
-      showSuccess('Session annulee')
+      showSuccess('Session annulée')
     },
     onError: () => {
       showError("Erreur lors de l'annulation")

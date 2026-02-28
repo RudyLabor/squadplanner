@@ -41,7 +41,7 @@ export function OnboardingStepProfile({
 
       <div className="text-center mb-8">
         <h2 className="text-xl font-bold text-text-primary mb-2">C'est toi ?</h2>
-        <p className="text-text-secondary">Tes potes te reconna&icirc;tront</p>
+        <p className="text-text-secondary">Tes potes te reconnaîtront</p>
       </div>
 
       <Card>
@@ -81,7 +81,7 @@ export function OnboardingStepProfile({
               </label>
             </div>
             <p className="text-sm text-text-tertiary">
-              Clique sur l'ic&ocirc;ne pour changer ta photo
+              Clique sur l'icône pour changer ta photo
             </p>
           </div>
 
@@ -116,7 +116,7 @@ export function OnboardingStepProfile({
               searchable
             />
             <p className="text-sm text-text-tertiary mt-1.5">
-              D&eacute;tect&eacute; automatiquement :{' '}
+              Détecté automatiquement :{' '}
               {Intl.DateTimeFormat().resolvedOptions().timeZone}
             </p>
           </div>

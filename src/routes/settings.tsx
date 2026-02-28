@@ -19,7 +19,7 @@ export function meta() {
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/settings' },
     { property: 'og:url', content: 'https://squadplanner.fr/settings' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Parametres' },
+    { property: 'og:title', content: 'Paramètres' },
     {
       property: 'og:description',
       content:
@@ -27,7 +27,7 @@ export function meta() {
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Parametres' },
+    { name: 'twitter:title', content: 'Paramètres' },
     {
       name: 'twitter:description',
       content:

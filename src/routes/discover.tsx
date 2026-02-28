@@ -19,7 +19,7 @@ export function meta() {
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/discover' },
     { property: 'og:url', content: 'https://squadplanner.fr/discover' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Decouvrir' },
+    { property: 'og:title', content: 'Découvrir' },
     {
       property: 'og:description',
       content:
@@ -27,7 +27,7 @@ export function meta() {
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Decouvrir' },
+    { name: 'twitter:title', content: 'Découvrir' },
     {
       name: 'twitter:description',
       content:

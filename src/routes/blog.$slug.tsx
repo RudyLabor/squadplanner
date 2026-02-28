@@ -336,7 +336,7 @@ export default function BlogPost() {
       <section className="px-4 md:px-6 py-12 bg-gradient-to-b from-primary/[0.015] to-transparent">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-xl font-bold text-text-primary mb-2">Organise tes sessions par jeu</h2>
-          <p className="text-text-tertiary mb-6">Decouvre nos pages dediees a chaque jeu populaire</p>
+          <p className="text-text-tertiary mb-6">Découvre nos pages dédiées à chaque jeu populaire</p>
           <div className="flex flex-wrap gap-3">
             {[
               { slug: 'valorant', name: 'Valorant', icon: '\uD83C\uDFAF' },

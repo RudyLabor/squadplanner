@@ -127,8 +127,8 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
       const result = await InAppPurchase2.purchaseProduct({ productId })
 
       if (!result || !result.receipt) {
-        set({ status: 'error', error: 'Achat annule ou echoue' })
-        return { success: false, error: 'Achat annule ou echoue' }
+        set({ status: 'error', error: 'Achat annulé ou échoué' })
+        return { success: false, error: 'Achat annulé ou échoué' }
       }
 
       // Validate the receipt server-side

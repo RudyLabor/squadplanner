@@ -58,7 +58,7 @@ export const fr = {
     search: 'Aucun résultat trouvé',
     friends: 'Aucun ami en ligne — invite tes potes !',
     activities: 'Pas encore d\'activité — crée ta première session !',
-    challenges: 'Aucun défi actif — reviens demain !',
+    challenges: 'Aucun défi pour le moment — reviens bientôt !',
   },
 
   // Statuts
@@ -178,7 +178,7 @@ export const fr = {
       messages: 'Messages',
       messagesDesc: 'Nouveaux messages de ta squad',
       party: 'Party vocale',
-      partyDesc: "Quand quelqu'un rejoint la party",
+      partyDesc: "Quand quelqu'un rejoint la party vocale",
       reminders: 'Rappels automatiques',
       remindersDesc: '30 min avant chaque session',
     },
@@ -192,7 +192,7 @@ export const fr = {
     appearance: {
       title: 'Apparence',
       theme: 'Thème',
-      themeDesc: 'Change le look de Squad Planner',
+      themeDesc: "Change l'apparence de Squad Planner",
       dark: 'Sombre',
       light: 'Clair',
       auto: 'Auto',
@@ -240,10 +240,10 @@ export const fr = {
   // Premium
   premium: {
     title: 'Premium',
-    subtitle: 'Débloque toutes les fonctionnalités',
+    subtitle: 'Profite de toutes les fonctionnalités',
     features: {
       unlimitedSquads: 'Squads illimitées',
-      advancedStats: 'Heatmaps de présence et tendances',
+      advancedStats: 'Analyse des présences et tendances',
       customThemes: 'Thèmes personnalisés',
       prioritySupport: 'Support prioritaire',
     },

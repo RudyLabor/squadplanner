@@ -72,7 +72,7 @@ export const showUpdateBanner = (title: string, onUpdate: () => void) =>
     type: 'update',
     title,
     persistent: true,
-    actions: [{ label: 'Mettre a jour', onClick: onUpdate, variant: 'primary' }],
+    actions: [{ label: 'Mettre à jour', onClick: onUpdate, variant: 'primary' }],
   })
 
 export const showInfoBanner = (title: string, message?: string) =>

@@ -53,9 +53,9 @@ export function RefundRequestModal({ open, onClose }: RefundRequestModalProps) {
       if (error) throw error
 
       setIsSuccess(true)
-      showSuccess('Demande de remboursement envoyee')
+      showSuccess('Demande de remboursement envoyée')
     } catch {
-      showError("Erreur lors de l'envoi de la demande. Reessaie ou contacte le support.")
+      showError("Erreur lors de l'envoi de la demande. Réessaie ou contacte le support.")
     } finally {
       setIsSubmitting(false)
     }
@@ -91,10 +91,10 @@ export function RefundRequestModal({ open, onClose }: RefundRequestModalProps) {
                 </div>
                 <div className="text-center">
                   <p className="text-md font-semibold text-text-primary mb-2">
-                    Demande envoyee
+                    Demande envoyée
                   </p>
                   <p className="text-base text-text-secondary">
-                    Ta demande a ete envoyee ! Tu recevras un email de confirmation sous 24h.
+                    Ta demande a été envoyée ! Tu recevras un email de confirmation sous 24h.
                   </p>
                 </div>
               </div>

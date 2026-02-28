@@ -203,7 +203,7 @@ export function useLeaveSquadMutation() {
     onMutate: optimistic.onMutate,
     onError: optimistic.onError,
     onSuccess: () => {
-      showSuccess('Tu as quitte la squad')
+      showSuccess('Tu as quitté la squad')
     },
     onSettled: optimistic.onSettled,
   })

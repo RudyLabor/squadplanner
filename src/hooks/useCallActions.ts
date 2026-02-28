@@ -31,7 +31,7 @@ export async function sendCallPushNotification(
           caller_avatar: caller.avatar_url,
         },
         actions: [
-          { action: 'answer', title: 'Repondre' },
+          { action: 'answer', title: 'Répondre' },
           { action: 'decline', title: 'Refuser' },
         ],
       },

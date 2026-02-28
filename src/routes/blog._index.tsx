@@ -295,14 +295,14 @@ export default function BlogIndex() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2 className="text-xl font-bold text-text-primary mb-2">Explore aussi</h2>
-            <p className="text-text-tertiary mb-6">Toutes nos ressources pour les gamers organises</p>
+            <p className="text-text-tertiary mb-6">Toutes nos ressources pour les gamers organisés</p>
           </m.div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { to: '/games/valorant', label: 'Sessions Valorant', desc: 'Planifier tes ranked' },
               { to: '/games/league-of-legends', label: 'Sessions LoL', desc: 'Organise tes Clash' },
-              { to: '/alternative/guilded', label: 'Alternative Guilded', desc: 'Guilded a ferme' },
-              { to: '/premium', label: 'Premium', desc: 'Squads illimitees' },
+              { to: '/alternative/guilded', label: 'Alternative Guilded', desc: 'Guilded a fermé' },
+              { to: '/premium', label: 'Premium', desc: 'Squads illimitées' },
             ].map((link) => (
               <Link
                 key={link.to}

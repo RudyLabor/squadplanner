@@ -35,7 +35,7 @@ export function OnboardingStepSquadChoice({
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-text-primary mb-1">
-                Cr&eacute;er une squad
+                Créer une squad
               </h3>
               <p className="text-md text-text-secondary">
                 Tu invites tes potes avec un code. En 10 secondes, ta squad est au complet et prête à jouer.
@@ -58,7 +58,7 @@ export function OnboardingStepSquadChoice({
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-text-primary mb-1">Rejoindre une squad</h3>
               <p className="text-md text-text-secondary">
-                Un pote t'a filé un code&#x202f;? Entre-le et retrouve ta squad.
+                Un pote t'a filé un code? Entre-le et retrouve ta squad.
               </p>
             </div>
             <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-success transition-colors shrink-0 mt-1" />

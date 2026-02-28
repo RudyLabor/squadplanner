@@ -14,7 +14,7 @@ export function headers(_args: HeadersArgs) {
 export function meta() {
   const title = 'Squad Planner - Le Calendly du gaming'
   const description =
-    'Cree ta squad, planifie tes sessions avec confirmation de presence et fiabilite mesuree. Fini les « on verra ». Gratuit.'
+    'Crée ta squad, planifie tes sessions avec confirmation de présence et fiabilité mesurée. Fini les « on verra ». Gratuit.'
   return [
     { title },
     { name: 'description', content: description },

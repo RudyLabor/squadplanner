@@ -70,7 +70,7 @@ export function useUpdateProfileMutation() {
         old ? { ...old, ...updates, updated_at: new Date().toISOString() } : old
       )
     },
-    errorMessage: 'Erreur lors de la mise a jour du profil',
+    errorMessage: 'Erreur lors de la mise à jour du profil',
     invalidateKeys: (userId) => [
       ['profile', userId],
       ['profile', 'current'],
@@ -95,7 +95,7 @@ export function useUpdateProfileMutation() {
     onMutate: optimistic.onMutate,
     onError: optimistic.onError,
     onSuccess: () => {
-      showSuccess('Profil mis a jour')
+      showSuccess('Profil mis à jour')
     },
     onSettled: optimistic.onSettled,
   })

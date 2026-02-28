@@ -36,7 +36,7 @@ export function OnboardingStepJoinSquad({
           <UserPlus className="w-8 h-8 text-success" />
         </div>
         <h2 className="text-xl font-bold text-text-primary mb-2">Rejoins une squad</h2>
-        <p className="text-text-secondary">Entre le code que ton ami t'a donn&eacute;</p>
+        <p className="text-text-secondary">Entre le code que ton ami t'a donné</p>
       </div>
 
       <Card>

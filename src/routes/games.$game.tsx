@@ -621,7 +621,7 @@ export default function Component() {
               <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
                 Chercher des joueurs {game.name}
               </div>
-              <p className="text-xs text-text-tertiary mt-1">Trouve des coequipiers fiables pour tes sessions</p>
+              <p className="text-xs text-text-tertiary mt-1">Trouve des coéquipiers fiables pour tes sessions</p>
             </Link>
             <Link
               to="/blog"
@@ -630,16 +630,16 @@ export default function Component() {
               <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
                 Guides et astuces gaming
               </div>
-              <p className="text-xs text-text-tertiary mt-1">Conseils pour organiser ta squad et eviter les no-shows</p>
+              <p className="text-xs text-text-tertiary mt-1">Conseils pour organiser ta squad et éviter les no-shows</p>
             </Link>
             <Link
               to="/alternative/guilded"
               className="p-4 rounded-xl border border-border-subtle hover:border-primary/30 bg-surface-card/50 transition-all group"
             >
               <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
-                Alternatives a Guilded
+                Alternatives à Guilded
               </div>
-              <p className="text-xs text-text-tertiary mt-1">Guilded a ferme : decouvre les meilleures alternatives</p>
+              <p className="text-xs text-text-tertiary mt-1">Guilded a fermé : découvre les meilleures alternatives</p>
             </Link>
           </div>
         </div>

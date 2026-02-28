@@ -343,7 +343,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                       </Button>
                       <Button onClick={handleOpenCreate}>
                         <Plus className="w-4 h-4" />
-                        Creer une squad
+                        Créer une squad
                       </Button>
                     </div>
                     <button

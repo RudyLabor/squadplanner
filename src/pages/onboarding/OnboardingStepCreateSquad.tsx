@@ -39,7 +39,7 @@ export function OnboardingStepCreateSquad({
         <div className="w-16 h-16 rounded-2xl bg-primary-10 flex items-center justify-center mx-auto mb-4">
           <Users className="w-8 h-8 text-primary" />
         </div>
-        <h2 className="text-xl font-bold text-text-primary mb-2">Cr&eacute;e ta squad</h2>
+        <h2 className="text-xl font-bold text-text-primary mb-2">Crée ta squad</h2>
         <p className="text-text-secondary">Donne-lui un nom et choisis ton jeu principal</p>
       </div>
 
@@ -74,11 +74,11 @@ export function OnboardingStepCreateSquad({
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                Cr&eacute;ation...
+                Création...
               </>
             ) : (
               <>
-                Cr&eacute;er ma squad
+                Créer ma squad
                 <ArrowRight className="w-5 h-5 ml-2" />
               </>
             )}

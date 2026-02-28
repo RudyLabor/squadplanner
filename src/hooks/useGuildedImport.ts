@@ -80,7 +80,7 @@ export function useGuildedImport() {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         })
-        if (profileError) throw new Error('Impossible de creer le profil')
+        if (profileError) throw new Error('Impossible de créer le profil')
       }
 
       const inviteCode = generateInviteCode()
@@ -124,7 +124,7 @@ export function useGuildedImport() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.squads.all })
-      showSuccess('Squad creee avec succes ! Partage le code avec tes membres Guilded.')
+      showSuccess('Squad créée avec succès ! Partage le code avec tes membres Guilded.')
       // Gamification
       import('../stores/useGamificationStore').then(({ useGamificationStore }) => {
         const store = useGamificationStore.getState()

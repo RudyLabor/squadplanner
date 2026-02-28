@@ -211,17 +211,17 @@ export function PricingSection() {
 
                 <div className="flex items-baseline gap-1 mb-2">
                   {isYearly && tier.monthlyPrice > 0 && (
-                    <span className="text-lg text-text-quaternary line-through mr-1">{tier.monthlyPrice.toFixed(2)}&euro;</span>
+                    <span className="text-lg text-text-quaternary line-through mr-1">{tier.monthlyPrice.toFixed(2)}€</span>
                   )}
                   <span className="text-2xl font-bold text-text-primary">
-                    {price.toFixed(2)}&euro;
+                    {price.toFixed(2)}€
                   </span>
                   <span className="text-text-quaternary text-sm">/mois</span>
                 </div>
 
                 {isYearly && tier.monthlyPrice > 0 && (
                   <p className="text-xs text-success mb-2">
-                    {yearlyTotal.toFixed(2)}&euro;/an &middot; &Eacute;conomise{' '}
+                    {yearlyTotal.toFixed(2)}€/an · Économise{' '}
                     {Math.round(
                       ((tier.monthlyPrice * 12 - yearlyTotal) / (tier.monthlyPrice * 12)) * 100
                     )}
@@ -231,7 +231,7 @@ export function PricingSection() {
 
                 {tier.dailyPrice && (
                   <p className="text-xs text-text-quaternary mb-2">
-                    Soit <span className="font-semibold text-text-secondary">{(price / 30).toFixed(2)}&euro;/jour</span> — {price < 10 ? "le prix d'un bonbon" : "moins qu'un café"}
+                    Soit <span className="font-semibold text-text-secondary">{(price / 30).toFixed(2)}€/jour</span> — {price < 10 ? "le prix d'un bonbon" : "moins qu'un café"}
                   </p>
                 )}
 

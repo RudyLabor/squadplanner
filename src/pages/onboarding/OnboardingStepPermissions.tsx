@@ -39,7 +39,7 @@ export function OnboardingStepPermissions({
 
       <div className="text-center mb-8">
         <h2 className="text-xl font-bold text-text-primary mb-2">Ne rate jamais une session</h2>
-        <p className="text-text-secondary">On te pr&eacute;vient quand ta squad t'attend</p>
+        <p className="text-text-secondary">On te prévient quand ta squad t'attend</p>
       </div>
 
       <div className="space-y-4">
@@ -53,25 +53,25 @@ export function OnboardingStepPermissions({
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="text-md font-semibold text-text-primary">Notifications</h3>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-warning-10 text-warning font-medium">
-                  Recommand&eacute;
+                  Recommandé
                 </span>
               </div>
               <p className="text-base text-text-secondary mb-3">
-                Sois pr&eacute;venu quand une session est cr&eacute;&eacute;e ou quand ta squad
+                Sois prévenu quand une session est créée ou quand ta squad
                 t'attend
               </p>
               {notifPermission === 'granted' ? (
                 <div className="flex items-center gap-2 text-success text-md">
                   <Check className="w-4 h-4" />
-                  Activ&eacute;es
+                  Activées
                 </div>
               ) : notifPermission === 'denied' ? (
                 <div className="space-y-1.5">
                   <p className="text-base text-warning font-medium">
-                    Notifications bloqu&eacute;es
+                    Notifications bloquées
                   </p>
                   <p className="text-sm text-text-tertiary">
-                    Pour les activer : clique sur l'ic&ocirc;ne cadenas &agrave; gauche de la barre
+                    Pour les activer : clique sur l'icône cadenas à gauche de la barre
                     d'adresse, puis autorise les notifications pour ce site.
                   </p>
                 </div>
@@ -103,15 +103,15 @@ export function OnboardingStepPermissions({
               {micPermission === 'granted' ? (
                 <div className="flex items-center gap-2 text-success text-md">
                   <Check className="w-4 h-4" />
-                  Autoris&eacute;
+                  Autorisé
                 </div>
               ) : micPermission === 'denied' ? (
                 <div className="space-y-1.5">
-                  <p className="text-base text-warning font-medium">Micro bloqu&eacute;</p>
+                  <p className="text-base text-warning font-medium">Micro bloqué</p>
                   <p className="text-sm text-text-tertiary">
-                    Pour l'activer : clique sur l'ic&ocirc;ne cadenas &agrave; gauche de la barre
+                    Pour l'activer : clique sur l'icône cadenas à gauche de la barre
                     d'adresse de ton navigateur, puis autorise le microphone. Tu peux aussi le faire
-                    plus tard dans les param&egrave;tres.
+                    plus tard dans les paramètres.
                   </p>
                 </div>
               ) : (
@@ -155,7 +155,7 @@ export function OnboardingStepPermissions({
               <Check className="w-5 h-5 ml-2" />
             </Button>
             <p className="text-sm text-text-tertiary text-center">
-              Tu pourras activer les notifications plus tard dans les param&egrave;tres
+              Tu pourras activer les notifications plus tard dans les paramètres
             </p>
           </>
         )}

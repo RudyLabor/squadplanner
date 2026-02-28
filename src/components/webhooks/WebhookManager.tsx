@@ -189,12 +189,12 @@ function WebhookCard({
           variant="secondary"
           onClick={onToggle}
           disabled={isToggling}
-          aria-label={webhook.is_active ? 'Desactiver le webhook' : 'Activer le webhook'}
+          aria-label={webhook.is_active ? 'Désactiver le webhook' : 'Activer le webhook'}
         >
           {isToggling ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
           ) : webhook.is_active ? (
-            'Desactiver'
+            'Désactiver'
           ) : (
             'Activer'
           )}
@@ -343,7 +343,7 @@ function CreateWebhookForm({
             ) : (
               <Plus className="w-4 h-4" />
             )}
-            Creer le webhook
+            Créer le webhook
           </Button>
           <Button size="sm" variant="secondary" onClick={onCancel}>
             Annuler
@@ -510,11 +510,11 @@ export function WebhookManager({ squadId: fixedSquadId }: WebhookManagerProps) {
               <WebhookIcon className="w-12 h-12 text-text-quaternary mx-auto mb-3 opacity-50" />
               <p className="text-md text-text-secondary mb-1">Pas encore de webhook</p>
               <p className="text-sm text-text-quaternary mb-4">
-                Connecte Discord, Notion ou Google Sheets a ta squad en ajoutant un webhook.
+                Connecte Discord, Notion ou Google Sheets à ta squad en ajoutant un webhook.
               </p>
               <Button size="sm" onClick={() => setShowCreateForm(true)}>
                 <Plus className="w-4 h-4" />
-                Creer mon premier webhook
+                Créer mon premier webhook
               </Button>
             </m.div>
           )}
@@ -527,7 +527,7 @@ export function WebhookManager({ squadId: fixedSquadId }: WebhookManagerProps) {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDelete}
         title="Supprimer ce webhook ?"
-        description={`Le webhook vers ${deleteTarget?.url ?? ''} sera definitivement supprime. Cette action est irreversible.`}
+        description={`Le webhook vers ${deleteTarget?.url ?? ''} sera définitivement supprimé. Cette action est irréversible.`}
         confirmLabel="Supprimer"
         variant="danger"
         isLoading={deleteMutation.isPending}

@@ -293,7 +293,7 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
           m._optimisticId === tempId ? { ...m, _sendFailed: true } : m
         ),
       }))
-      showError('Message non envoye. Appuie pour reessayer.')
+      showError('Message non envoyé. Appuie pour réessayer.')
       return { error: error as Error }
     }
   },

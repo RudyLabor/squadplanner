@@ -35,13 +35,13 @@ export interface Webhook {
 }
 
 export const WEBHOOK_EVENTS: { value: WebhookEvent; label: string }[] = [
-  { value: 'session.created', label: 'Session creee' },
-  { value: 'session.confirmed', label: 'Session confirmee' },
-  { value: 'session.cancelled', label: 'Session annulee' },
-  { value: 'rsvp.updated', label: 'RSVP mis a jour' },
+  { value: 'session.created', label: 'Session créée' },
+  { value: 'session.confirmed', label: 'Session confirmée' },
+  { value: 'session.cancelled', label: 'Session annulée' },
+  { value: 'rsvp.updated', label: 'RSVP mis à jour' },
   { value: 'member.joined', label: 'Membre rejoint' },
   { value: 'member.left', label: 'Membre parti' },
-  { value: 'message.sent', label: 'Message envoye' },
+  { value: 'message.sent', label: 'Message envoyé' },
 ]
 
 // ── Helpers ──────────────────────────────────────────────────────────
@@ -114,10 +114,10 @@ export function useCreateWebhookMutation() {
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.webhooks.list(variables.squadId) })
-      showSuccess('Webhook cree avec succes !')
+      showSuccess('Webhook créé avec succès !')
     },
     onError: (error: Error) => {
-      showError(error.message || 'Erreur lors de la creation du webhook')
+      showError(error.message || 'Erreur lors de la création du webhook')
     },
   })
 }
@@ -147,10 +147,10 @@ export function useUpdateWebhookMutation() {
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.webhooks.list(variables.squadId) })
-      showSuccess('Webhook mis a jour')
+      showSuccess('Webhook mis à jour')
     },
     onError: (error: Error) => {
-      showError(error.message || 'Erreur lors de la mise a jour')
+      showError(error.message || 'Erreur lors de la mise à jour')
     },
   })
 }
@@ -166,7 +166,7 @@ export function useDeleteWebhookMutation() {
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.webhooks.list(variables.squadId) })
-      showSuccess('Webhook supprime')
+      showSuccess('Webhook supprimé')
     },
     onError: (error: Error) => {
       showError(error.message || 'Erreur lors de la suppression')
@@ -205,10 +205,10 @@ export function useTestWebhookMutation() {
       return { status: response.status }
     },
     onSuccess: () => {
-      showSuccess('Test envoye avec succes !')
+      showSuccess('Test envoyé avec succès !')
     },
     onError: (error: Error) => {
-      showError(`Echec du test : ${error.message}`)
+      showError(`Échec du test : ${error.message}`)
     },
   })
 }

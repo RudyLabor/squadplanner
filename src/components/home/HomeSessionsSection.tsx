@@ -43,7 +43,7 @@ const NextSessionCard = memo(function NextSessionCard({
   } else if (diffDays === 1) {
     timeLabel = 'Demain'
   } else {
-    timeLabel = `Dans ${diffDays} jours`
+    timeLabel = `Dans ${diffDays} jour${diffDays > 1 ? 's' : ''}`
   }
 
   const timeFormatted = scheduledDate.toLocaleTimeString('fr-FR', {

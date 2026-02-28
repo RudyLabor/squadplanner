@@ -178,7 +178,7 @@ export default function SquadAnalytics() {
               <Card padding="none">
                 <CardContent className="p-4 sm:p-6">
                   <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
-                    Tendance des sessions
+                    Tendances des sessions
                   </h2>
                   <SessionTrends squadId={id} />
                 </CardContent>

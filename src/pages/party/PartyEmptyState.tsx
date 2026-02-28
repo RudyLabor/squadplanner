@@ -27,7 +27,7 @@ export function PartyEmptyState() {
         </div>
         <h2 className="text-lg font-bold text-text-primary mb-2">Parle avec ta squad</h2>
         <p className="text-md text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
-          Cr&eacute;e ou rejoins une squad pour lancer des parties vocales avec tes potes.
+          Crée ou rejoins une squad pour lancer des parties vocales avec tes potes.
         </p>
         <Link
           to="/squads"

@@ -60,7 +60,7 @@ const TIERS = [
     yearlyPrice: SQUAD_LEADER_PRICE_YEARLY,
     description: 'Pour les capitaines de squad.',
     features: [
-      'Squads illimités',
+      'Squads illimitées',
       'Historique illimité',
       'Audio HD Party',
       'IA Coach avancé',

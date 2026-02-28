@@ -83,7 +83,7 @@ export function Referrals() {
   const handleShareWhatsApp = () => {
     const url = generateShareUrl()
     if (!url) return
-    const text = `Rejoins Squad Planner et gagne 7 jours Premium gratuit ! Moi j'économise sur mon abo grâce au parrainage. ${url}`
+    const text = `Rejoins Squad Planner et gagne 7 jours Premium gratuits ! Moi j'économise sur mon abo grâce au parrainage. ${url}`
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
     analytics.track('referral_shared' as any, { platform: 'whatsapp' })
   }
@@ -91,7 +91,7 @@ export function Referrals() {
   const handleShareTwitter = () => {
     const url = generateShareUrl()
     if (!url) return
-    const text = `Je planifie mes sessions gaming avec @SquadPlanner ! Rejoins-nous et gagne 7 jours Premium gratuit`
+    const text = `Je planifie mes sessions gaming avec @SquadPlanner ! Rejoins-nous et gagne 7 jours Premium gratuits`
     window.open(
       `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
       '_blank'
@@ -308,7 +308,7 @@ export function Referrals() {
                   <Step number={2} text="Ton ami s'inscrit via ton lien" color="primary" />
                   <Step
                     number={3}
-                    text="Ton pote reçoit 7 jours Premium gratuit. Toi tu gagnes 500 XP + réduction permanente."
+                    text="Ton pote reçoit 7 jours Premium gratuits. Toi tu gagnes 500 XP + réduction permanente."
                     color="warning"
                   />
                   <Step

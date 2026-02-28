@@ -32,7 +32,7 @@ interface SquadsLoaderData {
 
 export function meta() {
   return [
-    { title: 'Mes Squads - Squad Planner' },
+    { title: 'Mes Squads — Squad Planner' },
     {
       name: 'description',
       content:

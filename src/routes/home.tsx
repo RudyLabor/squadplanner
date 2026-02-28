@@ -41,7 +41,7 @@ interface HomeLoaderData {
 
 export function meta() {
   return [
-    { title: 'Accueil - Squad Planner' },
+    { title: 'Accueil — Squad Planner' },
     { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',

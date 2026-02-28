@@ -88,7 +88,7 @@ const MobileNavLink = memo(function MobileNavLink({
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             className="absolute -top-1.5 -right-2 min-w-[20px] h-[20px] px-1 rounded-full bg-info text-white text-xs font-bold flex items-center justify-center"
-            aria-label={`${badge} non lus`}
+            aria-label={`${badge} non lu${badge > 1 ? 's' : ''}`}
           >
             {badge > 99 ? '99+' : badge}
           </m.span>

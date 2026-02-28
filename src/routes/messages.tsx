@@ -22,7 +22,7 @@ interface MessageMembershipRow {
 
 export function meta() {
   return [
-    { title: 'Messages - Squad Planner' },
+    { title: 'Messages — Squad Planner' },
     { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',

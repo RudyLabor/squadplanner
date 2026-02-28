@@ -269,7 +269,7 @@ export default function AlternativeGuilded() {
             />
             <div className="relative z-10">
               <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-2">
-                30% de réduction pour les migrés de Guilded
+                30% de réduction pour les ex-Guilded
               </h3>
               <p className="text-text-tertiary mb-4">Tape ce code avant qu'il expire</p>
               <div className="inline-block px-8 py-4 bg-purple/10 rounded-xl mb-4 border border-purple/20">

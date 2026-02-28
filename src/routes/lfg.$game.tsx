@@ -53,7 +53,7 @@ export function meta({ params }: { params: { game: string } }) {
   }
 
   const title = `Chercher des joueurs ${game.name} - Squad Planner`
-  const description = `Trouvez des joueurs ${game.name} fiables et formez une squad complète avec Squad Planner. Matchmaking intelligent et communauté vérifiée.`
+  const description = `Trouve des joueurs ${game.name} fiables et formez une squad complète avec Squad Planner. Matchmaking intelligent et communauté vérifiée.`
 
   return [
     { title },
@@ -562,7 +562,7 @@ export default function Component() {
               Passe au niveau supérieur
             </h3>
             <p className="text-text-tertiary mb-5 text-md max-w-lg mx-auto">
-              Matchmaking prioritaire, filtres avancés et plus de visibilité pour ta squad. Essaie Premium 7 jours gratuit.
+              Matchmaking prioritaire, filtres avancés et plus de visibilité pour ta squad. Essaie Premium 7 jours gratuits.
             </p>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="inline-flex">
               <Link
@@ -574,7 +574,7 @@ export default function Component() {
               </Link>
             </m.div>
             <p className="text-xs text-text-quaternary mt-3">
-              7 jours gratuit · Sans carte bancaire · Remboursé sous 30 jours
+              7 jours gratuits · Sans carte bancaire · Remboursé sous 30 jours
             </p>
           </m.div>
         </div>

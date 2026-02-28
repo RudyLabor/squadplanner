@@ -196,7 +196,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
             Les squads publiques apparaissent ici — crée la tienne et elle sera visible par tous les joueurs.
           </p>
           <p className="text-xs text-text-tertiary mb-5">
-            Gratuit, en 30 secondes. Tes futurs coequipiers te cherchent déjà.
+            Gratuit, en 30 secondes. Tes futurs coéquipiers te cherchent déjà.
           </p>
           <Link
             to="/squads"

@@ -9,7 +9,7 @@ const Profile = lazy(() => import('../pages/Profile').then((m) => ({ default: m.
 
 export function meta() {
   return [
-    { title: 'Mon Profil - Squad Planner' },
+    { title: 'Mon Profil — Squad Planner' },
     { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',

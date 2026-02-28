@@ -34,7 +34,7 @@ export function PartySingleSquad({
             <Mic className="w-9 h-9 text-white" />
           </m.div>
         </div>
-        <h3 className="text-lg font-bold text-text-primary mb-2">Pr&ecirc;t &agrave; parler ?</h3>
+        <h3 className="text-lg font-bold text-text-primary mb-2">Prêt à parler ?</h3>
         <p className="text-md text-text-secondary mb-2">{squad.name}</p>
         <p className="text-sm text-text-tertiary mb-3">
           {squad.game} · {memberCount} membre{memberCount > 1 ? 's' : ''}
@@ -94,7 +94,7 @@ export function PartyStatsCard({ squadName: _squadName }: { squadName: string })
           <div className="flex items-center justify-between">
             <span className="text-sm text-text-secondary flex items-center gap-2">
               <Clock className="w-3.5 h-3.5 text-text-tertiary" />
-              Dur&eacute;e moyenne
+              Durée moyenne
             </span>
             <span className="text-sm font-medium text-text-tertiary italic">--</span>
           </div>
@@ -114,15 +114,15 @@ export function PartyStatsCard({ squadName: _squadName }: { squadName: string })
           </div>
         </div>
         <p className="text-xs text-text-quaternary mt-3 text-center italic">
-          Bient&ocirc;t disponible
+          Bientôt disponible
         </p>
       </Card>
       <Card className="p-4 bg-bg-elevated border-border-default flex-1">
-        <p className="text-sm font-semibold text-text-primary mb-3">Historique r&eacute;cent</p>
+        <p className="text-sm font-semibold text-text-primary mb-3">Historique récent</p>
         <div className="flex flex-col items-center justify-center py-4">
-          <p className="text-xs text-text-quaternary italic">Aucune party enregistr&eacute;e</p>
+          <p className="text-xs text-text-quaternary italic">Aucune party enregistrée</p>
           <p className="text-xs text-text-quaternary mt-1">
-            Lance ta premi&egrave;re party pour voir l'historique ici
+            Lance ta première party pour voir l'historique ici
           </p>
         </div>
       </Card>

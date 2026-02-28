@@ -9,7 +9,7 @@ const Settings = lazy(() => import('../pages/Settings').then((m) => ({ default: 
 
 export function meta() {
   return [
-    { title: 'Paramètres - Squad Planner' },
+    { title: 'Paramètres — Squad Planner' },
     { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',

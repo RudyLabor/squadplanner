@@ -14,7 +14,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        "Retrouve l'historique de tes appels vocaux avec ta squad. Duree, participants et details de chaque party.",
+        "Retrouve l'historique de tes appels vocaux avec ta squad. Durée, participants et détails de chaque party.",
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/call-history' },
     { property: 'og:url', content: 'https://squadplanner.fr/call-history' },
@@ -23,7 +23,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        "Retrouve l'historique de tes appels vocaux avec ta squad. Duree, participants et details de chaque party.",
+        "Retrouve l'historique de tes appels vocaux avec ta squad. Durée, participants et détails de chaque party.",
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
     { name: 'twitter:card', content: 'summary_large_image' },
@@ -31,7 +31,7 @@ export function meta() {
     {
       name: 'twitter:description',
       content:
-        "Retrouve l'historique de tes appels vocaux avec ta squad. Duree, participants et details de chaque party.",
+        "Retrouve l'historique de tes appels vocaux avec ta squad. Durée, participants et détails de chaque party.",
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]

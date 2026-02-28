@@ -69,7 +69,7 @@ export const GAMES: GameInfo[] = [
     color: 'blue',
     tags: ['moba', 'stratégie', 'compétitif', 'riot'],
     specificPainPoint: 'Impossible de trouver 4 joueurs fiables pour du flex ranked',
-    specificUseCase: 'Monte en ranked avec une squad fixe qui connait ses rôles',
+    specificUseCase: 'Monte en ranked avec une squad fixe qui connaît ses rôles',
     specificFeatures: ['Organisation par rôle (Top, Jungle, Mid, ADC, Support)', 'Sessions Clash planifiées', 'Suivi de progression collective'],
     lfgSpecificCopy: 'Cherche des joueurs pour flex ranked ou Clash',
     testimonial: { quote: "Enfin une squad Clash stable. On a gagné notre premier tournoi ensemble après 3 mois de sessions régulières.", author: 'SarahLoL', rank: 'Platine 1', role: 'Joueuse League of Legends' },

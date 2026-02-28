@@ -50,7 +50,7 @@ const faqs = [
     id: 'other-games',
     question: 'Ça marche pour tous les jeux ?',
     answer:
-      "Oui. Valorant, CS2, Apex, Fortnite, Dota 2, les petits jeux obscurs. Squad Planner gère tout. C'est agnostique du jeu.",
+      "Oui. Valorant, CS2, Apex, Fortnite, Dota 2, les petits jeux obscurs. Squad Planner gère tout. Compatible avec tous les jeux.",
   },
   {
     id: 'data-safety',
@@ -330,7 +330,7 @@ export default function VsGuildedVsSquadPlanner() {
                 </div>
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Premium</div>
-                  <p className="text-text-secondary text-md">6,99 €/mois ou 59,88 €/an</p>
+                  <p className="text-text-secondary text-md">6,99 €/mois ou 69,90 €/an</p>
                   <ul className="text-text-secondary text-sm mt-2 space-y-1 pl-4">
                     <li>• Analytics avancées</li>
                     <li>• Personnalisation squad</li>

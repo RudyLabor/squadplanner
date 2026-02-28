@@ -98,7 +98,7 @@ export function meta({ params }: { params: { game: string } }) {
                 name: `Comment trouver des joueurs ${game.name} ?`,
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: `Activez le matchmaking Squad Planner pour recevoir des invitations de squads ${game.name} compatibles.`,
+                  text: `Active le matchmaking Squad Planner pour recevoir des invitations de squads ${game.name} compatibles.`,
                 },
               },
             ],
@@ -540,7 +540,7 @@ export default function Component() {
               Envie de plus pour ta squad {game.shortName || game.name} ?
             </h3>
             <p className="text-text-tertiary mb-5 text-md max-w-lg mx-auto">
-              Sessions illimitées, heatmaps de présence, coach IA et audio HD. Essaie Premium 7 jours gratuit.
+              Sessions illimitées, heatmaps de présence, coach IA et audio HD. Essaie Premium 7 jours gratuits.
             </p>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="inline-flex">
               <Link
@@ -552,7 +552,7 @@ export default function Component() {
               </Link>
             </m.div>
             <p className="text-xs text-text-quaternary mt-3">
-              7 jours gratuit · Sans carte bancaire · Remboursé sous 30 jours
+              7 jours gratuits · Sans carte bancaire · Remboursé sous 30 jours
             </p>
           </m.div>
         </div>

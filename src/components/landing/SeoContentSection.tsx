@@ -136,7 +136,7 @@ export function SeoContentSection() {
             <Link to="/alternative/discord-events" className="text-primary hover:underline">
               évènements Discord
             </Link>
-            , Squad Planner integre un vrai système de confirmation de présence avec score de
+            , Squad Planner intègre un vrai système de confirmation de présence avec score de
             fiabilité, des check-ins en session, et un coach IA qui analyse les habitudes de ta
             squad pour suggérer les meilleurs créneaux.
           </m.p>

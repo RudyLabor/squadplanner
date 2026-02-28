@@ -35,7 +35,7 @@ interface SessionsLoaderData {
 
 export function meta() {
   return [
-    { title: 'Sessions - Squad Planner' },
+    { title: 'Sessions — Squad Planner' },
     { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',

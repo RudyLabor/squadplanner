@@ -872,7 +872,7 @@ ${formData.message}
               onClick={handleCopyEmail}
               leftIcon={copiedEmail ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             >
-              {copiedEmail ? 'Copie !' : 'Copier'}
+              {copiedEmail ? 'Copié !' : 'Copier'}
             </Button>
           </div>
         </m.div>

@@ -50,14 +50,14 @@ export function meta() {
               {
                 '@type': 'Offer',
                 name: 'Premium',
-                price: '4.99',
+                price: '6.99',
                 priceCurrency: 'EUR',
                 url: 'https://squadplanner.fr/premium',
               },
               {
                 '@type': 'Offer',
                 name: 'Squad Leader',
-                price: '9.99',
+                price: '14.99',
                 priceCurrency: 'EUR',
                 url: 'https://squadplanner.fr/premium',
               },

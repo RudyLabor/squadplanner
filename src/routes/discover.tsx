@@ -9,7 +9,7 @@ const Discover = lazy(() => import('../pages/Discover'))
 
 export function meta() {
   return [
-    { title: 'Découvrir - Squad Planner' },
+    { title: 'Découvrir — Squad Planner' },
     { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',

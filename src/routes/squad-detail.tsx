@@ -29,29 +29,29 @@ interface SquadDetailLoaderData {
 
 export function meta() {
   return [
-    { title: 'Detail Squad - Squad Planner' },
+    { title: 'Détail Squad — Squad Planner' },
     { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',
       content:
-        'Consulte les details de ta squad : membres, sessions planifiees, classement et code d\'invitation.',
+        'Consulte les détails de ta squad : membres, sessions planifiées, classement et code d\'invitation.',
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/squads' },
     { property: 'og:url', content: 'https://squadplanner.fr/squads' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Detail Squad' },
+    { property: 'og:title', content: 'Détail Squad' },
     {
       property: 'og:description',
       content:
-        'Consulte les details de ta squad : membres, sessions planifiees, classement et code d\'invitation.',
+        'Consulte les détails de ta squad : membres, sessions planifiées, classement et code d\'invitation.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Detail Squad' },
+    { name: 'twitter:title', content: 'Détail Squad' },
     {
       name: 'twitter:description',
       content:
-        'Consulte les details de ta squad : membres, sessions planifiees, classement et code d\'invitation.',
+        'Consulte les détails de ta squad : membres, sessions planifiées, classement et code d\'invitation.',
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]

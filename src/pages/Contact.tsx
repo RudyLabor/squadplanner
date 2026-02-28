@@ -207,7 +207,7 @@ ${formData.message}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="organization" className="block text-sm font-medium text-text-primary mb-1.5">
-                      Organisation / Equipe
+                      Organisation / Équipe
                     </label>
                     <input
                       type="text"

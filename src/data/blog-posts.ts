@@ -30,7 +30,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h3>1. Squad Planner - La solution tout-en-un (⭐ Notre choix)</h3>
 
-      <p>Squad Planner est née directement de la demande des communautés gaming qui cherchaient une alternative à Guilded. Contrairement à Discord, qui se concentre sur la communication, Squad Planner offre une suite complète d'outils d'organisation spécifiquement conçue pour les gamers.</p>
+      <p>Squad Planner est né directement de la demande des communautés gaming qui cherchaient une alternative à Guilded. Contrairement à Discord, qui se concentre sur la communication, Squad Planner offre une suite complète d'outils d'organisation spécifiquement conçue pour les gamers.</p>
 
       <p><strong>Avantages :</strong></p>
       <ul>

@@ -508,7 +508,7 @@ export function Settings() {
           <Card id="webhooks" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
             <SectionHeader icon={Webhook} title="API Webhooks" />
             <p className="text-sm text-text-quaternary mb-4">
-              Connecte Discord, Notion ou Google Sheets a ta squad
+              Connecte Discord, Notion ou Google Sheets à ta squad
             </p>
             <Suspense
               fallback={
@@ -796,7 +796,7 @@ function SubscriptionSection({ onRefundClick }: { onRefundClick: () => void }) {
             to="/premium"
             className="text-sm text-primary hover:text-primary/80 transition-colors"
           >
-            Gerer
+            Gérer
           </Link>
         </div>
 
@@ -811,9 +811,9 @@ function SubscriptionSection({ onRefundClick }: { onRefundClick: () => void }) {
               <p className="text-md text-text-primary">Demander un remboursement</p>
               <p className="text-sm text-text-quaternary">
                 {isEligibleForRefund
-                  ? 'Garantie satisfait ou rembourse — 30 jours'
+                  ? 'Garantie satisfait ou remboursé — 30 jours'
                   : subscriptionAge !== null
-                    ? 'Periode de garantie expiree (plus de 30 jours)'
+                    ? 'Période de garantie expirée (plus de 30 jours)'
                     : 'Verification en cours...'}
               </p>
             </div>

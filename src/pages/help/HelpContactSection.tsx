@@ -153,7 +153,7 @@ export function HelpContactSection() {
                   `${priorityTag}${tierTag}[${contactSubject.toUpperCase()}] Support Squad Planner`
                 )
                 const body = encodeURIComponent(
-                  `${contactMessage}\n\n---\nTier: ${tier}\nPriorite: ${supportInfo.priority}`
+                  `${contactMessage}\n\n---\nTier: ${tier}\nPriorité: ${supportInfo.priority}`
                 )
                 window.location.href = `mailto:support@squadplanner.fr?subject=${subject}&body=${body}`
                 setContactSent(true)

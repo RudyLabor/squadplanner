@@ -18,7 +18,7 @@ function getSupportPriority(tier: SubscriptionTier): {
       return {
         priority: 'critical',
         label: 'Support Club',
-        responseTime: 'Ton ticket sera traite en priorite absolue (reponse sous 4h)',
+        responseTime: 'Ton ticket sera traité en priorité absolue (réponse sous 4h)',
         badgeClass: 'bg-gradient-to-r from-amber-500 to-yellow-400 text-white',
         icon: Crown,
       }
@@ -26,7 +26,7 @@ function getSupportPriority(tier: SubscriptionTier): {
       return {
         priority: 'urgent',
         label: 'Support Prioritaire',
-        responseTime: 'Ton ticket sera traite en priorite (reponse sous 12h)',
+        responseTime: 'Ton ticket sera traité en priorité (réponse sous 12h)',
         badgeClass: 'bg-gradient-to-r from-amber-500 to-yellow-400 text-white',
         icon: Crown,
       }
@@ -34,7 +34,7 @@ function getSupportPriority(tier: SubscriptionTier): {
       return {
         priority: 'high',
         label: 'Support Prioritaire',
-        responseTime: 'Ton ticket sera traite en priorite (reponse sous 24h)',
+        responseTime: 'Ton ticket sera traité en priorité (réponse sous 24h)',
         badgeClass: 'bg-gradient-to-r from-indigo-500 to-violet-500 text-white',
         icon: Zap,
       }
@@ -42,7 +42,7 @@ function getSupportPriority(tier: SubscriptionTier): {
       return {
         priority: 'normal',
         label: '',
-        responseTime: 'Reponse sous 48h',
+        responseTime: 'Réponse sous 48h',
         badgeClass: '',
         icon: Zap,
       }
@@ -92,11 +92,11 @@ export function HelpContactSection() {
             <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center">
               <CheckCircle className="w-7 h-7 text-success" />
             </div>
-            <p className="text-md font-semibold text-text-primary">Message envoy\u00e9\u00a0!</p>
+            <p className="text-md font-semibold text-text-primary">Message envoyé\u00a0!</p>
             <p className="text-base text-text-secondary text-center">
               {hasPremium
-                ? 'Merci\u00a0! Ton ticket prioritaire a ete envoye. On te repond au plus vite.'
-                : 'Merci pour ton retour\u00a0! On te repond sous 48h.'}
+                ? 'Merci\u00a0! Ton ticket prioritaire a été envoyé. On te répond au plus vite.'
+                : 'Merci pour ton retour\u00a0! On te répond sous 48h.'}
             </p>
             <button
               onClick={() => {
@@ -139,7 +139,7 @@ export function HelpContactSection() {
               <textarea
                 value={contactMessage}
                 onChange={(e) => setContactMessage(e.target.value)}
-                placeholder="D\u00e9cris ton probl\u00e8me ou ta suggestion..."
+                placeholder="Décris ton problème ou ta suggestion..."
                 rows={4}
                 className="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary resize-none transition-colors"
               />

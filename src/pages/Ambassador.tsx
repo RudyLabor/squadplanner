@@ -101,7 +101,7 @@ function AmbassadorDashboard({
           },
           {
             label: 'Gains totaux',
-            value: `${totalEarned.toFixed(2)} \u20ac`,
+            value: `${totalEarned.toFixed(2)} €`,
             icon: TrendingUp,
             color: 'warning',
           },
@@ -266,7 +266,7 @@ ${formData.message}
 
       const mailtoLink = `mailto:ambassadeur@squadplanner.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
       window.location.href = mailtoLink
-      showSuccess('Candidature envoyee ! On te repond sous 48h.')
+      showSuccess('Candidature envoyée ! On te répond sous 48h.')
     }
   }
 
@@ -344,7 +344,7 @@ ${formData.message}
             >
               Monetise{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple to-primary">
-                ta communaute gaming
+                ta communauté gaming
               </span>{' '}
               avec Squad Planner
             </m.h1>
@@ -356,7 +356,7 @@ ${formData.message}
               transition={{ delay: 0.2, duration: 0.4, ease }}
               className="text-md md:text-lg text-text-secondary max-w-2xl mx-auto"
             >
-              T'es streamer, createur de contenu ou capitaine de communaute gaming&nbsp;? Le programme ambassadeur est en cours de lancement. Partage Squad Planner avec ta communaute et gagne des recompenses
+              T'es streamer, créateur de contenu ou capitaine de communauté gaming&nbsp;? Le programme ambassadeur est en cours de lancement. Partage Squad Planner avec ta communauté et gagne des récompenses
               exclusives.
             </m.p>
           </div>
@@ -388,20 +388,20 @@ ${formData.message}
           className="mb-16"
         >
           <h2 className="text-2xl md:text-3xl font-bold text-text-primary text-center mb-8">
-            Les avantages d'etre ambassadeur
+            Les avantages d'être ambassadeur
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
               {
                 icon: Gamepad2,
-                title: 'Squad Leader gratuit a vie',
-                description: 'Acces complet au forfait premium Squad Leader sans fin',
+                title: 'Squad Leader gratuit à vie',
+                description: 'Accès complet au forfait premium Squad Leader sans fin',
                 color: 'primary',
               },
               {
                 icon: Gift,
-                title: 'Commission 20% sur chaque abonne',
-                description: 'Gagne 20% de commission sur tous les parrainages que tu generes (programme en cours de deploiement)',
+                title: 'Commission 20% sur chaque abonné',
+                description: 'Gagne 20% de commission sur tous les parrainages que tu génères (programme en cours de déploiement)',
                 color: 'success',
               },
               {
@@ -414,7 +414,7 @@ ${formData.message}
                 icon: TrendingUp,
                 title: 'Mise en avant Discover',
                 description:
-                  'Ton profil mis en avant sur la page Discover pour augmenter ta visibilite',
+                  'Ton profil mis en avant sur la page Discover pour augmenter ta visibilité',
                 color: 'purple',
               },
             ].map((item, i) => {
@@ -474,7 +474,7 @@ ${formData.message}
           className="mb-16"
         >
           <h2 className="text-2xl md:text-3xl font-bold text-text-primary text-center mb-12">
-            Comment ca marche
+            Comment ça marche
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
             {[
@@ -487,7 +487,7 @@ ${formData.message}
               {
                 step: 2,
                 title: 'On te contacte',
-                description: "Appel de 15 min pour te presenter l'app et repondre a tes questions",
+                description: "Appel de 15 min pour te présenter l'app et répondre à tes questions",
                 icon: Mic,
               },
               {
@@ -541,9 +541,9 @@ ${formData.message}
             <div className="space-y-4">
               {[
                 'Streamers Twitch/YouTube FR avec 1K-50K viewers',
-                'Createurs de contenu gaming (TikTok, Instagram, YouTube)',
-                'Capitaines de communaute Discord avec 100+ membres',
-                'Joueurs competitifs avec une audience active',
+                'Créateurs de contenu gaming (TikTok, Instagram, YouTube)',
+                'Capitaines de communauté Discord avec 100+ membres',
+                'Joueurs compétitifs avec une audience active',
               ].map((profileItem, i) => (
                 <m.div
                   key={i}
@@ -722,7 +722,7 @@ ${formData.message}
                   )}
 
                   <p className="text-xs text-text-tertiary text-center">
-                    En soumettant ce formulaire, tu acceptes que nous te contactions a propos du
+                    En soumettant ce formulaire, tu acceptes que nous te contactions à propos du
                     programme.
                   </p>
                 </form>
@@ -740,33 +740,33 @@ ${formData.message}
           className="mb-16"
         >
           <h2 className="text-2xl md:text-3xl font-bold text-text-primary text-center mb-8">
-            Questions frequentes
+            Questions fréquentes
           </h2>
           <div className="space-y-4">
             {[
               {
                 q: "C'est quoi un ambassadeur Squad Planner ?",
-                a: "Un ambassadeur est une personne influente qui represente Squad Planner aupres de sa communaute. Tu recois des outils marketing, un code promo unique et tu construis ton revenu passif en recommandant Squad Planner a tes followers.",
+                a: "Un ambassadeur est une personne influente qui représente Squad Planner auprès de sa communauté. Tu reçois des outils marketing, un code promo unique et tu construis ton revenu passif en recommandant Squad Planner à tes followers.",
               },
               {
                 q: 'Comment fonctionne la commission ?',
-                a: "Tu recois une commission de 20% pour chaque nouvel utilisateur qui s'inscrit via ton code promo unique. Si cet utilisateur passe Premium, tu recois un mois Squad Leader gratuit en plus.",
+                a: "Tu reçois une commission de 20% pour chaque nouvel utilisateur qui s'inscrit via ton code promo unique. Si cet utilisateur passe Premium, tu reçois un mois Squad Leader gratuit en plus.",
               },
               {
                 q: 'Je peux cumuler avec le parrainage normal ?',
-                a: "Oui ! En tant qu'ambassadeur, tu gardes acces au programme de parrainage standard (7 jours Premium pour chaque ami). La commission ambassadeur s'ajoute a cela.",
+                a: "Oui ! En tant qu'ambassadeur, tu gardes accès au programme de parrainage standard (7 jours Premium pour chaque ami). La commission ambassadeur s'ajoute à cela.",
               },
               {
-                q: "C'est obligatoire d'etre un gros streamer ?",
-                a: "Non ! On recherche aussi des createurs de contenu plus petits ou des capitaines de communaute motives. Ce qui compte, c'est ta passion pour le gaming et ton engagement envers ta communaute.",
+                q: "C'est obligatoire d'être un gros streamer ?",
+                a: "Non ! On recherche aussi des créateurs de contenu plus petits ou des capitaines de communauté motivés. Ce qui compte, c'est ta passion pour le gaming et ton engagement envers ta communauté.",
               },
               {
                 q: 'Quels outils marketing vas-tu me donner\u00a0?',
-                a: "Tu recevras des visuels (bannieres, clips), du texte marketing pret a l\u2019emploi, des graphiques et un support dedie de notre equipe pour booster tes resultats.",
+                a: "Tu recevras des visuels (bannières, clips), du texte marketing prêt à l'emploi, des graphiques et un support dédié de notre équipe pour booster tes résultats.",
               },
               {
                 q: 'Comment on reste en contact ?',
-                a: "Apres ta candidature approuvee, on te contacte pour un appel de 15 minutes. Ensuite, tu rejoins notre communaute Discord ambassadeurs pour rester connecte et partager tes resultats.",
+                a: "Après ta candidature approuvée, on te contacte pour un appel de 15 minutes. Ensuite, tu rejoins notre communauté Discord ambassadeurs pour rester connecté et partager tes résultats.",
               },
             ].map((faq, i) => (
               <m.div

@@ -1,7 +1,6 @@
 import { useRef, useEffect, useCallback, memo } from 'react'
-import { m, AnimatePresence } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { ChevronDown } from '../icons'
 import { MessageListSkeleton } from '../VirtualizedMessageList'
 import { EmptyState } from '../EmptyState'
 import { TypingIndicator } from '../TypingIndicator'
@@ -193,22 +192,20 @@ interface MessageThreadProps extends SharedProps {
   isLoading: boolean
   embedded: boolean
   typingText: string | null
-  showScrollButton: boolean
+  showScrollButton?: boolean
   messagesContainerRef: React.RefObject<HTMLDivElement | null>
   messagesEndRef: React.RefObject<HTMLDivElement | null>
   onScroll: () => void
-  onScrollToBottom: () => void
+  onScrollToBottom?: () => void
 }
 
 export function MessageThread({
   isLoading,
   embedded,
   typingText,
-  showScrollButton,
   messagesContainerRef,
   messagesEndRef,
   onScroll,
-  onScrollToBottom,
   ...props
 }: MessageThreadProps) {
   const { messages } = props
@@ -234,24 +231,6 @@ export function MessageThread({
       </div>
     )
 
-  const scrollBtn = (
-    <AnimatePresence>
-      {showScrollButton && (
-        <m.button
-          initial={{ opacity: 0, y: 20, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 20, scale: 0.8 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-          onClick={onScrollToBottom}
-          aria-label="Scroll to bottom"
-          className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-primary-bg hover:bg-primary-bg-hover rounded-full flex items-center justify-center shadow-md shadow-glow-primary-sm transition-colors z-50`}
-        >
-          <ChevronDown className="w-5 h-5 text-white" />
-        </m.button>
-      )}
-    </AnimatePresence>
-  )
-
   if (messages.length >= VIRTUALIZATION_THRESHOLD)
     return (
       <div className="flex-1 relative flex flex-col">
@@ -268,7 +247,6 @@ export function MessageThread({
             </div>
           )}
         </AnimatePresence>
-        {scrollBtn}
       </div>
     )
 
@@ -287,7 +265,6 @@ export function MessageThread({
         <AnimatePresence>{typingText && <TypingIndicator text={typingText} />}</AnimatePresence>
         <div ref={messagesEndRef} />
       </div>
-      {scrollBtn}
     </div>
   )
 }

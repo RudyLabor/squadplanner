@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { createElement, createRef } from 'react'
 import { MessageThread } from '../MessageThread'
 import type { MessageBubbleMessage } from '../MessageBubble'
@@ -19,9 +19,7 @@ vi.mock('framer-motion', () => ({
 }))
 
 // Mock icons
-vi.mock('../../icons', () => ({
-  ChevronDown: (props: any) => createElement('svg', { ...props, 'data-testid': 'chevron-down' }),
-}))
+vi.mock('../../icons', () => ({}))
 
 // Mock tanstack virtual
 vi.mock('@tanstack/react-virtual', () => ({
@@ -152,7 +150,6 @@ const defaultProps = {
   isLoading: false,
   embedded: false,
   typingText: null as string | null,
-  showScrollButton: false,
   messagesContainerRef: createRef<HTMLDivElement>(),
   messagesEndRef: createRef<HTMLDivElement>(),
   messages: [msg1, msg2],
@@ -167,7 +164,6 @@ const defaultProps = {
   onPollVote: vi.fn(),
   onScrollToMessage: vi.fn(),
   onScroll: vi.fn(),
-  onScrollToBottom: vi.fn(),
   getMessageDate: (d: string) => new Date(d).toDateString(),
 }
 
@@ -319,31 +315,6 @@ describe('MessageThread', () => {
   it('does not show typing indicator when typingText is null', () => {
     render(<MessageThread {...defaultProps} typingText={null} />)
     expect(screen.queryByTestId('typing-indicator')).not.toBeInTheDocument()
-  })
-
-  // === SCROLL TO BOTTOM BUTTON ===
-
-  it('shows scroll-to-bottom button when showScrollButton=true', () => {
-    render(<MessageThread {...defaultProps} showScrollButton={true} />)
-    expect(screen.getByLabelText('Scroll to bottom')).toBeInTheDocument()
-  })
-
-  it('hides scroll-to-bottom button when showScrollButton=false', () => {
-    render(<MessageThread {...defaultProps} showScrollButton={false} />)
-    expect(screen.queryByLabelText('Scroll to bottom')).not.toBeInTheDocument()
-  })
-
-  it('calls onScrollToBottom when scroll button clicked', () => {
-    const onScrollToBottom = vi.fn()
-    render(
-      <MessageThread
-        {...defaultProps}
-        showScrollButton={true}
-        onScrollToBottom={onScrollToBottom}
-      />
-    )
-    fireEvent.click(screen.getByLabelText('Scroll to bottom'))
-    expect(onScrollToBottom).toHaveBeenCalledOnce()
   })
 
   // === VIRTUALIZATION THRESHOLD ===

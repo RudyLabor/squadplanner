@@ -80,11 +80,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game, total_members)')
     .eq('user_id', user.id)
 
-  const squads: PartySquad[] = (
+  const rawSquads = (
     (memberships as PartyMembershipRow[] | null)?.map((m) => m.squads) || []
-  ).map((squad) => ({
+  )
+
+  // Count real members per squad (total_members column may be stale)
+  const memberCounts = new Map<string, number>()
+  if (rawSquads.length) {
+    const squadIds = rawSquads.map((s) => s.id)
+    const { data: allMembers } = await supabase
+      .from('squad_members')
+      .select('squad_id')
+      .in('squad_id', squadIds)
+    allMembers?.forEach((m: { squad_id: string }) => {
+      memberCounts.set(m.squad_id, (memberCounts.get(m.squad_id) || 0) + 1)
+    })
+  }
+
+  const squads: PartySquad[] = rawSquads.map((squad) => ({
     ...squad,
-    member_count: squad.total_members ?? 1,
+    member_count: memberCounts.get(squad.id) || squad.total_members || 1,
   }))
 
   return data({ squads }, { headers })
@@ -113,9 +128,30 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     5000
   )) as any
 
-  const squads: PartySquad[] = (
+  const rawSquads = (
     (memberships as PartyMembershipRow[] | null)?.map((m) => m.squads) || []
-  ).map((squad) => ({ ...squad, member_count: squad.total_members ?? 1 }))
+  )
+
+  // Count real members per squad (total_members column may be stale)
+  const memberCounts = new Map<string, number>()
+  if (rawSquads.length) {
+    const squadIds = rawSquads.map((s: RawPartySquadData) => s.id)
+    const { data: allMembers } = (await withTimeout(
+      supabase
+        .from('squad_members')
+        .select('squad_id')
+        .in('squad_id', squadIds),
+      5000
+    )) as any
+    ;(allMembers as { squad_id: string }[] | null)?.forEach((m) => {
+      memberCounts.set(m.squad_id, (memberCounts.get(m.squad_id) || 0) + 1)
+    })
+  }
+
+  const squads: PartySquad[] = rawSquads.map((squad: RawPartySquadData) => ({
+    ...squad,
+    member_count: memberCounts.get(squad.id) || squad.total_members || 1,
+  }))
 
   return { squads }
 }

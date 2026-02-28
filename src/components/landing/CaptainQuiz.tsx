@@ -111,7 +111,7 @@ export function CaptainQuiz() {
           </p>
         </div>
 
-        <div className="p-6 rounded-2xl bg-surface-card border border-border-subtle">
+        <div className="p-4 md:p-6 rounded-2xl bg-surface-card border border-border-subtle">
           <AnimatePresence mode="wait">
             {!result ? (
               <m.div
@@ -136,7 +136,7 @@ export function CaptainQuiz() {
                   </span>
                 </div>
 
-                <h3 className="text-md font-semibold text-text-primary mb-4">
+                <h3 className="text-sm md:text-md font-semibold text-text-primary mb-4">
                   {QUESTIONS[currentQ].question}
                 </h3>
 
@@ -146,7 +146,7 @@ export function CaptainQuiz() {
                       key={opt.label}
                       type="button"
                       onClick={() => handleAnswer(opt.type as ProfileType)}
-                      className="w-full text-left p-3 rounded-xl border border-border-subtle hover:border-primary/40 hover:bg-primary/[0.04] text-sm text-text-secondary hover:text-text-primary transition-all"
+                      className="w-full text-left px-3 py-2.5 md:p-3 rounded-xl border border-border-subtle hover:border-primary/40 hover:bg-primary/[0.04] text-xs md:text-sm text-text-secondary hover:text-text-primary transition-all break-words"
                     >
                       {opt.label}
                     </button>

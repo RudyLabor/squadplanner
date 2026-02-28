@@ -79,7 +79,6 @@ export function Messages() {
   const [searchQuery, setSearchQuery] = useState('')
   const [messageSearchQuery, setMessageSearchQuery] = useState('')
   const [showMessageSearch, setShowMessageSearch] = useState(false)
-  const [showScrollButton, setShowScrollButton] = useState(false)
   const [editingMessage, setEditingMessage] = useState<{ id: string; content: string } | null>(null)
   const [replyingTo, setReplyingTo] = useState<{
     id: string
@@ -224,11 +223,7 @@ export function Messages() {
   }, [activeSquadConv, markSquadAsRead])
 
   const handleScroll = useCallback(() => {
-    const c = messagesContainerRef.current
-    if (c) setShowScrollButton(c.scrollHeight - c.scrollTop - c.clientHeight >= 100)
-  }, [])
-  const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // Keep for future use (e.g. mark-as-read on scroll)
   }, [])
   const showToast = useCallback((msg: string, v: 'success' | 'error' = 'success') => {
     setToast({ message: msg, variant: v, visible: true })
@@ -520,7 +515,6 @@ export function Messages() {
         isLoading={isLoading}
         embedded={embedded}
         typingText={typingText}
-        showScrollButton={showScrollButton}
         memberRolesMap={memberRolesMap}
         messagesContainerRef={messagesContainerRef}
         messagesEndRef={messagesEndRef}
@@ -534,7 +528,6 @@ export function Messages() {
         onPollVote={handlePollVote}
         onScrollToMessage={scrollToMessage}
         onScroll={handleScroll}
-        onScrollToBottom={scrollToBottom}
       />
       <MessageComposer
         embedded={embedded}

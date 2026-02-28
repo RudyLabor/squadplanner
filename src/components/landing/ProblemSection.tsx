@@ -15,8 +15,8 @@ const chevronVariants = {
 }
 
 const problems = [
-  { emoji: '💬', text: '\u00AB\u00A0On joue ce soir ?\u00A0\u00BB → Personne ne répond' },
-  { emoji: '🤷', text: '\u00AB\u00A0Je sais pas, on verra\u00A0\u00BB → Rien ne se passe' },
+  { emoji: '💬', text: '« On joue ce soir ? » → Personne ne répond' },
+  { emoji: '🤷', text: '« Je sais pas, on verra » → Rien ne se passe' },
   { emoji: '👻', text: 'Session prévue → 2 mecs sur 5 se connectent' },
   { emoji: '😤', text: "Tout le monde attend que quelqu'un organise" },
 ]

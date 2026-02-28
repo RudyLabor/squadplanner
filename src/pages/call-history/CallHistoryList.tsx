@@ -162,12 +162,12 @@ export function CallHistoryList({
           <Phone className="w-10 h-10 text-primary" />
         </m.div>
         <h3 className="text-lg font-semibold text-text-primary mb-2">
-          {filter === 'all' ? 'Pr\u00eat \u00e0 appeler ta squad ?' : 'Rien pour le moment'}
+          {filter === 'all' ? 'PrÃªt Ã  appeler ta squad ?' : 'Rien pour le moment'}
         </h3>
         <p className="text-md text-text-tertiary text-center max-w-[280px] mb-6">
           {filter === 'all'
             ? 'Lance un appel vocal avec tes potes depuis la party !'
-            : `Aucun appel ${filter === 'incoming' ? 'entrant' : filter === 'outgoing' ? 'sortant' : 'manqu\u00e9'} pour le moment`}
+            : `Aucun appel ${filter === 'incoming' ? 'entrant' : filter === 'outgoing' ? 'sortant' : 'manqué'} pour le moment`}
         </p>
         {filter === 'all' && (
           <Link to="/party">

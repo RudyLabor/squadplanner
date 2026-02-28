@@ -92,11 +92,11 @@ export function HelpContactSection() {
             <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center">
               <CheckCircle className="w-7 h-7 text-success" />
             </div>
-            <p className="text-md font-semibold text-text-primary">Message envoyé\u00a0!</p>
+            <p className="text-md font-semibold text-text-primary">Message envoyé !</p>
             <p className="text-base text-text-secondary text-center">
               {hasPremium
-                ? 'Merci\u00a0! Ton ticket prioritaire a été envoyé. On te répond au plus vite.'
-                : 'Merci pour ton retour\u00a0! On te répond sous 48h.'}
+                ? 'Merci ! Ton ticket prioritaire a été envoyé. On te répond au plus vite.'
+                : 'Merci pour ton retour ! On te répond sous 48h.'}
             </p>
             <button
               onClick={() => {

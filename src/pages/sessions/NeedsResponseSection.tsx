@@ -27,8 +27,8 @@ export function NeedsResponseSection({ needsResponse }: NeedsResponseSectionProp
           </h2>
         </div>
         <p className="text-base text-text-secondary mb-3">
-          👉 <span className="text-text-primary">R\u00e9ponds maintenant</span> \u2014 sans ta r\u00e9ponse,
-          ta squad ne peut pas s'organiser. Chaque r\u00e9ponse rapide booste ta fiabilit\u00e9 de +5\u00a0%.
+          👉 <span className="text-text-primary">Réponds maintenant</span> — sans ta réponse,
+          ta squad ne peut pas s'organiser. Chaque réponse rapide booste ta fiabilité de +5 %.
         </p>
         <ul className="space-y-2" aria-label="Sessions en attente">
           {needsResponse.slice(0, 3).map((session) => (

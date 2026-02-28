@@ -251,7 +251,7 @@ export default function Auth() {
                 </div>
                 <h1 className="text-lg font-bold text-text-primary mb-2">
                   {mode === 'login'
-                    ? "Ta squad t'attend — reconnecte-toi\u00a0!"
+                    ? "Ta squad t'attend — reconnecte-toi !"
                     : mode === 'reset'
                       ? 'Nouveau mot de passe'
                       : 'Rejoins ta squad en 30 secondes'}

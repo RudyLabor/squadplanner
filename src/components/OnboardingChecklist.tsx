@@ -111,7 +111,7 @@ export function OnboardingChecklist({
     {
       id: 'squad',
       label: 'Crée ou rejoins ta première squad',
-      description: '30 secondes, c\u2019est tout',
+      description: '30 secondes, c’est tout',
       done: hasSquad,
       icon: Users,
       action: hasSquad ? undefined : { type: 'link' as const, to: '/squads' },
@@ -119,7 +119,7 @@ export function OnboardingChecklist({
     {
       id: 'invite',
       label: 'Invite un pote',
-      description: 'Copie le lien, envoie-le. Termin\u00e9.',
+      description: 'Copie le lien, envoie-le. Terminé.',
       done: inviteCopied,
       icon: UserPlus,
       action: inviteCopied ? undefined : { type: 'button' as const, onClick: handleCopyInvite },
@@ -127,7 +127,7 @@ export function OnboardingChecklist({
     {
       id: 'session',
       label: 'Planifie ta première session',
-      description: 'Choisis un cr\u00e9neau, ta squad confirme',
+      description: 'Choisis un créneau, ta squad confirme',
       done: hasSession,
       icon: Calendar,
       action: hasSession ? undefined : { type: 'button' as const, onClick: onCreateSession },

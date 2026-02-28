@@ -52,7 +52,7 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
             Comment ça marche
           </h2>
           <p className="text-text-tertiary text-lg">
-            De {'\u00ab\u00a0'}j'ai pas de squad{'\u00a0\u00bb'} à {'\u00ab\u00a0'}on joue ce soir{'\u00a0\u00bb'} en 30 secondes
+            De {'« '}j'ai pas de squad{' »'} à {'« '}on joue ce soir{' »'} en 30 secondes
           </p>
         </m.div>
 

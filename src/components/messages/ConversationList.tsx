@@ -144,7 +144,7 @@ const DMConversationCard = memo(function DMConversationCard({
           <p
             className={`text-base truncate ${c.unread_count > 0 ? 'text-text-tertiary' : 'text-text-quaternary'}`}
           >
-            {c.last_message_content || <span className="italic">Dis-lui bonjour\u00a0!</span>}
+            {c.last_message_content || <span className="italic">Dis-lui bonjour !</span>}
           </p>
         </div>
       </div>
@@ -293,7 +293,7 @@ export function ConversationList({
           <EmptyState
             type="no_messages"
             title="Envoie le premier message"
-            message="Clique sur un membre de ta squad pour lancer la conversation \u2014 c'est souvent comme \u00e7a que les meilleures sessions commencent."
+            message="Clique sur un membre de ta squad pour lancer la conversation — c'est souvent comme Ã§a que les meilleures sessions commencent."
             actionLabel="Voir mes squads"
             onAction={() => (window.location.href = '/squads')}
           />

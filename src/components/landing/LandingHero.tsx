@@ -157,7 +157,7 @@ export function LandingHero({
           </div>
 
           <p className="text-base text-text-quaternary text-center">
-            +2{'\u00a0'}000 gamers organisent déjà leurs sessions — rejoins-les
+            +2{' '}000 gamers organisent déjà leurs sessions — rejoins-les
           </p>
 
           {!isLoggedIn && (

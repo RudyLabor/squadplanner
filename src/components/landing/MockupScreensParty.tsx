@@ -238,7 +238,7 @@ export function ProfileScreen() {
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.8 + j * 0.05 }}
                 >
-                  {ok ? '\u2705' : '\u274C'}
+                  {ok ? '✅' : '❌'}
                 </m.span>
               ))}
             </div>
@@ -253,10 +253,10 @@ export function ProfileScreen() {
         transition={{ delay: 0.5 }}
       >
         {[
-          { label: 'Sessions', value: '12', icon: '\uD83D\uDCC5' },
-          { label: 'Check-ins', value: '11', icon: '\u2705' },
-          { label: 'Squads', value: '2', icon: '\uD83D\uDC65' },
-          { label: 'Challenges', value: '3/9', icon: '\uD83C\uDFC5' },
+          { label: 'Sessions', value: '12', icon: '📅' },
+          { label: 'Check-ins', value: '11', icon: '✅' },
+          { label: 'Squads', value: '2', icon: '👥' },
+          { label: 'Challenges', value: '3/9', icon: '🏅' },
         ].map((s) => (
           <div key={s.label} className="p-2.5 rounded-lg bg-bg-surface border border-border-subtle">
             <div className="flex items-center gap-1.5">

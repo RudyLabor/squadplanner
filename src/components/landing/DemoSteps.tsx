@@ -46,7 +46,7 @@ export const demoSteps: DemoStep[] = [
   },
   {
     id: 'play',
-    title: 'Jouez ensemble\u00a0!',
+    title: 'Jouez ensemble !',
     subtitle: 'Party vocale en cours',
     duration: 3000,
     icon: Headphones,
@@ -55,11 +55,11 @@ export const demoSteps: DemoStep[] = [
 ]
 
 const mockUsers = [
-  { name: 'Alex', emoji: '\uD83C\uDFAE', color: 'var(--color-primary)' },
-  { name: 'Sarah', emoji: '\uD83C\uDFAF', color: 'var(--color-success)' },
-  { name: 'Lucas', emoji: '\uD83D\uDD25', color: 'var(--color-warning)' },
-  { name: 'Emma', emoji: '\u2B50', color: 'var(--color-purple)' },
-  { name: 'Hugo', emoji: '\uD83C\uDFA7', color: 'var(--color-error)' },
+  { name: 'Alex', emoji: '🎮', color: 'var(--color-primary)' },
+  { name: 'Sarah', emoji: '🎯', color: 'var(--color-success)' },
+  { name: 'Lucas', emoji: '🔥', color: 'var(--color-warning)' },
+  { name: 'Emma', emoji: '⭐', color: 'var(--color-purple)' },
+  { name: 'Hugo', emoji: '🎧', color: 'var(--color-error)' },
 ]
 
 // Shared navbar for stepper mockups

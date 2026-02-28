@@ -5,7 +5,7 @@ import { Button, Card, CardContent } from '../ui'
 import { PremiumGate } from '../PremiumGate'
 import { getRoleConfig, isAdvancedRole, ASSIGNABLE_ROLES, type SquadRole } from '../../lib/roles'
 import { useUpdateMemberRoleMutation } from '../../hooks/queries'
-// LAZY LOAD: useVoiceCall import\u00e9 uniquement si call button cliqu\u00e9
+// LAZY LOAD: useVoiceCall importé uniquement si call button cliqué
 // import { useVoiceCallStore } from '../../hooks/useVoiceCall'
 
 interface MemberProfile {
@@ -167,7 +167,7 @@ function RoleAssignDropdown({
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium hover:bg-bg-hover transition-colors min-h-[32px]"
-        aria-label={`Changer le r\u00f4le de ${member.profiles?.username || 'ce joueur'}`}
+        aria-label={`Changer le rÃ´le de ${member.profiles?.username || 'ce joueur'}`}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
@@ -179,7 +179,7 @@ function RoleAssignDropdown({
         <div
           className="absolute right-0 top-full mt-1 w-56 rounded-xl bg-bg-secondary border border-border-default shadow-xl z-50 py-1 overflow-hidden"
           role="listbox"
-          aria-label="S\u00e9lectionner un r\u00f4le"
+          aria-label="Sélectionner un rÃ´le"
         >
           {ASSIGNABLE_ROLES.map((role) => {
             const config = getRoleConfig(role)
@@ -262,7 +262,7 @@ const MemberCard = memo(function MemberCard({
   squadId: string
 }) {
   const navigate = useNavigate()
-  // LAZY LOAD: useVoiceCall sera import\u00e9 dans handleCall
+  // LAZY LOAD: useVoiceCall sera importé dans handleCall
   const reliability = member.profiles?.reliability_score ?? 100
   const isCurrentUser = member.user_id === currentUserId
   const isMemberLeader = member.role === 'leader'
@@ -335,7 +335,7 @@ const MemberCard = memo(function MemberCard({
           <button
             onClick={handleMessage}
             className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-bg-hover transition-colors flex items-center justify-center"
-            aria-label={`Envoyer un message \u00e0 ${member.profiles?.username || 'ce joueur'}`}
+            aria-label={`Envoyer un message Ã  ${member.profiles?.username || 'ce joueur'}`}
           >
             <MessageCircle className="w-5 h-5 text-primary" aria-hidden="true" />
           </button>

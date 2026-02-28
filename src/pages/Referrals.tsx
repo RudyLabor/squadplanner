@@ -214,7 +214,7 @@ export function Referrals() {
                       background: 'linear-gradient(135deg, var(--color-success-5), transparent)',
                     }}
                   >
-                    {stats?.referralCode || '\u2014'}
+                    {stats?.referralCode || '—'}
                   </div>
                   <Button
                     variant="primary"

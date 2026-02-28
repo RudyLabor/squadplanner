@@ -96,7 +96,7 @@ interface UpcomingSession {
 // Badge fiabilité avec glow subtil et tooltip
 function ReliabilityBadge({ score }: { score: number }) {
   const tooltipText =
-    'Ton score de fiabilit\u00e9 refl\u00e8te ta r\u00e9putation dans ta squad. +5\u202f% quand tu confirmes, -10\u202f% si tu ne r\u00e9ponds pas. Les joueurs au-dessus de 95\u202f% sont les premiers invit\u00e9s aux sessions\u00a0!'
+    'Ton score de fiabilité reflÃ¨te ta réputation dans ta squad. +5 % quand tu confirmes, -10 % si tu ne réponds pas. Les joueurs au-dessus de 95 % sont les premiers invités aux sessions !'
 
   const getBadgeContent = () => {
     if (score >= 95) {
@@ -274,7 +274,7 @@ export default function Home({ loaderData }: HomeProps) {
         if (response === 'present') {
           haptic.success()
           fireConfetti()
-          setSuccessMessage("Confirm\u00e9\u00a0! Ta squad sait qu'elle peut compter sur toi \uD83D\uDD25")
+          setSuccessMessage("Confirmé ! Ta squad sait qu'elle peut compter sur toi 🔥")
           rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 5000))
         } else {
           setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
@@ -405,16 +405,16 @@ export default function Home({ loaderData }: HomeProps) {
               <h1 className="text-lg md:text-xl font-bold text-text-primary mb-1">
                 {greeting}
                 {profile?.username
-                  ? ` ${profile.username.length > 15 ? profile.username.slice(0, 15) + '\u2026' : profile.username}`
+                  ? ` ${profile.username.length > 15 ? profile.username.slice(0, 15) + '…' : profile.username}`
                   : ''}{' '}
                 !
               </h1>
               <p className="text-sm text-text-tertiary">
                 {upcomingSessions.length > 0
                   ? pendingRsvps > 0
-                    ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} sans ta r\u00e9ponse \u2014 ta squad ne peut pas s'organiser sans toi`
-                    : "T'es carr\u00e9, toutes tes sessions sont confirm\u00e9es \uD83D\uDD25"
-                  : "Chaque jour sans session, c'est un soir o\u00f9 ta squad joue sans toi"}
+                    ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} sans ta réponse — ta squad ne peut pas s'organiser sans toi`
+                    : "T'es carré, toutes tes sessions sont confirmées 🔥"
+                  : "Chaque jour sans session, c'est un soir où ta squad joue sans toi"}
               </p>
               <div className="flex items-center gap-2 mt-2">
                 <PlanBadge tier={tier} size="sm" />

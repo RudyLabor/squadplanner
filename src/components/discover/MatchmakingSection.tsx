@@ -92,9 +92,9 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
       await supabase.from('direct_messages').insert({
         sender_id: user.id,
         receiver_id: player.user_id,
-        content: `Salut ${player.username}\u00a0! Je t'invite \u00e0 rejoindre ma squad. \u00e7a te dit\u00a0?`,
+        content: `Salut ${player.username} ! Je t'invite Ã  rejoindre ma squad. Ã§a te dit ?`,
       })
-      showSuccess(`Message envoy\u00e9 \u00e0 ${player.username}\u00a0!`)
+      showSuccess(`Message envoyé Ã  ${player.username} !`)
     } catch {
       showError("Erreur lors de l'envoi")
     } finally {

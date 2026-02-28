@@ -270,7 +270,7 @@ export default function VsGuildedVsSquadPlanner() {
                 </div>
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Guilded Premium</div>
-                  <p className="text-text-secondary text-md">~4,99\u00a0$/mois (prix US estimé)</p>
+                  <p className="text-text-secondary text-md">~4,99 $/mois (prix US estimé)</p>
                   <p className="text-text-tertiary text-sm mt-1">*(supprimé depuis fermeture)</p>
                 </div>
               </div>

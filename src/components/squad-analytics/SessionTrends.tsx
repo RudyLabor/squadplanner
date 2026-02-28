@@ -128,7 +128,7 @@ export default function SessionTrends({ squadId }: { squadId: string }) {
                     animate={{ height: `${heightPercent}%` }}
                     transition={{ delay: idx * 0.05 + 0.1, duration: 0.4 }}
                     className="w-full bg-gradient-to-t from-primary to-primary-50 rounded-t-lg hover:from-primary-80 transition-all cursor-pointer group relative"
-                    title={`Semaine ${item.week + 1}\u00a0: ${item.count} session${item.count !== 1 ? 's' : ''}`}
+                    title={`Semaine ${item.week + 1} : ${item.count} session${item.count !== 1 ? 's' : ''}`}
                   >
                     {/* Tooltip */}
                     {item.count > 0 && (

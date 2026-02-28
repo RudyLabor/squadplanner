@@ -179,7 +179,7 @@ export function SettingsDeleteModal({ isOpen, onClose }: SettingsDeleteModalProp
                     Suppression...
                   </>
                 ) : (
-                  'Supprimer d\u00e9finitivement'
+                  'Supprimer définitivement'
                 )}
               </button>
             </div>

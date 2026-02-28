@@ -492,7 +492,7 @@ export function Settings() {
                 <div className="text-left">
                   <p className="text-md text-text-primary">Inviter des amis</p>
                   <p className="text-sm text-text-quaternary">
-                    Chaque ami parrain\u00e9 te rapproche du Premium gratuit
+                    Chaque ami parrainé te rapproche du Premium gratuit
                   </p>
                 </div>
               </div>

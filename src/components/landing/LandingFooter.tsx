@@ -57,7 +57,7 @@ export function LandingFooter() {
         <div className="max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full badge-shimmer border border-primary/20 mb-5">
             <Users className="w-3.5 h-3.5 text-primary" />
-            <span className="text-sm font-medium text-primary">+2{'\u00a0'}000 gamers s'organisent déjà</span>
+            <span className="text-sm font-medium text-primary">+2{' '}000 gamers s'organisent déjà</span>
           </div>
           <h3 className="text-lg md:text-xl font-bold text-text-primary mb-2">
             Sois le premier informé
@@ -106,7 +106,7 @@ export function LandingFooter() {
             )}
             {newsletterSuccess && (
               <p role="status" className="text-success text-sm mt-2">
-                Merci\u00a0! Tu recevras nos actus.
+                Merci ! Tu recevras nos actus.
               </p>
             )}
           </form>

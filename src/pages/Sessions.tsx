@@ -118,10 +118,10 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
                 </h1>
                 <p className="text-sm text-text-secondary">
                   {needsResponse.length > 0
-                    ? `${needsResponse.length} session${needsResponse.length > 1 ? 's' : ''} sans ta r\u00e9ponse \u2014 ta squad attend`
+                    ? `${needsResponse.length} session${needsResponse.length > 1 ? 's' : ''} sans ta réponse — ta squad attend`
                     : confirmed.length > 0
-                      ? `${confirmed.length} session${confirmed.length > 1 ? 's' : ''} confirm\u00e9e${confirmed.length > 1 ? 's' : ''} \u2014 ta squad compte sur toi\u202f!`
-                      : 'Aucune session pr\u00e9vue \u2014 propose un cr\u00e9neau en 30\u00a0secondes'}
+                      ? `${confirmed.length} session${confirmed.length > 1 ? 's' : ''} confirmée${confirmed.length > 1 ? 's' : ''} — ta squad compte sur toi !`
+                      : 'Aucune session prévue — propose un créneau en 30 secondes'}
                 </p>
               </div>
               <Button size="sm" onClick={() => openCreateSession()}>

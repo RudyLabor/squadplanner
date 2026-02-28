@@ -250,7 +250,7 @@ export function ClubDashboard() {
     document.body.removeChild(link)
 
     URL.revokeObjectURL(url)
-    toast.success('Export CSV t\u00e9l\u00e9charg\u00e9 \u2014 tes stats, tes donn\u00e9es')
+    toast.success('Export CSV téléchargé — tes stats, tes données')
   }, [squads])
 
   // PDF Export handler (placeholder)
@@ -322,7 +322,7 @@ export function ClubDashboard() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-text-primary">Dashboard Club</h1>
-            <p className="text-sm text-text-tertiary">Toutes tes squads, un seul tableau de bord \u2014 z\u00e9ro info qui t'\u00e9chappe</p>
+            <p className="text-sm text-text-tertiary">Toutes tes squads, un seul tableau de bord — zéro info qui t'échappe</p>
           </div>
         </m.div>
 
@@ -385,7 +385,7 @@ export function ClubDashboard() {
                   {clubStats.sessionsThisWeek}
                 </m.div>
                 <p className="text-xs text-text-tertiary mt-2">
-                  {clubStats.sessionsThisWeek > 0 ? 'Cette semaine \u2014 tes squads sont actives' : 'Aucune cette semaine \u2014 propose un cr\u00e9neau'}
+                  {clubStats.sessionsThisWeek > 0 ? 'Cette semaine — tes squads sont actives' : 'Aucune cette semaine — propose un créneau'}
                 </p>
               </div>
             </CardContent>
@@ -449,10 +449,10 @@ export function ClubDashboard() {
                 </m.div>
                 <p className="text-xs text-text-tertiary mt-2">
                   {clubStats.avgReliabilityScore >= 95
-                    ? 'Ton club est au top \u2014 continue comme \u00e7a'
+                    ? 'Ton club est au top — continue comme Ã§a'
                     : clubStats.avgReliabilityScore >= 80
-                      ? 'Tr\u00e8s fiable \u2014 encore 15\u00a0points pour le top'
-                      : 'Chaque session confirm\u00e9e fait monter ce score'}
+                      ? 'TrÃ¨s fiable — encore 15 points pour le top'
+                      : 'Chaque session confirmée fait monter ce score'}
                 </p>
               </div>
             </CardContent>
@@ -515,8 +515,8 @@ export function ClubDashboard() {
                   <Users className="w-12 h-12 text-text-tertiary/50 mx-auto mb-4" />
                   <p className="text-text-tertiary mb-4">
                     {searchQuery
-                      ? 'Aucune squad trouv\u00e9e'
-                      : 'Sans squad, impossible de suivre tes stats. Cr\u00e9e ta premi\u00e8re en 30\u00a0secondes.'}
+                      ? 'Aucune squad trouvée'
+                      : 'Sans squad, impossible de suivre tes stats. Crée ta premiÃ¨re en 30 secondes.'}
                   </p>
                   {!searchQuery && (
                     <Link to="/squads">

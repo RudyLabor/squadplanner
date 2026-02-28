@@ -31,7 +31,7 @@ const advantages = [
   {
     title: 'Pensé pour le gaming',
     description:
-      "Squad Planner, c'est l'orga gaming complète\u00a0: calendrier, confirmation de présence, chat intégré et party vocale. Discord = commu.",
+      "Squad Planner, c'est l'orga gaming complète : calendrier, confirmation de présence, chat intégré et party vocale. Discord = commu.",
     icon: Users,
   },
   {

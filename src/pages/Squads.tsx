@@ -178,7 +178,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   }
 
   const getSubtitle = () => {
-    if (squads.length === 0) return 'Tes potes jouent ce soir \u2014 tu les rejoins\u00a0?'
+    if (squads.length === 0) return 'Tes potes jouent ce soir — tu les rejoins ?'
     if (squads.length === 1) return '1 squad'
     return `${squads.length} squads`
   }
@@ -296,7 +296,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                             Des joueurs cherchent une squad comme la tienne
                           </h3>
                           <p className="text-sm text-text-tertiary">
-                            Explore les squads publiques et agrandis ton r\u00e9seau de joueurs.
+                            Explore les squads publiques et agrandis ton réseau de joueurs.
                           </p>
                         </div>
                         <Link to="/discover" className="flex-shrink-0">
@@ -331,10 +331,10 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                       Chaque soir sans squad, c'est une session que tu rates
                     </h3>
                     <p className="text-md text-text-tertiary mb-2 max-w-[300px] mx-auto">
-                      Cr\u00e9e ta squad en 30 secondes, invite tes potes et finis-en avec les "on verra".
+                      Crée ta squad en 30 secondes, invite tes potes et finis-en avec les "on verra".
                     </p>
                     <p className="text-sm text-text-quaternary mb-6 max-w-[300px] mx-auto">
-                      Tu as d\u00e9j\u00e0 un code d'invitation\u00a0? Rejoins ta squad en un clic.
+                      Tu as déjÃ  un code d'invitation ? Rejoins ta squad en un clic.
                     </p>
                     <div className="flex flex-wrap gap-3 justify-center">
                       <Button variant="secondary" onClick={() => setShowJoin(true)}>

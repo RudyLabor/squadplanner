@@ -41,7 +41,7 @@ export const SessionCard = memo(function SessionCard({
   } else {
     timeLabel =
       date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' }) +
-      ` \u00B7 ${date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
+      ` · ${date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
   }
 
   const getStatusBadge = () => {

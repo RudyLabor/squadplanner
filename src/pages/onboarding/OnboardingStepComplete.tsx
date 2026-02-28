@@ -110,7 +110,7 @@ export function OnboardingStepComplete({
         transition={{ delay: 0.4 }}
         className="text-2xl font-extrabold text-text-primary mb-2"
       >
-        {createdSquadName ? `${createdSquadName} est pr\u00eate \u00e0 jouer\u00a0!` : "C'est parti\u00a0!"}
+        {createdSquadName ? `${createdSquadName} est prÃªte Ã  jouer !` : "C'est parti !"}
       </m.h2>
       <m.p
         initial={{ opacity: 0 }}
@@ -119,10 +119,10 @@ export function OnboardingStepComplete({
         className="text-text-secondary mb-4"
       >
         {createdSquadId
-          ? 'Ta squad est cr\u00e9\u00e9e. Invite tes potes et planifie ta premi\u00e8re session !'
+          ? 'Ta squad est créée. Invite tes potes et planifie ta premiÃ¨re session !'
           : squadsLength > 0
-            ? `Tu as rejoint ${firstSquadName}\u00a0! L'aventure commence.`
-            : 'Tu peux maintenant explorer ou cr\u00e9er ta squad'}
+            ? `Tu as rejoint ${firstSquadName} ! L'aventure commence.`
+            : 'Tu peux maintenant explorer ou créer ta squad'}
       </m.p>
 
       {/* Quick stats - what you just unlocked */}
@@ -135,7 +135,7 @@ export function OnboardingStepComplete({
         >
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 border border-primary/15">
             <Calendar className="w-4 h-4 text-primary" />
-            <span className="text-xs font-medium text-primary">Sessions illimit\u00e9es</span>
+            <span className="text-xs font-medium text-primary">Sessions illimitées</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-success/10 border border-success/15">
             <Zap className="w-4 h-4 text-success" />
@@ -172,7 +172,7 @@ export function OnboardingStepComplete({
                   <div>
                     <p className="text-sm text-text-tertiary">Jeu</p>
                     <p className="text-md font-semibold text-text-primary">
-                      {squadGame || 'Non d\u00e9fini'}
+                      {squadGame || 'Non défini'}
                     </p>
                   </div>
                 </div>
@@ -191,7 +191,7 @@ export function OnboardingStepComplete({
                       setTimeout(() => setCodeCopied(false), 2000)
                     }}
                     className={`p-3 rounded-lg hover:scale-[1.02] transition-interactive ${codeCopied ? 'bg-success-10' : 'bg-primary-10 hover:bg-primary-15'}`}
-                    aria-label={codeCopied ? 'Code copi\u00e9' : "Copier le code d'invitation"}
+                    aria-label={codeCopied ? 'Code copié' : "Copier le code d'invitation"}
                   >
                     {codeCopied ? (
                       <Check className="w-5 h-5 text-success" aria-hidden="true" />

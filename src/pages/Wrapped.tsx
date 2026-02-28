@@ -231,7 +231,7 @@ export function Wrapped() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl text-purple/70"
           >
-            Tout ce que tu as accompli cette ann\u00e9e
+            Tout ce que tu as accompli cette année
           </m.p>
         </div>
       ),
@@ -248,7 +248,7 @@ export function Wrapped() {
             transition={{ duration: 0.4 }}
             className="text-lg text-primary/60 mb-4"
           >
-            Tu as jou\u00e9 avec ta squad pendant
+            Tu as joué avec ta squad pendant
           </m.p>
           <m.div
             key="hours-counter"
@@ -288,7 +288,7 @@ export function Wrapped() {
             transition={{ duration: 0.4 }}
             className="text-lg text-orange-200 mb-4"
           >
-            Ta s\u00e9rie la plus longue
+            Ta série la plus longue
           </m.p>
           <m.div
             key="streak-count"

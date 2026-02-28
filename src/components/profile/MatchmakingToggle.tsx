@@ -178,7 +178,7 @@ export function MatchmakingToggle({
           <p className="text-xs text-text-tertiary mt-0.5">
             {isEnabled
               ? 'Tu es visible par les autres joueurs'
-              : 'Active pour être trouvé par d\u2019autres joueurs'}
+              : 'Active pour être trouvé par d’autres joueurs'}
           </p>
         </div>
         <m.div

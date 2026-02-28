@@ -108,7 +108,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
         </m.div>
         <h3 className="text-lg font-semibold text-text-primary mb-2">Sans squad, tu rates des sessions chaque semaine</h3>
         <p className="text-md text-text-tertiary mb-6 max-w-[250px] mx-auto">
-          Cr\u00e9e ta squad en 30 secondes, invite tes potes et finis-en avec les "on verra".
+          Crée ta squad en 30 secondes, invite tes potes et finis-en avec les "on verra".
         </p>
         <Link to="/squads">
           <m.button

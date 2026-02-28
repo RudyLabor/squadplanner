@@ -423,7 +423,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
         <Card className="p-8 bg-gradient-to-br from-primary/[0.075] to-warning/5 border-primary">
           <Crown className="w-12 h-12 text-warning mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-text-primary mb-2">
-            Ta squad mérite mieux qu'un {'\u00ab\u00a0'}on verra{'\u00a0\u00bb'}
+            Ta squad mérite mieux qu'un {'« '}on verra{' »'}
           </h3>
           <p className="text-md text-text-secondary mb-2 max-w-md mx-auto">
             Les squads Premium jouent plus régulièrement. À toi de jouer.

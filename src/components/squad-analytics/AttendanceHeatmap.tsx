@@ -171,7 +171,7 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
                     key={`${dayIdx}-${hour}`}
                     whileHover={{ scale: 1.1 }}
                     className={`w-12 h-12 rounded-lg ${color} border border-border-subtle cursor-pointer transition-all flex items-center justify-center text-xs font-semibold ${count > 0 ? 'text-white' : 'text-text-tertiary'}`}
-                    title={`${day} ${hour}h\u00a0: ${count} présent${count > 1 ? 's' : ''}`}
+                    title={`${day} ${hour}h : ${count} présent${count > 1 ? 's' : ''}`}
                   >
                     {count > 0 && count}
                   </m.div>

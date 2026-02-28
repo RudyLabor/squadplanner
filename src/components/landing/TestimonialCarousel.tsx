@@ -126,9 +126,9 @@ function TestimonialCard({ t }: { t: Testimonial }) {
         ))}
       </div>
       <p className="text-text-secondary text-sm leading-relaxed italic flex-1">
-        {'\u00AB\u00A0'}
+        {'« '}
         {t.text}
-        {'\u00A0\u00BB'}
+        {' »'}
       </p>
     </div>
   )
@@ -200,7 +200,7 @@ export function TestimonialCarousel() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        Tu reconnais ces situations{'\u00a0'}?
+        Tu reconnais ces situations{' '}?
       </m.h2>
       <m.p
         className="text-text-tertiary text-center mb-10"
@@ -209,7 +209,7 @@ export function TestimonialCarousel() {
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
       >
-        Si tu as déjà envoyé {'\u00ab\u00a0'}qui est dispo ce soir{'\u00a0?\u00a0\u00bb'} sans réponse… on a la solution.
+        Si tu as déjà envoyé {'« '}qui est dispo ce soir{' ? »'} sans réponse… on a la solution.
       </m.p>
 
       <div

@@ -77,7 +77,7 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-warning/10 to-warning/025 border border-warning/15">
                 <Gift className="w-4 h-4 text-warning" />
                 <span className="text-base font-medium text-warning">
-                  2 mois offerts — économise 16,78{'\u00a0'}€
+                  2 mois offerts — économise 16,78{' '}€
                 </span>
               </div>
             </div>

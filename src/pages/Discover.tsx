@@ -191,12 +191,12 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           >
             <Compass className="w-8 h-8 text-primary" />
           </m.div>
-          <h2 className="text-lg font-bold text-text-primary mb-2">Sois parmi les premiers\u00a0!</h2>
+          <h2 className="text-lg font-bold text-text-primary mb-2">Sois parmi les premiers !</h2>
           <p className="text-sm text-text-secondary mb-1">
-            Les squads publiques apparaissent ici \u2014 cr\u00e9e la tienne et elle sera visible par tous les joueurs.
+            Les squads publiques apparaissent ici — crée la tienne et elle sera visible par tous les joueurs.
           </p>
           <p className="text-xs text-text-tertiary mb-5">
-            Gratuit, en 30\u00a0secondes. Tes futurs coequipiers te cherchent d\u00e9j\u00e0.
+            Gratuit, en 30 secondes. Tes futurs coequipiers te cherchent déjÃ .
           </p>
           <Link
             to="/squads"
@@ -215,13 +215,13 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           </div>
           <div className="space-y-2.5 text-sm text-text-secondary">
             <p>
-              1. <strong className="text-text-primary">Cr\u00e9e ta squad</strong> en 30\u00a0secondes et invite tes potes via code ou lien.
+              1. <strong className="text-text-primary">Crée ta squad</strong> en 30 secondes et invite tes potes via code ou lien.
             </p>
             <p>
-              2. <strong className="text-text-primary">Planifie des sessions</strong> \u2014 ta squad r\u00e9pond, tout le monde s'engage.
+              2. <strong className="text-text-primary">Planifie des sessions</strong> — ta squad répond, tout le monde s'engage.
             </p>
             <p>
-              3. <strong className="text-text-primary">Rends-la publique</strong> et de nouveaux joueurs la d\u00e9couvrent ici.
+              3. <strong className="text-text-primary">Rends-la publique</strong> et de nouveaux joueurs la découvrent ici.
             </p>
           </div>
         </div>

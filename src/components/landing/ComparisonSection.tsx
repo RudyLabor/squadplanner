@@ -106,7 +106,7 @@ export function ComparisonSection() {
             Ce que Discord ne fait pas pour ta squad
           </h2>
           <p className="text-text-tertiary text-lg">
-            Tu utilises Discord pour discuter{'\u00a0'}? Parfait. Utilise Squad Planner pour{' '}
+            Tu utilises Discord pour discuter{' '}? Parfait. Utilise Squad Planner pour{' '}
             <span className="text-text-primary font-medium">enfin jouer</span>.
           </p>
         </m.div>

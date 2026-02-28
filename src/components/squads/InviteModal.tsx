@@ -86,7 +86,7 @@ export function InviteModal({
   const handleShare = async () => {
     const shareData = {
       title: `Rejoins ${squadName} sur Squad Planner !`,
-      text: `Rejoins ma squad \u00AB\u202F${squadName}\u202F\u00BB sur Squad Planner !`,
+      text: `Rejoins ma squad « ${squadName} » sur Squad Planner !`,
       url: shareUrl,
     }
 

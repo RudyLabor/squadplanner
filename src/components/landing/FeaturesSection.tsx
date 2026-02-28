@@ -30,16 +30,16 @@ const pillars = [
     illustration: CalendarIllustration,
     title: 'Planning intelligent',
     description:
-      'Propose un créneau. Chacun répond. Fini les «\u00a0peut-être\u00a0» sans suite. On sait qui vient.',
+      'Propose un créneau. Chacun répond. Fini les « peut-être » sans suite. On sait qui vient.',
     color: 'var(--color-gold)',
     gradient: 'from-warning/[0.08] to-warning/[0.01]',
     details: [
-      'Confirme ta présence — fini les «\u00a0peut-être\u00a0» sans suite',
+      'Confirme ta présence — fini les « peut-être » sans suite',
       'Confirmation auto quand assez de joueurs',
       'Rappels avant chaque session',
     ],
     detailText:
-      'Propose un créneau. Chaque pote répond. Fini les «\u00a0peut-être\u00a0» sans suite. La session se confirme quand vous êtes assez. Plus de ghosting.',
+      'Propose un créneau. Chaque pote répond. Fini les « peut-être » sans suite. La session se confirme quand vous êtes assez. Plus de ghosting.',
   },
   {
     id: 'reliability',

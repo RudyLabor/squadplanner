@@ -28,7 +28,7 @@ export function Toggle({
         animate={{ left: enabled ? 24 : 4 }}
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       />
-      <span className="sr-only">{enabled ? 'Activ\u00e9' : 'D\u00e9sactiv\u00e9'}</span>
+      <span className="sr-only">{enabled ? 'Activé' : 'Désactivé'}</span>
     </button>
   )
 }

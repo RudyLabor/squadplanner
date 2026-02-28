@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Sparkles } from '../icons'
 export function SuccessToast({ message, onClose }: { message: string; onClose: () => void }) {
-  const isCelebration = message.includes('confirm') || message.includes('\uD83D\uDD25')
+  const isCelebration = message.includes('confirm') || message.includes('🔥')
 
   useEffect(() => {
     const timer = setTimeout(onClose, isCelebration ? 4000 : 3000)

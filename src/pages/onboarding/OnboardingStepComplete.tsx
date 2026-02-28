@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { Check, ArrowRight, Users, Gamepad2, Copy, Gift } from '../../components/icons'
+import { Check, ArrowRight, Users, Gamepad2, Copy, Gift, Sparkles, Calendar, Zap } from '../../components/icons'
 import { Button, Card } from '../../components/ui'
 import { useReferralStore } from '../../hooks/useReferral'
 
@@ -25,11 +25,17 @@ export function OnboardingStepComplete({
 }: OnboardingStepCompleteProps) {
   const [codeCopied, setCodeCopied] = useState(false)
   const [refCopied, setRefCopied] = useState(false)
+  const [showStats, setShowStats] = useState(false)
   const { stats, fetchReferralStats, generateShareUrl } = useReferralStore()
 
   useEffect(() => {
     fetchReferralStats()
   }, [fetchReferralStats])
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowStats(true), 800)
+    return () => clearTimeout(timer)
+  }, [])
 
   const referralUrl = stats?.referralCode ? generateShareUrl() : null
 
@@ -41,25 +47,27 @@ export function OnboardingStepComplete({
       exit={{ opacity: 0 }}
       className="text-center"
     >
-      {/* Confetti animation - reduced to 8 particles */}
+      {/* Confetti animation - 12 particles for bigger celebration */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(8)].map((_, i) => (
+        {[...Array(12)].map((_, i) => (
           <m.div
             key={i}
             initial={{
               y: -20,
-              x: (i - 4) * 60,
+              x: (i - 6) * 50,
               opacity: 1,
               rotate: 0,
+              scale: 0,
             }}
             animate={{
-              y: 500,
+              y: 600,
               opacity: 0,
-              rotate: (i % 2 === 0 ? 1 : -1) * 180,
+              rotate: (i % 2 === 0 ? 1 : -1) * 360,
+              scale: 1,
             }}
             transition={{
-              duration: 2 + (i % 3) * 0.5,
-              delay: i * 0.08,
+              duration: 2.5 + (i % 3) * 0.5,
+              delay: i * 0.06,
               ease: 'easeOut',
             }}
             className="absolute top-0 left-1/2"
@@ -79,25 +87,62 @@ export function OnboardingStepComplete({
         ))}
       </div>
 
+      {/* Animated success icon with glow */}
       <m.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        className="w-20 h-20 rounded-full bg-success flex items-center justify-center mx-auto mb-6"
+        initial={{ scale: 0, rotate: -180 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
+        className="w-24 h-24 rounded-full bg-gradient-to-br from-success to-success/70 flex items-center justify-center mx-auto mb-6 shadow-glow-success relative"
       >
-        <Check className="w-10 h-10 text-white" />
+        <Check className="w-12 h-12 text-white" />
+        <m.div
+          className="absolute -top-1 -right-1"
+          animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
+          transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+        >
+          <Sparkles className="w-6 h-6 text-warning" />
+        </m.div>
       </m.div>
 
-      <h2 className="text-xl font-bold text-text-primary mb-2">
+      <m.h2
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="text-2xl font-extrabold text-text-primary mb-2"
+      >
         {createdSquadName ? `${createdSquadName} est pr\u00eate \u00e0 jouer\u00a0!` : "C'est parti\u00a0!"}
-      </h2>
-      <p className="text-text-secondary mb-6">
+      </m.h2>
+      <m.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="text-text-secondary mb-4"
+      >
         {createdSquadId
-          ? 'Plus qu\u2019une \u00e9tape\u00a0: invite tes potes et planifie ta premi\u00e8re session'
+          ? 'Ta squad est cr\u00e9\u00e9e. Invite tes potes et planifie ta premi\u00e8re session !'
           : squadsLength > 0
-            ? `Tu as rejoint ${firstSquadName} !`
+            ? `Tu as rejoint ${firstSquadName}\u00a0! L'aventure commence.`
             : 'Tu peux maintenant explorer ou cr\u00e9er ta squad'}
-      </p>
+      </m.p>
+
+      {/* Quick stats - what you just unlocked */}
+      {showStats && (
+        <m.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-center justify-center gap-4 mb-6"
+        >
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 border border-primary/15">
+            <Calendar className="w-4 h-4 text-primary" />
+            <span className="text-xs font-medium text-primary">Sessions illimit\u00e9es</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-success/10 border border-success/15">
+            <Zap className="w-4 h-4 text-success" />
+            <span className="text-xs font-medium text-success">Confirmations en 1 clic</span>
+          </div>
+        </m.div>
+      )}
 
       {/* Squad recap card */}
       {createdSquadCode && (

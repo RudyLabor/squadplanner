@@ -26,10 +26,12 @@ export function CtaSection() {
               <Sparkles className="w-12 h-12 mx-auto mb-6 text-primary" aria-hidden="true" />
             </m.div>
             <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-              Prêt à jouer vraiment ?
+              Tes potes attendent.
+              <br />
+              <span className="text-gradient-animated">Crée ta squad maintenant.</span>
             </h2>
             <p className="text-text-tertiary mb-8 text-lg">
-              Gratuit, sans engagement. Lance ta première session en 30 secondes.
+              Pendant que tu hésites, d'autres squads planifient déjà leur prochaine session.
             </p>
             <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
               <Link

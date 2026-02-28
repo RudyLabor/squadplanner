@@ -3,6 +3,12 @@
  * Chaque jeu est identifié par un slug URL-friendly.
  */
 
+export interface GameTestimonial {
+  quote: string
+  author: string
+  rank: string
+}
+
 export interface GameInfo {
   slug: string
   name: string
@@ -16,6 +22,13 @@ export interface GameInfo {
   estimatedPlayers: string // e.g. "15M+ joueurs actifs"
   color: string // tailwind color for accents
   tags: string[]
+  // R11/R12 — Game-specific marketing content
+  specificPainPoint: string
+  specificUseCase: string
+  specificFeatures: string[]
+  lfgSpecificCopy: string
+  // R13 — Game-specific testimonial
+  testimonial: GameTestimonial
 }
 
 export const GAMES: GameInfo[] = [
@@ -33,6 +46,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '28M+ joueurs actifs',
     color: 'red',
     tags: ['fps', 'tactique', 'compétitif', 'riot'],
+    specificPainPoint: 'Perdre son rank parce que le 5e ghost au dernier moment',
+    specificUseCase: 'Organise tes ranked 5-stack et ne joue plus jamais avec un random',
+    specificFeatures: ['Matchmaking par rank (Iron à Radiant)', 'Sessions ranked récurrentes', 'Score de fiabilité anti-ghost'],
+    lfgSpecificCopy: 'Cherche des coéquipiers ranked pour monter ensemble',
+    testimonial: { quote: "On est passés de Gold à Diamond en 2 mois grâce à une squad stable. Plus de randoms toxiques.", author: 'Alex', rank: 'Diamond 2' },
   },
   {
     slug: 'league-of-legends',
@@ -49,6 +67,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '150M+ joueurs actifs',
     color: 'blue',
     tags: ['moba', 'stratégie', 'compétitif', 'riot'],
+    specificPainPoint: 'Impossible de trouver 4 joueurs fiables pour du flex ranked',
+    specificUseCase: 'Monte en ranked avec une squad fixe qui connait ses rôles',
+    specificFeatures: ['Organisation par rôle (Top, Jungle, Mid, ADC, Support)', 'Sessions Clash planifiées', 'Suivi de progression collective'],
+    lfgSpecificCopy: 'Cherche des joueurs pour flex ranked ou Clash',
+    testimonial: { quote: "Enfin une squad Clash stable. On a gagné notre premier tournoi ensemble.", author: 'Sarah', rank: 'Platine 1' },
   },
   {
     slug: 'fortnite',
@@ -64,6 +87,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '80M+ joueurs actifs',
     color: 'purple',
     tags: ['battle-royale', 'construction', 'cross-platform'],
+    specificPainPoint: 'Tes potes sont sur 5 plateformes différentes et personne ne sait quand jouer',
+    specificUseCase: 'Coordonne tes sessions cross-platform pour ne rater aucun event',
+    specificFeatures: ['Planification cross-platform', 'Alertes events et mises à jour', 'Sessions duo, trio ou squad'],
+    lfgSpecificCopy: 'Cherche des joueurs pour ranked, créatif ou events saisonniers',
+    testimonial: { quote: "Avec Squad Planner on rate plus aucun event saisonnier. Tout le monde est prêt.", author: 'Lucas', rank: 'Champion League' },
   },
   {
     slug: 'rocket-league',
@@ -79,6 +107,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '90M+ joueurs',
     color: 'cyan',
     tags: ['sport', 'arcade', 'compétitif', 'cross-platform'],
+    specificPainPoint: 'Sessions courtes mais impossible de trouver un 3e pour du ranked',
+    specificUseCase: 'Lance des sessions rapides en 2v2 ou 3v3 après le boulot',
+    specificFeatures: ['Sessions courtes (15-30 min)', 'Tournois entre amis', 'Matchmaking par rank'],
+    lfgSpecificCopy: 'Cherche des coéquipiers 2v2 ou 3v3 pour monter en ranked',
+    testimonial: { quote: "On fait nos sessions 2v2 tous les mardis soir. Plus besoin de chercher un mate.", author: 'Théo', rank: 'Grand Champion' },
   },
   {
     slug: 'cs2',
@@ -95,6 +128,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '35M+ joueurs actifs',
     color: 'amber',
     tags: ['fps', 'compétitif', 'valve', 'tactique'],
+    specificPainPoint: 'Perdre un match compétitif parce que ton 5e ne se connecte jamais',
+    specificUseCase: 'Assure-toi que ta 5-stack est complète avant de lancer la ranked',
+    specificFeatures: ['Confirmation obligatoire avant le match', 'Sessions Premier planifiées', 'Score de fiabilité visible'],
+    lfgSpecificCopy: 'Cherche des joueurs pour du compétitif ou Premier',
+    testimonial: { quote: "Depuis qu'on utilise Squad Planner, on a toujours notre 5e. Notre taux de victoire a explosé.", author: 'Maxime', rank: 'Faceit Niveau 8' },
   },
   {
     slug: 'apex-legends',
@@ -110,6 +148,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '15M+ joueurs actifs',
     color: 'red',
     tags: ['battle-royale', 'fps', 'squad', 'hero-shooter'],
+    specificPainPoint: 'Ton trio tombe à duo au dernier moment et tu te fais écraser',
+    specificUseCase: 'Garde ton trio ranked soudé avec des sessions régulières',
+    specificFeatures: ['Squads de 3 optimisées', 'Rappels avant chaque session', 'Suivi de performance squad'],
+    lfgSpecificCopy: 'Cherche un 3e fiable pour du ranked ou des arenas',
+    testimonial: { quote: "Plus de duo forcé en ranked. On joue toujours à 3 maintenant.", author: 'Emma', rank: 'Master' },
   },
   {
     slug: 'minecraft',
@@ -125,6 +168,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '170M+ joueurs actifs',
     color: 'emerald',
     tags: ['survie', 'sandbox', 'créatif', 'cross-platform'],
+    specificPainPoint: 'Ton serveur survie meurt parce que personne ne se connecte en même temps',
+    specificUseCase: 'Coordonne tes sessions build ou survie pour que tout le monde soit là',
+    specificFeatures: ['Sessions longues (2h+)', 'Planification de projets build', 'Coordination serveur multi-joueurs'],
+    lfgSpecificCopy: 'Cherche des joueurs pour survie, créatif ou mini-jeux',
+    testimonial: { quote: "Notre serveur survie a jamais été aussi actif. On joue tous les mercredis.", author: 'Jules', rank: 'Joueur régulier' },
   },
   {
     slug: 'fifa',
@@ -141,6 +189,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '50M+ joueurs',
     color: 'green',
     tags: ['sport', 'football', 'compétitif', 'ea'],
+    specificPainPoint: 'Ton club Pro Clubs tombe à 5 joueurs parce que personne ne confirme',
+    specificUseCase: 'Organise tes sessions Pro Clubs et tournois entre amis',
+    specificFeatures: ['Planification de matchs Pro Clubs', 'Tournois entre amis', 'Rappels le jour du match'],
+    lfgSpecificCopy: 'Cherche des joueurs pour Pro Clubs ou tournois FUT',
+    testimonial: { quote: "On a enfin un club Pro Clubs complet chaque soir. Fini les matchs à 5.", author: 'Karim', rank: 'Division 2' },
   },
   {
     slug: 'call-of-duty',
@@ -157,6 +210,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '100M+ joueurs',
     color: 'orange',
     tags: ['fps', 'battle-royale', 'zombies', 'activision'],
+    specificPainPoint: 'Ta squad Warzone se connecte jamais en même temps',
+    specificUseCase: 'Planifie tes soirées Warzone, Zombies ou multi avec ta squad fixe',
+    specificFeatures: ['Sessions Warzone squad', 'Soirées Zombies planifiées', 'Multi modes (ranked, casual, customs)'],
+    lfgSpecificCopy: 'Cherche des joueurs pour Warzone, ranked ou Zombies',
+    testimonial: { quote: "Nos soirées Warzone du vendredi sont devenues sacrées. Tout le monde est là.", author: 'Antoine', rank: 'Iridescent' },
   },
   {
     slug: 'overwatch-2',
@@ -173,6 +231,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '25M+ joueurs actifs',
     color: 'orange',
     tags: ['hero-shooter', 'fps', 'compétitif', 'blizzard'],
+    specificPainPoint: 'Impossible de composer une team équilibrée quand personne ne confirme son rôle',
+    specificUseCase: 'Compose ta team par rôle (Tank, DPS, Support) et grimpe en ranked',
+    specificFeatures: ['Composition par rôle', 'Sessions ranked planifiées', 'Suivi de SR collectif'],
+    lfgSpecificCopy: 'Cherche Tank/DPS/Support pour du ranked ou quickplay',
+    testimonial: { quote: "On compose notre team à l'avance, plus de surprise au dernier moment.", author: 'Marie', rank: 'Master' },
   },
   {
     slug: 'destiny-2',
@@ -188,6 +251,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '10M+ joueurs',
     color: 'indigo',
     tags: ['looter-shooter', 'mmo', 'raid', 'bungie'],
+    specificPainPoint: 'Trouver 5 joueurs fiables pour un raid de 3 heures un samedi soir',
+    specificUseCase: 'Planifie tes raids et strikes avec une équipe qui se présente vraiment',
+    specificFeatures: ['Sessions longues (raids 3h+)', 'Check-in obligatoire', 'Planification de raids hebdomadaires'],
+    lfgSpecificCopy: 'Cherche des gardiens pour raids, donjons ou Trials',
+    testimonial: { quote: "Premier raid Day One réussi grâce à une squad fiable. Tout le monde était prêt.", author: 'Nico', rank: 'Power Level 2000+' },
   },
   {
     slug: 'gta-online',
@@ -204,6 +272,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '30M+ joueurs',
     color: 'lime',
     tags: ['monde-ouvert', 'action', 'braquage', 'rockstar'],
+    specificPainPoint: 'Ton braquage tombe à l\'eau parce qu\'il manque toujours quelqu\'un',
+    specificUseCase: 'Organise tes braquages, courses et soirées délire avec ta squad',
+    specificFeatures: ['Planification de braquages', 'Sessions soirées thématiques', 'Coordination multi-activités'],
+    lfgSpecificCopy: 'Cherche des joueurs pour braquages, courses ou délires',
+    testimonial: { quote: "Nos braquages du dimanche sont devenus un rituel. Zéro annulation.", author: 'Léo', rank: 'Niveau 300+' },
   },
 ]
 

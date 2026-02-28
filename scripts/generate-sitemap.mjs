@@ -6,13 +6,20 @@
  * with the correct application/xml content type.
  */
 
-import { writeFileSync } from 'fs'
+import { readFileSync, writeFileSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const BASE_URL = 'https://squadplanner.fr'
 const today = new Date().toISOString().split('T')[0]
+
+/** Extract blog slugs from blog-posts.ts by regex */
+function extractBlogSlugs() {
+  const src = readFileSync(resolve(__dirname, '..', 'src', 'data', 'blog-posts.ts'), 'utf-8')
+  const matches = [...src.matchAll(/slug:\s*['"]([^'"]+)['"]/g)]
+  return matches.map((m) => m[1])
+}
 
 function buildUrl(path, priority, changefreq) {
   return `  <url>
@@ -62,12 +69,11 @@ const altPages = [
   buildUrl('/vs/guilded-vs-squad-planner', '0.8', 'monthly'),
 ]
 
-// Blog pages
+// Blog pages (dynamically extracted from blog-posts.ts)
+const blogSlugs = extractBlogSlugs()
 const blogPages = [
   buildUrl('/blog', '0.8', 'weekly'),
-  buildUrl('/blog/guilded-alternatives-2026', '0.7', 'monthly'),
-  buildUrl('/blog/organiser-tournoi-entre-amis', '0.7', 'monthly'),
-  buildUrl('/blog/squad-ghost-astuces', '0.7', 'monthly'),
+  ...blogSlugs.map((slug) => buildUrl(`/blog/${slug}`, '0.7', 'monthly')),
 ]
 
 // Program pages

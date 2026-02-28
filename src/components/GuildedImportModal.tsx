@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Dialog, DialogHeader, DialogBody, DialogFooter } from './ui/Dialog'
 import { Button } from './ui/Button'
@@ -22,6 +22,22 @@ interface GuildedImportModalProps {
 }
 
 const ease = [0.16, 1, 0.3, 1] as const
+
+function GuildedModalCountdown() {
+  const [daysLeft, setDaysLeft] = useState(0)
+  useEffect(() => {
+    const expiry = new Date('2026-06-30T23:59:59')
+    const now = new Date()
+    const diff = Math.max(0, Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)))
+    setDaysLeft(diff)
+  }, [])
+  if (daysLeft <= 0) return null
+  return (
+    <p className="text-xs text-warning font-medium mt-1">
+      ⏳ Expire le 30 juin 2026 — {daysLeft}j restant{daysLeft > 1 ? 's' : ''}
+    </p>
+  )
+}
 
 export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
   const [serverName, setServerName] = useState('')
@@ -160,6 +176,7 @@ export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
                     </code>{' '}
                     pour 30% sur ton premier mois Premium
                   </p>
+                  <GuildedModalCountdown />
                 </div>
               </div>
             </m.div>

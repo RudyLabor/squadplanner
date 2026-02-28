@@ -313,6 +313,48 @@ export default function Home({ loaderData }: HomeProps) {
   const reliabilityScore = totalSessions === 0 ? 0 : (profile?.reliability_score ?? 0)
   const pendingRsvps = upcomingSessions.filter((s) => !s.my_rsvp).length
 
+  // R16 — Contextual nudge (1 at a time, priority order)
+  const homeNudge = useMemo(() => {
+    if (squads.length === 0) return null
+    if (pendingRsvps > 0)
+      return {
+        icon: '⚡',
+        text: `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} attend${pendingRsvps > 1 ? 'ent' : ''} ta réponse. Ta squad ne peut pas s'organiser sans toi.`,
+        cta: 'Répondre maintenant',
+        action: () => navigate(`/session/${upcomingSessions.find((s) => !s.my_rsvp)?.id}`),
+        color: 'warning' as const,
+      }
+    if (sessionsThisWeek === 0)
+      return {
+        icon: '📅',
+        text: "Aucune session prévue cette semaine. Crée-en une avant que tes potes s'organisent sans toi.",
+        cta: 'Créer une session',
+        action: openCreateSessionModal,
+        color: 'primary' as const,
+      }
+    if (reliabilityScore > 0 && reliabilityScore < 70)
+      return {
+        icon: '📉',
+        text: `Ton score de fiabilité est à ${reliabilityScore}%. Confirme ta présence à la prochaine session pour le remonter.`,
+        cta: 'Voir les sessions',
+        action: () => navigate('/sessions'),
+        color: 'error' as const,
+      }
+    if (
+      profile?.created_at &&
+      Date.now() - new Date(profile.created_at).getTime() < 3 * 24 * 60 * 60 * 1000 &&
+      squads.length === 1
+    )
+      return {
+        icon: '👋',
+        text: `Bienvenue dans ${squads[0].name} ! Invite tes potes pour compléter ta squad.`,
+        cta: 'Inviter',
+        action: () => navigate(`/squad/${squads[0].id}`),
+        color: 'success' as const,
+      }
+    return null
+  }, [squads, pendingRsvps, sessionsThisWeek, reliabilityScore, profile?.created_at, upcomingSessions, navigate, openCreateSessionModal])
+
   const activeParty =
     isInVoiceChat && currentChannel && remoteUsers.length > 0
       ? {
@@ -380,6 +422,40 @@ export default function Home({ loaderData }: HomeProps) {
               </div>
             </m.header>
 
+            {/* R16 — Contextual nudge */}
+            {homeNudge && (
+              <m.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex items-center gap-3 p-3 rounded-xl border ${
+                  homeNudge.color === 'warning'
+                    ? 'bg-warning/[0.06] border-warning/15'
+                    : homeNudge.color === 'error'
+                      ? 'bg-error/[0.06] border-error/15'
+                      : homeNudge.color === 'success'
+                        ? 'bg-success/[0.06] border-success/15'
+                        : 'bg-primary/[0.06] border-primary/15'
+                }`}
+              >
+                <span className="text-xl flex-shrink-0">{homeNudge.icon}</span>
+                <p className="text-sm text-text-secondary flex-1">{homeNudge.text}</p>
+                <button
+                  onClick={homeNudge.action}
+                  className={`text-xs font-semibold px-3 py-1.5 rounded-lg flex-shrink-0 transition-colors ${
+                    homeNudge.color === 'warning'
+                      ? 'bg-warning/15 text-warning hover:bg-warning/25'
+                      : homeNudge.color === 'error'
+                        ? 'bg-error/15 text-error hover:bg-error/25'
+                        : homeNudge.color === 'success'
+                          ? 'bg-success/15 text-success hover:bg-success/25'
+                          : 'bg-primary/15 text-primary hover:bg-primary/25'
+                  }`}
+                >
+                  {homeNudge.cta}
+                </button>
+              </m.div>
+            )}
+
             {!squadsLoading &&
               !sessionsLoading &&
               (squads.length === 0 || upcomingSessions.length === 0) &&
@@ -390,6 +466,8 @@ export default function Home({ loaderData }: HomeProps) {
                   hasSession={upcomingSessions.length > 0}
                   onCreateSession={openCreateSessionModal}
                   userId={user?.id}
+                  hasAvatar={!!profile?.avatar_url}
+                  hasCheckedIn={(profile?.total_sessions ?? 0) > 0}
                 />
               )}
 

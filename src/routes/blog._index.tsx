@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { getAllBlogPosts } from '../data/blog-posts'
 import { Calendar, Clock, Hash, ArrowRight, Sparkles } from '../components/icons'
+import { NewsletterCTA } from '../components/landing/NewsletterCTA'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 
@@ -239,6 +240,15 @@ export default function BlogIndex() {
               ))}
             </m.div>
           )}
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ── Newsletter CTA (R25) ── */}
+      <section className="px-4 md:px-6 py-8">
+        <div className="max-w-xl mx-auto">
+          <NewsletterCTA />
         </div>
       </section>
 

@@ -420,12 +420,40 @@ function PostSessionResults({
   const presentRsvps = rsvps?.filter((r) => r.response === 'present').length || 0
   const totalCheckins = checkins?.length || 0
   const participationRate = presentRsvps > 0 ? Math.round((totalCheckins / presentRsvps) * 100) : 0
+  const isPerfect = participationRate === 100 && totalCheckins > 0
 
   return (
-    <div className="mb-8">
+    <m.div
+      className="mb-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
         Résultats de la session
       </h2>
+
+      {/* R26 — Perfect attendance celebration */}
+      {isPerfect && (
+        <m.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          className="mb-4 p-4 rounded-2xl bg-gradient-to-r from-success/10 to-warning/10 border border-success/20 text-center"
+        >
+          <m.span
+            className="text-4xl block mb-2"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15, delay: 0.2 }}
+          >
+            🏅
+          </m.span>
+          <p className="text-md font-bold text-text-primary">Squad Parfaite !</p>
+          <p className="text-sm text-text-tertiary">100% de présence — tout le monde était là.</p>
+        </m.div>
+      )}
+
       <Card className="overflow-hidden">
         <div className="p-4 bg-gradient-to-b from-primary/[0.05] to-transparent">
           <div className="flex items-center gap-2 mb-4">
@@ -434,21 +462,36 @@ function PostSessionResults({
           </div>
 
           <dl className="grid grid-cols-3 gap-3">
-            <div className="text-center p-3 rounded-xl bg-bg-surface">
+            <m.div
+              className="text-center p-3 rounded-xl bg-bg-surface"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
               <Users className="w-5 h-5 mx-auto mb-1 text-primary" aria-hidden="true" />
               <dd className="text-lg font-bold text-text-primary">{totalRsvps}</dd>
               <dt className="text-xs text-text-tertiary">Inscrits</dt>
-            </div>
-            <div className="text-center p-3 rounded-xl bg-bg-surface">
+            </m.div>
+            <m.div
+              className="text-center p-3 rounded-xl bg-bg-surface"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
               <CheckCircle2 className="w-5 h-5 mx-auto mb-1 text-success" aria-hidden="true" />
               <dd className="text-lg font-bold text-text-primary">{totalCheckins}</dd>
               <dt className="text-xs text-text-tertiary">Check-ins</dt>
-            </div>
-            <div className="text-center p-3 rounded-xl bg-bg-surface">
+            </m.div>
+            <m.div
+              className="text-center p-3 rounded-xl bg-bg-surface"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
               <TrendingUp className="w-5 h-5 mx-auto mb-1 text-info" aria-hidden="true" />
               <dd className="text-lg font-bold text-text-primary">{participationRate}%</dd>
               <dt className="text-xs text-text-tertiary">Fiabilité</dt>
-            </div>
+            </m.div>
           </dl>
 
           <div className="mt-4 space-y-2">
@@ -479,8 +522,32 @@ function PostSessionResults({
               </div>
             )}
           </div>
+
+          {/* R26 — Share results button */}
+          <m.div
+            className="mt-4 pt-3 border-t border-border-subtle"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                const text = `Session terminée ! ${totalCheckins}/${presentRsvps} joueurs présents (${participationRate}% de fiabilité)${isPerfect ? ' 🏅 Squad Parfaite !' : ''}`
+                if (navigator.share) {
+                  navigator.share({ text }).catch(() => {})
+                } else {
+                  navigator.clipboard.writeText(text).catch(() => {})
+                }
+              }}
+              className="w-full flex items-center justify-center gap-2 h-9 rounded-xl text-sm font-medium text-primary hover:bg-primary/[0.06] transition-colors"
+            >
+              <Share2 className="w-4 h-4" />
+              Partager les résultats
+            </button>
+          </m.div>
         </div>
       </Card>
-    </div>
+    </m.div>
   )
 }

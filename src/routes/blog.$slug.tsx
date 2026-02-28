@@ -3,6 +3,7 @@ import { Link, useLoaderData } from 'react-router'
 import { m } from 'framer-motion'
 import { getBlogPostBySlug, getRelatedPosts, type BlogPost } from '../data/blog-posts'
 import { ArrowLeft, Calendar, Clock, Hash, ArrowRight, Sparkles } from '../components/icons'
+import { NewsletterCTA } from '../components/landing/NewsletterCTA'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 
@@ -237,6 +238,13 @@ export default function BlogPost() {
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </m.article>
+
+      {/* ── Newsletter CTA (R25) ── */}
+      <section className="px-4 md:px-6 py-8">
+        <div className="max-w-xl mx-auto">
+          <NewsletterCTA />
+        </div>
+      </section>
 
       <div className="section-divider" />
 

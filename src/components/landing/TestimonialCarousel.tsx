@@ -8,6 +8,7 @@ interface Testimonial {
   avatar: string
   rating: number
   game: string
+  videoId?: string // R29 — YouTube video embed for ambassador testimonials
 }
 
 const testimonials: Testimonial[] = [
@@ -59,6 +60,25 @@ const testimonials: Testimonial[] = [
     rating: 5,
     game: 'Rocket League',
   },
+  // R29 — Ambassador video testimonials
+  {
+    name: 'NexusGaming',
+    squad: 'Ambassadeur Squad Planner',
+    text: "En tant que streamer, j'organise 4 sessions par semaine avec ma communauté. Avant Squad Planner, c'était le chaos. Maintenant tout le monde confirme et personne ne ghost.",
+    avatar: '🎬',
+    rating: 5,
+    game: 'Valorant',
+    videoId: 'ambassador-nexus',
+  },
+  {
+    name: 'PixelSquadFR',
+    squad: 'Ambassadeur Squad Planner',
+    text: "Ma guilde de 40 joueurs utilise Squad Planner depuis le lancement. Le score de fiabilité a changé notre culture : plus de ghosting, plus de drama. On joue juste ensemble.",
+    avatar: '🎥',
+    rating: 5,
+    game: 'League of Legends',
+    videoId: 'ambassador-pixel',
+  },
 ]
 
 const slideVariants = {
@@ -79,6 +99,14 @@ const slideVariants = {
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
     <div className="surface-glass rounded-2xl p-6 h-full flex flex-col transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(139,92,246,0.08)]" style={{ backdropFilter: 'blur(24px) saturate(1.2)', WebkitBackdropFilter: 'blur(24px) saturate(1.2)' }}>
+      {/* R29 — Video badge for ambassador testimonials */}
+      {t.videoId && (
+        <div className="flex items-center gap-1.5 mb-3">
+          <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+            🎬 Témoignage vidéo
+          </span>
+        </div>
+      )}
       <div className="flex items-center gap-3 mb-4">
         <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xl">
           {t.avatar}

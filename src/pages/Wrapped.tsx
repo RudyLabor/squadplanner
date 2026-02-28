@@ -463,20 +463,49 @@ export function Wrapped() {
             </m.p>
           )}
 
-          {/* Share button */}
-          <m.button
-            key="share-btn"
+          {/* R28 — Share + Challenge CTA */}
+          <m.div
+            key="share-section"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            onClick={handleShare}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 px-6 py-3 bg-white text-[#2d1054] rounded-full font-bold text-lg hover:bg-purple/10 transition-colors"
+            className="flex flex-col items-center gap-3"
           >
-            <Share2 className="w-5 h-5" />
-            Partager mon Wrapped
-          </m.button>
+            <m.button
+              onClick={handleShare}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-3 px-6 py-3 bg-white text-[#2d1054] rounded-full font-bold text-lg hover:bg-purple/10 transition-colors"
+            >
+              <Share2 className="w-5 h-5" />
+              Partager mon Wrapped
+            </m.button>
+
+            <m.button
+              onClick={() => {
+                const challengeText = `Je te défie ! Mon Gaming Wrapped 2026 : ${stats.sessionCount} sessions, ${stats.totalHours}h jouées, ${stats.reliabilityScore}% de fiabilité. Tu peux faire mieux ? 👉 squadplanner.fr/wrapped`
+                if (navigator.share) {
+                  navigator.share({ title: 'Défi Gaming Wrapped', text: challengeText, url: 'https://squadplanner.fr/wrapped' }).catch(() => {})
+                } else {
+                  navigator.clipboard.writeText(challengeText).catch(() => {})
+                }
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/20 text-white rounded-full font-semibold text-sm hover:bg-white/30 transition-colors border border-white/20"
+            >
+              ⚔️ Challenge tes potes
+            </m.button>
+
+            <m.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="text-xs text-white/40 mt-2"
+            >
+              Tes potes n'ont pas de compte ? Ils pourront créer le leur gratuitement.
+            </m.p>
+          </m.div>
         </div>
       ),
     },

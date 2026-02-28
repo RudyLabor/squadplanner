@@ -18,6 +18,10 @@ export default {
     const { getAllGameSlugs } = await import('./src/data/games')
     const gameSlugs = getAllGameSlugs()
 
+    // Import blog slugs for dynamic prerendering
+    const { getAllBlogSlugs } = await import('./src/data/blog-posts')
+    const blogSlugs = getAllBlogSlugs()
+
     return [
       // Core pages
       '/',
@@ -36,11 +40,9 @@ export default {
       '/vs/guilded-vs-squad-planner',
       // Ambassador program
       '/ambassador',
-      // Blog
+      // Blog (all articles dynamically)
       '/blog',
-      '/blog/guilded-alternatives-2026',
-      '/blog/organiser-tournoi-entre-amis',
-      '/blog/squad-ghost-astuces',
+      ...blogSlugs.map((s) => `/blog/${s}`),
     ]
   },
   presets,

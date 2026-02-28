@@ -456,6 +456,800 @@ export const BLOG_POSTS: BlogPost[] = [
       <p>À toi de jouer\u00a0!</p>
     </article>`,
   },
+  {
+    slug: 'creer-team-esport-2026',
+    title: 'Comment créer une team esport en 2026',
+    excerpt:
+      'Guide complet pour monter ta team esport de zéro\u00a0: recrutement, rôles, planning et outils pour réussir.',
+    date: '2026-02-20',
+    author: 'Squad Planner Team',
+    tags: ['esport', 'team', 'guide'],
+    readTime: 9,
+    coverEmoji: '🏆',
+    content: `<article>
+      <h2>Comment créer une team esport en 2026</h2>
+
+      <p>Créer une team esport, ce n'est pas juste rassembler 5 potes sur Discord et lancer une ranked. C'est un vrai projet qui demande de la structure, de la rigueur et une vision claire. En 2026, l'écosystème compétitif est plus accessible que jamais, mais la concurrence est féroce. Voici comment poser les bases d'une équipe solide et durable.</p>
+
+      <h3>1. Définis ton identité et tes objectifs</h3>
+
+      <p>Avant de recruter qui que ce soit, pose-toi les bonnes questions\u00a0:</p>
+      <ul>
+        <li><strong>Quel jeu\u00a0?</strong> Concentre-toi sur un seul titre au départ. Valorant, League of Legends, Rocket League… choisis celui où tu as le plus d'expertise.</li>
+        <li><strong>Quel niveau\u00a0?</strong> Amateur, semi-pro ou pro\u00a0? Sois honnête sur tes ambitions à court terme.</li>
+        <li><strong>Quelle culture\u00a0?</strong> Compétition pure, ambiance détendue mais sérieuse, ou mélange des deux\u00a0? Ta culture attirera (ou repoussera) les bons profils.</li>
+      </ul>
+
+      <p>Donne un nom à ta team, crée un logo simple et rédige une courte charte. Ces éléments peuvent sembler superficiels, mais ils donnent une identité qui fédère.</p>
+
+      <h3>2. Recrute les bons profils</h3>
+
+      <p>Le recrutement est l'étape la plus critique. Un joueur toxique ou peu fiable peut détruire la dynamique de toute l'équipe.</p>
+
+      <p><strong>Où chercher\u00a0?</strong></p>
+      <ul>
+        <li>Les serveurs Discord dédiés au jeu</li>
+        <li>Les forums et subreddits compétitifs</li>
+        <li>La page Discover de Squad Planner, qui te permet de trouver des joueurs par jeu et par région</li>
+        <li>Les tournois locaux ou en ligne (observe les joueurs prometteurs)</li>
+      </ul>
+
+      <p><strong>Critères de sélection\u00a0:</strong></p>
+      <ul>
+        <li><strong>Skill\u00a0:</strong> Évidemment, mais ce n'est pas le seul critère</li>
+        <li><strong>Fiabilité\u00a0:</strong> Un joueur qui ghost les entraînements ne vaut rien. Le score de fiabilité de Squad Planner t'aide à identifier les joueurs sérieux.</li>
+        <li><strong>Communication\u00a0:</strong> En compétition, un joueur qui communique bien vaut mieux qu'un carry silencieux</li>
+        <li><strong>Disponibilité\u00a0:</strong> Vérifie que les créneaux correspondent avant de recruter</li>
+      </ul>
+
+      <h3>3. Structure les rôles</h3>
+
+      <p>Une team esport, ce n'est pas 5 joueurs égaux. Chacun a un rôle\u00a0:</p>
+      <ul>
+        <li><strong>IGL (In-Game Leader)\u00a0:</strong> Le stratège, celui qui fait les calls</li>
+        <li><strong>Joueurs de rôle\u00a0:</strong> Entry fragger, support, lurker, etc. selon le jeu</li>
+        <li><strong>Manager\u00a0:</strong> Gère la logistique, les inscriptions aux tournois, la communication</li>
+        <li><strong>Coach (optionnel)\u00a0:</strong> Analyse les replays et propose des ajustements tactiques</li>
+      </ul>
+
+      <p>Définis clairement qui fait quoi dès le départ. Les conflits de rôles sont la première cause de dissolution des teams.</p>
+
+      <h3>4. Établis un planning d'entraînement régulier</h3>
+
+      <p>La régularité fait la différence entre une team qui stagne et une qui progresse. Fixe un planning hebdomadaire\u00a0:</p>
+      <ul>
+        <li><strong>3 à 4 sessions par semaine</strong> minimum pour une team semi-pro</li>
+        <li><strong>Mardi, jeudi, dimanche</strong> sont souvent les créneaux les plus populaires</li>
+        <li><strong>Durée fixe\u00a0:</strong> 2h par session, pas plus (la fatigue diminue les performances)</li>
+      </ul>
+
+      <p>Squad Planner est idéal pour gérer ce planning. Crée des sessions récurrentes, active les rappels automatiques et suis la présence de chaque membre. Tu sauras immédiatement qui s'investit vraiment et qui décroche.</p>
+
+      <h3>5. Inscris-toi aux compétitions</h3>
+
+      <p>Une team qui ne joue que des scrims finit par s'ennuyer. Inscris-toi rapidement à des tournois\u00a0:</p>
+      <ul>
+        <li><strong>Tournois communautaires</strong> pour commencer (faible enjeu, bonne ambiance)</li>
+        <li><strong>Ligues amateurs</strong> comme les opens ESWC, les qualifiers VCT ou les tournois Toornament</li>
+        <li><strong>Scrims réguliers</strong> contre d'autres teams de ton niveau</li>
+      </ul>
+
+      <p>Chaque compétition est une opportunité d'apprentissage. Gagne ou perd, l'important est de débriefer après chaque match.</p>
+
+      <h3>6. Utilise les bons outils</h3>
+
+      <p>En 2026, une team esport qui gère tout "à la main" se pénalise. Voici ta stack idéale\u00a0:</p>
+      <ul>
+        <li><strong>Squad Planner\u00a0:</strong> Planning, RSVP, fiabilité, chat d'équipe, analytics</li>
+        <li><strong>Discord\u00a0:</strong> Communication vocale pendant les matchs</li>
+        <li><strong>Un outil de VOD review\u00a0:</strong> Pour analyser vos parties (Insights.gg, Medal.tv)</li>
+        <li><strong>Un tableur partagé\u00a0:</strong> Pour les strats, les compos, les notes de scrim</li>
+      </ul>
+
+      <h3>Conclusion</h3>
+
+      <p>Créer une team esport en 2026, c'est un projet passionnant mais exigeant. La clé du succès tient en trois mots\u00a0: <strong>structure</strong>, <strong>régularité</strong> et <strong>communication</strong>. Avec les bons outils et la bonne mentalité, ta team peut aller loin. Commence petit, sois constant, et les résultats suivront.</p>
+    </article>`,
+  },
+  {
+    slug: 'meilleurs-horaires-jouer-equipe',
+    title: 'Les meilleurs horaires pour jouer en équipe',
+    excerpt:
+      'Découvre les créneaux optimaux pour rassembler ta squad et maximiser le plaisir de jeu.',
+    date: '2026-02-18',
+    author: 'Squad Planner Team',
+    tags: ['organisation', 'horaires', 'astuces'],
+    readTime: 6,
+    coverEmoji: '⏰',
+    content: `<article>
+      <h2>Les meilleurs horaires pour jouer en équipe</h2>
+
+      <p>Tu le sais\u00a0: trouver un créneau qui convient à tout le monde, c'est le défi numéro un des squads. Entre le boulot, les cours, la vie perso et les fuseaux horaires différents, coordonner 4 ou 5 personnes relève parfois de l'exploit. Pourtant, certains créneaux fonctionnent nettement mieux que d'autres.</p>
+
+      <h3>Les créneaux en semaine</h3>
+
+      <p>En semaine, la fenêtre magique pour la plupart des joueurs européens se situe entre <strong>20h30 et 23h00</strong>. C'est le moment où la majorité des gens ont terminé leur journée, dîné, et sont prêts à jouer.</p>
+
+      <ul>
+        <li><strong>20h30 - 21h00\u00a0:</strong> Le sweet spot. Assez tard pour que tout le monde soit dispo, assez tôt pour jouer 2-3 heures sans se coucher trop tard.</li>
+        <li><strong>21h00 - 22h00\u00a0:</strong> Le pic d'activité. Les serveurs sont remplis, les files d'attente rapides.</li>
+        <li><strong>22h00 - 23h00\u00a0:</strong> Encore jouable, mais les joueurs avec des contraintes matinales commencent à décrocher.</li>
+      </ul>
+
+      <p>À éviter en semaine\u00a0: les créneaux avant 19h (trop de gens encore occupés) et après 23h30 (fatigue, performances dégradées).</p>
+
+      <h3>Le week-end\u00a0: plus de flexibilité</h3>
+
+      <p>Le week-end ouvre des possibilités supplémentaires\u00a0:</p>
+
+      <ul>
+        <li><strong>L'après-midi (14h-17h)\u00a0:</strong> Excellent pour les longues sessions, les tournois, ou les VOD reviews. Tout le monde est frais et dispo.</li>
+        <li><strong>Le soir (20h-00h)\u00a0:</strong> Comme en semaine, mais avec moins de pression sur l'heure de fin.</li>
+        <li><strong>Le dimanche soir\u00a0:</strong> Souvent le créneau le plus populaire. Dernier moment de détente avant la semaine.</li>
+      </ul>
+
+      <h3>Le casse-tête des fuseaux horaires</h3>
+
+      <p>Si ta squad regroupe des joueurs de différents pays, les fuseaux horaires compliquent tout. Un joueur à Paris (UTC+1) et un à Montréal (UTC-5) ont 6 heures de décalage. Quand il est 21h à Paris, il n'est que 15h au Québec.</p>
+
+      <p><strong>Solutions\u00a0:</strong></p>
+      <ul>
+        <li>Choisis un créneau de compromis (souvent en fin d'après-midi heure européenne / début d'après-midi heure américaine)</li>
+        <li>Alterne les créneaux pour ne pas toujours pénaliser les mêmes joueurs</li>
+        <li>Utilise Squad Planner pour afficher les horaires dans le fuseau de chaque joueur automatiquement</li>
+      </ul>
+
+      <h3>Comment Squad Planner t'aide à trouver le bon créneau</h3>
+
+      <p>Plutôt que d'envoyer un sondage Doodle à chaque session, Squad Planner propose des outils intégrés\u00a0:</p>
+
+      <ul>
+        <li><strong>Analytics de présence\u00a0:</strong> Visualise quels jours et quelles heures obtiennent le meilleur taux de présence dans ta squad</li>
+        <li><strong>Heatmaps\u00a0:</strong> Identifie les créneaux où tes membres sont le plus souvent disponibles</li>
+        <li><strong>Sessions récurrentes\u00a0:</strong> Fixe un créneau régulier et laisse le système gérer les rappels</li>
+        <li><strong>Gestion des fuseaux\u00a0:</strong> Chaque joueur voit l'heure de la session dans son propre fuseau</li>
+      </ul>
+
+      <h3>Nos recommandations par profil</h3>
+
+      <ul>
+        <li><strong>Squad d'étudiants\u00a0:</strong> Semaine 21h-23h, week-end après-midi</li>
+        <li><strong>Squad d'actifs\u00a0:</strong> Semaine 20h30-22h30, dimanche après-midi</li>
+        <li><strong>Squad internationale\u00a0:</strong> Week-end 17h-19h CET (compromis Europe/Amérique)</li>
+        <li><strong>Team esport\u00a0:</strong> 3 créneaux fixes par semaine, dont 1 le week-end</li>
+      </ul>
+
+      <h3>Conclusion</h3>
+
+      <p>Le meilleur horaire, c'est celui où tout le monde est là. Pas celui qui est parfait sur le papier, mais celui qui garantit la présence régulière de ta squad. Teste, observe les tendances grâce à tes analytics, et ajuste. Avec un créneau bien choisi et bien communiqué, tu verras ton taux de présence grimper en flèche.</p>
+    </article>`,
+  },
+  {
+    slug: 'discord-vs-squad-planner',
+    title: 'Discord vs Squad Planner\u00a0: quelle différence\u00a0?',
+    excerpt:
+      'Discord et Squad Planner remplissent des rôles différents. Découvre pourquoi ils se complètent parfaitement.',
+    date: '2026-02-16',
+    author: 'Squad Planner Team',
+    tags: ['comparaison', 'discord', 'plateforme'],
+    readTime: 8,
+    coverEmoji: '⚔️',
+    content: `<article>
+      <h2>Discord vs Squad Planner\u00a0: quelle différence\u00a0?</h2>
+
+      <p>On nous pose souvent la question\u00a0: "Pourquoi utiliser Squad Planner si on a déjà Discord\u00a0?" C'est une question légitime. Discord est fantastique pour la communication, mais quand il s'agit d'organiser concrètement les sessions de jeu de ta squad, ses limites apparaissent rapidement.</p>
+
+      <h3>Discord\u00a0: le roi de la communication</h3>
+
+      <p>Discord excelle dans ce pour quoi il a été conçu\u00a0:</p>
+      <ul>
+        <li><strong>Chat textuel\u00a0:</strong> Channels organisés par sujet, rôles, permissions granulaires</li>
+        <li><strong>Voix\u00a0:</strong> Qualité audio excellente, channels vocaux instantanés</li>
+        <li><strong>Communauté\u00a0:</strong> Des millions de serveurs publics, un écosystème de bots énorme</li>
+        <li><strong>Intégrations\u00a0:</strong> Spotify, YouTube, Twitch, jeux… tout s'intègre nativement</li>
+      </ul>
+
+      <p>Pour discuter, traîner ensemble et partager des memes, Discord est imbattable. Personne ne prétend le contraire.</p>
+
+      <h3>Là où Discord atteint ses limites</h3>
+
+      <p>Essaie d'organiser une session de jeu régulière avec 6 personnes sur Discord. Tu vas vite rencontrer ces problèmes\u00a0:</p>
+
+      <ul>
+        <li><strong>Pas de vrai système RSVP\u00a0:</strong> Les "Discord Events" existent, mais ils n'offrent pas de confirmation fiable. Les réactions emoji ne sont pas du RSVP.</li>
+        <li><strong>Aucun suivi de fiabilité\u00a0:</strong> Qui a ghost la dernière session\u00a0? Qui est toujours présent\u00a0? Discord ne te le dit pas.</li>
+        <li><strong>Pas de rappels intelligents\u00a0:</strong> Un rappel @everyone est spammé, pas ciblé. Les gens mute le channel et ratent les sessions.</li>
+        <li><strong>Pas d'analytics\u00a0:</strong> Quel jour fonctionne le mieux\u00a0? Quel taux de présence\u00a0? Impossible à savoir sans outils externes.</li>
+        <li><strong>Information noyée\u00a0:</strong> Le message "session ce soir 21h" disparaît dans le flux en 2 minutes</li>
+      </ul>
+
+      <h3>Squad Planner\u00a0: l'organisation gaming</h3>
+
+      <p>Squad Planner a été conçu spécifiquement pour résoudre ces problèmes\u00a0:</p>
+
+      <ul>
+        <li><strong>RSVP intégré\u00a0:</strong> Présent, Absent, Peut-être — chaque joueur confirme sa présence d'un tap. L'organisateur sait exactement qui sera là.</li>
+        <li><strong>Score de fiabilité\u00a0:</strong> Chaque joueur a un score qui reflète sa ponctualité. Les ghosteurs sont identifiés automatiquement.</li>
+        <li><strong>Rappels ciblés\u00a0:</strong> Les joueurs qui n'ont pas répondu reçoivent un rappel. Ceux qui ont confirmé reçoivent un rappel 30 minutes avant.</li>
+        <li><strong>Analytics de squad\u00a0:</strong> Heatmaps de présence, créneaux optimaux, tendances de participation sur le mois.</li>
+        <li><strong>Check-in\u00a0:</strong> Le jour J, les joueurs confirment leur présence réelle. Plus de "j'ai dit oui mais je suis pas là".</li>
+        <li><strong>Gamification\u00a0:</strong> XP, challenges, streaks, badges — jouer régulièrement est récompensé</li>
+      </ul>
+
+      <h3>Ce que Squad Planner ne remplace pas</h3>
+
+      <p>Soyons honnêtes\u00a0: Squad Planner n'a pas vocation à remplacer Discord. Voici ce que Discord fait mieux\u00a0:</p>
+
+      <ul>
+        <li>Les grandes communautés publiques (100+ membres)</li>
+        <li>Le streaming en direct dans un channel</li>
+        <li>L'écosystème de bots (modération, musique, mini-jeux)</li>
+        <li>Le partage d'écran en temps réel</li>
+      </ul>
+
+      <h3>La combinaison gagnante</h3>
+
+      <p>Les meilleures squads utilisent les deux\u00a0:</p>
+
+      <ol>
+        <li><strong>Squad Planner</strong> pour planifier les sessions, suivre les présences, gérer la fiabilité et motiver les joueurs</li>
+        <li><strong>Discord</strong> pour discuter au quotidien, rejoindre le vocal pendant les parties, et maintenir le lien social</li>
+      </ol>
+
+      <p>C'est comme utiliser un agenda (Squad Planner) et un téléphone (Discord). L'un planifie, l'autre communique. Ensemble, ils couvrent 100\u00a0% des besoins d'une squad organisée.</p>
+
+      <h3>En résumé</h3>
+
+      <p>Discord est un outil de communication extraordinaire. Squad Planner est un outil d'organisation gaming. Ils ne se concurrencent pas, ils se complètent. Si tu veux que ta squad arrête de ghost et commence à jouer sérieusement ensemble, ajoute Squad Planner à ta stack. Tu garderas Discord pour le fun quotidien.</p>
+    </article>`,
+  },
+  {
+    slug: '5-jeux-parfaits-entre-potes',
+    title: '5 jeux parfaits pour jouer entre potes en 2026',
+    excerpt:
+      'Notre sélection des 5 meilleurs jeux multijoueur pour des sessions mémorables avec ta squad.',
+    date: '2026-02-14',
+    author: 'Squad Planner Team',
+    tags: ['jeux', 'recommandation', 'multijoueur'],
+    readTime: 7,
+    coverEmoji: '🎮',
+    content: `<article>
+      <h2>5 jeux parfaits pour jouer entre potes en 2026</h2>
+
+      <p>Trouver le bon jeu pour ta squad, c'est la moitié du succès. Un jeu trop compétitif peut créer des tensions, un jeu trop simple peut ennuyer. Voici notre sélection 2026 des jeux qui offrent le meilleur équilibre entre fun, coopération et replay value quand on joue en groupe.</p>
+
+      <h3>1. Valorant — Le tactique qui soude les équipes</h3>
+
+      <p>Valorant reste le roi du FPS tactique en 2026. Avec ses agents aux capacités uniques, chaque joueur a un rôle précis dans l'équipe. C'est le jeu idéal pour les squads qui aiment la compétition et la stratégie.</p>
+
+      <p><strong>Pourquoi c'est parfait en squad\u00a0:</strong></p>
+      <ul>
+        <li>La communication est essentielle — impossible de jouer sans se parler</li>
+        <li>5 joueurs pile, le format squad idéal</li>
+        <li>Le ranked à 5 récompense la coordination</li>
+        <li>Les compositions d'agents nécessitent une vraie réflexion d'équipe</li>
+      </ul>
+
+      <h3>2. Helldivers 2 — Le chaos coopératif</h3>
+
+      <p>Helldivers 2 a explosé et continue de recevoir du contenu régulier. Ce shooter coopératif à 4 joueurs est un pur concentré de fun, de teamwork et de moments hilarants.</p>
+
+      <p><strong>Pourquoi c'est parfait en squad\u00a0:</strong></p>
+      <ul>
+        <li>Le friendly fire crée des situations mémorables (et des fous rires)</li>
+        <li>La difficulté élevée force la coordination</li>
+        <li>Les sessions sont courtes (20-40 min par mission), parfait pour les soirées semaine</li>
+        <li>Pas besoin d'être un pro pour s'amuser</li>
+      </ul>
+
+      <h3>3. Minecraft — L'intemporel créatif</h3>
+
+      <p>Minecraft ne vieillit pas. Que tu construises un empire, que tu explores des caves ou que tu survives ensemble, c'est le jeu de squad par excellence pour les sessions décontractées.</p>
+
+      <p><strong>Pourquoi c'est parfait en squad\u00a0:</strong></p>
+      <ul>
+        <li>Zéro pression compétitive — juste du fun et de la créativité</li>
+        <li>Les projets de construction créent des objectifs à long terme pour la squad</li>
+        <li>Accessible à tous les niveaux de skill</li>
+        <li>Les mods et serveurs personnalisés renouvellent l'expérience à l'infini</li>
+      </ul>
+
+      <h3>4. Lethal Company — L'horreur qui rapproche</h3>
+
+      <p>Lethal Company est le jeu d'horreur coopératif qui fait hurler et rire en même temps. Explorer des lunes abandonnées pour récupérer du loot tout en évitant des créatures terrifiantes\u00a0: le concept est simple mais terriblement efficace.</p>
+
+      <p><strong>Pourquoi c'est parfait en squad\u00a0:</strong></p>
+      <ul>
+        <li>Les réactions vocales créent des souvenirs inoubliables</li>
+        <li>Le travail d'équipe est vital pour survivre</li>
+        <li>Les sessions sont courtes et intenses</li>
+        <li>Le jeu est léger et tourne sur n'importe quel PC</li>
+      </ul>
+
+      <h3>5. It Takes Two — Le chef-d'œuvre à deux</h3>
+
+      <p>Si ta squad se joue parfois à deux, It Takes Two est une pépite. Ce jeu d'aventure coopératif exclusivement en duo offre une variété de gameplay incroyable et une histoire touchante.</p>
+
+      <p><strong>Pourquoi c'est parfait\u00a0:</strong></p>
+      <ul>
+        <li>Chaque chapitre propose des mécaniques totalement nouvelles</li>
+        <li>La coopération est au cœur de chaque puzzle</li>
+        <li>Le Friend Pass permet de jouer à deux avec un seul achat</li>
+        <li>10-12 heures de contenu de qualité exceptionnelle</li>
+      </ul>
+
+      <h3>Comment organiser tes sessions</h3>
+
+      <p>Avoir les bons jeux, c'est bien. Mais si personne ne se pointe aux sessions, ça ne sert à rien. Voici un conseil\u00a0: crée une session dédiée pour chaque jeu sur Squad Planner. Par exemple\u00a0:</p>
+
+      <ul>
+        <li>Mardi 21h\u00a0: Valorant ranked</li>
+        <li>Jeudi 21h\u00a0: Helldivers 2 missions</li>
+        <li>Dimanche 15h\u00a0: Minecraft chill</li>
+      </ul>
+
+      <p>Avec des créneaux fixes et des rappels automatiques, ta squad aura toujours quelque chose à attendre avec impatience. Et grâce au système RSVP, tu sauras à l'avance combien de joueurs seront présents pour adapter le jeu en conséquence.</p>
+
+      <h3>Conclusion</h3>
+
+      <p>Le meilleur jeu pour ta squad est celui qui vous fait passer un bon moment ensemble. Varie les genres, alterne entre compétition et détente, et surtout\u00a0: planifie tes sessions pour que tout le monde soit au rendez-vous. Bonne game\u00a0!</p>
+    </article>`,
+  },
+  {
+    slug: 'ameliorer-communication-squad',
+    title: 'Comment améliorer la communication dans ta squad',
+    excerpt:
+      'La communication est la clé du succès en équipe. Voici des conseils concrets pour mieux jouer ensemble.',
+    date: '2026-02-12',
+    author: 'Squad Planner Team',
+    tags: ['communication', 'squad', 'teamwork'],
+    readTime: 7,
+    coverEmoji: '💬',
+    content: `<article>
+      <h2>Comment améliorer la communication dans ta squad</h2>
+
+      <p>Tu peux avoir les meilleurs joueurs du monde dans ta squad\u00a0: sans communication efficace, vous perdrez contre des équipes moins skilled mais mieux coordonnées. La communication est le multiplicateur de force ultime en gaming.</p>
+
+      <h3>Les bases\u00a0: la communication en jeu</h3>
+
+      <p>En plein match, chaque seconde compte. Ta communication doit être\u00a0:</p>
+      <ul>
+        <li><strong>Concise\u00a0:</strong> "2 ennemis B" plutôt que "Euh, je crois que j'ai vu des gens, ils étaient vers B je pense"</li>
+        <li><strong>Précise\u00a0:</strong> Utilise les callouts officiels de la map. "Long A" est universellement compris, "là-bas à gauche" ne l'est pas.</li>
+        <li><strong>Timing\u00a0:</strong> L'info doit arriver au moment où elle est utile, pas 10 secondes après</li>
+        <li><strong>Calme\u00a0:</strong> Crier l'info ne la rend pas plus utile. Ça stresse tout le monde.</li>
+      </ul>
+
+      <h3>Assigner des rôles de communication</h3>
+
+      <p>Dans une squad bien organisée, tout le monde ne parle pas en même temps\u00a0:</p>
+      <ul>
+        <li><strong>L'IGL (leader)\u00a0:</strong> Fait les calls stratégiques. Quand il parle, tout le monde écoute.</li>
+        <li><strong>Les joueurs\u00a0:</strong> Donnent les infos de leur zone (positions ennemies, cooldowns, ressources) mais ne font pas de calls stratégiques sauf urgence.</li>
+        <li><strong>Le shotcaller\u00a0:</strong> En cas de fight, une seule personne décide si on engage ou on se replie.</li>
+      </ul>
+
+      <p>Règle d'or\u00a0: pendant un fight, seuls l'IGL et les callouts critiques passent. Les commentaires ("oh noooon", "c'est injuste\u00a0!") polluent le vocal.</p>
+
+      <h3>Le debrief post-session</h3>
+
+      <p>Les meilleures squads progressent parce qu'elles prennent 10 minutes après chaque session pour débriefer\u00a0:</p>
+
+      <ol>
+        <li><strong>Qu'est-ce qui a bien marché\u00a0?</strong> Identifiez les rounds ou moments où la coordination était parfaite.</li>
+        <li><strong>Qu'est-ce qui a merdé\u00a0?</strong> Sans accuser personne. "On a perdu le contrôle de B" plutôt que "C'est de la faute de Marc".</li>
+        <li><strong>Qu'est-ce qu'on change\u00a0?</strong> Un ajustement concret pour la prochaine fois.</li>
+      </ol>
+
+      <p>Utilise le chat de Squad Planner pour noter ces points après chaque session. Avec le temps, vous aurez un historique précieux de votre progression.</p>
+
+      <h3>Gérer la toxicité</h3>
+
+      <p>La toxicité tue la communication. Si un joueur rage, insulte ou blame constamment, les autres cessent de parler. C'est un cercle vicieux.</p>
+
+      <p><strong>Règles à établir\u00a0:</strong></p>
+      <ul>
+        <li>Pas de blame en plein match. Le debrief est fait pour ça.</li>
+        <li>Si tu es tilté, mute-toi et respire. Reviens quand tu es calme.</li>
+        <li>Critiquer une décision est OK. Attaquer une personne ne l'est jamais.</li>
+        <li>L'IGL a le dernier mot. Même si tu n'es pas d'accord, on exécute et on discute après.</li>
+      </ul>
+
+      <h3>Les outils qui aident</h3>
+
+      <p>Au-delà du vocal pendant les parties, la communication entre les sessions est tout aussi importante\u00a0:</p>
+
+      <ul>
+        <li><strong>Le chat Squad Planner\u00a0:</strong> Pour discuter des prochaines sessions, partager des strats, ou simplement maintenir le lien social</li>
+        <li><strong>Les mentions @\u00a0:</strong> Pour interpeller quelqu'un spécifiquement sans spammer tout le monde</li>
+        <li><strong>Les threads\u00a0:</strong> Pour organiser les discussions par sujet (strats, recrutement, banter)</li>
+        <li><strong>Les sondages\u00a0:</strong> Pour prendre des décisions collectives (quel jeu ce week-end\u00a0? quel créneau\u00a0?)</li>
+      </ul>
+
+      <h3>Conclusion</h3>
+
+      <p>La communication est un skill qui se travaille, comme le aim ou le game sense. Investis du temps à améliorer la communication de ta squad et tu verras les résultats immédiatement\u00a0: moins de frustration, plus de victoires, et surtout plus de fun ensemble.</p>
+    </article>`,
+  },
+  {
+    slug: 'guide-igl-in-game-leader',
+    title: 'Le guide du IGL (In-Game Leader)',
+    excerpt:
+      'Tout ce que tu dois savoir pour devenir un bon IGL\u00a0: shotcalling, gestion d\u2019équipe et préparation.',
+    date: '2026-02-08',
+    author: 'Squad Planner Team',
+    tags: ['leadership', 'IGL', 'compétitif'],
+    readTime: 10,
+    coverEmoji: '🧠',
+    content: `<article>
+      <h2>Le guide du IGL (In-Game Leader)</h2>
+
+      <p>L'IGL, c'est le cerveau de l'équipe. Pas forcément le meilleur joueur en termes de skill pur, mais celui qui fait gagner les rounds grâce à ses décisions. Si tu veux assumer ce rôle — ou si tu le fais déjà sans le savoir — ce guide est pour toi.</p>
+
+      <h3>Qu'est-ce qu'un IGL exactement\u00a0?</h3>
+
+      <p>L'In-Game Leader est le joueur qui\u00a0:</p>
+      <ul>
+        <li>Décide de la stratégie à chaque round ou phase de jeu</li>
+        <li>Fait les calls en temps réel (attaquer, défendre, rotater, sauvegarder)</li>
+        <li>Lit le jeu de l'adversaire et adapte le plan</li>
+        <li>Maintient le moral de l'équipe pendant les moments difficiles</li>
+      </ul>
+
+      <p>En résumé, l'IGL est à la fois stratège, communicateur et leader émotionnel. C'est le rôle le plus exigeant du jeu compétitif.</p>
+
+      <h3>Les qualités d'un bon IGL</h3>
+
+      <p><strong>1. La capacité de décision rapide</strong></p>
+      <p>Un bon IGL ne doute pas pendant 10 secondes. Il analyse, décide et communique. Même une décision moyenne exécutée rapidement est meilleure qu'une décision parfaite prise trop tard. Ton équipe a besoin de direction, pas de perfection.</p>
+
+      <p><strong>2. La lecture du jeu (game sense)</strong></p>
+      <p>L'IGL doit constamment se demander\u00a0: "Que fait l'adversaire\u00a0?" En analysant les patterns (rotations, timing, tendances de l'équipe ennemie), il anticipe et prend des contre-mesures.</p>
+
+      <p><strong>3. La communication claire</strong></p>
+      <p>Les calls doivent être courts, précis et compréhensibles. "On push B ensemble dans 5 secondes, Marc flash, Emma smoke" — tout le monde sait quoi faire. Évite les calls vagues comme "on va essayer un truc".</p>
+
+      <p><strong>4. La gestion émotionnelle</strong></p>
+      <p>Perdre 5 rounds d'affilée, c'est dur. L'IGL ne peut pas se permettre de tilter. Au contraire, c'est son rôle de calmer les esprits\u00a0: "On respire, on revient aux fondamentaux, on prend un round à la fois."</p>
+
+      <h3>Comment préparer tes sessions en tant qu'IGL</h3>
+
+      <p>Le travail d'un IGL ne commence pas au début du match. Il commence bien avant\u00a0:</p>
+
+      <ol>
+        <li><strong>Analyse les replays\u00a0:</strong> Regarde vos dernières parties. Identifie les patterns qui fonctionnent et ceux qui échouent.</li>
+        <li><strong>Prépare 3-4 strats par map\u00a0:</strong> Pas 20 strats complexes. 3 solides que tout le monde connaît par cœur.</li>
+        <li><strong>Connais tes joueurs\u00a0:</strong> Qui est en forme\u00a0? Qui a besoin de confiance\u00a0? Adapte ton plan aux forces de chacun.</li>
+        <li><strong>Planifie les sessions d'entraînement\u00a0:</strong> Utilise Squad Planner pour fixer des sessions régulières. La régularité est la clé de la progression.</li>
+      </ol>
+
+      <h3>Le shotcalling en pratique</h3>
+
+      <p>Voici un framework simple pour tes calls\u00a0:</p>
+
+      <ul>
+        <li><strong>Début de round\u00a0:</strong> Annonce le plan ("Default B, on cherche des picks")</li>
+        <li><strong>Mid-round\u00a0:</strong> Adapte selon les infos ("Ils stack A, on rotate B execute")</li>
+        <li><strong>Clutch\u00a0:</strong> Si un joueur est seul, guide-le calmement ou laisse-le se concentrer en silence</li>
+        <li><strong>Entre les rounds\u00a0:</strong> Feedback rapide + annonce du plan suivant</li>
+      </ul>
+
+      <p>Adapte le niveau de détail à ton équipe. Avec des joueurs expérimentés, "Default A" suffit. Avec des débutants, détaille chaque position.</p>
+
+      <h3>Gérer les désaccords</h3>
+
+      <p>Ton équipe ne sera pas toujours d'accord avec tes calls. C'est normal. Voici comment gérer\u00a0:</p>
+
+      <ul>
+        <li><strong>Pendant le match\u00a0:</strong> L'IGL a le dernier mot. On exécute, on discute après.</li>
+        <li><strong>Après le match\u00a0:</strong> Écoute les retours. "Tu avais raison, on aurait dû rotater plus tôt" — cette ouverture renforce la confiance.</li>
+        <li><strong>Si tu te trompes\u00a0:</strong> Assume-le. "Mon call était mauvais, on fera différemment." L'humilité inspire le respect.</li>
+      </ul>
+
+      <h3>L'IGL et l'organisation de la squad</h3>
+
+      <p>Un bon IGL ne se limite pas au jeu. Il est souvent le moteur organisationnel de la squad\u00a0:</p>
+
+      <ul>
+        <li>Il planifie les sessions d'entraînement régulières sur Squad Planner</li>
+        <li>Il s'assure que tout le monde est présent et préparé</li>
+        <li>Il utilise les analytics de Squad Planner pour identifier qui décroche et pourquoi</li>
+        <li>Il organise les VOD reviews et les debriefs</li>
+      </ul>
+
+      <p>Le score de fiabilité est un outil précieux pour l'IGL\u00a0: il montre objectivement l'investissement de chaque membre sans avoir à faire de reproches.</p>
+
+      <h3>Conclusion</h3>
+
+      <p>Être IGL, c'est un engagement. C'est prendre des responsabilités que les autres ne veulent pas. Mais c'est aussi le rôle le plus gratifiant\u00a0: quand ta strat fonctionne, quand ton call retourne un round perdu d'avance, quand ton équipe progresse grâce à ta vision — il n'y a rien de comparable. Travaille ta lecture du jeu, communique clairement, et surtout\u00a0: reste calme sous la pression.</p>
+    </article>`,
+  },
+  {
+    slug: 'pourquoi-squads-meurent',
+    title: 'Pourquoi les squads meurent (et comment sauver la tienne)',
+    excerpt:
+      'Les 5 raisons principales pour lesquelles les squads se dissolvent, et les solutions pour y remédier.',
+    date: '2026-02-06',
+    author: 'Squad Planner Team',
+    tags: ['retention', 'squad', 'engagement'],
+    readTime: 8,
+    coverEmoji: '💀',
+    content: `<article>
+      <h2>Pourquoi les squads meurent (et comment sauver la tienne)</h2>
+
+      <p>Tu as déjà vécu ça\u00a0: une squad qui commence dans l'enthousiasme, des sessions enflammées pendant 2-3 semaines, puis les absences s'accumulent, les messages se font rares, et un jour tu réalises que c'est fini. Personne ne joue plus ensemble.</p>
+
+      <p>Ce n'est pas une fatalité. La plupart des squads meurent pour des raisons identifiables — et évitables. Voici les 5 causes principales et comment les contrer.</p>
+
+      <h3>Raison 1\u00a0: Le planning inconsistant</h3>
+
+      <p>C'est le tueur numéro un. Sans horaire fixe, chaque session devient une négociation\u00a0: "Vous jouez ce soir\u00a0?" "Peut-être." "À quelle heure\u00a0?" "Sais pas." Résultat\u00a0: personne ne s'organise et les sessions deviennent aléatoires.</p>
+
+      <p><strong>La solution\u00a0:</strong></p>
+      <ul>
+        <li>Fixe 2-3 créneaux récurrents par semaine. Même jours, même heure.</li>
+        <li>Crée des sessions récurrentes sur Squad Planner pour que chaque membre les voie dans son calendrier.</li>
+        <li>Les rappels automatiques font le reste\u00a0: plus besoin de relancer manuellement.</li>
+      </ul>
+
+      <h3>Raison 2\u00a0: Le ghosting non adressé</h3>
+
+      <p>Un joueur ghost une session. Puis deux. Puis trois. Personne ne dit rien. Les autres commencent à se dire "pourquoi je me donnerais la peine si lui ne vient pas\u00a0?" L'effet domino est dévastateur.</p>
+
+      <p><strong>La solution\u00a0:</strong></p>
+      <ul>
+        <li>Un système de fiabilité transparent. Quand le score baisse, c'est visible par tous.</li>
+        <li>Une conversation directe mais bienveillante avec le ghosteur\u00a0: "Hey, tout va bien\u00a0? On a remarqué que tu as raté les 3 dernières sessions."</li>
+        <li>Si le joueur ne peut plus venir régulièrement, c'est OK — mais il faut le dire ouvertement plutôt que disparaître.</li>
+      </ul>
+
+      <h3>Raison 3\u00a0: L'absence de responsabilité</h3>
+
+      <p>Quand personne ne prend les choses en main, tout le monde attend que quelqu'un d'autre organise. C'est le syndrome du "je viens si quelqu'un crée la session". Sans leader, il ne se passe rien.</p>
+
+      <p><strong>La solution\u00a0:</strong></p>
+      <ul>
+        <li>Désigne un responsable par squad (pas forcément le meilleur joueur, mais le plus fiable).</li>
+        <li>Ce responsable crée les sessions, vérifie les RSVP, relance les absents.</li>
+        <li>Avec Squad Planner, ce travail prend 5 minutes par semaine grâce aux sessions récurrentes et aux rappels automatiques.</li>
+      </ul>
+
+      <h3>Raison 4\u00a0: Le burnout du leader</h3>
+
+      <p>Le revers de la médaille du point précédent. Si une seule personne fait tout — organise, relance, motive, résout les conflits — elle finit par craquer. Et quand le leader abandonne, la squad suit.</p>
+
+      <p><strong>La solution\u00a0:</strong></p>
+      <ul>
+        <li>Répartis les responsabilités. Un joueur gère le planning, un autre le recrutement, un troisième les strats.</li>
+        <li>Automatise tout ce qui peut l'être\u00a0: rappels automatiques, RSVP en un clic, analytics consultables par tous.</li>
+        <li>Le leader doit aussi se sentir écouté et soutenu. Demandez-lui régulièrement comment il va.</li>
+      </ul>
+
+      <h3>Raison 5\u00a0: On a oublié le fun</h3>
+
+      <p>Parfois, la squad devient trop sérieuse. Chaque session est ranked tryhard, les debriefs virent au blame game, et le plaisir de jouer ensemble disparaît. Le gaming, c'est d'abord un loisir.</p>
+
+      <p><strong>La solution\u00a0:</strong></p>
+      <ul>
+        <li>Alterne sessions compétitives et sessions fun (chill games, mini-jeux, sessions "tout est permis").</li>
+        <li>Célèbre les victoires, même les petites. Les challenges et badges de Squad Planner sont conçus pour ça.</li>
+        <li>Organisez des événements spéciaux\u00a0: soirée tournoi, marathon gaming, découverte d'un nouveau jeu.</li>
+        <li>Le système de streaks et d'XP maintient la motivation au quotidien sans pression.</li>
+      </ul>
+
+      <h3>Les signes avant-coureurs</h3>
+
+      <p>Ta squad est peut-être en danger si\u00a0:</p>
+      <ul>
+        <li>Le taux de présence descend en dessous de 60\u00a0%</li>
+        <li>Les messages dans le chat se font rares</li>
+        <li>Les sessions sont annulées plus souvent que jouées</li>
+        <li>Un ou plusieurs membres ne répondent plus aux RSVP</li>
+        <li>Le leader semble fatigué ou désengagé</li>
+      </ul>
+
+      <p>Si tu repères ces signes, agis vite. Une conversation ouverte avec ta squad peut tout changer.</p>
+
+      <h3>Conclusion</h3>
+
+      <p>Les squads ne meurent pas par accident. Elles meurent par négligence\u00a0: planning flou, ghosting non adressé, responsabilités mal réparties, burnout du leader, ou perte de fun. La bonne nouvelle, c'est que chacun de ces problèmes a une solution. Avec un peu d'organisation et les bons outils, ta squad peut durer des années. Et c'est exactement ce qu'on construit ici.</p>
+    </article>`,
+  },
+  {
+    slug: 'ranked-a-5-guide-monter',
+    title: 'Ranked à 5\u00a0: le guide pour monter ensemble',
+    excerpt:
+      'Conseils pratiques pour grimper le ladder en 5-stack\u00a0: planning, rôles, mental et progression.',
+    date: '2026-02-03',
+    author: 'Squad Planner Team',
+    tags: ['ranked', 'compétitif', 'guide'],
+    readTime: 9,
+    coverEmoji: '📈',
+    content: `<article>
+      <h2>Ranked à 5\u00a0: le guide pour monter ensemble</h2>
+
+      <p>Jouer en ranked à 5, c'est l'expérience la plus intense et gratifiante du gaming compétitif. Mais c'est aussi la plus exigeante\u00a0: contrairement au solo queue où tu ne dépends que de toi, le 5-stack demande une coordination parfaite. Voici comment transformer ta squad en machine à LP.</p>
+
+      <h3>Le prérequis\u00a0: un planning d'entraînement sérieux</h3>
+
+      <p>Tu ne grimperas pas en jouant "quand on peut". Les meilleurs stacks jouent ensemble régulièrement, aux mêmes horaires, avec la même intensité.</p>
+
+      <ul>
+        <li><strong>Minimum 3 sessions par semaine\u00a0:</strong> C'est le seuil pour maintenir la synergie d'équipe</li>
+        <li><strong>Sessions de 2-3 heures max\u00a0:</strong> Au-delà, la concentration chute et les performances avec</li>
+        <li><strong>Un créneau fixe\u00a0:</strong> Mardi-jeudi-dimanche par exemple. La régularité bat l'intensité.</li>
+      </ul>
+
+      <p>Crée des sessions récurrentes sur Squad Planner. Les rappels automatiques garantissent que personne n'oublie, et le score de fiabilité montre qui est vraiment investi dans la montée.</p>
+
+      <h3>Attribuer les rôles et s'y tenir</h3>
+
+      <p>En 5-stack, chaque joueur doit maîtriser un rôle et s'y spécialiser\u00a0:</p>
+
+      <ul>
+        <li><strong>IGL\u00a0:</strong> Le stratège qui fait les calls (voir notre guide dédié)</li>
+        <li><strong>Entry\u00a0:</strong> Le joueur agressif qui ouvre les sites</li>
+        <li><strong>Support\u00a0:</strong> Flash, smoke, heal — celui qui rend les autres meilleurs</li>
+        <li><strong>Flex\u00a0:</strong> S'adapte selon la composition adverse</li>
+        <li><strong>Anchor\u00a0:</strong> Tient les sites, dernière ligne de défense</li>
+      </ul>
+
+      <p>Résiste à la tentation de changer de rôle constamment. La spécialisation crée de la maîtrise, et la maîtrise crée des victoires.</p>
+
+      <h3>La VOD review\u00a0: le secret des teams qui progressent</h3>
+
+      <p>80\u00a0% des teams ne regardent jamais leurs replays. C'est une erreur énorme. Voici comment intégrer la VOD review\u00a0:</p>
+
+      <ol>
+        <li><strong>Enregistre chaque session ranked\u00a0:</strong> Medal.tv, OBS, ou le replay intégré du jeu</li>
+        <li><strong>Après la session, identifie 2-3 rounds clés\u00a0:</strong> Un round perdu qu'on aurait pu gagner, un round gagné grâce à un bon call</li>
+        <li><strong>Analysez ensemble pendant 15 minutes\u00a0:</strong> Pas 2 heures. Ciblez les erreurs récurrentes.</li>
+        <li><strong>Définissez un objectif pour la prochaine session\u00a0:</strong> "On améliore notre retake A" ou "On arrête de perdre les anti-eco"</li>
+      </ol>
+
+      <p>Utilise le chat Squad Planner pour partager les clips et les notes de VOD review. Avec le temps, vous accumulerez un historique précieux de votre progression.</p>
+
+      <h3>Le mental\u00a0: gérer les lose streaks</h3>
+
+      <p>Toute team traverse des périodes de défaites. La différence entre les teams qui grimpent et celles qui stagnent, c'est leur gestion du mental\u00a0:</p>
+
+      <ul>
+        <li><strong>Règle des 2 défaites\u00a0:</strong> Après 2 défaites consécutives, faites une pause de 15 minutes. Hydratez-vous, étirez-vous, décompressez.</li>
+        <li><strong>Jamais de blame\u00a0:</strong> "On a perdu en équipe" est la seule phrase acceptable. Le blame détruit la confiance.</li>
+        <li><strong>Célébrez les petites victoires\u00a0:</strong> Un beau clutch, une strat bien exécutée, un comeback — même si vous perdez le match.</li>
+        <li><strong>Le score n'est pas tout\u00a0:</strong> Si vous progressez dans votre coordination, vous êtes sur la bonne voie même en perdant.</li>
+      </ul>
+
+      <h3>Tracker votre progression</h3>
+
+      <p>Ce qui n'est pas mesuré ne s'améliore pas. Suivez ces indicateurs\u00a0:</p>
+
+      <ul>
+        <li><strong>Win rate en 5-stack\u00a0:</strong> Visez 55\u00a0%+ pour grimper régulièrement</li>
+        <li><strong>Taux de présence\u00a0:</strong> Via Squad Planner, vérifiez que tout le monde est là. Un remplaçant change la dynamique.</li>
+        <li><strong>Rounds types gagnés/perdus\u00a0:</strong> Vous perdez toujours les pistol rounds\u00a0? Les retakes\u00a0? Ciblez vos faiblesses.</li>
+        <li><strong>Score de fiabilité individuel\u00a0:</strong> Un joueur qui ghost les entraînements pénalise toute l'équipe</li>
+      </ul>
+
+      <h3>Le planning type d'une semaine ranked</h3>
+
+      <ul>
+        <li><strong>Lundi\u00a0:</strong> Repos ou aim training individuel</li>
+        <li><strong>Mardi 21h\u00a0:</strong> Session ranked (3 matchs max)</li>
+        <li><strong>Mercredi\u00a0:</strong> VOD review 30 min (async via clips partagés)</li>
+        <li><strong>Jeudi 21h\u00a0:</strong> Session ranked avec focus sur l'objectif de la semaine</li>
+        <li><strong>Vendredi\u00a0:</strong> Repos</li>
+        <li><strong>Samedi\u00a0:</strong> Fun games ou scrims décontractés</li>
+        <li><strong>Dimanche 15h\u00a0:</strong> Session ranked longue (5 matchs si tout va bien)</li>
+      </ul>
+
+      <h3>Conclusion</h3>
+
+      <p>Monter en ranked à 5, c'est un marathon, pas un sprint. La clé, c'est la régularité\u00a0: sessions fixes, rôles définis, VOD review régulière, et un mental d'acier face aux défaites. Organise ta squad sérieusement, et les LP suivront. À toi de grinder\u00a0!</p>
+    </article>`,
+  },
+  {
+    slug: 'gerer-joueur-toxique-squad',
+    title: 'Comment gérer un joueur toxique dans ta squad',
+    excerpt:
+      'Un joueur toxique peut détruire l\u2019ambiance de toute la squad. Voici comment gérer la situation avec tact.',
+    date: '2026-02-01',
+    author: 'Squad Planner Team',
+    tags: ['toxicité', 'management', 'squad'],
+    readTime: 6,
+    coverEmoji: '🛡️',
+    content: `<article>
+      <h2>Comment gérer un joueur toxique dans ta squad</h2>
+
+      <p>Il y a ce joueur qui rage après chaque défaite. Qui blame ses coéquipiers systématiquement. Qui transforme chaque session en expérience stressante. Tu le connais, et tu sais que ça plombe l'ambiance pour tout le monde. Mais comment gérer la situation sans faire exploser la squad\u00a0?</p>
+
+      <h3>Reconnaître la toxicité</h3>
+
+      <p>Première étape\u00a0: distinguer une mauvaise journée d'un comportement toxique récurrent. Tout le monde peut tilter une fois. La toxicité, c'est un pattern\u00a0:</p>
+
+      <ul>
+        <li><strong>Blame systématique\u00a0:</strong> C'est toujours la faute des autres, jamais la sienne</li>
+        <li><strong>Insultes ou remarques blessantes\u00a0:</strong> Même "pour rire", si ça blesse, c'est toxique</li>
+        <li><strong>Rage quit\u00a0:</strong> Quitter la partie en cours de match parce qu'il est tilté</li>
+        <li><strong>Négativité constante\u00a0:</strong> "On va perdre", "c'est mort", "ce jeu est nul" — à chaque session</li>
+        <li><strong>Refus de communiquer\u00a0:</strong> Boude, se mute, ignore les calls après un désaccord</li>
+      </ul>
+
+      <p>Si tu coches 2 ou 3 de ces points pour le même joueur, c'est un problème qu'il faut adresser.</p>
+
+      <h3>Étape 1\u00a0: La conversation privée</h3>
+
+      <p>Ne règle jamais ça en public ou en plein match. Contacte le joueur en privé, en DM, calmement\u00a0:</p>
+
+      <ul>
+        <li>Commence par le positif\u00a0: "T'es un bon joueur et on aime jouer avec toi."</li>
+        <li>Décris le problème sans accuser\u00a0: "Les dernières sessions, il y a eu pas mal de remarques négatives et ça pèse sur l'ambiance."</li>
+        <li>Écoute sa version\u00a0: Peut-être qu'il traverse une période difficile. La toxicité est souvent un symptôme, pas la cause.</li>
+        <li>Propose des solutions\u00a0: "Si tu sens le tilt monter, mute-toi 2 minutes et respire. On préfère le silence à la négativité."</li>
+      </ul>
+
+      <p>Dans 70\u00a0% des cas, cette conversation suffit. Les gens ne réalisent pas toujours l'impact de leur comportement.</p>
+
+      <h3>Étape 2\u00a0: Établir des règles de squad</h3>
+
+      <p>Si le problème est récurrent ou concerne plusieurs joueurs, il est temps de poser des règles claires\u00a0:</p>
+
+      <ol>
+        <li><strong>Pas d'insultes, même "pour rire"\u00a0:</strong> Si la personne visée ne rit pas, ce n'est pas drôle.</li>
+        <li><strong>Le blame se fait en debrief, pas en match\u00a0:</strong> Pendant la partie, on se concentre sur la solution.</li>
+        <li><strong>Le rage quit est inacceptable\u00a0:</strong> Quitter en cours de match pénalise tout le monde.</li>
+        <li><strong>Le droit au tilt\u00a0:</strong> Chacun peut dire "je suis tilté, je me mute 2 min" sans jugement.</li>
+      </ol>
+
+      <p>Épingle ces règles dans le chat de ta squad sur Squad Planner. Ce n'est pas de la bureaucratie — c'est de la protection pour tout le monde.</p>
+
+      <h3>Étape 3\u00a0: Le suivi objectif</h3>
+
+      <p>Plutôt que de se baser sur des impressions, utilise des données\u00a0:</p>
+
+      <ul>
+        <li>Le score de fiabilité de Squad Planner montre objectivement l'engagement de chaque joueur</li>
+        <li>Un joueur qui rage quit régulièrement verra son score baisser naturellement</li>
+        <li>Les taux de présence révèlent si les autres membres commencent à éviter les sessions à cause d'un joueur problématique</li>
+      </ul>
+
+      <p>Ces données permettent d'avoir une conversation factuelle, pas émotionnelle.</p>
+
+      <h3>Étape 4\u00a0: Savoir quand exclure</h3>
+
+      <p>Si malgré la conversation privée et les règles établies, le comportement ne change pas, il faut prendre une décision difficile\u00a0: exclure le joueur.</p>
+
+      <p><strong>Signes qu'il est temps\u00a0:</strong></p>
+      <ul>
+        <li>Les autres membres commencent à annuler quand ce joueur est présent</li>
+        <li>L'ambiance se détériore session après session</li>
+        <li>Le joueur refuse de reconnaître le problème malgré plusieurs discussions</li>
+        <li>D'autres membres menacent de quitter</li>
+      </ul>
+
+      <p><strong>Comment le faire\u00a0:</strong></p>
+      <ul>
+        <li>En privé, jamais en public</li>
+        <li>Avec respect\u00a0: "On pense que la squad n'est pas le bon fit pour toi en ce moment"</li>
+        <li>Sans hostilité\u00a0: ne brûle pas les ponts, les gens changent</li>
+      </ul>
+
+      <h3>Prévenir plutôt que guérir</h3>
+
+      <p>La meilleure stratégie, c'est de créer une culture où la toxicité n'a pas sa place dès le départ\u00a0:</p>
+
+      <ul>
+        <li>Intègre les règles de conduite dès le recrutement</li>
+        <li>Valorise les bons comportements (les challenges d'esprit sportif, les badges de fiabilité)</li>
+        <li>En tant que leader, montre l'exemple\u00a0: si toi tu ne tiltes pas, les autres suivront</li>
+        <li>Crée un espace où dire "je suis frustré" est normal et accepté</li>
+      </ul>
+
+      <h3>Conclusion</h3>
+
+      <p>Gérer un joueur toxique, c'est inconfortable. Mais ne rien faire est pire\u00a0: ça détruit l'ambiance, fait fuir les bons joueurs, et tue la squad à petit feu. Avec une approche humaine — conversation privée, règles claires, données objectives et, si nécessaire, exclusion respectueuse — tu protèges ce qui compte vraiment\u00a0: le plaisir de jouer ensemble.</p>
+    </article>`,
+  },
 ]
 
 /**
@@ -463,6 +1257,13 @@ export const BLOG_POSTS: BlogPost[] = [
  */
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
   return BLOG_POSTS.find((post) => post.slug === slug)
+}
+
+/**
+ * Retourne tous les slugs des articles de blog
+ */
+export function getAllBlogSlugs(): string[] {
+  return BLOG_POSTS.map((p) => p.slug)
 }
 
 /**

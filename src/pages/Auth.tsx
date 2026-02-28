@@ -192,7 +192,51 @@ export default function Auth() {
       </header>
 
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 pb-12">
-        <div className="w-full max-w-[400px]">
+        <div className="w-full max-w-[900px] flex gap-12 items-center">
+          {/* Social proof sidebar — desktop only */}
+          <div className="hidden lg:flex flex-col gap-6 w-[380px] flex-shrink-0">
+            <div className="p-6 rounded-2xl bg-bg-elevated border border-border-subtle">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                <span className="text-sm font-medium text-success">+500 gamers inscrits</span>
+              </div>
+              <p className="text-lg font-bold text-text-primary mb-1">
+                Rejoins la communauté
+              </p>
+              <p className="text-sm text-text-tertiary">
+                Des squads planifient leurs sessions en ce moment même.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="p-4 rounded-xl bg-surface-card border border-border-subtle">
+                <p className="text-sm text-text-secondary italic mb-2">
+                  « Depuis Squad Planner, on joue 3 fois par semaine au lieu d'une. Tout le monde confirme, personne ne ghost. »
+                </p>
+                <p className="text-xs text-text-quaternary">— Alex, squad Valorant</p>
+              </div>
+              <div className="p-4 rounded-xl bg-surface-card border border-border-subtle">
+                <p className="text-sm text-text-secondary italic mb-2">
+                  « Le meilleur outil pour organiser nos sessions ranked. On a fini par monter ensemble grâce à la régularité. »
+                </p>
+                <p className="text-xs text-text-quaternary">— Sarah, squad League of Legends</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {['🎯 Valorant', '⚔️ LoL', '🏗️ Fortnite', '🌍 Minecraft', '🚀 Rocket League', '🎮 Apex'].map((g) => (
+                <span key={g} className="px-3 py-1.5 rounded-full bg-bg-elevated border border-border-subtle text-xs text-text-tertiary">
+                  {g}
+                </span>
+              ))}
+            </div>
+
+            <p className="text-xs text-text-quaternary text-center">
+              30 secondes pour commencer · 100% gratuit
+            </p>
+          </div>
+
+          <div className="w-full max-w-[400px]">
           <AnimatePresence mode="wait">
             <m.div
               key={mode}
@@ -343,6 +387,7 @@ export default function Auth() {
               )}
             </m.div>
           </AnimatePresence>
+        </div>
         </div>
       </main>
 

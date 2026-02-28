@@ -109,7 +109,7 @@ function GameNotFound() {
           variants={scrollReveal}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: '200px' }}
           className="text-center"
         >
           <h1 className="text-4xl font-bold text-text-primary mb-4">Jeu non trouvé</h1>
@@ -232,7 +232,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
           >
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border mb-8"
@@ -250,7 +250,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
           >
             Planifie tes sessions
@@ -264,7 +264,7 @@ export default function Component() {
             variants={scrollRevealLight}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
             {game.description}
@@ -276,7 +276,7 @@ export default function Component() {
             variants={scrollRevealLight}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
           >
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
@@ -298,6 +298,10 @@ export default function Component() {
               </Link>
             </m.div>
           </m.div>
+
+          <p className="text-sm text-text-quaternary -mt-6 mb-8">
+            100% gratuit · Pas de carte bancaire · Prêt en 30 secondes
+          </p>
 
           {/* Quick stats */}
           <div className="flex items-center justify-center gap-8 md:gap-16">
@@ -324,7 +328,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-center mb-12"
           >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
@@ -344,7 +348,7 @@ export default function Component() {
                   variants={scrollRevealLight}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: true }}
+                  viewport={{ once: true, margin: '200px' }}
                   transition={{ delay: i * 0.1 }}
                   className="relative"
                 >
@@ -380,7 +384,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-center mb-12"
           >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
@@ -400,7 +404,7 @@ export default function Component() {
                   variants={scrollRevealLight}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: true }}
+                  viewport={{ once: true, margin: '200px' }}
                   transition={{ delay: i * 0.1 }}
                   className="p-8 md:p-10 rounded-3xl bg-gradient-to-br from-surface-card/80 to-transparent border border-border-subtle hover:border-border-hover transition-all"
                 >
@@ -438,6 +442,73 @@ export default function Component() {
 
       <div className="section-divider" />
 
+      {/* ── Why this game + Squad Planner (R11) ── */}
+      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.01]">
+        <div className="max-w-4xl mx-auto">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '200px' }}
+            className="text-center mb-10"
+          >
+            <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-3">
+              Pourquoi {game.name} + Squad Planner
+            </h2>
+            <p className="text-text-tertiary text-lg max-w-2xl mx-auto">
+              {game.specificPainPoint}. {game.specificUseCase}.
+            </p>
+          </m.div>
+
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '200px' }}
+            className="grid sm:grid-cols-3 gap-4 mb-10"
+          >
+            {game.specificFeatures.map((feat, i) => (
+              <div
+                key={i}
+                className="p-4 rounded-xl bg-surface-card border border-border-subtle text-center"
+              >
+                <Check className="w-5 h-5 mx-auto mb-2" style={{ color: gc }} />
+                <p className="text-sm font-medium text-text-primary">{feat}</p>
+              </div>
+            ))}
+          </m.div>
+
+          {/* Testimonial (R13) */}
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '200px' }}
+            className="p-6 rounded-2xl border border-border-subtle bg-gradient-to-br from-surface-card to-transparent"
+          >
+            <div className="flex items-start gap-4">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg font-bold text-white"
+                style={{ backgroundColor: gc }}
+              >
+                {game.testimonial.author[0]}
+              </div>
+              <div>
+                <p className="text-text-primary text-md italic mb-2">
+                  &laquo;{game.testimonial.quote}&raquo;
+                </p>
+                <p className="text-sm text-text-tertiary">
+                  <span className="font-medium text-text-secondary">{game.testimonial.author}</span>
+                  {' '}· {game.testimonial.rank}
+                </p>
+              </div>
+            </div>
+          </m.div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       {/* ── FAQ ── */}
       <section className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-3xl mx-auto">
@@ -445,7 +516,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-center mb-12"
           >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
@@ -460,7 +531,7 @@ export default function Component() {
                 variants={scrollRevealLight}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: '200px' }}
                 className="border border-border-subtle rounded-xl overflow-hidden"
               >
                 <button
@@ -494,7 +565,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
             style={{
               background: `radial-gradient(ellipse at center, ${gc}10 0%, transparent 60%)`,
@@ -548,7 +619,7 @@ export default function Component() {
             variants={scrollRevealLight}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-center mb-8"
           >
             <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">

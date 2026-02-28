@@ -16,6 +16,9 @@ import { FaqSection } from '../components/landing/FaqSection'
 import { CtaSection } from '../components/landing/CtaSection'
 import { LandingFooter } from '../components/landing/LandingFooter'
 import { MobileStickyCTA } from '../components/landing/MobileStickyCTA'
+import { CaptainQuiz } from '../components/landing/CaptainQuiz'
+import { GhostCalculator } from '../components/landing/GhostCalculator'
+import { SocialProofNotification } from '../components/SocialProofNotification'
 import { ArrowRight } from '../components/icons'
 import { Link } from 'react-router'
 
@@ -100,6 +103,11 @@ export default function Landing() {
       <div className="section-divider" />
       <ProblemSection />
       <div className="section-divider" />
+      {/* R21 — Captain Quiz (IKEA Effect + Commitment) */}
+      <LazySection minHeight={400}>
+        <CaptainQuiz />
+      </LazySection>
+      <div className="section-divider" />
       {/* CTA intermédiaire */}
       <div className="text-center py-8 px-4">
         <Link
@@ -119,6 +127,11 @@ export default function Landing() {
       <div className="section-divider" />
       <LazySection minHeight={300}>
         <ReliabilitySection />
+      </LazySection>
+      <div className="section-divider" />
+      {/* R22 — Ghost Calculator (Loss Aversion + Commitment) */}
+      <LazySection minHeight={400}>
+        <GhostCalculator />
       </LazySection>
       <div className="section-divider" />
       <LazySection minHeight={400}>
@@ -144,6 +157,7 @@ export default function Landing() {
       <LazySection minHeight={300}>
         <CtaSection />
       </LazySection>
+      <SocialProofNotification />
       <MobileStickyCTA />
       <LandingFooter />
     </div>

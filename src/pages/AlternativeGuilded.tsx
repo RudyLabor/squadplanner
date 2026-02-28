@@ -13,7 +13,7 @@ import {
 } from '../components/icons'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { GuildedImportModal } from '../components/GuildedImportModal'
 
 const features = [
@@ -75,6 +75,22 @@ const faqs = [
       "Oui. Calendrier illimité, confirmations de présence, notifications. Tout ça gratuit. Premium te donne des analytics avancées si tu veux. Mais l'essentiel reste gratuit.",
   },
 ]
+
+function GuildedCountdown() {
+  const [daysLeft, setDaysLeft] = useState(0)
+  useEffect(() => {
+    const expiry = new Date('2026-06-30T23:59:59')
+    const now = new Date()
+    const diff = Math.max(0, Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)))
+    setDaysLeft(diff)
+  }, [])
+  if (daysLeft <= 0) return null
+  return (
+    <p className="text-sm text-warning font-medium">
+      ⏳ Offre expire le 30 juin 2026 — encore {daysLeft} jour{daysLeft > 1 ? 's' : ''}
+    </p>
+  )
+}
 
 export default function AlternativeGuilded() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
@@ -246,11 +262,12 @@ export default function AlternativeGuilded() {
               <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-2">
                 30% de réduction pour les migrés de Guilded
               </h3>
-              <p className="text-text-tertiary mb-6">Tape ce code</p>
-              <div className="inline-block px-8 py-4 bg-purple/10 rounded-xl mb-6 border border-purple/20">
+              <p className="text-text-tertiary mb-4">Tape ce code avant qu'il expire</p>
+              <div className="inline-block px-8 py-4 bg-purple/10 rounded-xl mb-4 border border-purple/20">
                 <code className="text-2xl md:text-3xl font-bold text-purple">GUILDED30</code>
               </div>
-              <p className="text-base text-text-secondary">30% sur ton premier mois Premium</p>
+              <p className="text-base text-text-secondary mb-3">30% sur ton premier mois Premium</p>
+              <GuildedCountdown />
             </div>
           </m.div>
         </div>

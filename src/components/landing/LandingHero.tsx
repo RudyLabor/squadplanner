@@ -141,6 +141,12 @@ export function LandingHero({
             )}
           </div>
 
+          {!isLoggedIn && (
+            <p className="text-sm text-text-quaternary -mt-10 mb-6">
+              100% gratuit · Pas de carte bancaire · Prêt en 30 secondes
+            </p>
+          )}
+
           <div className="flex items-center justify-center gap-8 md:gap-16 mb-8">
             {heroStats.map((stat) => (
               <div key={stat.label} className="text-center">

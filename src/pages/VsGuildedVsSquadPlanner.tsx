@@ -3,7 +3,7 @@ import { m } from 'framer-motion'
 import { Check, ArrowRight, ChevronDown, Sparkles } from '../components/icons'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const features = [
   { category: 'Organisation', name: "Calendrier d'événements", guilded: true, squadPlanner: true },
@@ -59,6 +59,22 @@ const faqs = [
       'Squad Planner est viable. On innove, on croît. Mais même si ça arrive (spoiler: ça arrivera pas), tu peux exporter tes données quand tu veux. Zéro piège.',
   },
 ]
+
+function VsGuildedCountdown() {
+  const [daysLeft, setDaysLeft] = useState(0)
+  useEffect(() => {
+    const expiry = new Date('2026-06-30T23:59:59')
+    const now = new Date()
+    const diff = Math.max(0, Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)))
+    setDaysLeft(diff)
+  }, [])
+  if (daysLeft <= 0) return null
+  return (
+    <p className="text-sm text-warning font-medium mb-6">
+      ⏳ Code GUILDED30 expire le 30 juin 2026 — encore {daysLeft} jour{daysLeft > 1 ? 's' : ''}
+    </p>
+  )
+}
 
 export default function VsGuildedVsSquadPlanner() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
@@ -468,9 +484,10 @@ export default function VsGuildedVsSquadPlanner() {
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
                 C'est bon, tu viens ?
               </h2>
-              <p className="text-text-tertiary mb-8 text-lg">
+              <p className="text-text-tertiary mb-4 text-lg">
                 Code GUILDED30 = 30&nbsp;% sur Premium. Mais calendrier et confirmations, c'est gratuit de toute façon.
               </p>
+              <VsGuildedCountdown />
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
                   to="/auth?mode=register&redirect=onboarding"

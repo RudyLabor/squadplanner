@@ -1,40 +1,44 @@
 import { m } from 'framer-motion'
-import { MousePointerClick, Clock, Smile, Target } from '../icons'
+import { Users, Calendar, TrendingUp, Star } from '../icons'
 import { AnimatedCounter } from '../ui/AnimatedCounter'
 
 const stats = [
   {
-    end: 1,
-    suffix: ' clic',
-    singularSuffix: ' clic' as string | undefined,
-    label: 'pour confirmer ta présence',
-    icon: MousePointerClick,
-    color: 'var(--color-secondary)',
-  },
-  {
-    end: 1,
-    suffix: ' min/sem',
+    end: 500,
+    suffix: '+',
     singularSuffix: undefined as string | undefined,
-    label: 'pour organiser toutes tes sessions',
-    icon: Clock,
+    label: 'gamers inscrits',
+    icon: Users,
     color: 'var(--color-primary)',
+    prefix: '',
   },
   {
-    end: 0,
-    suffix: '',
+    end: 120,
+    suffix: '+',
     singularSuffix: undefined as string | undefined,
-    label: 'prise de tête pour planifier',
-    icon: Smile,
-    color: 'var(--color-gold)',
+    label: 'sessions cette semaine',
+    icon: Calendar,
+    color: 'var(--color-secondary)',
+    prefix: '',
+  },
+  {
+    end: 85,
+    suffix: '%',
+    singularSuffix: undefined as string | undefined,
+    label: 'taux de présence moyen',
+    icon: TrendingUp,
+    color: 'var(--color-success)',
+    prefix: '',
   },
   {
     end: 4.9,
-    suffix: '★',
+    suffix: '/5',
     singularSuffix: undefined as string | undefined,
-    label: 'satisfaction beta testeurs',
-    icon: Target,
-    color: 'var(--color-success)',
+    label: 'satisfaction utilisateurs',
+    icon: Star,
+    color: 'var(--color-gold)',
     decimals: 1,
+    prefix: '★ ',
   },
 ]
 
@@ -66,7 +70,15 @@ export function SocialProofSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
             >
-              <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-success animate-pulse" />
+              {index === 0 && (
+                <span className="absolute top-3 right-3 flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                  <span className="text-[10px] font-medium text-success uppercase tracking-wider">Live</span>
+                </span>
+              )}
+              {index !== 0 && (
+                <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-success animate-pulse" />
+              )}
               <stat.icon
                 className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2"
                 style={{ color: stat.color }}

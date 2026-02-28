@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import type { HeadersArgs } from 'react-router'
 import { useParams, Link } from 'react-router'
 import { m } from 'framer-motion'
@@ -14,6 +14,7 @@ import {
   Target,
   Shield,
   Check,
+  Clock,
 } from '../components/icons'
 
 // ── Color mapping ──────────────────────────────────
@@ -76,7 +77,7 @@ function GameNotFound() {
           variants={scrollReveal}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: '200px' }}
           className="text-center"
         >
           <h1 className="text-4xl font-bold text-text-primary mb-4">Jeu non trouvé</h1>
@@ -132,11 +133,29 @@ const benefits = [
   },
 ]
 
+const RANK_OPTIONS = ['Débutant', 'Bronze/Silver', 'Gold/Platine', 'Diamond+', 'Top rank']
+const TIME_SLOTS = [
+  { id: 'soir-semaine', label: 'Soir semaine', icon: '🌙' },
+  { id: 'weekend', label: 'Weekend', icon: '🎮' },
+  { id: 'apres-midi', label: 'Après-midi', icon: '☀️' },
+  { id: 'nuit', label: 'Sessions tard', icon: '🦉' },
+]
+
 // ── Main component ─────────────────────────────────
 export default function Component() {
   const { game: gameSlug } = useParams()
   const game = gameSlug ? getGameBySlug(gameSlug) : undefined
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
+
+  // R15 — Mini-form state (IKEA Effect + Commitment)
+  const [selectedRank, setSelectedRank] = useState('')
+  const [selectedSlots, setSelectedSlots] = useState<string[]>([])
+
+  const toggleSlot = useCallback((slotId: string) => {
+    setSelectedSlots((prev) =>
+      prev.includes(slotId) ? prev.filter((s) => s !== slotId) : [...prev, slotId]
+    )
+  }, [])
 
   if (!game) return <GameNotFound />
 
@@ -199,7 +218,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
           >
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border mb-8"
@@ -217,7 +236,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
           >
             Cherche des joueurs
@@ -231,7 +250,7 @@ export default function Component() {
             variants={scrollRevealLight}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
             T'en as marre de jouer avec des randoms qui ragequit au bout de 5 min ? Trouve des
@@ -246,7 +265,7 @@ export default function Component() {
             variants={scrollRevealLight}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
           >
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
@@ -268,6 +287,10 @@ export default function Component() {
             </m.div>
           </m.div>
 
+          <p className="text-sm text-text-quaternary -mt-6 mb-8">
+            100% gratuit · Pas de carte bancaire · Premiers matchs en 24h
+          </p>
+
           {/* Quick stats */}
           <div className="flex items-center justify-center gap-8 md:gap-16">
             {[
@@ -286,6 +309,104 @@ export default function Component() {
 
       <div className="section-divider" />
 
+      {/* ── R15 — Mini-form (IKEA Effect + Commitment) ── */}
+      <section className="px-4 md:px-6 py-10 md:py-14 bg-gradient-to-b from-primary/[0.02] to-transparent">
+        <div className="max-w-xl mx-auto">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '200px' }}
+            className="p-6 md:p-8 rounded-2xl bg-surface-card border border-border-subtle"
+          >
+            <div className="text-center mb-6">
+              <h2 className="text-lg font-bold text-text-primary mb-1">
+                Trouve des joueurs {game.name} faits pour toi
+              </h2>
+              <p className="text-sm text-text-tertiary">
+                2 questions, 10 secondes — on s'occupe du reste
+              </p>
+            </div>
+
+            {/* Rank */}
+            <div className="mb-5">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
+                <Target className="w-4 h-4 inline-block mr-1.5" style={{ color: gc }} />
+                Ton niveau ?
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {RANK_OPTIONS.map((rank) => (
+                  <button
+                    key={rank}
+                    type="button"
+                    onClick={() => setSelectedRank(rank === selectedRank ? '' : rank)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                      selectedRank === rank
+                        ? 'text-white shadow-sm'
+                        : 'bg-bg-elevated text-text-tertiary hover:text-text-primary border border-border-subtle'
+                    }`}
+                    style={selectedRank === rank ? { backgroundColor: gc } : undefined}
+                  >
+                    {rank}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Time slots */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
+                <Clock className="w-4 h-4 inline-block mr-1.5" style={{ color: gc }} />
+                Tes créneaux préférés ?
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {TIME_SLOTS.map((slot) => (
+                  <button
+                    key={slot.id}
+                    type="button"
+                    onClick={() => toggleSlot(slot.id)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                      selectedSlots.includes(slot.id)
+                        ? 'border-2 text-text-primary'
+                        : 'bg-bg-elevated text-text-tertiary hover:text-text-primary border border-border-subtle'
+                    }`}
+                    style={
+                      selectedSlots.includes(slot.id) ? { borderColor: gc, backgroundColor: `${gc}10` } : undefined
+                    }
+                  >
+                    <span>{slot.icon}</span>
+                    {slot.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA */}
+            <Link
+              to={`/auth?mode=register&redirect=onboarding&game=${game.slug}${selectedRank ? `&rank=${encodeURIComponent(selectedRank)}` : ''}${selectedSlots.length ? `&slots=${selectedSlots.join(',')}` : ''}`}
+              className="flex items-center justify-center gap-2 w-full h-12 rounded-xl bg-primary-bg text-white font-semibold hover:bg-primary-bg-hover transition-colors shadow-glow-primary-sm"
+            >
+              {selectedRank || selectedSlots.length > 0 ? (
+                <>
+                  Trouve ma squad
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              ) : (
+                <>
+                  Commencer gratuitement
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
+            </Link>
+            <p className="text-xs text-text-quaternary text-center mt-2">
+              100% gratuit · Pas de carte bancaire
+            </p>
+          </m.div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       {/* ── How it works ── */}
       <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]">
         <div className="max-w-5xl mx-auto">
@@ -293,7 +414,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-center mb-12"
           >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
@@ -313,7 +434,7 @@ export default function Component() {
                   variants={scrollRevealLight}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: true }}
+                  viewport={{ once: true, margin: '200px' }}
                   transition={{ delay: i * 0.1 }}
                   className="relative"
                 >
@@ -349,7 +470,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-center mb-12"
           >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
@@ -369,7 +490,7 @@ export default function Component() {
                   variants={scrollRevealLight}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: true }}
+                  viewport={{ once: true, margin: '200px' }}
                   transition={{ delay: i * 0.1 }}
                   className="p-8 md:p-10 rounded-3xl bg-gradient-to-br from-surface-card/80 to-transparent border border-border-subtle hover:border-border-hover transition-all"
                 >
@@ -414,7 +535,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-center mb-12"
           >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
@@ -448,7 +569,7 @@ export default function Component() {
                 variants={scrollRevealLight}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: '200px' }}
                 transition={{ delay: testimonial.delay }}
                 className="p-6 rounded-2xl bg-gradient-to-br from-surface-card/80 to-transparent border border-border-subtle hover:border-border-hover transition-all"
               >
@@ -472,6 +593,73 @@ export default function Component() {
 
       <div className="section-divider" />
 
+      {/* ── Why this game + Squad Planner (R12) ── */}
+      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.01]">
+        <div className="max-w-4xl mx-auto">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '200px' }}
+            className="text-center mb-10"
+          >
+            <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-3">
+              {game.lfgSpecificCopy}
+            </h2>
+            <p className="text-text-tertiary text-lg max-w-2xl mx-auto">
+              {game.specificPainPoint}. Squad Planner résout ça.
+            </p>
+          </m.div>
+
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '200px' }}
+            className="grid sm:grid-cols-3 gap-4 mb-10"
+          >
+            {game.specificFeatures.map((feat, i) => (
+              <div
+                key={i}
+                className="p-4 rounded-xl bg-surface-card border border-border-subtle text-center"
+              >
+                <Check className="w-5 h-5 mx-auto mb-2" style={{ color: gc }} />
+                <p className="text-sm font-medium text-text-primary">{feat}</p>
+              </div>
+            ))}
+          </m.div>
+
+          {/* Testimonial (R13) */}
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '200px' }}
+            className="p-6 rounded-2xl border border-border-subtle bg-gradient-to-br from-surface-card to-transparent"
+          >
+            <div className="flex items-start gap-4">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg font-bold text-white"
+                style={{ backgroundColor: gc }}
+              >
+                {game.testimonial.author[0]}
+              </div>
+              <div>
+                <p className="text-text-primary text-md italic mb-2">
+                  &laquo;{game.testimonial.quote}&raquo;
+                </p>
+                <p className="text-sm text-text-tertiary">
+                  <span className="font-medium text-text-secondary">{game.testimonial.author}</span>
+                  {' '}· {game.testimonial.rank}
+                </p>
+              </div>
+            </div>
+          </m.div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       {/* ── FAQ ── */}
       <section className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-3xl mx-auto">
@@ -479,7 +667,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-center mb-12"
           >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
@@ -494,7 +682,7 @@ export default function Component() {
                 variants={scrollRevealLight}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: '200px' }}
                 className="border border-border-subtle rounded-xl overflow-hidden"
               >
                 <button
@@ -528,7 +716,7 @@ export default function Component() {
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
             style={{
               background: `radial-gradient(ellipse at center, ${gc}10 0%, transparent 60%)`,
@@ -582,7 +770,7 @@ export default function Component() {
             variants={scrollRevealLight}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '200px' }}
             className="text-center mb-8"
           >
             <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">

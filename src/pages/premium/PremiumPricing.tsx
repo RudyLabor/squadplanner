@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   Crown,
   Zap,
+  XCircle,
 } from '../../components/icons'
 import { Button, Card } from '../../components/ui'
 import {
@@ -22,6 +23,9 @@ import {
   CLUB_PRICE_MONTHLY,
   CLUB_PRICE_YEARLY,
 } from '../../hooks/usePremium'
+import { useAuthStore } from '../../hooks/useAuth'
+import { usePremium } from '../../hooks/usePremium'
+import { useSquadsQuery } from '../../hooks/queries/useSquadsQuery'
 import type { SubscriptionTier } from '../../types/database'
 
 interface PremiumPricingProps {
@@ -107,6 +111,13 @@ const TIERS = [
 
 export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: PremiumPricingProps) {
   const [isYearly, setIsYearly] = useState(false)
+
+  // R18 — Personalized stats for connected users
+  const { user, profile } = useAuthStore()
+  const { tier } = usePremium()
+  const { data: squads } = useSquadsQuery()
+  const squadCount = squads?.length ?? 0
+  const isConnected = !!user && tier === 'free'
 
   // Launch promo countdown — expires April 30, 2026
   const PROMO_END = new Date('2026-04-30T23:59:59').getTime()
@@ -241,6 +252,49 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
             </span>
           </button>
         </div>
+      </div>
+
+      {/* Ce que tu rates — Loss Aversion (R14 + R18 personalized) */}
+      <div
+        className="animate-fade-in-up mb-8 p-5 rounded-2xl bg-error/[0.04] border border-error/10"
+        style={{ animationDelay: '0.27s' }}
+      >
+        <h3 className="text-md font-bold text-text-primary mb-3 text-center">
+          {isConnected ? `${profile?.username || 'Toi'}, voilà ce que tu rates` : 'Ce que tu rates en restant gratuit'}
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          {(isConnected
+            ? [
+                { text: `Tu as ${squadCount} squad${squadCount > 1 ? 's' : ''}`, detail: 'Premium : 5 squads' },
+                { text: 'Historique limité à 7 jours', detail: 'Premium : 90 jours' },
+                { text: 'Pas de stats avancées', detail: 'Premium : analytics complets' },
+                { text: "Pas d'IA Coach", detail: 'Premium : conseils personnalisés' },
+                { text: 'Chat basique (texte seulement)', detail: 'Premium : GIF, voice, polls' },
+                { text: 'Pas de badge exclusif', detail: 'Premium : badge violet' },
+              ]
+            : [
+                { text: '2 squads maximum', detail: 'Premium : 5 squads' },
+                { text: 'Historique limité à 7 jours', detail: 'Premium : 90 jours' },
+                { text: 'Pas de stats avancées', detail: 'Premium : analytics complets' },
+                { text: "Pas d'IA Coach", detail: 'Premium : conseils personnalisés' },
+                { text: 'Chat basique (texte seulement)', detail: 'Premium : GIF, voice, polls' },
+                { text: 'Pas de badge exclusif', detail: 'Premium : badge violet' },
+              ]
+          ).map((item) => (
+            <div key={item.text} className="flex items-start gap-2.5">
+              <XCircle className="w-4 h-4 text-error/70 flex-shrink-0 mt-0.5" />
+              <div>
+                <span className="text-sm text-text-secondary line-through decoration-error/40">
+                  {item.text}
+                </span>
+                <span className="text-xs text-success ml-1.5">{item.detail}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-text-tertiary text-center mt-3">
+          Chaque jour sans Premium, c'est un jour où ta squad joue sans filet.
+        </p>
       </div>
 
       {/* Pricing Cards — 3 tiers */}

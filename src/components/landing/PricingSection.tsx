@@ -29,6 +29,7 @@ const TIERS = [
     ctaStyle: 'border border-border-default text-text-primary hover:bg-bg-hover',
     popular: false,
     badge: null,
+    dailyPrice: false,
   },
   {
     name: 'Premium',
@@ -46,9 +47,10 @@ const TIERS = [
       'Zéro pub',
     ],
     cta: 'Débloquer Premium',
-    ctaStyle: 'bg-primary-bg text-white hover:bg-primary-bg-hover shadow-glow-primary-sm',
-    popular: false,
-    badge: null,
+    ctaStyle: 'bg-gradient-to-r from-primary to-purple text-white hover:opacity-90 shadow-glow-primary-sm',
+    popular: true,
+    badge: 'RECOMMANDÉ',
+    dailyPrice: true,
   },
   {
     name: 'Squad Leader',
@@ -68,8 +70,9 @@ const TIERS = [
     ],
     cta: 'Choisir Squad Leader',
     ctaStyle: 'bg-gradient-to-r from-warning to-warning/80 text-bg-base hover:opacity-90',
-    popular: true,
-    badge: 'POPULAIRE',
+    popular: false,
+    badge: null,
+    dailyPrice: false,
   },
   {
     name: 'Club',
@@ -90,6 +93,7 @@ const TIERS = [
     ctaStyle: 'border border-primary text-primary hover:bg-primary-10',
     popular: false,
     badge: 'B2B',
+    dailyPrice: false,
   },
 ]
 
@@ -193,6 +197,12 @@ export function PricingSection() {
                       ((tier.monthlyPrice * 12 - yearlyTotal) / (tier.monthlyPrice * 12)) * 100
                     )}
                     %
+                  </p>
+                )}
+
+                {tier.dailyPrice && (
+                  <p className="text-xs text-text-quaternary mb-2">
+                    Soit <span className="font-semibold text-text-secondary">{(price / 30).toFixed(2)}&euro;/jour</span> — le prix d'un bonbon
                   </p>
                 )}
 

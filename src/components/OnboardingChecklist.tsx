@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Users, UserPlus, Calendar, Check, X, ChevronRight, Sparkles, Star } from './icons'
+import { Users, UserPlus, Calendar, Check, X, ChevronRight, Sparkles, Star, User, CheckCircle } from './icons'
 import { Link } from 'react-router'
 import { Card } from './ui'
 import { showSuccess } from '../lib/toast'
@@ -11,6 +11,8 @@ interface OnboardingChecklistProps {
   hasSession: boolean
   onCreateSession: () => void
   userId?: string
+  hasAvatar?: boolean
+  hasCheckedIn?: boolean
 }
 
 const getStorageKey = (userId?: string) =>
@@ -22,6 +24,8 @@ export function OnboardingChecklist({
   hasSession,
   onCreateSession,
   userId,
+  hasAvatar = false,
+  hasCheckedIn = false,
 }: OnboardingChecklistProps) {
   const [dismissed, setDismissed] = useState(false)
   const [inviteCopied, setInviteCopied] = useState(false)
@@ -63,7 +67,7 @@ export function OnboardingChecklist({
   }, [hasSession, lastCompletedStep])
 
   // If all steps are complete, auto-hide after a celebration
-  const allComplete = hasSquad && hasSession && inviteCopied
+  const allComplete = hasSquad && hasSession && inviteCopied && hasAvatar && hasCheckedIn
 
   useEffect(() => {
     if (allComplete && !dismissed) {
@@ -128,10 +132,26 @@ export function OnboardingChecklist({
       icon: Calendar,
       action: hasSession ? undefined : { type: 'button' as const, onClick: onCreateSession },
     },
+    {
+      id: 'profile',
+      label: 'Complète ton profil',
+      description: 'Ajoute un avatar pour que ta squad te reconnaisse',
+      done: hasAvatar,
+      icon: User,
+      action: hasAvatar ? undefined : { type: 'link' as const, to: '/profile' },
+    },
+    {
+      id: 'checkin',
+      label: 'Fais ton premier check-in',
+      description: 'Confirme ta présence à une session en cours',
+      done: hasCheckedIn,
+      icon: CheckCircle,
+      action: hasCheckedIn ? undefined : { type: 'link' as const, to: '/sessions' },
+    },
   ]
 
-  const completedCount = [hasSquad, inviteCopied, hasSession].filter(Boolean).length
-  const totalSteps = 3
+  const completedCount = [hasSquad, inviteCopied, hasSession, hasAvatar, hasCheckedIn].filter(Boolean).length
+  const totalSteps = 5
   const progress = (completedCount / totalSteps) * 100
 
   return (

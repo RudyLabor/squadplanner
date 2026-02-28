@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { AlertTriangle, Loader2 } from '../../components/icons'
+import { AlertTriangle, Loader2, Users, Trophy, Zap } from '../../components/icons'
 import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import { showError } from '../../lib/toast'
 
@@ -9,9 +9,49 @@ interface SettingsDeleteModalProps {
   onClose: () => void
 }
 
+interface AccountLossStats {
+  squadCount: number
+  squadNames: string[]
+  sessionCount: number
+  xp: number
+  level: number
+}
+
 export function SettingsDeleteModal({ isOpen, onClose }: SettingsDeleteModalProps) {
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
+  const [lossStats, setLossStats] = useState<AccountLossStats | null>(null)
+
+  // R19 — Fetch account stats to show what user will lose (Endowment Effect + Loss Aversion)
+  useEffect(() => {
+    if (!isOpen) return
+    const fetchStats = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) return
+        const [memberships, profile] = await Promise.all([
+          supabase.from('squad_members').select('squad_id, squads(name)').eq('user_id', user.id),
+          supabase.from('profiles').select('xp, level, total_sessions').eq('id', user.id).single(),
+        ])
+        const squadNames = (memberships.data || [])
+          .map((m) => {
+            const squad = m.squads as unknown as { name: string } | null
+            return squad?.name || ''
+          })
+          .filter(Boolean)
+        setLossStats({
+          squadCount: squadNames.length,
+          squadNames,
+          sessionCount: profile.data?.total_sessions || 0,
+          xp: profile.data?.xp || 0,
+          level: profile.data?.level || 1,
+        })
+      } catch {
+        // Non-critical — proceed without stats
+      }
+    }
+    fetchStats()
+  }, [isOpen])
 
   const handleDeleteAccount = async () => {
     if (deleteConfirmText !== 'SUPPRIMER') return
@@ -67,11 +107,44 @@ export function SettingsDeleteModal({ isOpen, onClose }: SettingsDeleteModalProp
             <p className="text-md text-text-tertiary mb-4">
               Cette action est{' '}
               <span className="text-error font-semibold">
-                d&eacute;finitive et irr&eacute;versible
+                définitive et irréversible
               </span>
-              . Toutes tes donn&eacute;es seront supprim&eacute;es : profil, messages, squads,
-              statistiques.
+              . Toutes tes données seront supprimées.
             </p>
+
+            {/* R19 — Loss recap (Endowment Effect) */}
+            {lossStats && (lossStats.squadCount > 0 || lossStats.xp > 0) && (
+              <div className="mb-4 p-3 rounded-xl bg-error/[0.04] border border-error/10 space-y-2">
+                <p className="text-xs font-semibold text-error uppercase tracking-wide">Tu vas perdre :</p>
+                {lossStats.squadCount > 0 && (
+                  <div className="flex items-center gap-2 text-sm text-text-secondary">
+                    <Users className="w-4 h-4 text-error/60 flex-shrink-0" />
+                    <span>
+                      {lossStats.squadCount} squad{lossStats.squadCount > 1 ? 's' : ''}
+                      {lossStats.squadNames.length > 0 && (
+                        <span className="text-text-tertiary"> ({lossStats.squadNames.slice(0, 3).join(', ')}{lossStats.squadNames.length > 3 ? '...' : ''})</span>
+                      )}
+                    </span>
+                  </div>
+                )}
+                {lossStats.sessionCount > 0 && (
+                  <div className="flex items-center gap-2 text-sm text-text-secondary">
+                    <Trophy className="w-4 h-4 text-error/60 flex-shrink-0" />
+                    <span>{lossStats.sessionCount} session{lossStats.sessionCount > 1 ? 's' : ''} jouée{lossStats.sessionCount > 1 ? 's' : ''}</span>
+                  </div>
+                )}
+                {lossStats.xp > 0 && (
+                  <div className="flex items-center gap-2 text-sm text-text-secondary">
+                    <Zap className="w-4 h-4 text-error/60 flex-shrink-0" />
+                    <span>{lossStats.xp} XP · Niveau {lossStats.level}</span>
+                  </div>
+                )}
+                <p className="text-xs text-text-tertiary italic">
+                  Tes coéquipiers vont perdre un joueur fiable.
+                </p>
+              </div>
+            )}
+
             <p className="text-base text-text-tertiary mb-3">
               Tape <span className="font-mono text-error font-bold">SUPPRIMER</span> pour confirmer
               :

@@ -180,8 +180,11 @@ export default function SquadDetail() {
               <SquadMembers
                 members={currentSquad.members || []}
                 ownerId={currentSquad.owner_id}
+                squadId={id || ''}
                 memberCount={currentSquad.member_count || 0}
                 currentUserId={user?.id}
+                isLeader={!!isOwner}
+                canUseAdvancedRoles={canAccessFeature('advanced_roles', id)}
                 onInviteClick={() => setShowInviteModal(true)}
               />
 

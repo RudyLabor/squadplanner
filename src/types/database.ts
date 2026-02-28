@@ -1,7 +1,7 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
 // Enum types
-export type SquadRole = 'leader' | 'co_leader' | 'member'
+export type SquadRole = 'leader' | 'co_leader' | 'moderator' | 'member' | 'igl' | 'coach' | 'shotcaller'
 export type SessionStatus = 'proposed' | 'confirmed' | 'cancelled' | 'completed'
 export type RsvpResponse = 'present' | 'absent' | 'maybe'
 export type CheckinStatus = 'present' | 'late' | 'noshow'

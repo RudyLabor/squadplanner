@@ -141,6 +141,13 @@ export const queryKeys = {
     predictions: (squadId: string) =>
       [...queryKeys.aiAdvanced.all, 'predictions', squadId] as const,
   },
+
+  // Webhooks (Club tier)
+  webhooks: {
+    all: ['webhooks'] as const,
+    list: (squadId: string) => [...['webhooks'], 'list', squadId] as const,
+    detail: (webhookId: string) => [...['webhooks'], 'detail', webhookId] as const,
+  },
 }
 
 /**

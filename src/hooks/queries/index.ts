@@ -43,6 +43,9 @@ export {
   type SquadMemberWithProfile,
 } from './useSquadMembers'
 
+// Squad Member Role
+export { useUpdateMemberRoleMutation } from './useSquadsMutations'
+
 // User Profile
 export { useProfileQuery, useCurrentProfileQuery, useUpdateProfileMutation } from './useUserProfile'
 

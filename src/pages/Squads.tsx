@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { m } from 'framer-motion'
-import { Users, Plus, UserPlus, Compass } from '../components/icons'
+import { Users, Plus, UserPlus, Compass, Download } from '../components/icons'
 import { Link } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card, SquadCardSkeleton } from '../components/ui'
@@ -16,6 +16,7 @@ import { PullToRefresh } from '../components/PullToRefresh'
 import { queryClient } from '../lib/queryClient'
 import { SquadLimitReached, PremiumBadge } from '../components/PremiumGate'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
+import { GuildedImportModal } from '../components/GuildedImportModal'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { FREE_SQUAD_LIMIT } from '../hooks/usePremium'
 import { SquadCard, type SquadNextSession } from './squads/SquadCard'
@@ -41,6 +42,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   const [showCreate, setShowCreate] = useState(false)
   const [showJoin, setShowJoin] = useState(false)
   const [showPremiumModal, setShowPremiumModal] = useState(false)
+  const [showGuildedImport, setShowGuildedImport] = useState(false)
   const [name, setName] = useState('')
   const [game, setGame] = useState('')
   const [inviteCode, setInviteCode] = useState('')
@@ -334,16 +336,24 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                     <p className="text-sm text-text-quaternary mb-6 max-w-[300px] mx-auto">
                       Tu as d\u00e9j\u00e0 un code d'invitation\u00a0? Rejoins ta squad en un clic.
                     </p>
-                    <div className="flex gap-3 justify-center">
+                    <div className="flex flex-wrap gap-3 justify-center">
                       <Button variant="secondary" onClick={() => setShowJoin(true)}>
                         <UserPlus className="w-4 h-4" />
                         Rejoindre avec un code
                       </Button>
                       <Button onClick={handleOpenCreate}>
                         <Plus className="w-4 h-4" />
-                        Créer une squad
+                        Creer une squad
                       </Button>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowGuildedImport(true)}
+                      className="mt-4 inline-flex items-center gap-2 text-sm text-text-tertiary hover:text-text-secondary transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      Importer depuis Guilded
+                    </button>
                   </Card>
                 </m.div>
               )
@@ -356,6 +366,11 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
           onClose={() => setShowPremiumModal(false)}
           squadId={squads[0]?.id}
           feature="Squads illimitées"
+        />
+
+        <GuildedImportModal
+          open={showGuildedImport}
+          onClose={() => setShowGuildedImport(false)}
         />
       </main>
     </PullToRefresh>

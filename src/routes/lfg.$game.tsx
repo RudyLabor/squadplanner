@@ -237,7 +237,7 @@ export default function Component() {
             T'en as marre de jouer avec des randoms qui ragequit au bout de 5 min ? Trouve des
             joueurs {game.name} fiables, de ton niveau, qui tiennent parole
             <span className="text-text-primary font-medium">
-              . Gratuit — inscription en 30 secondes.
+              . Gratuit, sans inscription obligatoire.
             </span>
           </m.p>
 

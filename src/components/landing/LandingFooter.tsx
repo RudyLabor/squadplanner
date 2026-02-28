@@ -265,7 +265,7 @@ export function LandingFooter() {
         {/* Trust badges glassmorphiques */}
         <div className="flex flex-wrap justify-center gap-3 mb-6">
           {[
-            { label: 'Hébergé en Europe (UE)', icon: '🇪🇺' },
+            { label: 'Hébergé en France', icon: '🇫🇷' },
             { label: 'Conforme au RGPD', icon: '🛡️' },
             { label: 'Données chiffrées', icon: '🔒' },
           ].map((badge) => (

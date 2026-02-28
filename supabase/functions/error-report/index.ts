@@ -42,6 +42,23 @@ interface Breadcrumb {
   level?: string
 }
 
+type SubscriptionTier = 'free' | 'premium' | 'squad_leader' | 'club'
+type SupportPriority = 'normal' | 'high' | 'urgent' | 'critical'
+
+/** Maps subscription tier to support priority level */
+function getTierPriority(tier?: SubscriptionTier): SupportPriority {
+  switch (tier) {
+    case 'club':
+      return 'critical'
+    case 'squad_leader':
+      return 'urgent'
+    case 'premium':
+      return 'high'
+    default:
+      return 'normal'
+  }
+}
+
 interface ErrorReport {
   message: string
   stack?: string
@@ -54,6 +71,8 @@ interface ErrorReport {
   extra?: Record<string, unknown>
   breadcrumbs?: Breadcrumb[]
   tags?: Record<string, string>
+  subscriptionTier?: SubscriptionTier
+  type?: string
 }
 
 serve(async (req) => {
@@ -95,19 +114,32 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    const rows = batch.map((err) => ({
-      message: (err.message || '').slice(0, 2000),
-      stack: err.stack?.slice(0, 5000),
-      url: (err.url || '').slice(0, 2000),
-      timestamp: err.timestamp || new Date().toISOString(),
-      user_agent: (err.userAgent || '').slice(0, 500),
-      user_id: err.userId || null,
-      username: err.username || null,
-      level: err.level || 'error',
-      extra: err.extra || null,
-      breadcrumbs: err.breadcrumbs || null,
-      tags: err.tags || null,
-    }))
+    const rows = batch.map((err) => {
+      const priority = getTierPriority(err.subscriptionTier)
+      return {
+        message: (err.message || '').slice(0, 2000),
+        stack: err.stack?.slice(0, 5000),
+        url: (err.url || '').slice(0, 2000),
+        timestamp: err.timestamp || new Date().toISOString(),
+        user_agent: (err.userAgent || '').slice(0, 500),
+        user_id: err.userId || null,
+        username: err.username || null,
+        level: err.level || 'error',
+        extra: {
+          ...(err.extra || {}),
+          subscription_tier: err.subscriptionTier || 'free',
+          priority,
+          report_type: err.type || 'error',
+        },
+        breadcrumbs: err.breadcrumbs || null,
+        tags: {
+          ...(err.tags || {}),
+          priority,
+          ...(err.subscriptionTier ? { subscription_tier: err.subscriptionTier } : {}),
+          ...(err.type ? { report_type: err.type } : {}),
+        },
+      }
+    })
 
     const { error } = await supabase.from('error_reports').insert(rows)
 

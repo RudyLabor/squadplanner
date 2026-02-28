@@ -75,7 +75,7 @@ export const FEATURES = [
     highlight: false,
   },
   {
-    name: 'Rôles avancés (Leader, Co-leader, Modérateur)',
+    name: 'Rôles avancés (IGL, Coach, Shotcaller)',
     free: false,
     premium: false,
     squadLeader: true,
@@ -138,7 +138,7 @@ export const FEATURES = [
     highlight: false,
   },
   {
-    name: 'Export CSV avancé',
+    name: 'API webhooks',
     free: false,
     premium: false,
     squadLeader: false,
@@ -147,13 +147,13 @@ export const FEATURES = [
     highlight: false,
   },
   {
-    name: 'Support prioritaire par email',
-    free: false,
-    premium: false,
-    squadLeader: false,
-    club: true,
+    name: 'Support prioritaire',
+    free: 'Sous 48h',
+    premium: 'Sous 24h',
+    squadLeader: 'Sous 12h',
+    club: 'Sous 4h',
     icon: Shield,
-    highlight: false,
+    highlight: true,
   },
   {
     name: 'Badge exclusif',
@@ -201,10 +201,14 @@ export const FAQ = [
   },
   {
     q: "Le tier Club, c'est pour qui ?",
-    a: 'Le Club est conçu pour les structures esport et les organisations qui gèrent plusieurs équipes. Tu as un dashboard multi-squads, du branding personnalisé, un export CSV avancé et un support prioritaire par email.',
+    a: 'Le Club est conçu pour les structures esport et les organisations qui gèrent plusieurs équipes. Tu as un dashboard multi-squads, du branding personnalisé, des API webhooks et un support prioritaire.',
   },
   {
     q: "Y a-t-il une période d'essai ?",
     a: "Oui ! Tu bénéficies de 7 jours d'essai gratuit sans carte bancaire. À la fin de l'essai, tu choisis ton plan. On offre aussi une garantie satisfait ou remboursé de 30 jours.",
+  },
+  {
+    q: 'Comment demander un remboursement ?',
+    a: "On offre une garantie satisfait ou remboursé de 30 jours, sans condition. Contacte-nous via le formulaire dans tes paramètres (section Abonnement), et on te rembourse sous 48h. Tu peux aussi passer par le support dans la page Aide.",
   },
 ]

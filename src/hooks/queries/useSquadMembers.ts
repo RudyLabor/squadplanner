@@ -6,12 +6,13 @@
  */
 import { useQuery } from '@tanstack/react-query'
 import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
+import type { SquadRole } from '../../lib/roles'
 
 export interface SquadMemberWithProfile {
   id: string
   squad_id: string
   user_id: string
-  role: 'leader' | 'moderator' | 'member'
+  role: SquadRole
   joined_at: string
   profiles?: {
     username?: string

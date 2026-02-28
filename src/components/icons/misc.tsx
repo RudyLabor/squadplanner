@@ -65,6 +65,16 @@ export const Cookie = (p: IconProps) => (
   </svg>
 )
 
+export const Crosshair = (p: IconProps) => (
+  <svg {...d} {...p}>
+    <circle cx="12" cy="12" r="10" />
+    <line x1="22" x2="18" y1="12" y2="12" />
+    <line x1="6" x2="2" y1="12" y2="12" />
+    <line x1="12" x2="12" y1="6" y2="2" />
+    <line x1="12" x2="12" y1="22" y2="18" />
+  </svg>
+)
+
 export const Crown = (p: IconProps) => (
   <svg {...d} {...p}>
     <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" />
@@ -126,6 +136,14 @@ export const Globe = (p: IconProps) => (
     <circle cx="12" cy="12" r="10" />
     <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
     <path d="M2 12h20" />
+  </svg>
+)
+
+export const GraduationCap = (p: IconProps) => (
+  <svg {...d} {...p}>
+    <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+    <path d="M22 10v6" />
+    <path d="M6 12.5V16c0 1 2.686 3 6 3s6-2 6-3v-3.5" />
   </svg>
 )
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react'
 import {
   Bell,
   Volume2,
@@ -19,6 +19,8 @@ import {
   ExternalLink,
   Gift,
   Plug,
+  Crown,
+  Webhook,
 } from '../components/icons'
 import { useNavigate, Link } from 'react-router'
 import { Card, SegmentedControl, Select } from '../components/ui'
@@ -31,6 +33,13 @@ import { Toggle, SectionHeader, SettingRow, ThemeSelector } from './settings/Set
 import { SettingsDeleteModal } from './settings/SettingsDeleteModal'
 import { useLocale, useSetLocale } from '../lib/i18n'
 import { useDiscordLink } from '../hooks/useDiscordLink'
+import { usePremium, hasTierAccess } from '../hooks/usePremium'
+import { RefundRequestModal } from '../components/RefundRequestModal'
+import { OnboardingCallBooking } from '../components/OnboardingCallBooking'
+import { InvoiceManager } from '../components/InvoiceManager'
+import { PremiumGate } from '../components/PremiumGate'
+
+const LazyWebhookManager = lazy(() => import('../components/webhooks/WebhookManager'))
 
 interface NotificationSettings {
   sessions: boolean
@@ -56,6 +65,7 @@ export function Settings() {
   const navigate = useNavigate()
   const { signOut } = useAuthStore()
   useHashNavigation()
+  const { tier, hasPremium } = usePremium()
 
   // i18n
   const locale = useLocale()
@@ -90,6 +100,7 @@ export function Settings() {
     () => localStorage.getItem('sq-timezone') || Intl.DateTimeFormat().resolvedOptions().timeZone
   )
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showRefundModal, setShowRefundModal] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
 
   // Persist settings to localStorage on change
@@ -412,6 +423,24 @@ export function Settings() {
 
         <hr className="section-divider my-6" />
 
+        {hasPremium && <SubscriptionSection onRefundClick={() => setShowRefundModal(true)} />}
+
+        {/* Club tier features: Onboarding Call + Enterprise Billing */}
+        {hasTierAccess(tier, 'club') ? (
+          <>
+            <hr className="section-divider my-6" />
+            <OnboardingCallBooking />
+            <InvoiceManager />
+          </>
+        ) : hasPremium ? (
+          <>
+            <hr className="section-divider my-6" />
+            <PremiumGate feature="club_dashboard" featureLabel="Onboarding assisté & Facturation entreprise">
+              <OnboardingCallBooking />
+            </PremiumGate>
+          </>
+        ) : null}
+
         <Card id="data" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Database} title="Données" />
           <div className="space-y-3">
@@ -474,6 +503,28 @@ export function Settings() {
 
         <DiscordSection />
 
+        {/* API Webhooks — Club tier only */}
+        {hasTierAccess(tier, 'club') ? (
+          <Card id="webhooks" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
+            <SectionHeader icon={Webhook} title="API Webhooks" />
+            <p className="text-sm text-text-quaternary mb-4">
+              Connecte Discord, Notion ou Google Sheets a ta squad
+            </p>
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center py-8 gap-2">
+                  <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                  <span className="text-md text-text-secondary">Chargement...</span>
+                </div>
+              }
+            >
+              <LazyWebhookManager />
+            </Suspense>
+          </Card>
+        ) : (
+          <PremiumGate feature="api_webhooks" featureLabel="API Webhooks" />
+        )}
+
         <Card id="legal" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={FileText} title="Légal" />
           <div className="space-y-3">
@@ -529,6 +580,7 @@ export function Settings() {
         <p className="text-center text-sm text-text-quaternary mt-6">Squad Planner</p>
       </div>
       <SettingsDeleteModal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} />
+      <RefundRequestModal open={showRefundModal} onClose={() => setShowRefundModal(false)} />
     </main>
   )
 }
@@ -655,6 +707,120 @@ function QuietHoursToggle() {
   }, [])
 
   return <Toggle enabled={enabled} onChange={handleToggle} />
+}
+
+/** Subscription section — only shown if user has premium */
+function SubscriptionSection({ onRefundClick }: { onRefundClick: () => void }) {
+  const { tier } = usePremium()
+  const [subscriptionAge, setSubscriptionAge] = useState<number | null>(null)
+
+  useEffect(() => {
+    const checkSubscriptionAge = async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        if (!user) return
+
+        // Check subscription created_at from subscriptions table
+        const { data: subscription } = await supabase
+          .from('subscriptions')
+          .select('created_at, current_period_start')
+          .eq('user_id', user.id)
+          .eq('status', 'active')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        if (subscription) {
+          const startDate = new Date(subscription.current_period_start || subscription.created_at)
+          const daysSinceStart = Math.floor(
+            (Date.now() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+          )
+          setSubscriptionAge(daysSinceStart)
+        } else {
+          // Fallback: check profile subscription_expires_at to estimate
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('subscription_tier, subscription_expires_at, updated_at')
+            .eq('id', user.id)
+            .single()
+
+          if (profile?.subscription_tier && profile.subscription_tier !== 'free') {
+            // Use updated_at as rough estimate for subscription start
+            const startDate = new Date(profile.updated_at)
+            const daysSinceStart = Math.floor(
+              (Date.now() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+            )
+            setSubscriptionAge(daysSinceStart)
+          }
+        }
+      } catch {
+        // Silently fail — button will remain disabled
+      }
+    }
+    checkSubscriptionAge()
+  }, [])
+
+  const tierLabels: Record<string, string> = {
+    premium: 'Premium',
+    squad_leader: 'Squad Leader',
+    club: 'Club',
+  }
+
+  const isEligibleForRefund = subscriptionAge !== null && subscriptionAge <= 30
+
+  return (
+    <Card id="subscription" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
+      <SectionHeader icon={Crown} title="Abonnement" />
+      <div className="space-y-3">
+        <div className="flex items-center justify-between p-4 rounded-xl bg-surface-card">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Crown className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-md text-text-primary font-medium">
+                {tierLabels[tier] || 'Gratuit'}
+              </p>
+              <p className="text-sm text-text-quaternary">
+                {subscriptionAge !== null
+                  ? `Actif depuis ${subscriptionAge} jour${subscriptionAge > 1 ? 's' : ''}`
+                  : 'Abonnement actif'}
+              </p>
+            </div>
+          </div>
+          <Link
+            to="/premium"
+            className="text-sm text-primary hover:text-primary/80 transition-colors"
+          >
+            Gerer
+          </Link>
+        </div>
+
+        <button
+          onClick={onRefundClick}
+          disabled={!isEligibleForRefund}
+          className="w-full flex items-center justify-between p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <div className="flex items-center gap-3">
+            <Shield className="w-5 h-5 text-primary" />
+            <div className="text-left">
+              <p className="text-md text-text-primary">Demander un remboursement</p>
+              <p className="text-sm text-text-quaternary">
+                {isEligibleForRefund
+                  ? 'Garantie satisfait ou rembourse — 30 jours'
+                  : subscriptionAge !== null
+                    ? 'Periode de garantie expiree (plus de 30 jours)'
+                    : 'Verification en cours...'}
+              </p>
+            </div>
+          </div>
+          <ChevronRight className="w-5 h-5 text-text-quaternary" />
+        </button>
+      </div>
+    </Card>
+  )
 }
 
 export default Settings

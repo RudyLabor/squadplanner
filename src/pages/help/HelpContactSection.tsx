@@ -1,12 +1,60 @@
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Mail, Send, CheckCircle } from '../../components/icons'
+import { Mail, Send, CheckCircle, Crown, Zap } from '../../components/icons'
 import { Card, Select } from '../../components/ui'
+import { usePremium } from '../../hooks/usePremium'
+import type { SubscriptionTier } from '../../types/database'
+
+/** Maps subscription tier to support priority level */
+function getSupportPriority(tier: SubscriptionTier): {
+  priority: 'normal' | 'high' | 'urgent' | 'critical'
+  label: string
+  responseTime: string
+  badgeClass: string
+  icon: typeof Crown | typeof Zap
+} {
+  switch (tier) {
+    case 'club':
+      return {
+        priority: 'critical',
+        label: 'Support Club',
+        responseTime: 'Ton ticket sera traite en priorite absolue (reponse sous 4h)',
+        badgeClass: 'bg-gradient-to-r from-amber-500 to-yellow-400 text-white',
+        icon: Crown,
+      }
+    case 'squad_leader':
+      return {
+        priority: 'urgent',
+        label: 'Support Prioritaire',
+        responseTime: 'Ton ticket sera traite en priorite (reponse sous 12h)',
+        badgeClass: 'bg-gradient-to-r from-amber-500 to-yellow-400 text-white',
+        icon: Crown,
+      }
+    case 'premium':
+      return {
+        priority: 'high',
+        label: 'Support Prioritaire',
+        responseTime: 'Ton ticket sera traite en priorite (reponse sous 24h)',
+        badgeClass: 'bg-gradient-to-r from-indigo-500 to-violet-500 text-white',
+        icon: Zap,
+      }
+    default:
+      return {
+        priority: 'normal',
+        label: '',
+        responseTime: 'Reponse sous 48h',
+        badgeClass: '',
+        icon: Zap,
+      }
+  }
+}
 
 export function HelpContactSection() {
   const [contactSubject, setContactSubject] = useState<string>('bug')
   const [contactMessage, setContactMessage] = useState('')
   const [contactSent, setContactSent] = useState(false)
+  const { tier, hasPremium } = usePremium()
+  const supportInfo = getSupportPriority(tier)
 
   return (
     <Card className="mt-8 p-5 bg-gradient-to-br from-primary/5 to-transparent border-primary/10">
@@ -15,9 +63,19 @@ export function HelpContactSection() {
           <Mail className="w-6 h-6 text-primary" />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-text-primary mb-1">Contacter le support</h3>
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <h3 className="text-lg font-semibold text-text-primary">Contacter le support</h3>
+            {hasPremium && (
+              <span
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ${supportInfo.badgeClass}`}
+              >
+                <supportInfo.icon className="w-3 h-3" />
+                {supportInfo.label}
+              </span>
+            )}
+          </div>
           <p className="text-base text-text-secondary">
-            Notre \u00e9quipe est l\u00e0 pour t'aider. R\u00e9ponse garantie sous 24h, souvent en quelques heures.
+            {supportInfo.responseTime}
           </p>
         </div>
       </div>
@@ -36,7 +94,9 @@ export function HelpContactSection() {
             </div>
             <p className="text-md font-semibold text-text-primary">Message envoy\u00e9\u00a0!</p>
             <p className="text-base text-text-secondary text-center">
-              Merci pour ton retour\u00a0! On te r\u00e9pond sous 24h, souvent beaucoup plus vite.
+              {hasPremium
+                ? 'Merci\u00a0! Ton ticket prioritaire a ete envoye. On te repond au plus vite.'
+                : 'Merci pour ton retour\u00a0! On te repond sous 48h.'}
             </p>
             <button
               onClick={() => {
@@ -79,7 +139,7 @@ export function HelpContactSection() {
               <textarea
                 value={contactMessage}
                 onChange={(e) => setContactMessage(e.target.value)}
-                placeholder="Décris ton problème ou ta suggestion..."
+                placeholder="D\u00e9cris ton probl\u00e8me ou ta suggestion..."
                 rows={4}
                 className="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary resize-none transition-colors"
               />
@@ -87,10 +147,14 @@ export function HelpContactSection() {
             <button
               onClick={() => {
                 if (!contactMessage.trim()) return
+                const priorityTag = supportInfo.priority !== 'normal' ? `[${supportInfo.priority.toUpperCase()}]` : ''
+                const tierTag = `[${tier.toUpperCase()}]`
                 const subject = encodeURIComponent(
-                  `[${contactSubject.toUpperCase()}] Support Squad Planner`
+                  `${priorityTag}${tierTag}[${contactSubject.toUpperCase()}] Support Squad Planner`
                 )
-                const body = encodeURIComponent(contactMessage)
+                const body = encodeURIComponent(
+                  `${contactMessage}\n\n---\nTier: ${tier}\nPriorite: ${supportInfo.priority}`
+                )
                 window.location.href = `mailto:support@squadplanner.fr?subject=${subject}&body=${body}`
                 setContactSent(true)
               }}

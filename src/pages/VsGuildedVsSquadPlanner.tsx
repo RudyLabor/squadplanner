@@ -32,13 +32,13 @@ const faqs = [
     id: 'migration-easy',
     question: 'Je peux importer mes données ?',
     answer:
-      "Pas d'import automatique depuis Guilded. Mais créer ta squad prend 30 secondes\u00a0: un nom, un jeu, un lien d'invitation. Tes potes rejoignent en 1 clic.",
+      "Oui. Si t'as tes squads documentés, on te facilite le move. Support direct pour une migration sans galère.",
   },
   {
     id: 'premium-worth',
     question: "C'est quoi Premium ?",
     answer:
-      "Premium, c'est\u00a0: analytics avancées, squads illimités, thèmes personnalisés. Mais calendrier, confirmations, notif push\u00a0? Gratuit. L'essentiel, c'est gratuit.",
+      "Premium, c'est : analytics avancées, custom squads, API. Mais calendrier, confirmations, notif push ? Gratuit. L'essentiel, c'est gratuit.",
   },
   {
     id: 'both-platforms',
@@ -300,7 +300,7 @@ export default function VsGuildedVsSquadPlanner() {
                   <ul className="text-text-secondary text-sm mt-2 space-y-1 pl-4">
                     <li>• Analytics avancées</li>
                     <li>• Personnalisation squad</li>
-                    <li>• Thèmes personnalisés</li>
+                    <li>• API intégrations</li>
                   </ul>
                 </div>
               </div>
@@ -469,7 +469,7 @@ export default function VsGuildedVsSquadPlanner() {
                 C'est bon, tu viens ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Calendrier, confirmations, notifications\u00a0: c'est gratuit. Premium pour les stats avancées et plus.
+                Code GUILDED30 = 30&nbsp;% sur Premium. Mais calendrier et confirmations, c'est gratuit de toute façon.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link

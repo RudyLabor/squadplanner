@@ -79,7 +79,7 @@ export const TIER_LIMITS: Record<SubscriptionTier, TierLimits> = {
     hasClubDashboard: false,
     hasCustomBranding: false,
     hasApiWebhooks: false,
-    hasPrioritySupport: false,
+    hasPrioritySupport: true,
     maxMembers: 20,
   },
   squad_leader: {
@@ -101,7 +101,7 @@ export const TIER_LIMITS: Record<SubscriptionTier, TierLimits> = {
     hasClubDashboard: false,
     hasCustomBranding: false,
     hasApiWebhooks: false,
-    hasPrioritySupport: false,
+    hasPrioritySupport: true,
     maxMembers: 50,
   },
   club: {

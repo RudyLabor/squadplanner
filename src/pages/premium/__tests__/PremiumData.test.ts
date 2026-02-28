@@ -92,12 +92,12 @@ describe('FEATURES — feature comparison table data (4 tiers)', () => {
     expect(hd.club).toBe(true)
   })
 
-  it('Club-only features: dashboard multi-squads, branding, export CSV, support', () => {
+  it('Club-only features: dashboard multi-squads, branding, API, support', () => {
     const clubOnlyNames = [
       'Dashboard multi-squads',
       'Branding personnalisé',
-      'Export CSV avancé',
-      'Support prioritaire par email',
+      'API webhooks',
+      'Support prioritaire 24h',
     ]
     for (const name of clubOnlyNames) {
       const feature = FEATURES.find((f) => f.name === name)!

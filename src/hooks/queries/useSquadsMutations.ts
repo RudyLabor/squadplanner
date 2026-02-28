@@ -5,6 +5,8 @@ import { showSuccess, showError } from '../../lib/toast'
 import { sendMemberJoinedMessage, sendMemberLeftMessage } from '../../lib/systemMessages'
 import { createOptimisticMutation } from '../../utils/optimisticUpdate'
 import type { SquadWithMembers } from './useSquadsQuery'
+import type { SquadRole } from '../../lib/roles'
+import { getRoleConfig } from '../../lib/roles'
 
 function generateInviteCode(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
@@ -253,6 +255,44 @@ export function useDeleteSquadMutation() {
     },
     onError: (error) => {
       showError(error.message || 'Impossible de supprimer la squad')
+    },
+  })
+}
+
+/**
+ * Mutation to update a squad member's role.
+ * Used by squad leaders to assign roles (including advanced premium roles).
+ */
+export function useUpdateMemberRoleMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      squadId,
+      memberId,
+      newRole,
+    }: {
+      squadId: string
+      memberId: string
+      newRole: SquadRole
+    }) => {
+      const { error } = await supabase
+        .from('squad_members')
+        .update({ role: newRole })
+        .eq('squad_id', squadId)
+        .eq('user_id', memberId)
+
+      if (error) throw error
+    },
+    onSuccess: (_data, variables) => {
+      const roleLabel = getRoleConfig(variables.newRole).label
+      queryClient.invalidateQueries({ queryKey: queryKeys.squads.all })
+      queryClient.invalidateQueries({ queryKey: queryKeys.squads.detail(variables.squadId) })
+      queryClient.invalidateQueries({ queryKey: ['squad_members', variables.squadId] })
+      showSuccess(`R\u00f4le mis \u00e0 jour : ${roleLabel}`)
+    },
+    onError: (error) => {
+      showError(error.message || 'Impossible de changer le r\u00f4le')
     },
   })
 }

@@ -6,6 +6,7 @@ import { useDirectMessagesStore } from '../hooks/useDirectMessages'
 import { useAuthStore } from '../hooks/useAuth'
 import { useTypingIndicator } from '../hooks/useTypingIndicator'
 import { useStatePersistence } from '../hooks/useStatePersistence'
+import { useKeyboardVisible } from '../hooks/useKeyboardVisible'
 import { PinnedMessages, type PinnedMessage } from '../components/PinnedMessages'
 import { EditMessageModal } from '../components/EditMessageModal'
 import { CreatePollModal } from '../components/CreatePollModal'
@@ -26,6 +27,7 @@ import { ThreadView } from '../components/ThreadView'
 export function Messages() {
   const { user } = useAuthStore()
   const [searchParams, setSearchParams] = useSearchParams()
+  const isKeyboardVisible = useKeyboardVisible()
 
   const {
     messages: squadMessages,
@@ -661,7 +663,11 @@ export function Messages() {
   return (
     <div
       className="fixed inset-x-0 top-0 z-[60] flex flex-col lg:inset-0 lg:z-auto lg:static"
-      style={{ bottom: 'calc(80px + env(safe-area-inset-bottom, 0px))' }}
+      style={{
+        bottom: isKeyboardVisible
+          ? '0px'
+          : 'calc(80px + env(safe-area-inset-bottom, 0px))',
+      }}
     >
       {toastEl}
       {renderChatView()}

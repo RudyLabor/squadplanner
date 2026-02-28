@@ -208,7 +208,7 @@ export default function Auth() {
               </p>
             </div>
 
-            <div className="hidden lg:block space-y-3">
+            <div className="space-y-3">
               <div className="p-4 rounded-xl bg-surface-card border border-border-subtle">
                 <p className="text-sm text-text-secondary italic mb-2">
                   « Depuis Squad Planner, on joue 3 fois par semaine au lieu d'une. Tout le monde confirme, personne ne ghost. »

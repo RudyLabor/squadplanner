@@ -123,7 +123,7 @@ export function WeeklyLeaderboard({ compact = false }: { compact?: boolean }) {
               Niveau {level} — {getLevelTitle()}
             </span>
           </div>
-          <span className="text-xs text-primary font-bold">{xp} XP</span>
+          <span className="text-xs text-primary-hover font-bold">{xp} XP</span>
         </div>
         <div className="h-2 bg-bg-active rounded-full overflow-hidden">
           <m.div

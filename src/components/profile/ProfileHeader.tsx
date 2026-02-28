@@ -137,7 +137,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploadingPhoto}
               aria-label="Changer la photo de profil"
-              className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-primary flex items-center justify-center border-3 border-bg-base hover:bg-primary transition-colors shadow-md"
+              className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-primary-bg flex items-center justify-center border-3 border-bg-base hover:bg-primary-bg transition-colors shadow-md"
             >
               {isUploadingPhoto ? (
                 <Loader2 className="w-4 h-4 text-white animate-spin" aria-hidden="true" />

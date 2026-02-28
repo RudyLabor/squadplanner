@@ -44,7 +44,7 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
                 <button
                   type="button"
                   onClick={() => promptInstall()}
-                  className="px-4 py-2 rounded-lg bg-primary text-white text-base font-semibold hover:bg-primary-hover active:scale-[0.97] transition-all"
+                  className="px-4 py-2 rounded-lg bg-primary-bg text-white text-base font-semibold hover:bg-primary-bg-hover active:scale-[0.97] transition-all"
                 >
                   Installer
                 </button>

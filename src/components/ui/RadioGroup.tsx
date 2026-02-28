@@ -184,7 +184,7 @@ function RadioCircle({ isSelected }: { isSelected: boolean }) {
       aria-hidden="true"
     >
       <span
-        className={`absolute inset-1 rounded-full bg-primary transition-transform duration-150 ${
+        className={`absolute inset-1 rounded-full bg-primary-bg transition-transform duration-150 ${
           isSelected ? 'scale-100' : 'scale-0'
         }`}
       />

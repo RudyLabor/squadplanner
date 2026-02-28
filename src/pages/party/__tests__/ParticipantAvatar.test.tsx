@@ -91,7 +91,7 @@ describe('ParticipantAvatar', () => {
     const toiLabel = screen.getByText('Toi')
     expect(toiLabel.className).toContain('text-primary')
     // 5. Avatar circle has primary background
-    const circle = container.querySelector('.bg-primary')
+    const circle = container.querySelector('.bg-primary-bg')
     expect(circle).not.toBeNull()
     // 6. Initial text is white (visible on primary bg)
     const initial = screen.getByText('T')

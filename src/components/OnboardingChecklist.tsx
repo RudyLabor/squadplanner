@@ -316,7 +316,7 @@ export function OnboardingChecklist({
                     (step.action.type === 'link' ? (
                       <Link
                         to={step.action.to}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary-hover transition-colors shadow-sm hover:shadow-md flex-shrink-0"
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary-bg text-white font-medium hover:bg-primary-bg-hover transition-colors shadow-sm hover:shadow-md flex-shrink-0"
                       >
                         Go
                         <ChevronRight className="w-4 h-4" />
@@ -324,7 +324,7 @@ export function OnboardingChecklist({
                     ) : (
                       <button
                         onClick={step.action.onClick}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary-hover transition-colors shadow-sm hover:shadow-md flex-shrink-0"
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary-bg text-white font-medium hover:bg-primary-bg-hover transition-colors shadow-sm hover:shadow-md flex-shrink-0"
                       >
                         Go
                         <ChevronRight className="w-4 h-4" />

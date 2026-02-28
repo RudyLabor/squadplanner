@@ -91,7 +91,7 @@ export function HelpChatbot({ faqItems }: HelpChatbotProps) {
             setIsOpen(!isOpen)
             setShowHint(false)
           }}
-          className="relative w-14 h-14 rounded-full bg-primary text-white shadow-lg shadow-primary/25 flex items-center justify-center"
+          className="relative w-14 h-14 rounded-full bg-primary-bg text-white shadow-lg shadow-primary/25 flex items-center justify-center"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           aria-label={isOpen ? 'Fermer le chat' : 'Ouvrir le chat'}

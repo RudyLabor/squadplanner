@@ -142,7 +142,7 @@ export function Slider({
       >
         {/* Filled track */}
         <div
-          className={`absolute inset-y-0 left-0 rounded-full bg-primary`}
+          className={`absolute inset-y-0 left-0 rounded-full bg-primary-bg`}
           style={{ width: `${percent}%` }}
         />
 

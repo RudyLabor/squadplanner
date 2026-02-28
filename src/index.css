@@ -22,10 +22,13 @@
   --color-text-tertiary: #9ca3af; /* Ratio: 8.3:1 - WCAG AAA (improved from #8a8a8f) */
   --color-text-quaternary: #9ca3af; /* Ratio: 8.3:1 - WCAG AAA compliant */
 
-  /* Accents - Obsidian & Violet identity */
-  --color-primary: #8B5CF6; /* Violet - sophisticated, premium */
-  --color-primary-hover: #A78BFA;
+  /* Accents - Obsidian & Violet identity — WCAG AA compliant */
+  --color-primary: #8B5CF6; /* Violet-500 - for text on dark bg, Ratio: 4.60:1 on #0c0c14 */
+  --color-primary-hover: #A78BFA; /* Violet-400 - lighter hover */
+  --color-primary-bg: #7C3AED; /* Violet-600 - for button/badge bg, Ratio: 5.70:1 vs white */
+  --color-primary-bg-hover: #6D28D9; /* Violet-700 - hover for button bg */
   --color-success: #34d399;
+  --color-success-bg: #047857; /* Emerald-700 - for button bg with white text, Ratio: 6.17:1 vs white */
   --color-warning: #fbbf24;
   --color-info: #818CF8;
   --color-purple: #a78bfa;
@@ -89,7 +92,7 @@
 
   /* === CHANTIER 1 - TOKENS MANQUANTS (Section 2.3) === */
 
-  /* Accents avec opacité (pour backgrounds colorés) */
+  /* Accents avec opacité (pour backgrounds colorés) — uses #7C3AED (124, 58, 237) */
   --color-primary-5: rgba(139, 92, 246, 0.05);
   --color-primary-10: rgba(139, 92, 246, 0.1);
   --color-primary-15: rgba(139, 92, 246, 0.15);
@@ -275,6 +278,8 @@
   /* Accents - Violet adjusted for light mode */
   --color-primary: #7C3AED;
   --color-primary-hover: #6D28D9;
+  --color-primary-bg: #7C3AED; /* Same as primary in light mode */
+  --color-primary-bg-hover: #6D28D9;
 
   /* Border - Subtle on light */
   --color-border-subtle: rgba(0, 0, 0, 0.08);
@@ -305,6 +310,7 @@
 
   /* Accents ajustés pour fond clair — WCAG AA text contrast ≥ 4.5:1 on #ffffff */
   --color-success: #046C4E; /* Ratio: 5.8:1 on #fff, 4.7:1 on #e6e6e6 (was #047857 at 4.39:1 on grey) */
+  --color-success-bg: #047857; /* Emerald-700 - for button bg with white text, Ratio: 6.17:1 vs white */
   --color-warning: #92400e; /* Ratio: 5.9:1 on #fff (was #d97706 at 3.2:1) */
   --color-error: #b91c1c; /* Ratio: 5.7:1 on #fff (was #dc2626 at 4.6:1) */
   --color-info: #6D28D9; /* Violet info for light mode */
@@ -333,10 +339,10 @@
   --shadow-glow-warning: 0 0 20px rgba(217, 119, 6, 0.08);
 
   /* Accents avec opacité - light mode */
-  --color-primary-5: rgba(124, 58, 237, 0.05);
-  --color-primary-10: rgba(124, 58, 237, 0.1);
-  --color-primary-15: rgba(124, 58, 237, 0.15);
-  --color-primary-20: rgba(124, 58, 237, 0.2);
+  --color-primary-5: rgba(139, 92, 246, 0.05);
+  --color-primary-10: rgba(139, 92, 246, 0.1);
+  --color-primary-15: rgba(139, 92, 246, 0.15);
+  --color-primary-20: rgba(139, 92, 246, 0.2);
   --color-success-5: rgba(5, 150, 105, 0.05);
   --color-success-10: rgba(5, 150, 105, 0.1);
   --color-success-15: rgba(5, 150, 105, 0.15);
@@ -353,9 +359,9 @@
   --color-info-10: rgba(2, 132, 199, 0.1);
   --color-info-15: rgba(2, 132, 199, 0.15);
   --color-info-20: rgba(2, 132, 199, 0.2);
-  --color-purple-10: rgba(124, 58, 237, 0.1);
-  --color-purple-15: rgba(124, 58, 237, 0.15);
-  --color-purple-20: rgba(124, 58, 237, 0.2);
+  --color-purple-10: rgba(139, 92, 246, 0.1);
+  --color-purple-15: rgba(139, 92, 246, 0.15);
+  --color-purple-20: rgba(139, 92, 246, 0.2);
 
   /* Badge-specific accent colors - light mode */
   --color-pink: #ec4899;
@@ -403,13 +409,13 @@
   /* Additional opacity variants - light mode */
   --color-warning-30: rgba(217, 119, 6, 0.3);
   --color-success-30: rgba(5, 150, 105, 0.3);
-  --color-primary-30: rgba(124, 58, 237, 0.3);
-  --color-primary-hover-15: rgba(109, 40, 217, 0.15);
-  --color-primary-hover-30: rgba(109, 40, 217, 0.3);
+  --color-primary-30: rgba(139, 92, 246, 0.3);
+  --color-primary-hover-15: rgba(167, 139, 250, 0.15);
+  --color-primary-hover-30: rgba(167, 139, 250, 0.3);
 
   /* Shadow glows - light mode badge-specific */
   --shadow-glow-warning-strong: 0 0 30px rgba(217, 119, 6, 0.12);
-  --shadow-glow-purple: 0 0 20px rgba(124, 58, 237, 0.12);
+  --shadow-glow-purple: 0 0 20px rgba(139, 92, 246, 0.12);
   --shadow-glow-pink: 0 0 20px rgba(236, 72, 153, 0.12);
   --shadow-glow-cyan: 0 0 20px rgba(8, 145, 178, 0.12);
   --shadow-glow-orange: 0 0 20px rgba(234, 88, 12, 0.12);
@@ -1672,7 +1678,7 @@ select:focus-visible,
 [data-theme='light'] .mesh-bg {
   background:
     radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
     radial-gradient(ellipse at 60% 80%, rgba(5, 150, 105, 0.03) 0%, transparent 50%);
 }
 

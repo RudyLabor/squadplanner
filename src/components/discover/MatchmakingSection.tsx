@@ -42,7 +42,7 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
         <div className="flex flex-col items-center gap-3">
           <Link
             to="/profile?activate=matchmaking"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors"
           >
             Activer dans mon profil
           </Link>

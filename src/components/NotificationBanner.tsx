@@ -98,7 +98,7 @@ export default function NotificationBanner() {
                         }}
                         className={`text-xs font-medium px-3 py-1 rounded-lg transition-colors ${
                           action.variant === 'primary'
-                            ? 'bg-primary text-white hover:bg-primary/80'
+                            ? 'bg-primary-bg text-white hover:bg-primary-bg-hover'
                             : 'bg-overlay-light text-text-primary hover:bg-overlay-medium'
                         }`}
                       >

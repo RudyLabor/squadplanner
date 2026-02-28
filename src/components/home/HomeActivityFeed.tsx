@@ -34,7 +34,7 @@ const activityConfig: Record<
 
 const dotColorMap: Record<ActivityType, string> = {
   session_rsvp: 'bg-success',
-  session_created: 'bg-primary',
+  session_created: 'bg-primary-bg',
   squad_joined: 'bg-info',
 }
 

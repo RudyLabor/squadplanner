@@ -31,7 +31,7 @@ export function PartyEmptyState() {
         </p>
         <Link
           to="/squads"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-medium shadow-md shadow-primary/10 hover:bg-primary-hover transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-bg text-white font-medium shadow-md shadow-primary/10 hover:bg-primary-bg-hover transition-colors"
         >
           <Users className="w-4 h-4" /> Trouver une squad
         </Link>

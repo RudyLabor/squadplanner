@@ -310,7 +310,7 @@ export function CreateSessionModal() {
             <button
               type="submit"
               disabled={isLoading || !selectedSquadId}
-              className="flex-1 px-4 py-3 rounded-xl bg-primary text-white text-md font-semibold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-3 rounded-xl bg-primary-bg text-white text-md font-semibold hover:bg-primary-bg-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer la session'}
             </button>

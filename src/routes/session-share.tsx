@@ -127,7 +127,7 @@ export default function SessionSharePage() {
         </p>
         <button
           onClick={() => navigate('/')}
-          className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white"
+          className="rounded-xl bg-primary-bg px-6 py-3 text-sm font-semibold text-white"
         >
           Découvrir Squad Planner
         </button>
@@ -233,7 +233,7 @@ export default function SessionSharePage() {
           ) : (
             <button
               onClick={handleJoin}
-              className="w-full rounded-xl bg-primary px-6 py-3 text-center text-sm font-semibold text-white transition-transform active:scale-[0.98]"
+              className="w-full rounded-xl bg-primary-bg px-6 py-3 text-center text-sm font-semibold text-white transition-transform active:scale-[0.98]"
             >
               Rejoindre la session
             </button>

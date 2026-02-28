@@ -260,7 +260,7 @@ export function ClubDashboard() {
 
   // Color presets
   const colorOptions = [
-    { value: 'primary', label: 'Bleu', bgClass: 'bg-primary' },
+    { value: 'primary', label: 'Bleu', bgClass: 'bg-primary-bg' },
     { value: 'success', label: 'Vert', bgClass: 'bg-success' },
     { value: 'warning', label: 'Jaune', bgClass: 'bg-warning' },
     { value: 'error', label: 'Rouge', bgClass: 'bg-error' },
@@ -337,7 +337,7 @@ export function ClubDashboard() {
           <Card className="relative overflow-hidden">
             <CardContent className="p-6">
               <div className="absolute inset-0 opacity-5 pointer-events-none">
-                <div className="absolute top-2 right-2 w-16 h-16 bg-primary rounded-full blur-2xl" />
+                <div className="absolute top-2 right-2 w-16 h-16 bg-primary-bg rounded-full blur-2xl" />
               </div>
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">

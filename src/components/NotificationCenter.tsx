@@ -315,7 +315,7 @@ export function NotificationBell() {
                   >
                     <div className="flex items-start gap-3">
                       {!notif.read && (
-                        <span className="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                        <span className="w-2 h-2 rounded-full bg-primary-bg mt-1.5 flex-shrink-0" />
                       )}
                       <div className="flex-1 min-w-0">
                         <p className="text-base font-medium text-text-primary truncate">

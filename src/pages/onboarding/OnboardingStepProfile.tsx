@@ -69,7 +69,7 @@ export function OnboardingStepProfile({
                   </div>
                 )}
               </div>
-              <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center border-2 border-bg-base cursor-pointer hover:brightness-90 hover:scale-[1.02] transition-interactive">
+              <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary-bg flex items-center justify-center border-2 border-bg-base cursor-pointer hover:brightness-90 hover:scale-[1.02] transition-interactive">
                 <Camera className="w-4 h-4 text-white" />
                 <input
                   type="file"

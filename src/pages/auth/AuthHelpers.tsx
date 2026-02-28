@@ -37,7 +37,7 @@ export function PasswordStrength({ password }: { password: string }) {
 
     if (score <= 1) return { level: 1, label: 'Faible', color: 'bg-error' }
     if (score <= 2) return { level: 2, label: 'Moyen', color: 'bg-warning' }
-    if (score <= 3) return { level: 3, label: 'Bon', color: 'bg-primary' }
+    if (score <= 3) return { level: 3, label: 'Bon', color: 'bg-primary-bg' }
     return { level: 4, label: 'Fort', color: 'bg-success' }
   }
 

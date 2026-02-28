@@ -153,7 +153,7 @@ export function ProfileScreen() {
     <div className="h-full flex flex-col bg-bg-base">
       <div className="flex flex-col items-center pt-10 pb-3">
         <m.div
-          className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-xl font-bold text-text-primary mb-2"
+          className="w-14 h-14 rounded-2xl bg-primary-bg flex items-center justify-center text-xl font-bold text-text-primary mb-2"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 300 }}

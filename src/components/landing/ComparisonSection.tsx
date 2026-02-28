@@ -146,7 +146,7 @@ export function ComparisonSection() {
                 </th>
                 <th
                   scope="col"
-                  className="text-center text-xs md:text-base font-medium text-primary px-1 md:px-6 py-3 border-t-2 border-t-primary"
+                  className="text-center text-xs md:text-base font-medium text-primary-hover px-1 md:px-6 py-3 border-t-2 border-t-primary"
                 >
                   <span className="inline-flex items-center gap-1 md:gap-1.5">
                     <SquadPlannerLogo size={14} aria-hidden="true" />

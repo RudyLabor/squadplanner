@@ -253,7 +253,7 @@ describe('HowItWorksSection', () => {
     // Desktop stepper buttons are the first 4
     const stepperBtns = buttons.slice(0, 4)
     // Step 1 (index 1) should be active
-    const activeCircle = stepperBtns[1].querySelector('.bg-primary.text-white')
+    const activeCircle = stepperBtns[1].querySelector('.bg-primary-bg.text-white')
     expect(activeCircle).toBeTruthy()
   })
 

@@ -278,7 +278,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({
                 type="button"
                 onClick={handleSave}
                 disabled={isSaving}
-                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary-bg text-white hover:bg-primary-bg-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Enregistrer'}
               </button>

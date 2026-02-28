@@ -17,7 +17,7 @@ const trackSizes = {
 } as const
 
 const fillColors = {
-  default: 'bg-primary',
+  default: 'bg-primary-bg',
   success: 'bg-success',
   warning: 'bg-warning',
   error: 'bg-error',

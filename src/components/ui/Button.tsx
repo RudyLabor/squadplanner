@@ -28,7 +28,7 @@ const cssMotionClasses = 'hover:-translate-y-px active:scale-[0.97]'
 
 const variantClasses: Record<string, string> = {
   primary:
-    'bg-primary hover:bg-primary-hover text-white shadow-md shadow-primary/10 shadow-[0_0_20px_rgba(139,92,246,0.15)] hover:shadow-[0_0_30px_rgba(139,92,246,0.25)]',
+    'bg-primary-bg hover:bg-primary-bg-hover text-white shadow-md shadow-primary/10 shadow-[0_0_20px_rgba(139,92,246,0.15)] hover:shadow-[0_0_30px_rgba(139,92,246,0.25)]',
   secondary:
     'bg-surface-card border border-border-default hover:bg-surface-card-hover hover:border-border-hover text-text-primary',
   ghost: 'bg-transparent hover:bg-bg-hover text-text-secondary hover:text-text-primary',

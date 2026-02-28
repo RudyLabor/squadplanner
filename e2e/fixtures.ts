@@ -620,7 +620,7 @@ export const test = base.extend<{
 export async function dismissCookieBanner(page: import('@playwright/test').Page) {
   try {
     const btn = page.getByRole('button', { name: /Tout accepter/i })
-    await btn.waitFor({ state: 'visible', timeout: 3000 })
+    await btn.waitFor({ state: 'visible', timeout: 5000 })
     await btn.click()
     await page.waitForTimeout(500)
   } catch {

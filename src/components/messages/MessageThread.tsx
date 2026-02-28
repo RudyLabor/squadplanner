@@ -244,7 +244,7 @@ export function MessageThread({
           transition={{ type: 'spring', stiffness: 300, damping: 25 }}
           onClick={onScrollToBottom}
           aria-label="Scroll to bottom"
-          className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-primary hover:bg-primary-hover rounded-full flex items-center justify-center shadow-md shadow-glow-primary-sm transition-colors z-50`}
+          className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-primary-bg hover:bg-primary-bg-hover rounded-full flex items-center justify-center shadow-md shadow-glow-primary-sm transition-colors z-50`}
         >
           <ChevronDown className="w-5 h-5 text-white" />
         </m.button>

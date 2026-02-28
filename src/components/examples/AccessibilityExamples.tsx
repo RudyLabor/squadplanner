@@ -79,7 +79,7 @@ export function LoginFormExample() {
       <button
         type="submit"
         disabled={isRetrying}
-        className="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover disabled:opacity-50"
+        className="w-full px-4 py-2 bg-primary-bg text-white rounded-lg hover:bg-primary-bg-hover disabled:opacity-50"
       >
         {isRetrying ? 'Connexion en cours...' : 'Se connecter'}
       </button>
@@ -100,7 +100,7 @@ export function ModalExample() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover"
+        className="px-4 py-2 bg-primary-bg text-white rounded-lg hover:bg-primary-bg-hover"
       >
         Ouvrir la modale
       </button>
@@ -133,7 +133,7 @@ export function ModalExample() {
               announce('Action confirmée', 'assertive')
               setIsOpen(false)
             }}
-            className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover"
+            className="flex-1 px-4 py-2 bg-primary-bg text-white rounded-lg hover:bg-primary-bg-hover"
           >
             Confirmer
           </button>
@@ -211,7 +211,7 @@ export function AnnouncementExample() {
         <p className="text-lg font-bold">Compteur: {count}</p>
         <button
           onClick={handleIncrement}
-          className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover"
+          className="px-4 py-2 bg-primary-bg text-white rounded-lg hover:bg-primary-bg-hover"
         >
           +1
         </button>

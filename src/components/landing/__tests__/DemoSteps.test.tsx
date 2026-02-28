@@ -437,7 +437,7 @@ describe('DemoSteps', () => {
       const Play = stepComponents.play
       const { container } = render(<Play />)
       // 5 main visualizer bars with bg-primary class
-      const primaryBars = container.querySelectorAll('.bg-primary')
+      const primaryBars = container.querySelectorAll('.bg-primary-bg')
       expect(primaryBars.length).toBe(5)
     })
 

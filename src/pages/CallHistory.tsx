@@ -134,7 +134,7 @@ export function CallHistory() {
                 onClick={() => setFilter(option.value)}
                 className={`px-4 py-2.5 min-h-[44px] rounded-xl text-base font-medium whitespace-nowrap transition-interactive touch-target ${
                   filter === option.value
-                    ? 'bg-primary text-white'
+                    ? 'bg-primary-bg text-white'
                     : 'bg-surface-card text-text-tertiary hover:bg-border-default hover:text-text-primary hover:scale-[1.02]'
                 }`}
               >

@@ -256,7 +256,7 @@ export function TestimonialCarousel() {
               <span
                 className={`h-2 rounded-full transition-all duration-300 block ${
                   i === currentIndex
-                    ? 'bg-primary w-6'
+                    ? 'bg-primary-bg w-6'
                     : 'bg-border-hover w-2 hover:bg-text-quaternary'
                 }`}
               />

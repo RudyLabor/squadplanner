@@ -118,7 +118,7 @@ export function OnboardingStepInvite({
           <button
             type="button"
             onClick={() => handleShare('native')}
-            className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-primary text-white font-medium hover:bg-primary-hover transition-colors"
+            className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-primary-bg text-white font-medium hover:bg-primary-bg-hover transition-colors"
           >
             <Share2 className="w-4 h-4" />
             Partager

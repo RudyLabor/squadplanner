@@ -87,7 +87,7 @@ export function LandingFooter() {
               <button
                 type="submit"
                 disabled={newsletterLoading}
-                className="px-5 min-h-[48px] bg-primary text-white text-md font-semibold rounded-xl hover:bg-primary-hover transition-colors shrink-0 disabled:opacity-60 flex items-center gap-2"
+                className="px-5 min-h-[48px] bg-primary-bg text-white text-md font-semibold rounded-xl hover:bg-primary-bg-hover transition-colors shrink-0 disabled:opacity-60 flex items-center gap-2"
               >
                 {newsletterLoading ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

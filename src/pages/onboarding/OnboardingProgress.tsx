@@ -41,9 +41,9 @@ export function OnboardingProgress({ step }: OnboardingProgressProps) {
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-base font-semibold transition-interactive ${
                   isCompleted
-                    ? 'bg-success text-white'
+                    ? 'bg-success-bg text-white'
                     : isActive
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary-bg text-white'
                       : 'bg-border-subtle text-text-tertiary'
                 }`}
               >

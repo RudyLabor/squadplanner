@@ -82,7 +82,7 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-all ${
                           isActive
-                            ? 'bg-primary text-white scale-110'
+                            ? 'bg-primary-bg text-white scale-110'
                             : isPast
                               ? 'bg-primary/20 text-primary'
                               : 'bg-bg-elevated border border-border-subtle text-text-quaternary'
@@ -150,7 +150,7 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                     </div>
                     {isActive && (
                       <m.div
-                        className="hidden lg:block h-0.5 bg-primary rounded-full ml-auto self-center"
+                        className="hidden lg:block h-0.5 bg-primary-bg rounded-full ml-auto self-center"
                         initial={{ width: 0 }}
                         animate={{ width: 40 }}
                         transition={{

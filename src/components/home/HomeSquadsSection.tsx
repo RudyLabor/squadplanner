@@ -112,7 +112,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
         </p>
         <Link to="/squads">
           <m.button
-            className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary text-white text-md font-semibold shadow-glow-primary-sm"
+            className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary-bg text-white text-md font-semibold shadow-glow-primary-sm"
             whileHover={{ y: -2, scale: 1.02, boxShadow: 'var(--shadow-glow-primary-md)' }}
             {...springTap}
           >

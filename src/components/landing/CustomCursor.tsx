@@ -64,7 +64,7 @@ export function CustomCursor() {
       {trail.map((dot, i) => (
         <m.div
           key={i}
-          className="absolute w-1.5 h-1.5 rounded-full bg-primary"
+          className="absolute w-1.5 h-1.5 rounded-full bg-primary-bg"
           style={{
             x: dot.x,
             y: dot.y,

@@ -29,7 +29,7 @@ function ActivePartyCard({ squadName, participantCount }: ActiveParty) {
               <div className="text-base text-text-tertiary">Party vocale en cours</div>
             </div>
             <m.div
-              className="px-4 py-2 min-h-[44px] flex items-center rounded-lg bg-primary text-white text-md font-medium"
+              className="px-4 py-2 min-h-[44px] flex items-center rounded-lg bg-primary-bg text-white text-md font-medium"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}

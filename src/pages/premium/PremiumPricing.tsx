@@ -50,7 +50,7 @@ const TIERS = [
     ],
     ctaLabel: 'Choisir Premium',
     gradient: 'from-primary to-primary/80',
-    badgeClass: 'bg-primary/20 text-primary',
+    badgeClass: 'bg-primary/20 text-primary-hover',
     borderActive: 'border-primary bg-primary/5',
     popular: false,
     badge: null,
@@ -98,7 +98,7 @@ const TIERS = [
     ],
     ctaLabel: 'Contacter',
     gradient: 'from-primary to-purple',
-    badgeClass: 'bg-primary/20 text-primary',
+    badgeClass: 'bg-primary/20 text-primary-hover',
     borderActive: 'border-primary bg-primary/5',
     popular: false,
     badge: 'B2B',
@@ -221,7 +221,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
             onClick={() => setIsYearly(false)}
             className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
               !isYearly
-                ? 'bg-primary text-white shadow-sm'
+                ? 'bg-primary-bg text-white shadow-sm'
                 : 'text-text-tertiary hover:text-text-primary'
             }`}
           >
@@ -231,12 +231,12 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
             onClick={() => setIsYearly(true)}
             className={`px-4 py-2 rounded-lg text-base font-medium transition-colors flex items-center gap-2 ${
               isYearly
-                ? 'bg-success text-white shadow-sm'
+                ? 'bg-success-bg text-white shadow-sm'
                 : 'text-text-tertiary hover:text-text-primary'
             }`}
           >
             Annuel
-            <span className="px-1.5 py-0.5 rounded-full bg-success/20 text-success text-xs font-bold">
+            <span className="px-1.5 py-0.5 rounded-full bg-black/25 text-white text-xs font-bold">
               -20%
             </span>
           </button>
@@ -270,7 +270,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
               {t.badge && (
                 <div
                   className={`absolute top-0 right-0 px-3 py-1 text-sm font-bold rounded-bl-xl ${
-                    t.popular ? 'bg-warning text-bg-base' : 'bg-primary text-white'
+                    t.popular ? 'bg-warning text-bg-base' : 'bg-primary-bg text-white'
                   }`}
                 >
                   {t.badge}
@@ -315,8 +315,8 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
                   t.popular
                     ? 'bg-gradient-to-r from-warning to-warning/80 text-bg-base hover:opacity-90'
                     : t.tier === 'club'
-                      ? 'border border-primary text-primary hover:bg-primary-10'
-                      : 'bg-primary text-white hover:bg-primary-hover shadow-glow-primary-sm'
+                      ? 'border border-primary text-primary-hover hover:bg-primary-10'
+                      : 'bg-primary-bg text-white hover:bg-primary-bg-hover shadow-glow-primary-sm'
                 }`}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}

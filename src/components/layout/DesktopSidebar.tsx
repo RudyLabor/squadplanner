@@ -236,7 +236,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           <m.button
             type="button"
             onClick={() => onOpenCreateSessionModal()}
-            className="flex items-center justify-center gap-2 w-full h-10 rounded-xl bg-primary text-white text-xs font-semibold"
+            className="flex items-center justify-center gap-2 w-full h-10 rounded-xl bg-primary-bg text-white text-xs font-semibold"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.25 }}
@@ -249,7 +249,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           <m.button
             type="button"
             onClick={() => onOpenCreateSessionModal()}
-            className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary text-white text-md font-semibold"
+            className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary-bg text-white text-md font-semibold"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.25 }}

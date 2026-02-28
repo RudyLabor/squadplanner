@@ -237,7 +237,7 @@ function PageVariant({
         <button
           onClick={onRetry}
           disabled={isRetrying}
-          className="w-full max-w-xs inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors disabled:opacity-60 mb-3"
+          className="w-full max-w-xs inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors disabled:opacity-60 mb-3"
         >
           {isRetrying ? (
             <Loader2 className="w-4 h-4 animate-spin" />

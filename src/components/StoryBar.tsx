@@ -46,12 +46,12 @@ function StoryCircle({
           )}
         </div>
         {isOwnStory && (
-          <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center border-2 border-bg-elevated">
+          <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary-bg flex items-center justify-center border-2 border-bg-elevated">
             <Plus className="w-3 h-3 text-white" />
           </div>
         )}
         {storyCount > 1 && (
-          <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-primary text-white text-2xs font-bold flex items-center justify-center border border-bg-elevated">
+          <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-primary-bg text-white text-2xs font-bold flex items-center justify-center border border-bg-elevated">
             {storyCount}
           </span>
         )}
@@ -142,7 +142,7 @@ function CreateStoryModal({
               <button
                 onClick={handleSubmit}
                 disabled={!content.trim()}
-                className="w-full py-2.5 rounded-xl bg-primary text-white font-medium hover:bg-primary-hover disabled:opacity-50 transition-colors"
+                className="w-full py-2.5 rounded-xl bg-primary-bg text-white font-medium hover:bg-primary-bg-hover disabled:opacity-50 transition-colors"
               >
                 Publier la story
               </button>

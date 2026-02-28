@@ -107,7 +107,7 @@ describe('CustomCursor', () => {
 
     it('renders 5 trail dots', () => {
       const { container } = render(<CustomCursor />)
-      const trailDots = container.querySelectorAll('.rounded-full.bg-primary')
+      const trailDots = container.querySelectorAll('.rounded-full.bg-primary-bg')
       expect(trailDots.length).toBe(5)
     })
 

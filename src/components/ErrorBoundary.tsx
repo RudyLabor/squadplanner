@@ -134,7 +134,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {/* Primary action */}
             <button
               onClick={this.handleRetry}
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors mb-3"
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors mb-3"
             >
               <RefreshCw className="w-4 h-4" />
               {this.state.isChunkError ? 'Mettre à jour' : 'Réessayer'}

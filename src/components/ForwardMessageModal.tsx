@@ -174,7 +174,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                 type="button"
                 onClick={handleForward}
                 disabled={!selectedSquadId || isSending || sent}
-                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary-bg text-white hover:bg-primary-bg-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {sent ? (
                   <>

@@ -96,7 +96,7 @@ export const ChannelList = memo(function ChannelList({
                 <button
                   onClick={handleCreate}
                   disabled={!newChannelName.trim() || isCreating}
-                  className="px-3 py-1 rounded-lg text-xs font-medium bg-primary text-white hover:bg-primary-hover disabled:opacity-50 transition-colors"
+                  className="px-3 py-1 rounded-lg text-xs font-medium bg-primary-bg text-white hover:bg-primary-bg-hover disabled:opacity-50 transition-colors"
                 >
                   Créer
                 </button>

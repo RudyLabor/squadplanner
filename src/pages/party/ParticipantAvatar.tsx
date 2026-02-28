@@ -38,7 +38,7 @@ export function ParticipantAvatar({
           />
         )}
         <div
-          className={`relative ${sizeClasses[size]} rounded-full flex items-center justify-center overflow-hidden ${isSpeaking ? 'bg-success ring-2 ring-success/25 shadow-glow-success' : isLocal ? 'bg-primary' : 'bg-primary/30'} transition-interactive`}
+          className={`relative ${sizeClasses[size]} rounded-full flex items-center justify-center overflow-hidden ${isSpeaking ? 'bg-success ring-2 ring-success/25 shadow-glow-success' : isLocal ? 'bg-primary-bg' : 'bg-primary/30'} transition-interactive`}
         >
           {showImage ? (
             <img

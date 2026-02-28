@@ -50,7 +50,7 @@ export function Badge({
     error: 'bg-error',
     danger: 'bg-error',
     info: 'bg-info',
-    primary: 'bg-primary',
+    primary: 'bg-primary-bg',
   }
 
   const sizes: Record<string, string> = {

@@ -105,7 +105,7 @@ export function LandingHero({
               >
                 <Link
                   to="/home"
-                  className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-glow-idle"
+                  className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-glow-idle"
                   data-track="hero_cta_click"
                 >
                   Accéder à mes squads
@@ -121,7 +121,7 @@ export function LandingHero({
                 >
                   <Link
                     to="/auth?mode=register&redirect=onboarding"
-                    className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
+                    className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
                     data-track="hero_cta_click"
                   >
                     Créer ma squad gratuitement

@@ -46,7 +46,7 @@ export function Legal() {
             onClick={() => setActiveTab('cgu')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-md font-medium transition-all ${
               activeTab === 'cgu'
-                ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                ? 'bg-primary-bg text-white shadow-lg shadow-primary/20'
                 : 'text-text-secondary hover:text-text-primary hover:bg-border-subtle'
             }`}
           >
@@ -59,7 +59,7 @@ export function Legal() {
             onClick={() => setActiveTab('privacy')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-md font-medium transition-all ${
               activeTab === 'privacy'
-                ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                ? 'bg-primary-bg text-white shadow-lg shadow-primary/20'
                 : 'text-text-secondary hover:text-text-primary hover:bg-border-subtle'
             }`}
           >

@@ -196,7 +196,7 @@ export const MessageBubble = memo(function MessageBubble({
               </div>
             )}
             <div
-              className={`px-4 py-2.5 rounded-2xl transition-colors duration-150 ${isOwn ? 'bg-primary text-white rounded-br-lg hover:bg-primary-hover hover:shadow-glow-primary-sm' : 'bg-bg-surface text-text-primary rounded-bl-lg hover:bg-bg-hover hover:shadow-sm'}`}
+              className={`px-4 py-2.5 rounded-2xl transition-colors duration-150 ${isOwn ? 'bg-primary-bg text-white rounded-br-lg hover:bg-primary-bg-hover hover:shadow-glow-primary-sm' : 'bg-bg-surface text-text-primary rounded-bl-lg hover:bg-bg-hover hover:shadow-sm'}`}
             >
               <MessageContent
                 content={content}

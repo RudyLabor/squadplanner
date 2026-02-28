@@ -77,7 +77,7 @@ export function Help() {
             onClick={() => setSelectedCategory(null)}
             className={`flex-shrink-0 px-4 py-2 rounded-full text-base font-medium transition-interactive ${
               selectedCategory === null
-                ? 'bg-primary text-white'
+                ? 'bg-primary-bg text-white'
                 : 'bg-border-subtle text-text-secondary hover:bg-border-hover hover:scale-[1.02]'
             }`}
           >
@@ -89,7 +89,7 @@ export function Help() {
               onClick={() => setSelectedCategory(cat)}
               className={`flex-shrink-0 px-4 py-2 rounded-full text-base font-medium transition-interactive ${
                 selectedCategory === cat
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary-bg text-white'
                   : 'bg-border-subtle text-text-secondary hover:bg-border-hover hover:scale-[1.02]'
               }`}
             >
@@ -109,7 +109,7 @@ export function Help() {
                 setSearchQuery('')
                 setSelectedCategory(null)
               }}
-              className="px-4 py-2 rounded-lg bg-primary text-white text-base font-medium hover:bg-primary-hover transition-colors"
+              className="px-4 py-2 rounded-lg bg-primary-bg text-white text-base font-medium hover:bg-primary-bg-hover transition-colors"
             >
               Voir toutes les questions
             </button>

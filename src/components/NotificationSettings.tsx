@@ -153,7 +153,7 @@ function ToggleRow({
         </span>
       </div>
       <div
-        className={`relative w-10 h-5.5 rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-border-default'}`}
+        className={`relative w-10 h-5.5 rounded-full transition-colors ${checked ? 'bg-primary-bg' : 'bg-border-default'}`}
       >
         <div
           className={`absolute top-0.5 w-4.5 h-4.5 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-5' : 'translate-x-0.5'}`}

@@ -65,7 +65,7 @@ export function Toggle({
           transition-colors duration-200 ease-in-out
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2
           ${config.track}
-          ${checked ? 'bg-primary' : 'bg-border-hover'}
+          ${checked ? 'bg-primary-bg' : 'bg-border-hover'}
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
         `}
       >

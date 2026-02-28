@@ -45,7 +45,7 @@ export function HomeScreen() {
         transition={{ delay: 0.2 }}
       >
         <div className="flex items-center gap-2.5 mb-3">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-primary-bg flex items-center justify-center">
             <Calendar className="w-4 h-4 text-text-primary" />
           </div>
           <div className="flex-1">
@@ -179,7 +179,7 @@ export function SquadScreen() {
           </div>
           <div className="text-sm font-bold text-text-primary tracking-[0.15em]">8J9DQR</div>
         </div>
-        <div className="px-3 py-1.5 rounded-md bg-primary text-xs text-text-primary font-medium">
+        <div className="px-3 py-1.5 rounded-md bg-primary-bg text-xs text-text-primary font-medium">
           Copier
         </div>
       </m.div>

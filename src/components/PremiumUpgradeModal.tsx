@@ -176,7 +176,7 @@ export function PremiumUpgradeModal({
             <button
               onClick={() => setIsYearly(false)}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                !isYearly ? 'bg-primary text-white' : 'text-text-tertiary'
+                !isYearly ? 'bg-primary-bg text-white' : 'text-text-tertiary'
               }`}
             >
               Mensuel
@@ -184,11 +184,11 @@ export function PremiumUpgradeModal({
             <button
               onClick={() => setIsYearly(true)}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                isYearly ? 'bg-success text-white' : 'text-text-tertiary'
+                isYearly ? 'bg-success-bg text-white' : 'text-text-tertiary'
               }`}
             >
               Annuel
-              <span className="px-1 py-0.5 rounded text-xs font-bold bg-success/20 text-success">
+              <span className="px-1 py-0.5 rounded text-xs font-bold bg-black/25 text-white">
                 -20%
               </span>
             </button>

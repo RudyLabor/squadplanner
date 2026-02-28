@@ -59,7 +59,7 @@ export function PremiumFeaturesTable() {
                   Gratuit
                 </th>
                 <th className="bg-bg-elevated text-center p-2">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/20 text-xs font-bold text-primary">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/20 text-xs font-bold text-primary-hover">
                     Premium
                   </span>
                 </th>
@@ -69,7 +69,7 @@ export function PremiumFeaturesTable() {
                   </span>
                 </th>
                 <th className="bg-bg-elevated text-center p-2">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-xs font-bold text-white">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-bg text-xs font-bold text-white">
                     Club
                   </span>
                 </th>

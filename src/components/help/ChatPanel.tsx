@@ -90,7 +90,7 @@ export function ChatPanel({
                 </div>
               )}
               <div
-                className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${msg.role === 'user' ? 'bg-primary text-white rounded-br-md' : 'bg-surface-card border border-border-subtle text-text-primary rounded-bl-md'}`}
+                className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${msg.role === 'user' ? 'bg-primary-bg text-white rounded-br-md' : 'bg-surface-card border border-border-subtle text-text-primary rounded-bl-md'}`}
               >
                 {msg.text}
               </div>
@@ -167,7 +167,7 @@ export function ChatPanel({
             <m.button
               onClick={onSend}
               disabled={!inputText.trim() || isTyping}
-              className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-10 h-10 rounded-xl bg-primary-bg text-white flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Envoyer"

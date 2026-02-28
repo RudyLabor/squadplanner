@@ -18,10 +18,8 @@ import { test, expect, checkAccessibility, dismissCookieBanner, loginViaUI } fro
 
 /** Run axe-core and assert ZERO critical/serious violations — STRICT, no swallowing */
 async function assertA11yStrict(page: import('@playwright/test').Page, context: string) {
-  // Disable color-contrast: known production issues with brand colors
-  const { violations, totalViolations, passes } = await checkAccessibility(page, {
-    disableRules: ['color-contrast'],
-  })
+  // color-contrast now enabled — bg-primary-bg (#7C3AED) passes WCAG AA (5.70:1 vs white)
+  const { violations, totalViolations, passes } = await checkAccessibility(page)
 
   // STRICT: passes must be > 0 (axe-core actually ran and found something to check)
   expect(passes, `axe-core found 0 passes on ${context} — scan likely failed`).toBeGreaterThan(0)
@@ -46,6 +44,8 @@ test.describe('A11y Regression - Auth Flow', () => {
   test('Landing page accessible after load', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
+    // Cookie banner appears after 3.5s delay — wait for it to fully render + dismiss
+    await page.waitForTimeout(4000)
     await dismissCookieBanner(page)
 
     // STRICT: full a11y audit
@@ -100,6 +100,7 @@ test.describe('A11y Regression - Dashboard', () => {
     await page.goto('/home')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
+    await dismissCookieBanner(page)
 
     // STRICT: must not be on auth page
     expect(page.url()).not.toContain('/auth')
@@ -183,13 +184,12 @@ test.describe('A11y Regression - Gamification', () => {
     await page.goto('/home')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
+    await dismissCookieBanner(page)
 
-    // STRICT: full a11y audit — no separate "soft" check
-    const { violations, passes } = await checkAccessibility(page, {
-      disableRules: ['color-contrast'],
-    })
+    // STRICT: full a11y audit including color-contrast
+    const { violations, passes } = await checkAccessibility(page)
     expect(passes).toBeGreaterThan(0)
-    // STRICT: zero critical/serious violations (color-contrast excluded — known production issues)
+    // STRICT: zero critical/serious violations (including color-contrast)
     expect(violations.length).toBe(0)
   })
 })
@@ -293,6 +293,8 @@ test.describe('A11y Regression - Mobile Viewport (375px)', () => {
     await page.setViewportSize({ width: 375, height: 812 })
     await page.goto('/')
     await page.waitForLoadState('networkidle')
+    // Cookie banner appears after 3.5s delay — wait for it to fully render + dismiss
+    await page.waitForTimeout(4000)
     await dismissCookieBanner(page)
 
     // STRICT: full a11y audit at mobile viewport
@@ -315,6 +317,7 @@ test.describe('A11y Regression - Mobile Viewport (375px)', () => {
     await page.goto('/home')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
+    await dismissCookieBanner(page)
 
     // STRICT: full a11y audit at mobile viewport
     await assertA11yStrict(page, 'Home - mobile 375px')
@@ -354,8 +357,9 @@ test.describe('A11y Regression - Dark Mode', () => {
 
       await page.goto(path)
       await page.waitForLoadState('networkidle')
-      if (!needsAuth) await dismissCookieBanner(page)
-      await page.waitForTimeout(500)
+      if (!needsAuth) await page.waitForTimeout(4000)
+      else await page.waitForTimeout(1000)
+      await dismissCookieBanner(page)
 
       // STRICT: full a11y audit in dark mode
       await assertA11yStrict(page, `${name} - dark mode`)

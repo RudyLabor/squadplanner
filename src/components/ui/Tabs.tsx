@@ -180,7 +180,7 @@ export function Tab({ value, icon, disabled = false, children }: TabProps) {
       {isActive && variant === 'underline' && (
         <m.div
           layoutId={`${baseId}-underline`}
-          className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
+          className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-bg rounded-full"
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         />
       )}

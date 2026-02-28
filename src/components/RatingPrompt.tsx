@@ -59,7 +59,7 @@ export function RatingPrompt() {
                 window.open('https://squadplanner.fr/review', '_blank')
                 dismiss()
               }}
-              className="flex-1 py-2 px-4 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-hover transition-colors"
+              className="flex-1 py-2 px-4 bg-primary-bg text-white rounded-xl text-sm font-semibold hover:bg-primary-bg-hover transition-colors"
             >
               Laisser un avis
             </button>

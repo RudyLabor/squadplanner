@@ -39,9 +39,6 @@ const protectedPages = [
 // AXE-CORE WCAG 2.1 AA — Public Pages (dark + light)
 // ============================================================
 test.describe('A11Y-AXE: WCAG Audit — Public Pages', () => {
-  // color-contrast excluded: known minor contrast issues on landing/auth cookie banner
-  const disableRules = ['color-contrast']
-
   for (const { name, path } of publicPages) {
     test(`${name} (dark mode): zero serious/critical WCAG violations`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: 'dark' })
@@ -49,9 +46,9 @@ test.describe('A11Y-AXE: WCAG Audit — Public Pages', () => {
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(500)
 
-      const { violations } = await checkAccessibility(page, { disableRules })
+      const { violations } = await checkAccessibility(page)
 
-      // STRICT: Zero tolerance for serious/critical violations (excluding color-contrast)
+      // STRICT: Zero tolerance for serious/critical violations (including color-contrast)
       expect(
         violations.length,
         `${name} dark mode: ${violations.length} violations serious/critical trouvees: ${JSON.stringify(violations.map((v) => ({ id: v.id, impact: v.impact, description: v.description })))}`
@@ -64,9 +61,9 @@ test.describe('A11Y-AXE: WCAG Audit — Public Pages', () => {
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(500)
 
-      const { violations } = await checkAccessibility(page, { disableRules })
+      const { violations } = await checkAccessibility(page)
 
-      // STRICT: Zero tolerance (excluding color-contrast)
+      // STRICT: Zero tolerance (including color-contrast)
       expect(
         violations.length,
         `${name} light mode: ${violations.length} violations trouvees: ${JSON.stringify(violations.map((v) => ({ id: v.id, impact: v.impact, description: v.description })))}`
@@ -79,9 +76,6 @@ test.describe('A11Y-AXE: WCAG Audit — Public Pages', () => {
 // AXE-CORE WCAG 2.1 AA — Protected Pages (dark + light)
 // ============================================================
 test.describe('A11Y-AXE: WCAG Audit — Protected Pages', () => {
-  // color-contrast excluded: known minor contrast issues on production
-  const disableRules = ['color-contrast']
-
   for (const { name, path } of protectedPages) {
     test(`${name} (dark mode): zero serious/critical WCAG violations`, async ({
       authenticatedPage: page,
@@ -91,9 +85,9 @@ test.describe('A11Y-AXE: WCAG Audit — Protected Pages', () => {
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(1000)
 
-      const { violations } = await checkAccessibility(page, { disableRules })
+      const { violations } = await checkAccessibility(page)
 
-      // STRICT: Zero tolerance (excluding color-contrast)
+      // STRICT: Zero tolerance (including color-contrast)
       expect(
         violations.length,
         `${name} dark mode: violations trouvees: ${JSON.stringify(violations.map((v) => ({ id: v.id, impact: v.impact })))}`
@@ -108,9 +102,9 @@ test.describe('A11Y-AXE: WCAG Audit — Protected Pages', () => {
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(1000)
 
-      const { violations } = await checkAccessibility(page, { disableRules })
+      const { violations } = await checkAccessibility(page)
 
-      // STRICT: Zero tolerance (excluding color-contrast)
+      // STRICT: Zero tolerance (including color-contrast)
       expect(
         violations.length,
         `${name} light mode: violations trouvees: ${JSON.stringify(violations.map((v) => ({ id: v.id, impact: v.impact })))}`
@@ -526,7 +520,7 @@ test.describe('A11Y-FORMS: Form Input Labels', () => {
 // COLOR CONTRAST — automated axe-core check
 // ============================================================
 test.describe('A11Y-CONTRAST: Color Contrast', () => {
-  test('Landing page: axe-core color-contrast violations are minimal', async ({ page }) => {
+  test('Landing page: zero color-contrast violations', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(500)
@@ -535,15 +529,14 @@ test.describe('A11Y-CONTRAST: Color Contrast', () => {
 
     const contrastViolations = violations.filter((v) => v.id === 'color-contrast')
 
-    // Known minor contrast issues on cookie banner / decorative elements
-    // Allow up to 2 violations (known production issues)
+    // STRICT: All contrast issues fixed (bg-primary-bg #7C3AED = 5.70:1 vs white)
     expect(
       contrastViolations.length,
-      `Landing: ${contrastViolations.length} violation(s) de contraste.`
-    ).toBeLessThanOrEqual(2)
+      `Landing: ${contrastViolations.length} violation(s) de contraste: ${JSON.stringify(contrastViolations.map((v) => v.nodes?.map((n) => n.html).join(', ')))}`
+    ).toBe(0)
   })
 
-  test('Auth page: axe-core color-contrast violations are minimal', async ({ page }) => {
+  test('Auth page: zero color-contrast violations', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(500)
@@ -552,11 +545,11 @@ test.describe('A11Y-CONTRAST: Color Contrast', () => {
 
     const contrastViolations = violations.filter((v) => v.id === 'color-contrast')
 
-    // Allow up to 2 violations (known production issues)
+    // STRICT: All contrast issues fixed
     expect(
       contrastViolations.length,
-      `Auth: ${contrastViolations.length} violation(s) de contraste`
-    ).toBeLessThanOrEqual(2)
+      `Auth: ${contrastViolations.length} violation(s) de contraste: ${JSON.stringify(contrastViolations.map((v) => v.nodes?.map((n) => n.html).join(', ')))}`
+    ).toBe(0)
   })
 })
 

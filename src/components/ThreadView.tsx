@@ -137,7 +137,7 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
                         <div
                           className={`px-3 py-2 rounded-xl text-sm ${
                             isOwn
-                              ? 'bg-primary text-white rounded-br-md'
+                              ? 'bg-primary-bg text-white rounded-br-md'
                               : 'bg-bg-surface text-text-primary rounded-bl-md'
                           }`}
                         >
@@ -170,7 +170,7 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
               <button
                 type="submit"
                 disabled={!newMessage.trim() || isSending}
-                className="p-2.5 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50"
+                className="p-2.5 rounded-xl bg-primary-bg text-white hover:bg-primary-bg-hover transition-colors disabled:opacity-50"
                 aria-label="Envoyer"
               >
                 {isSending ? (

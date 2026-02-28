@@ -152,7 +152,7 @@ export const VoiceMessagePlayer = memo(function VoiceMessagePlayer({
                   isPlayed
                     ? isOwn
                       ? 'bg-white'
-                      : 'bg-primary'
+                      : 'bg-primary-bg'
                     : isOwn
                       ? 'bg-white/30'
                       : 'bg-text-quaternary'

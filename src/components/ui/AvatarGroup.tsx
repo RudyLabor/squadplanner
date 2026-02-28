@@ -39,7 +39,7 @@ const statusColors = {
   dnd: 'bg-error',
 } as const
 
-const bgColors = ['bg-primary', 'bg-info', 'bg-success', 'bg-warning', 'bg-error'] as const
+const bgColors = ['bg-primary-bg', 'bg-info', 'bg-success', 'bg-warning', 'bg-error'] as const
 
 function getInitialBg(name: string): string {
   let hash = 0

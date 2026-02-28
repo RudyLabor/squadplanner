@@ -31,7 +31,7 @@ export interface DMConversation {
 function UnreadBadge({ count }: { count: number }) {
   if (count <= 0) return null
   return (
-    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center">
+    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-primary-bg text-white text-xs font-bold rounded-full flex items-center justify-center">
       {count > 9 ? '9+' : count}
     </span>
   )
@@ -175,7 +175,7 @@ interface Props {
 function TabBadge({ count }: { count: number }) {
   if (count <= 0) return null
   return (
-    <span className="min-w-[18px] h-[18px] px-1 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center">
+    <span className="min-w-[18px] h-[18px] px-1 bg-primary-bg text-white text-xs font-bold rounded-full flex items-center justify-center">
       {count > 9 ? '9+' : count}
     </span>
   )
@@ -211,7 +211,7 @@ export function ConversationList({
             Messages
           </h1>
           {totalUnread > 0 && (
-            <span className="px-2.5 py-1 bg-primary text-white text-sm font-bold rounded-full">
+            <span className="px-2.5 py-1 bg-primary-bg text-white text-sm font-bold rounded-full">
               {totalUnread} non lu{totalUnread > 1 ? 's' : ''}
             </span>
           )}

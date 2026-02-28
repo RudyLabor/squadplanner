@@ -184,7 +184,7 @@ export function VoiceChat({ squadId, sessionTitle }: VoiceChatProps) {
                     {[1, 2, 3].map((i) => (
                       <m.div
                         key={i}
-                        className="w-1 bg-primary rounded-full"
+                        className="w-1 bg-primary-bg rounded-full"
                         animate={{
                           height: [4, 12, 4],
                         }}

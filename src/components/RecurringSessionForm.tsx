@@ -334,7 +334,7 @@ export function RecurringSessionForm({
                 whileTap={{ scale: 0.95 }}
                 className={`py-2 px-1 rounded-lg text-xs font-semibold transition-colors ${
                   selectedDays.includes(day.value)
-                    ? 'bg-primary text-white shadow-md'
+                    ? 'bg-primary-bg text-white shadow-md'
                     : 'bg-surface-card text-text-tertiary hover:bg-border-subtle'
                 }`}
               >
@@ -381,7 +381,7 @@ export function RecurringSessionForm({
                 whileTap={{ scale: 0.95 }}
                 className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
                   duration === opt.minutes
-                    ? 'bg-primary text-white shadow-md'
+                    ? 'bg-primary-bg text-white shadow-md'
                     : 'bg-surface-card text-text-tertiary hover:bg-border-subtle'
                 }`}
               >
@@ -463,7 +463,7 @@ export function RecurringSessionForm({
           <Button
             type="submit"
             disabled={isLoading || selectedDays.length === 0}
-            className="flex-1 bg-primary hover:bg-primary-hover text-white"
+            className="flex-1 bg-primary-bg hover:bg-primary-bg-hover text-white"
           >
             {isLoading ? (
               <>

@@ -154,7 +154,7 @@ export function HeroMockup() {
         {/* Step progress bar (auto-advance indicator) */}
         <div className="w-32 h-0.5 rounded-full bg-border-subtle overflow-hidden">
           <m.div
-            className="h-full bg-primary rounded-full"
+            className="h-full bg-primary-bg rounded-full"
             key={`hero-progress-${currentStep}`}
             initial={{ width: '0%' }}
             animate={{ width: '100%' }}

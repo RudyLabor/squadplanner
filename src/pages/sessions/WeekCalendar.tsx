@@ -143,7 +143,7 @@ export function WeekCalendar({ sessions, weekOffset = 0, onWeekChange }: WeekCal
                           ? 'bg-error'
                           : s.my_rsvp === 'maybe'
                             ? 'bg-warning'
-                            : 'bg-primary'
+                            : 'bg-primary-bg'
                     }`}
                     title={s.title || 'Session'}
                   />
@@ -162,7 +162,7 @@ export function WeekCalendar({ sessions, weekOffset = 0, onWeekChange }: WeekCal
       {/* Legend */}
       <div className="flex items-center gap-4 mt-2 justify-center">
         <div className="flex items-center gap-1">
-          <div className="w-2 h-2 rounded-full bg-primary" />
+          <div className="w-2 h-2 rounded-full bg-primary-bg" />
           <span className="text-xs text-text-quaternary">En attente</span>
         </div>
         <div className="flex items-center gap-1">

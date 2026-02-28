@@ -315,7 +315,7 @@ ${formData.message}
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/60 mb-4">
                       <Icon className="w-8 h-8 text-white" />
                     </div>
-                    <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm mb-4">
+                    <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary-bg text-white font-bold text-sm mb-4">
                       {item.step}
                     </div>
                     <h3 className="text-lg font-semibold text-text-primary mb-2">{item.title}</h3>

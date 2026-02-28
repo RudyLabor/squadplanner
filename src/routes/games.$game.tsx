@@ -118,7 +118,7 @@ function GameNotFound() {
           </p>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-bg text-white rounded-xl hover:bg-primary-bg-hover transition-colors"
           >
             Retour à l'accueil
             <ArrowRight className="w-5 h-5" />
@@ -282,7 +282,7 @@ export default function Component() {
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
               <Link
                 to="/auth?mode=register&redirect=onboarding"
-                className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
+                className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
               >
                 Créer ma squad {game.shortName || game.name}
                 <ArrowRight className="w-5 h-5" />

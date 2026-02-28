@@ -120,7 +120,7 @@ export default function AlternativeDiscordEvents() {
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
               <Link
                 to="/auth?mode=register&redirect=onboarding"
-                className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
+                className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
               >
                 Essayer gratuitement
                 <ArrowRight className="w-5 h-5" />
@@ -181,7 +181,7 @@ export default function AlternativeDiscordEvents() {
 
                   {/* Squad Planner Version */}
                   <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-emerald-500/20 hover:border-emerald-500/30 transition-all relative">
-                    <div className="absolute -top-3 -right-3 px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">
+                    <div className="absolute -top-3 -right-3 px-3 py-1 bg-primary-bg text-white text-xs font-semibold rounded-full">
                       T'aimes mieux
                     </div>
                     <div className="flex items-start gap-3 mb-4">
@@ -314,7 +314,7 @@ export default function AlternativeDiscordEvents() {
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap}>
               <Link
                 to="/auth?mode=register&redirect=onboarding"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white rounded-xl font-semibold shadow-lg shadow-primary/10 hover:bg-primary/90 transition-colors"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-primary-bg text-white rounded-xl font-semibold shadow-lg shadow-primary/10 hover:bg-primary-bg-hover transition-colors"
               >
                 Essayer gratuitement
                 <ArrowRight className="w-5 h-5" />

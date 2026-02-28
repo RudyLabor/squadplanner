@@ -112,7 +112,7 @@ const typeProgressColors: Record<ToastType, string> = {
   success: 'bg-success',
   error: 'bg-error',
   warning: 'bg-warning',
-  info: 'bg-primary',
+  info: 'bg-primary-bg',
   default: 'bg-text-tertiary',
 }
 

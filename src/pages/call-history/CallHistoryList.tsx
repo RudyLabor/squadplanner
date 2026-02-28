@@ -229,7 +229,7 @@ export function CallHistoryList({
                                   ? 'bg-warning'
                                   : call.type === 'incoming'
                                     ? 'bg-success'
-                                    : 'bg-primary'
+                                    : 'bg-primary-bg'
                             }`}
                           >
                             {call.status === 'missed' ? (
@@ -336,7 +336,7 @@ export function CallHistoryList({
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={scrollToTop}
-            className="fixed bottom-24 right-4 z-40 w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-primary/25 flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-interactive"
+            className="fixed bottom-24 right-4 z-40 w-11 h-11 rounded-full bg-primary-bg text-white shadow-lg shadow-primary/25 flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-interactive"
             aria-label="Remonter en haut"
           >
             <ArrowUp className="w-5 h-5" />

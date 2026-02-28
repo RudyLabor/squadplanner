@@ -112,7 +112,7 @@ export function TourTooltip({
                   key={i}
                   className={`h-1.5 rounded-full transition-all ${
                     i === currentStep
-                      ? 'w-8 bg-primary'
+                      ? 'w-8 bg-primary-bg'
                       : i < currentStep
                         ? 'w-1.5 bg-success'
                         : 'w-1.5 bg-border-subtle'

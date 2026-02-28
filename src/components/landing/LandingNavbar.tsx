@@ -88,7 +88,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
             {isLoggedIn ? (
               <Link
                 to="/home"
-                className="px-4 py-2 rounded-lg bg-primary text-white text-base lg:text-md font-medium hover:bg-primary-hover transition-colors duration-300 inline-flex items-center"
+                className="px-4 py-2 rounded-lg bg-primary-bg text-white text-base lg:text-md font-medium hover:bg-primary-bg-hover transition-colors duration-300 inline-flex items-center"
               >
                 Aller à l'app
               </Link>
@@ -102,7 +102,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
                 </Link>
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
-                  className="hidden lg:inline-flex items-center px-3 lg:px-4 py-2 rounded-lg bg-primary text-white text-base lg:text-md font-medium hover:bg-primary-hover transition-colors duration-300"
+                  className="hidden lg:inline-flex items-center px-3 lg:px-4 py-2 rounded-lg bg-primary-bg text-white text-base lg:text-md font-medium hover:bg-primary-bg-hover transition-colors duration-300"
                   data-track="navbar_cta_click"
                 >
                   Créer ma squad
@@ -110,7 +110,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
                 </Link>
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
-                  className="lg:hidden inline-flex items-center px-3 py-2 rounded-lg bg-primary text-white text-sm font-medium"
+                  className="lg:hidden inline-flex items-center px-3 py-2 rounded-lg bg-primary-bg text-white text-sm font-medium"
                   data-track="navbar_mobile_cta_click"
                 >
                   S'inscrire
@@ -177,7 +177,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
             <Link
               to="/auth?mode=register&redirect=onboarding"
               onClick={closeMobileMenu}
-              className="block w-full py-3 bg-primary text-white rounded-xl font-medium text-center"
+              className="block w-full py-3 bg-primary-bg text-white rounded-xl font-medium text-center"
             >
               Créer ma squad gratuitement
             </Link>

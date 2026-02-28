@@ -170,7 +170,7 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({
               <button
                 onClick={handleSave}
                 disabled={isUpdating}
-                className="px-5 py-2.5 min-h-[44px] rounded-xl text-sm font-medium bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50"
+                className="px-5 py-2.5 min-h-[44px] rounded-xl text-sm font-medium bg-primary-bg text-white hover:bg-primary-bg-hover transition-colors disabled:opacity-50"
               >
                 {isUpdating ? 'Enregistrement...' : 'Enregistrer'}
               </button>

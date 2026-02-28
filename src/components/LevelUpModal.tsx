@@ -141,7 +141,7 @@ export function AchievementToast() {
             <p className="text-sm font-bold text-text-primary">{pendingAchievement.name}</p>
             <p className="text-xs text-text-tertiary">{pendingAchievement.description}</p>
           </div>
-          <div className="text-xs text-primary font-bold ml-auto">
+          <div className="text-xs text-primary-hover font-bold ml-auto">
             +{pendingAchievement.xpBonus} XP
           </div>
         </m.div>

@@ -148,7 +148,7 @@ export default function Maintenance() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.3 }}
           onClick={handleManualRefresh}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors mb-6"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors mb-6"
         >
           <RefreshCw className="w-4 h-4" />
           Vérifier maintenant

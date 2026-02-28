@@ -92,7 +92,7 @@ export function CookieConsent() {
                         </div>
                       </div>
                       <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-border-subtle">
-                        <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-primary-bg mt-1.5 shrink-0" />
                         <div>
                           <p className="text-base font-medium text-text-primary">Analytics</p>
                           <p className="text-sm text-text-tertiary">
@@ -124,7 +124,7 @@ export function CookieConsent() {
                 </button>
                 <button
                   onClick={handleAcceptAll}
-                  className="flex-1 h-11 rounded-xl bg-primary text-md text-white font-semibold hover:bg-primary-hover transition-colors"
+                  className="flex-1 h-11 rounded-xl bg-primary-bg text-md text-white font-semibold hover:bg-primary-bg-hover transition-colors"
                 >
                   Tout accepter
                 </button>

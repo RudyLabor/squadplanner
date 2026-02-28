@@ -200,7 +200,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           </p>
           <Link
             to="/squads"
-            className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary-hover transition-colors"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary-bg text-white text-sm font-medium hover:bg-primary-bg-hover transition-colors"
           >
             <Plus className="w-4 h-4" />
             Créer une squad

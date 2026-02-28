@@ -129,7 +129,7 @@ export function CallControls({
               <div className="relative flex-1 h-6 flex items-center">
                 <div className="absolute inset-x-0 h-1.5 rounded-full bg-overlay-light overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-primary transition-all duration-100"
+                    className="h-full rounded-full bg-primary-bg transition-all duration-100"
                     style={{ width: `${fillPercent * 100}%` }}
                   />
                 </div>

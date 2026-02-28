@@ -62,7 +62,7 @@ export function CommandResultList({
                 >
                   <div
                     className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                      isSelected ? 'bg-primary' : 'bg-border-subtle'
+                      isSelected ? 'bg-primary-bg' : 'bg-border-subtle'
                     }`}
                   >
                     <cmd.icon

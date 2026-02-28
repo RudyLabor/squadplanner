@@ -70,7 +70,7 @@ export function Checkbox({
           border-2 transition-colors duration-150
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2
           ${config.box}
-          ${isActive ? 'bg-primary border-primary' : 'bg-transparent border-border-default hover:border-border-hover'}
+          ${isActive ? 'bg-primary-bg border-primary' : 'bg-transparent border-border-default hover:border-border-hover'}
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
         `}
       >

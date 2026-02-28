@@ -223,7 +223,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({
               type="button"
               onClick={handleSend}
               disabled={isSending}
-              className="p-2 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50"
+              className="p-2 rounded-xl bg-primary-bg text-white hover:bg-primary-bg-hover transition-colors disabled:opacity-50"
               aria-label="Envoyer le message vocal"
             >
               {isSending ? (

@@ -192,7 +192,7 @@ function CreateStep() {
         </div>
       </m.div>
       <m.div
-        className="mt-auto bg-primary text-white text-sm font-medium py-2.5 rounded-xl text-center"
+        className="mt-auto bg-primary-bg text-white text-sm font-medium py-2.5 rounded-xl text-center"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1.2, type: 'spring', stiffness: 300 }}
@@ -400,7 +400,7 @@ function PlayStep() {
         {[0, 1, 2, 3, 4].map((i) => (
           <m.div
             key={i}
-            className="w-1 rounded-full bg-primary"
+            className="w-1 rounded-full bg-primary-bg"
             animate={{ height: [8, 20, 8] }}
             transition={{ duration: 0.6, repeat: 4, delay: i * 0.1, ease: 'easeInOut' }}
           />

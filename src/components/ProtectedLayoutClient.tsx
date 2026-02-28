@@ -42,8 +42,15 @@ export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLay
 
   // Check localStorage for onboarding skip (client-only, runs after first render)
   useEffect(() => {
-    setOnboardingSkipped(localStorage.getItem('sq-onboarding-skipped') === 'true')
-  }, [])
+    const skipped = localStorage.getItem('sq-onboarding-skipped') === 'true'
+    setOnboardingSkipped(skipped)
+    // If user has squads, persist the flag so future loads (even from a new
+    // browser or after cache clear) won't redirect to onboarding.
+    if (!skipped && loaderData?.squads?.length > 0) {
+      localStorage.setItem('sq-onboarding-skipped', 'true')
+      setOnboardingSkipped(true)
+    }
+  }, [loaderData?.squads?.length])
 
   // If we have loader data, the server already authenticated the user.
   // Show content immediately without waiting for client-side auth.
@@ -56,8 +63,11 @@ export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLay
         </div>
       )
     }
-    // Only redirect to onboarding if user explicitly hasn't skipped AND has no squads
-    if (onboardingSkipped === false && loaderData.squads.length === 0) {
+    // Only redirect to onboarding if user explicitly hasn't skipped AND has no squads.
+    // Safety: if the profile has a username, the user already completed onboarding
+    // previously — don't redirect even if squads fetch failed (returned []).
+    const hasProfile = loaderData.profile?.username && loaderData.profile.username.length > 0
+    if (onboardingSkipped === false && loaderData.squads.length === 0 && !hasProfile) {
       return <Navigate to="/onboarding" replace />
     }
     return <ProtectedContent />

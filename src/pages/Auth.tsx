@@ -5,7 +5,7 @@ import { Link, useNavigate, useSearchParams, Navigate } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card } from '../components/ui'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
-import { useAuthStore, useSquadsStore } from '../hooks'
+import { useAuthStore } from '../hooks'
 import { useReferralStore } from '../hooks/useReferral'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { translateAuthError } from './auth/AuthHelpers'
@@ -33,7 +33,6 @@ export default function Auth() {
   const [passwordUpdated, setPasswordUpdated] = useState(false)
 
   const { signIn, signUp, signInWithGoogle, user, isInitialized } = useAuthStore()
-  const { fetchSquads } = useSquadsStore()
   const navigate = useNavigate()
 
   if (isInitialized && user && mode !== 'reset') {
@@ -128,11 +127,12 @@ export default function Auth() {
             navigate('/home')
           }
         } else {
-          // Force fresh fetch (bypass cache) — stale data after sign-out/sign-in could
-          // incorrectly send users with existing squads to onboarding.
-          await fetchSquads(true)
-          const { squads } = useSquadsStore.getState()
-          navigate(squads.length === 0 ? '/onboarding' : '/home')
+          // Always navigate to /home after login. The _protected layout's
+          // clientLoader will reliably fetch squads (with retry) and redirect
+          // to /onboarding if the user truly has none. Fetching squads here
+          // caused a race condition: the auth session wasn't fully settled yet,
+          // so fetchSquads would silently fail → squads=[] → wrong redirect.
+          navigate('/home')
         }
       }
     } else {

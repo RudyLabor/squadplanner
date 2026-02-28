@@ -48,7 +48,7 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
             Comment ça marche
           </h2>
           <p className="text-text-tertiary text-lg">
@@ -134,7 +134,7 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                     </div>
                     <div>
                       <h3
-                        className={`text-md font-semibold transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}
+                        className={`text-base font-semibold transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}
                       >
                         {step.title}
                       </h3>
@@ -142,7 +142,7 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                         <m.p
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
-                          className="text-md text-text-tertiary mt-1"
+                          className="text-base text-text-tertiary mt-1"
                         >
                           {step.description}
                         </m.p>

@@ -59,7 +59,6 @@ export const SquadCard = memo(function SquadCard({
 
   return (
     <m.article
-      layoutId={`squad-card-${squad.id}`}
       whileHover={{ y: -2, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       aria-labelledby={`squad-name-${squad.id}`}
@@ -101,7 +100,7 @@ export const SquadCard = memo(function SquadCard({
                 <div className="flex items-center gap-2 mb-0.5">
                   <h3
                     id={`squad-name-${squad.id}`}
-                    className="text-md font-semibold text-text-primary truncate"
+                    className="text-base font-semibold text-text-primary truncate"
                   >
                     {squad.name}
                   </h3>

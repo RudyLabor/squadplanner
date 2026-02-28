@@ -37,7 +37,7 @@ export function CommandResultList({
       {filteredCommands.length === 0 ? (
         <div className="px-4 py-8 text-center">
           <HelpCircle className="w-8 h-8 text-text-tertiary mx-auto mb-2" />
-          <p className="text-md text-text-secondary">Aucun résultat pour "{query}"</p>
+          <p className="text-base text-text-secondary">Aucun résultat pour "{query}"</p>
         </div>
       ) : (
         Object.entries(groupedCommands).map(([category, commands]) => (
@@ -71,7 +71,7 @@ export function CommandResultList({
                   </div>
                   <div className="flex-1 min-w-0">
                     <p
-                      className={`text-md truncate ${isSelected ? 'text-text-primary' : 'text-text-secondary'}`}
+                      className={`text-base truncate ${isSelected ? 'text-text-primary' : 'text-text-secondary'}`}
                     >
                       {cmd.label}
                     </p>

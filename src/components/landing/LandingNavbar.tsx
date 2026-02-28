@@ -55,7 +55,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
           >
             <SquadPlannerLogo size={24} />
             <span
-              className="text-md font-semibold text-text-primary hidden sm:inline"
+              className="text-base font-semibold text-text-primary hidden sm:inline"
               aria-hidden="true"
             >
               Squad Planner
@@ -88,7 +88,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
             {isLoggedIn ? (
               <Link
                 to="/home"
-                className="px-4 py-2 rounded-lg bg-primary-bg text-white text-base lg:text-md font-medium hover:bg-primary-bg-hover transition-colors duration-300 inline-flex items-center"
+                className="px-4 py-2 rounded-lg bg-primary-bg text-white text-base font-medium hover:bg-primary-bg-hover transition-colors duration-300 inline-flex items-center"
               >
                 Mon dashboard
               </Link>
@@ -96,13 +96,13 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
               <>
                 <Link
                   to="/auth"
-                  className="hidden lg:inline-flex items-center px-3 lg:px-4 py-2 text-base lg:text-md text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all"
+                  className="hidden lg:inline-flex items-center px-3 lg:px-4 py-2 text-base text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all"
                 >
                   Se connecter
                 </Link>
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
-                  className="hidden lg:inline-flex items-center px-3 lg:px-4 py-2 rounded-lg bg-primary-bg text-white text-base lg:text-md font-medium hover:bg-primary-bg-hover transition-colors duration-300"
+                  className="hidden lg:inline-flex items-center px-3 lg:px-4 py-2 rounded-lg bg-primary-bg text-white text-base font-medium hover:bg-primary-bg-hover transition-colors duration-300"
                   data-track="navbar_cta_click"
                 >
                   Créer ma squad — gratuit

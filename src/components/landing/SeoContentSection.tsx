@@ -37,7 +37,7 @@ export function SeoContentSection() {
           viewport={{ once: true }}
           className="text-center mb-10"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
             Pourquoi les gamers choisissent Squad Planner
           </h2>
         </m.div>
@@ -47,7 +47,7 @@ export function SeoContentSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="space-y-6 text-md text-text-secondary leading-relaxed"
+          className="space-y-6 text-base text-text-secondary leading-relaxed"
         >
           <m.p variants={staggerItemVariants}>
             <strong className="text-text-primary">

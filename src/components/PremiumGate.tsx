@@ -123,7 +123,7 @@ export function PremiumGate({
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <span className="text-md font-medium text-text-primary">{label}</span>
+              <span className="text-base font-medium text-text-primary">{label}</span>
               <PremiumBadge small />
             </div>
             <span className="text-sm text-text-tertiary">Passe Premium pour débloquer</span>
@@ -181,7 +181,7 @@ export function SquadLimitReached({
           <Lock className="w-5 h-5 text-warning" />
         </div>
         <div className="flex-1">
-          <h3 className="text-md font-semibold text-text-primary mb-1">Limite atteinte</h3>
+          <h3 className="text-base font-semibold text-text-primary mb-1">Limite atteinte</h3>
           <p className="text-base text-text-secondary mb-3">
             Tu as {currentCount}/{maxCount} squads. Passe Premium pour en créer plus !
           </p>

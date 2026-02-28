@@ -41,7 +41,7 @@ export function PartySection({ squadId }: PartySectionProps) {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Mic className={`w-5 h-5 ${isConnected ? 'text-success' : 'text-primary'}`} />
-          <span className="text-md font-semibold text-text-primary">Party vocale</span>
+          <span className="text-base font-semibold text-text-primary">Party vocale</span>
         </div>
         {participantCount > 0 && !isConnected && (
           <Badge variant="success">
@@ -164,7 +164,7 @@ export function SquadSessionsList({
         ) : (
           <Card className="p-6 text-center">
             <Calendar className="w-10 h-10 mx-auto mb-3 text-text-quaternary" strokeWidth={1} />
-            <p className="text-md text-text-tertiary mb-1">Pas encore de session prévue</p>
+            <p className="text-base text-text-tertiary mb-1">Pas encore de session prévue</p>
             <p className="text-sm text-text-quaternary mb-4">
               Propose un créneau pour jouer avec ta squad
             </p>

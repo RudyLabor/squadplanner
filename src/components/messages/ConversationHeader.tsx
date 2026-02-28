@@ -75,7 +75,7 @@ export function ConversationHeader({
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="text-md font-semibold text-text-primary truncate">{chatName}</h2>
+                <h2 className="text-base font-semibold text-text-primary truncate">{chatName}</h2>
                 <p className="text-sm text-text-quaternary">{chatSubtitle}</p>
               </div>
               <button
@@ -98,13 +98,13 @@ export function ConversationHeader({
                     decoding="async"
                   />
                 ) : (
-                  <span className="text-md font-bold text-primary">
+                  <span className="text-base font-bold text-primary">
                     {(dmConv.other_user_username || '?').charAt(0).toUpperCase()}
                   </span>
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="text-md font-semibold text-text-primary truncate">{chatName}</h2>
+                <h2 className="text-base font-semibold text-text-primary truncate">{chatName}</h2>
                 <p className="text-sm text-text-quaternary">{chatSubtitle}</p>
               </div>
               <button

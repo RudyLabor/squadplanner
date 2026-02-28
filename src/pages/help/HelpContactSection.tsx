@@ -92,7 +92,7 @@ export function HelpContactSection() {
             <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center">
               <CheckCircle className="w-7 h-7 text-success" />
             </div>
-            <p className="text-md font-semibold text-text-primary">Message envoyé !</p>
+            <p className="text-base font-semibold text-text-primary">Message envoyé !</p>
             <p className="text-base text-text-secondary text-center">
               {hasPremium
                 ? 'Merci ! Ton ticket prioritaire a été envoyé. On te répond au plus vite.'
@@ -141,7 +141,7 @@ export function HelpContactSection() {
                 onChange={(e) => setContactMessage(e.target.value)}
                 placeholder="Décris ton problème ou ta suggestion..."
                 rows={4}
-                className="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary resize-none transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-border-default text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary resize-none transition-colors"
               />
             </div>
             <button
@@ -159,7 +159,7 @@ export function HelpContactSection() {
                 setContactSent(true)
               }}
               disabled={!contactMessage.trim()}
-              className="w-full h-11 rounded-xl bg-primary-bg text-white text-md font-semibold hover:bg-primary-bg-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full h-11 rounded-xl bg-primary-bg text-white text-base font-semibold hover:bg-primary-bg-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Send className="w-4 h-4" />
               Envoyer le message

@@ -1,7 +1,7 @@
 import { m } from 'framer-motion'
 import { Calendar, Check, Target, Trophy, Sparkles, TrendingUp, Plus } from '../icons'
 import { Link } from 'react-router'
-import { Card, ProgressRing, AnimatedCounter, HelpTooltip } from '../ui'
+import { Card, ProgressRing, AnimatedCounter, HelpTooltip, StatCard } from '../ui'
 
 // Système de tiers basé sur le score de fiabilité
 const TIERS = [
@@ -243,22 +243,21 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
             aria-label="Statistiques"
           >
             {stats.map((stat) => (
-              <Card key={stat.label} className="p-4 bg-bg-elevated">
-                <div className="flex items-center gap-3">
+              <StatCard
+                key={stat.label}
+                layout="horizontal"
+                icon={
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center"
                     style={{ backgroundColor: stat.bgColor }}
                   >
                     <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
                   </div>
-                  <div>
-                    <div className="text-2xl font-bold text-text-primary">
-                      <AnimatedCounter end={stat.value} duration={1.5} />
-                    </div>
-                    <div className="text-sm text-text-quaternary">{stat.label}</div>
-                  </div>
-                </div>
-              </Card>
+                }
+                value={<AnimatedCounter end={stat.value} duration={1.5} />}
+                label={stat.label}
+                className="bg-bg-elevated"
+              />
             ))}
           </section>
           {hasNoActivity && (
@@ -268,7 +267,7 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                   <Plus className="w-5 h-5 text-primary" />
                 </div>
                 <div className="text-left">
-                  <p className="text-md font-medium text-text-primary">
+                  <p className="text-base font-medium text-text-primary">
                     Planifie ta première session !
                   </p>
                   <Link

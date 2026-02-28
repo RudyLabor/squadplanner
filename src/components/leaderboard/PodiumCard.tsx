@@ -94,7 +94,7 @@ export function PodiumCard({ entry, isCurrentUser, index }: PodiumCardProps) {
             </m.div>
 
             <h3
-              className={`font-bold text-text-primary truncate mb-1 ${isFirst ? 'text-lg' : 'text-md'}`}
+              className={`font-bold text-text-primary truncate mb-1 ${isFirst ? 'text-lg' : 'text-base'}`}
             >
               {entry.username}
             </h3>

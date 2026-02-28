@@ -156,7 +156,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="w-full max-w-[340px] p-5 rounded-2xl bg-bg-elevated border border-border-default shadow-xl space-y-4"
               >
-                <h3 className="text-md font-semibold text-text-primary text-center">
+                <h3 className="text-base font-semibold text-text-primary text-center">
                   Modifier le profil
                 </h3>
                 <div className="space-y-3">
@@ -196,10 +196,10 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                 exit={{ opacity: 0, y: -10 }}
                 className="text-center"
               >
-                <h1 className="text-xl font-bold text-text-primary mb-1">
+                <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary mb-1">
                   {profile?.username || 'Gamer'}
                 </h1>
-                <Expandable previewLines={2} className="text-md text-text-tertiary mb-1 max-w-sm">
+                <Expandable previewLines={2} className="text-base text-text-tertiary mb-1 max-w-sm">
                   {profile?.bio || 'Pas encore de bio'}
                 </Expandable>
                 <p className="text-sm text-text-quaternary mb-3">{user?.email}</p>

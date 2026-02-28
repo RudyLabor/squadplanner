@@ -50,7 +50,7 @@ export const ConfirmedSessions = memo(function ConfirmedSessions({
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2 mb-0.5">
-                            <h3 className="text-md font-medium text-text-primary truncate">
+                            <h3 className="text-base font-medium text-text-primary truncate">
                               {session.title || session.game || 'Session'}
                             </h3>
                             <Badge variant="success" className="shrink-0">
@@ -92,7 +92,7 @@ export const ConfirmedSessions = memo(function ConfirmedSessions({
               <h3 className="text-lg font-semibold text-text-primary mb-2">
                 Aucune session confirmée pour toi
               </h3>
-              <p className="text-md text-text-secondary mb-4">
+              <p className="text-base text-text-secondary mb-4">
                 Clique "Présent" sur une session et elle apparaît ici — ta squad saura qu'elle peut compter sur toi.
               </p>
               <Link to="/squads">
@@ -113,7 +113,7 @@ export function HowItWorksSection() {
   return (
     <section aria-label="Guide des sessions">
       <Card className="p-6">
-        <h2 className="text-md font-semibold text-text-primary mb-4">
+        <h2 className="text-base font-semibold text-text-primary mb-4">
           Comment fonctionnent les sessions ?
         </h2>
         <ol className="space-y-3 list-none">

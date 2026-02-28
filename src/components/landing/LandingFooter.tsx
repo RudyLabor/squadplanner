@@ -13,7 +13,7 @@ const FOOTER_GAMES = [
 ]
 
 const linkClass =
-  'inline-block py-1.5 text-md text-text-tertiary hover:text-primary transition-colors duration-200 leading-relaxed'
+  'inline-block py-1.5 text-base text-text-tertiary hover:text-primary transition-colors duration-200 leading-relaxed'
 
 export function LandingFooter() {
   const [newsletterEmail, setNewsletterEmail] = useState('')
@@ -62,7 +62,7 @@ export function LandingFooter() {
           <h3 className="text-lg md:text-xl font-bold text-text-primary mb-2">
             Sois le premier informé
           </h3>
-          <p className="text-md text-text-tertiary mb-6 max-w-md mx-auto">
+          <p className="text-base text-text-tertiary mb-6 max-w-md mx-auto">
             Nouveaux jeux, astuces et mises à jour. Max 2 emails/mois. Zéro spam.
           </p>
           <form onSubmit={handleNewsletterSubmit} noValidate className="max-w-md mx-auto">
@@ -74,7 +74,7 @@ export function LandingFooter() {
                   name="email"
                   required
                   placeholder="ton@email.com"
-                  className="w-full pl-10 pr-4 py-3 bg-surface-card/50 backdrop-blur-sm border border-border-subtle rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:ring-1 focus:ring-primary/20 focus:outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-surface-card/50 backdrop-blur-sm border border-border-subtle rounded-xl text-base text-text-primary placeholder:text-text-quaternary focus:border-primary focus:ring-1 focus:ring-primary/20 focus:outline-none transition-all"
                   aria-label="Adresse email pour la newsletter"
                   value={newsletterEmail}
                   onChange={(e) => {
@@ -87,7 +87,7 @@ export function LandingFooter() {
               <button
                 type="submit"
                 disabled={newsletterLoading}
-                className="px-5 min-h-[48px] bg-primary-bg text-white text-md font-semibold rounded-xl hover:bg-primary-bg-hover transition-colors shrink-0 disabled:opacity-60 flex items-center gap-2"
+                className="px-5 min-h-[48px] bg-primary-bg text-white text-base font-semibold rounded-xl hover:bg-primary-bg-hover transition-colors shrink-0 disabled:opacity-60 flex items-center gap-2"
               >
                 {newsletterLoading ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -293,7 +293,7 @@ export function LandingFooter() {
           <div className="flex items-center gap-2.5">
             <SquadPlannerLogo size={22} />
             <div>
-              <span className="text-md font-semibold text-text-primary">Squad Planner</span>
+              <span className="text-base font-semibold text-text-primary">Squad Planner</span>
               <span className="text-sm text-text-tertiary ml-2">Le Calendly du gaming</span>
             </div>
           </div>

@@ -35,14 +35,14 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
         <h3 className="text-lg font-semibold text-text-primary mb-2">
           Personne en recherche de squad pour le moment
         </h3>
-        <p className="text-md text-text-secondary max-w-sm mx-auto mb-4">
+        <p className="text-base text-text-secondary max-w-sm mx-auto mb-4">
           Active la recherche de squad dans ton profil pour apparaître ici et être
           trouvé par d'autres joueurs.
         </p>
         <div className="flex flex-col items-center gap-3">
           <Link
             to="/profile?activate=matchmaking"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-bg text-white text-base font-medium hover:bg-primary-bg-hover transition-colors"
           >
             Activer dans mon profil
           </Link>

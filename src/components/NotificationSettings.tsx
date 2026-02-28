@@ -29,7 +29,7 @@ export const NotificationSettings = memo(function NotificationSettings() {
     <div className="space-y-6">
       {/* Global settings */}
       <div className="space-y-3">
-        <h3 className="text-md font-semibold text-text-primary flex items-center gap-2">
+        <h3 className="text-base font-semibold text-text-primary flex items-center gap-2">
           <Bell className="w-4 h-4" /> Général
         </h3>
 
@@ -90,7 +90,7 @@ export const NotificationSettings = memo(function NotificationSettings() {
           className="space-y-2"
         >
           <div className="flex items-center justify-between">
-            <h3 className="text-md font-semibold text-text-primary flex items-center gap-2">
+            <h3 className="text-base font-semibold text-text-primary flex items-center gap-2">
               <span>{category.icon}</span> {category.label}
             </h3>
             <div className="flex items-center gap-2">

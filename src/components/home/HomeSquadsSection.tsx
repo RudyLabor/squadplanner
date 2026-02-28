@@ -70,7 +70,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
                         <Users className="w-5 h-5 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-md font-medium text-text-primary truncate">
+                        <div className="text-base font-medium text-text-primary truncate">
                           {squad.name}
                         </div>
                         <div className="text-sm text-text-tertiary">{squad.game}</div>
@@ -107,12 +107,12 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
           <Users className="w-7 h-7 text-primary" strokeWidth={1.5} />
         </m.div>
         <h3 className="text-lg font-semibold text-text-primary mb-2">Sans squad, tu rates des sessions chaque semaine</h3>
-        <p className="text-md text-text-tertiary mb-6 max-w-[250px] mx-auto">
+        <p className="text-base text-text-tertiary mb-6 max-w-[250px] mx-auto">
           Crée ta squad en 30 secondes, invite tes potes et finis-en avec les "on verra".
         </p>
         <Link to="/squads">
           <m.button
-            className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary-bg text-white text-md font-semibold shadow-glow-primary-sm"
+            className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary-bg text-white text-base font-semibold shadow-glow-primary-sm"
             whileHover={{ y: -2, scale: 1.02, boxShadow: 'var(--shadow-glow-primary-md)' }}
             {...springTap}
           >

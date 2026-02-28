@@ -601,10 +601,10 @@ export function Messages() {
                   <div className="w-20 h-20 rounded-2xl bg-primary-10 flex items-center justify-center mx-auto mb-5">
                     <Sparkles className="w-10 h-10 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold text-text-primary mb-2">
+                  <h3 className="text-xl lg:text-2xl font-semibold font-display text-text-primary mb-2">
                     Ta squad t'attend
                   </h3>
-                  <p className="text-md text-text-quaternary max-w-[250px] mx-auto">
+                  <p className="text-base text-text-quaternary max-w-[250px] mx-auto">
                     Choisis une conversation pour retrouver tes potes.
                   </p>
                 </div>
@@ -633,7 +633,7 @@ export function Messages() {
           >
             {showSlowLoadingHint ? (
               <div className="text-center py-12">
-                <p className="text-text-tertiary text-md">
+                <p className="text-text-tertiary text-base">
                   Le chargement prend plus de temps que prévu...
                 </p>
                 <p className="text-text-quaternary text-sm mt-2">

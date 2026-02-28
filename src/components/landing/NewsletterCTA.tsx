@@ -34,7 +34,7 @@ export function NewsletterCTA() {
         className="p-6 rounded-2xl bg-success/[0.06] border border-success/15 text-center"
       >
         <CheckCircle2 className="w-8 h-8 text-success mx-auto mb-3" />
-        <p className="text-md font-semibold text-text-primary mb-1">Bienvenue dans la squad !</p>
+        <p className="text-base font-semibold text-text-primary mb-1">Bienvenue dans la squad !</p>
         <p className="text-sm text-text-tertiary">
           Tu recevras nos meilleures astuces anti-ghosting chaque semaine.
         </p>
@@ -46,7 +46,7 @@ export function NewsletterCTA() {
     <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/[0.06] to-primary/[0.02] border border-primary/15">
       <div className="flex items-center gap-2 mb-3">
         <Mail className="w-5 h-5 text-primary" />
-        <h3 className="text-md font-bold text-text-primary">
+        <h3 className="text-base font-bold text-text-primary">
           Une astuce anti-ghosting par semaine
         </h3>
       </div>

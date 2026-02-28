@@ -51,7 +51,7 @@ export function OnboardingStepPermissions({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-md font-semibold text-text-primary">Notifications</h3>
+                <h3 className="text-base font-semibold text-text-primary">Notifications</h3>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-warning-10 text-warning font-medium">
                   Recommandé
                 </span>
@@ -61,7 +61,7 @@ export function OnboardingStepPermissions({
                 t'attend
               </p>
               {notifPermission === 'granted' ? (
-                <div className="flex items-center gap-2 text-success text-md">
+                <div className="flex items-center gap-2 text-success text-base">
                   <Check className="w-4 h-4" />
                   Activées
                 </div>
@@ -92,7 +92,7 @@ export function OnboardingStepPermissions({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-md font-semibold text-text-primary">Microphone</h3>
+                <h3 className="text-base font-semibold text-text-primary">Microphone</h3>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-border-subtle text-text-secondary font-medium">
                   Optionnel
                 </span>
@@ -101,7 +101,7 @@ export function OnboardingStepPermissions({
                 Pour la party vocale avec ta squad. Tu peux activer plus tard.
               </p>
               {micPermission === 'granted' ? (
-                <div className="flex items-center gap-2 text-success text-md">
+                <div className="flex items-center gap-2 text-success text-base">
                   <Check className="w-4 h-4" />
                   Autorisé
                 </div>

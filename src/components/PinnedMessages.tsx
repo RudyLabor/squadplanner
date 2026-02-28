@@ -73,7 +73,7 @@ export function PinnedMessages({
           <div className="w-7 h-7 rounded-lg bg-warning-15 flex items-center justify-center">
             <Pin className="w-4 h-4 text-warning" />
           </div>
-          <span className="text-md font-medium text-text-primary">
+          <span className="text-base font-medium text-text-primary">
             {pinnedMessages.length} message{pinnedMessages.length > 1 ? 's' : ''} épinglé
             {pinnedMessages.length > 1 ? 's' : ''}
           </span>
@@ -125,7 +125,7 @@ export function PinnedMessages({
                     </div>
 
                     {/* Message preview */}
-                    <p className="text-md text-text-secondary leading-relaxed">
+                    <p className="text-base text-text-secondary leading-relaxed">
                       {truncateMessage(pinned.message_content)}
                     </p>
 

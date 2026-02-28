@@ -34,7 +34,7 @@ export function ProblemSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
             Le problème que tu connais trop bien
           </h2>
           <p className="text-text-tertiary text-lg">
@@ -66,7 +66,7 @@ export function ProblemSection() {
                 >
                   {item.emoji}
                 </m.span>
-                <p className="text-text-secondary text-md leading-relaxed">{item.text}</p>
+                <p className="text-text-secondary text-base leading-relaxed">{item.text}</p>
               </div>
               {i < problems.length - 1 && (
                 <m.div className="flex justify-center py-1" variants={chevronVariants}>

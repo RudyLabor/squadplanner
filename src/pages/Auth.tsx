@@ -201,7 +201,7 @@ export default function Auth() {
       <header className="relative z-10 px-6 py-5">
         <Link to="/" className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity">
           <SquadPlannerLogo size={28} />
-          <span className="text-md font-semibold text-text-primary">Squad Planner</span>
+          <span className="text-base font-semibold text-text-primary">Squad Planner</span>
         </Link>
       </header>
 
@@ -263,14 +263,14 @@ export default function Auth() {
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-10 mb-5">
                   <Gamepad2 className="w-7 h-7 text-primary" />
                 </div>
-                <h1 className="text-lg font-bold text-text-primary mb-2">
+                <h1 className="text-lg font-bold text-text-primary mb-2 font-display">
                   {mode === 'login'
                     ? "Ta squad t'attend, reconnecte-toi !"
                     : mode === 'reset'
                       ? 'Nouveau mot de passe'
                       : 'Rejoins ta squad en 30 secondes'}
                 </h1>
-                <p className="text-md text-text-secondary">
+                <p className="text-base text-text-secondary">
                   {mode === 'login'
                     ? 'Des sessions sont peut-être déjà planifiées'
                     : mode === 'reset'
@@ -387,7 +387,7 @@ export default function Auth() {
 
               {mode !== 'reset' && (
                 <div className="text-center">
-                  <p className="text-md text-text-secondary">
+                  <p className="text-base text-text-secondary">
                     {mode === 'login' ? 'Première fois ?' : 'Déjà un compte ?'}{' '}
                     <button
                       type="button"

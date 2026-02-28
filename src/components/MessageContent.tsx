@@ -150,7 +150,7 @@ export const MessageContent = memo(function MessageContent({
     const header = lines[0]
     const body = lines.slice(1).join('\n')
     return (
-      <div className="text-md leading-relaxed whitespace-pre-wrap break-words">
+      <div className="text-base leading-relaxed whitespace-pre-wrap break-words">
         <div
           className={`text-sm italic mb-1 flex items-center gap-1 ${isOwn ? 'text-white/60' : 'text-text-quaternary'}`}
         >
@@ -170,7 +170,7 @@ export const MessageContent = memo(function MessageContent({
   }
 
   return (
-    <span className="text-md leading-relaxed whitespace-pre-wrap break-words">
+    <span className="text-base leading-relaxed whitespace-pre-wrap break-words">
       {tokens.map((token, i) => {
         switch (token.type) {
           case 'text':

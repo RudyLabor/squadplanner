@@ -33,7 +33,8 @@ type InputProps = InputFieldProps | TextareaFieldProps
 const sharedClasses = `w-full rounded-xl bg-surface-input border border-border-default
   hover:bg-bg-hover hover:border-border-hover
   focus:border-primary/60 focus:ring-2 focus:ring-primary/10 focus:outline-none
-  focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08),0_0_16px_rgba(139,92,246,0.1)] text-text-primary placeholder-text-quaternary transition-input`
+  focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08),0_0_16px_rgba(139,92,246,0.1)] text-text-primary placeholder-text-quaternary transition-input
+  disabled:opacity-50 disabled:cursor-not-allowed`
 
 export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
   (
@@ -101,7 +102,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
     const currentLength = typeof value === 'string' ? value.length : 0
 
     const errorClasses = error
-      ? 'border-error/50 focus:border-error focus:ring-error/8 focus:shadow-glow-primary-md'
+      ? 'border-error/50 focus:border-error focus:ring-error/8 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.08),0_0_16px_rgba(239,68,68,0.1)]'
       : ''
     const paddingClasses = `${hasLeftElement ? 'pl-12' : 'pl-4'} ${hasRightElement ? 'pr-12' : 'pr-4'}`
 
@@ -163,7 +164,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
                 <button
                   type="button"
                   onClick={onClear}
-                  className="text-text-quaternary hover:text-text-tertiary transition-colors"
+                  className="flex items-center justify-center min-w-[44px] min-h-[44px] -mr-2 text-text-quaternary hover:text-text-tertiary transition-colors"
                   aria-label="Clear input"
                 >
                   <X className="w-4 h-4" />

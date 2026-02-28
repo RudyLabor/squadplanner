@@ -103,7 +103,7 @@ export function CaptainQuiz() {
     <section className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-xl mx-auto">
         <div className="text-center mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">
             Quel type de capitaine es-tu ?
           </h2>
           <p className="text-text-tertiary">
@@ -136,7 +136,7 @@ export function CaptainQuiz() {
                   </span>
                 </div>
 
-                <h3 className="text-sm md:text-md font-semibold text-text-primary mb-4">
+                <h3 className="text-sm md:text-base font-semibold text-text-primary mb-4">
                   {QUESTIONS[currentQ].question}
                 </h3>
 

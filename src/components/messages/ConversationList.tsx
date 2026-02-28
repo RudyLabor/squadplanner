@@ -65,7 +65,7 @@ const ConversationCard = memo(function ConversationCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
             <h3
-              className={`text-md font-medium truncate ${c.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'}`}
+              className={`text-base font-medium truncate ${c.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'}`}
             >
               {c.name || 'Conversation'}
             </h3>
@@ -122,7 +122,7 @@ const DMConversationCard = memo(function DMConversationCard({
               decoding="async"
             />
           ) : (
-            <span className="text-md font-bold text-primary">
+            <span className="text-base font-bold text-primary">
               {(c.other_user_username || '?').charAt(0).toUpperCase()}
             </span>
           )}
@@ -131,7 +131,7 @@ const DMConversationCard = memo(function DMConversationCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
             <h3
-              className={`text-md font-medium truncate ${c.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'}`}
+              className={`text-base font-medium truncate ${c.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'}`}
             >
               {c.other_user_username}
             </h3>
@@ -255,7 +255,7 @@ export function ConversationList({
             activeTab === 'squads' ? 'Rechercher une squad...' : 'Rechercher un contact...'
           }
           aria-label="Rechercher une conversation"
-          className="w-full h-11 pl-10 pr-4 bg-bg-surface border border-border-default rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+          className="w-full h-11 pl-10 pr-4 bg-bg-surface border border-border-default rounded-xl text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
         />
       </div>
 

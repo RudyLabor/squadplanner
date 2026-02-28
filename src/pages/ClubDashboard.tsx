@@ -400,7 +400,7 @@ export function ClubDashboard() {
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-text-tertiary text-sm font-medium">
-                    Taux de présence moyen
+                    Score de fiabilité moyen
                   </span>
                   <div className="w-10 h-10 rounded-lg bg-warning/10 flex items-center justify-center">
                     <Clock className="w-5 h-5 text-warning" />
@@ -692,7 +692,7 @@ export function ClubDashboard() {
                   {/* Club Name Input */}
                   <div className="mb-4">
                     <label className="text-xs font-medium text-text-tertiary mb-2 block">
-                      Nom du club
+                      Nom du club <span className="text-text-quaternary">(bientôt)</span>
                     </label>
                     <input
                       type="text"
@@ -706,7 +706,7 @@ export function ClubDashboard() {
                   {/* Color Picker */}
                   <div>
                     <label className="text-xs font-medium text-text-tertiary mb-3 block">
-                      Couleur primaire
+                      Couleur primaire <span className="text-text-quaternary">(bientôt)</span>
                     </label>
                     <div className="grid grid-cols-3 gap-2">
                       {colorOptions.map((option) => (

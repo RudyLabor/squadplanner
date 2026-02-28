@@ -143,7 +143,7 @@ function WebhookCard({
             <WebhookStatusBadge webhook={webhook} />
           </div>
           <p
-            className="text-md font-medium text-text-primary truncate"
+            className="text-base font-medium text-text-primary truncate"
             title={webhook.url}
           >
             {webhook.url}
@@ -291,7 +291,7 @@ function CreateWebhookForm({
       className="overflow-hidden"
     >
       <div className="p-4 rounded-xl bg-surface-card border border-primary/20 space-y-4">
-        <h4 className="text-md font-semibold text-text-primary">Nouveau webhook</h4>
+        <h4 className="text-base font-semibold text-text-primary">Nouveau webhook</h4>
 
         {/* URL input */}
         <Input
@@ -436,18 +436,18 @@ export function WebhookManager({ squadId: fixedSquadId }: WebhookManagerProps) {
       {!squadId ? (
         <div className="text-center py-8">
           <WebhookIcon className="w-10 h-10 text-text-quaternary mx-auto mb-3" />
-          <p className="text-md text-text-secondary">
+          <p className="text-base text-text-secondary">
             Selectionne un squad pour gerer ses webhooks
           </p>
         </div>
       ) : isLoading ? (
         <div className="flex items-center justify-center py-8 gap-2">
           <Loader2 className="w-5 h-5 text-primary animate-spin" />
-          <span className="text-md text-text-secondary">Chargement...</span>
+          <span className="text-base text-text-secondary">Chargement...</span>
         </div>
       ) : isError ? (
         <div className="text-center py-8">
-          <p className="text-md text-error mb-2">Erreur de chargement</p>
+          <p className="text-base text-error mb-2">Erreur de chargement</p>
           <p className="text-sm text-text-quaternary">
             {(error as Error)?.message ?? 'La table webhooks n\'existe peut-etre pas encore'}
           </p>
@@ -508,7 +508,7 @@ export function WebhookManager({ squadId: fixedSquadId }: WebhookManagerProps) {
               className="text-center py-8 px-4"
             >
               <WebhookIcon className="w-12 h-12 text-text-quaternary mx-auto mb-3 opacity-50" />
-              <p className="text-md text-text-secondary mb-1">Pas encore de webhook</p>
+              <p className="text-base text-text-secondary mb-1">Pas encore de webhook</p>
               <p className="text-sm text-text-quaternary mb-4">
                 Connecte Discord, Notion ou Google Sheets à ta squad en ajoutant un webhook.
               </p>

@@ -21,7 +21,7 @@ export function NeedsResponseSection({ needsResponse }: NeedsResponseSectionProp
           >
             <PartyPopper className="w-5 h-5 text-warning" />
           </m.div>
-          <h2 className="text-md font-semibold text-text-primary">
+          <h2 className="text-base font-semibold text-text-primary">
             Ta squad t'attend ! {needsResponse.length} session{needsResponse.length > 1 ? 's' : ''}{' '}
             à confirmer
           </h2>
@@ -39,7 +39,7 @@ export function NeedsResponseSection({ needsResponse }: NeedsResponseSectionProp
                   whileHover={{ x: 4 }}
                 >
                   <Calendar className="w-4 h-4 text-warning" aria-hidden="true" />
-                  <span className="flex-1 text-md text-text-primary">
+                  <span className="flex-1 text-base text-text-primary">
                     {session.title || session.game || 'Session'}
                   </span>
                   <span className="text-sm text-text-secondary">
@@ -71,7 +71,7 @@ export function AllCaughtUp({ needsResponse, confirmed }: AllCaughtUpProps) {
             <CheckCircle2 className="w-5 h-5 text-success" />
           </div>
           <div>
-            <h3 className="text-md font-semibold text-success">🎯 T'es à jour !</h3>
+            <h3 className="text-base font-semibold text-success">🎯 T'es à jour !</h3>
             <p className="text-sm text-text-secondary">
               Ta squad sait qu'elle peut compter sur toi
             </p>

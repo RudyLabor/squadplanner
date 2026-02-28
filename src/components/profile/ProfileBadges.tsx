@@ -189,7 +189,7 @@ export function ProfileBadges({
       <Card className="mb-5 overflow-hidden">
         <div className="flex items-center gap-2 px-4 pt-4 pb-2">
           <Trophy className="w-4 h-4 text-warning" />
-          <h3 className="text-md font-semibold text-text-primary">Badges Saisonniers</h3>
+          <h3 className="text-base font-semibold text-text-primary">Badges Saisonniers</h3>
         </div>
         {challengesLoaded ? (
           <SeasonalBadgesComponent initialBadges={challengesData?.badges} />
@@ -207,7 +207,7 @@ export function ProfileBadges({
       {/* Achievements section */}
       <Card className="mb-5 p-4 bg-bg-elevated">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-md font-semibold text-text-primary">Succès</h3>
+          <h3 className="text-base font-semibold text-text-primary">Succès</h3>
           <span className="text-sm text-text-quaternary">
             {unlockedAchievements.length}/{ACHIEVEMENTS.length}
           </span>

@@ -164,7 +164,7 @@ export function CallHistoryList({
         <h3 className="text-lg font-semibold text-text-primary mb-2">
           {filter === 'all' ? 'Prêt à appeler ta squad ?' : 'Rien pour le moment'}
         </h3>
-        <p className="text-md text-text-tertiary text-center max-w-[280px] mb-6">
+        <p className="text-base text-text-tertiary text-center max-w-[280px] mb-6">
           {filter === 'all'
             ? 'Lance un appel vocal avec tes potes depuis la party !'
             : `Aucun appel ${filter === 'incoming' ? 'entrant' : filter === 'outgoing' ? 'sortant' : 'manqué'} pour le moment`}
@@ -246,7 +246,7 @@ export function CallHistoryList({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-0.5">
                             <h3
-                              className={`text-md font-semibold truncate ${
+                              className={`text-base font-semibold truncate ${
                                 call.status === 'missed'
                                   ? 'text-error'
                                   : call.status === 'rejected'

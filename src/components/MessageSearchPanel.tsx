@@ -62,7 +62,7 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Rechercher dans les messages..."
-              className="flex-1 bg-transparent text-text-primary placeholder-text-quaternary outline-none text-md"
+              className="flex-1 bg-transparent text-text-primary placeholder-text-quaternary outline-none text-base"
               aria-label="Rechercher des messages"
               autoFocus
             />

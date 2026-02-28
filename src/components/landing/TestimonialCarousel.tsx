@@ -82,7 +82,7 @@ function TestimonialCard({ t }: { t: Testimonial }) {
           <div className="text-xs text-info mt-0.5">{t.game}</div>
         </div>
       </div>
-      <p className="text-text-secondary text-sm leading-relaxed italic flex-1">
+      <p className="text-text-secondary text-base leading-relaxed italic flex-1">
         {t.text}
       </p>
     </div>
@@ -106,8 +106,16 @@ export function TestimonialCarousel() {
       else setCardsPerView(1)
     }
     updateCardsPerView()
-    window.addEventListener('resize', updateCardsPerView)
-    return () => window.removeEventListener('resize', updateCardsPerView)
+    let timeoutId: ReturnType<typeof setTimeout>
+    const debouncedUpdate = () => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(updateCardsPerView, 150)
+    }
+    window.addEventListener('resize', debouncedUpdate)
+    return () => {
+      window.removeEventListener('resize', debouncedUpdate)
+      clearTimeout(timeoutId)
+    }
   }, [])
 
   const totalSlides = Math.ceil(testimonials.length / cardsPerView)
@@ -150,7 +158,7 @@ export function TestimonialCarousel() {
       aria-label="Situations de joueurs"
     >
       <m.h2
-        className="text-xl md:text-2xl font-bold text-center text-text-primary mb-3"
+        className="text-2xl md:text-3xl font-bold text-center text-text-primary mb-3"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -200,7 +208,7 @@ export function TestimonialCarousel() {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ type: 'spring', stiffness: 300, damping: 30, duration: 0.4 }}
+              transition={{ type: 'tween', ease: [0.4, 0, 0.2, 1], duration: 0.4 }}
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.1}

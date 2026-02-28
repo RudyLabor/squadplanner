@@ -102,7 +102,7 @@ export function ComparisonSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
             Ce que Discord ne fait pas pour ta squad
           </h2>
           <p className="text-text-tertiary text-lg">
@@ -165,7 +165,7 @@ export function ComparisonSection() {
                 >
                   <th
                     scope="row"
-                    className="text-left text-xs md:text-md text-text-primary px-2 md:px-6 py-2.5 md:py-4 font-normal"
+                    className="text-left text-xs md:text-base text-text-primary px-2 md:px-6 py-2.5 md:py-4 font-normal"
                   >
                     {item.feature}
                   </th>

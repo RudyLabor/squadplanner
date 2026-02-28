@@ -86,7 +86,7 @@ export default function VsGuildedVsSquadPlanner() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 0%, #a855f712 0%, transparent 60%)',
+            background: 'radial-gradient(circle at 50% 0%, var(--color-primary-10) 0%, transparent 60%)',
             filter: 'blur(40px)',
           }}
         />
@@ -232,14 +232,14 @@ export default function VsGuildedVsSquadPlanner() {
                       </td>
                       <td className="px-6 py-4 text-center">
                         {feature.guilded ? (
-                          <Check className="w-6 h-6 text-emerald-400 mx-auto" />
+                          <Check className="w-6 h-6 text-success mx-auto" />
                         ) : (
                           <div className="w-6 h-6 mx-auto" />
                         )}
                       </td>
                       <td className="px-6 py-4 text-center">
                         {feature.squadPlanner ? (
-                          <Check className="w-6 h-6 text-emerald-400 mx-auto" />
+                          <Check className="w-6 h-6 text-success mx-auto" />
                         ) : (
                           <div className="w-6 h-6 mx-auto" />
                         )}
@@ -284,15 +284,15 @@ export default function VsGuildedVsSquadPlanner() {
               <div className="space-y-4 mb-8">
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Gratuit</div>
-                  <p className="text-text-secondary text-md">Forum, chat, voix</p>
+                  <p className="text-text-secondary text-base">Forum, chat, voix</p>
                 </div>
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Guilded Premium</div>
-                  <p className="text-text-secondary text-md">~4,99 $/mois (prix US estimé)</p>
+                  <p className="text-text-secondary text-base">~4,99 $/mois (prix US estimé)</p>
                   <p className="text-text-tertiary text-sm mt-1">*(supprimé depuis fermeture)</p>
                 </div>
               </div>
-              <p className="text-sm text-red-500 font-semibold">
+              <p className="text-sm text-error font-semibold">
                 Fermée depuis 2024. Plus rien ne bouge.
               </p>
             </m.div>
@@ -313,24 +313,24 @@ export default function VsGuildedVsSquadPlanner() {
               <div className="space-y-4 mb-8">
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Gratuit</div>
-                  <ul className="text-text-secondary text-md space-y-1">
+                  <ul className="text-text-secondary text-base space-y-1">
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <Check className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
                       <span>1 squad, 5 membres, 2 sessions/semaine — tout ça gratuit</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <Check className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
                       <span>Confirmation fiable</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <Check className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
                       <span>Notifications push</span>
                     </li>
                   </ul>
                 </div>
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Premium</div>
-                  <p className="text-text-secondary text-md">6,99 €/mois ou 69,90 €/an</p>
+                  <p className="text-text-secondary text-base">6,99 €/mois ou 69,90 €/an</p>
                   <ul className="text-text-secondary text-sm mt-2 space-y-1 pl-4">
                     <li>• Analytics avancées</li>
                     <li>• Personnalisation squad</li>
@@ -338,7 +338,7 @@ export default function VsGuildedVsSquadPlanner() {
                   </ul>
                 </div>
               </div>
-              <p className="text-sm text-emerald-400 font-semibold">
+              <p className="text-sm text-success font-semibold">
                 ✓ Active · On innove · On reste
               </p>
             </m.div>
@@ -358,8 +358,8 @@ export default function VsGuildedVsSquadPlanner() {
             viewport={{ once: true }}
             className="relative p-8 md:p-10 rounded-3xl border overflow-hidden"
             style={{
-              background: 'radial-gradient(ellipse at center, #a855f710 0%, transparent 60%)',
-              borderColor: '#a855f720',
+              background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
+              borderColor: 'var(--color-primary-20)',
             }}
           >
             <m.div
@@ -367,7 +367,7 @@ export default function VsGuildedVsSquadPlanner() {
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               style={{
-                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+                background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
               }}
             />
             <div className="relative z-10">
@@ -385,7 +385,7 @@ export default function VsGuildedVsSquadPlanner() {
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-text-primary">T'es venu de Guilded ?</strong>
                     <p className="text-text-secondary mt-1">
@@ -394,7 +394,7 @@ export default function VsGuildedVsSquadPlanner() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-text-primary">T'utilises Discord ?</strong>
                     <p className="text-text-secondary mt-1">
@@ -403,7 +403,7 @@ export default function VsGuildedVsSquadPlanner() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-text-primary">T'es en squad compétitive ?</strong>
                     <p className="text-text-secondary mt-1">
@@ -450,14 +450,14 @@ export default function VsGuildedVsSquadPlanner() {
                   className="w-full flex items-center justify-between p-5 text-left hover:bg-bg-elevated/50 transition-colors"
                   aria-expanded={openFAQ === i}
                 >
-                  <span className="text-md font-medium text-text-primary pr-4">{faq.question}</span>
+                  <span className="text-base font-medium text-text-primary pr-4">{faq.question}</span>
                   <ChevronDown
                     className={`w-5 h-5 text-text-quaternary shrink-0 transition-transform duration-300 ${openFAQ === i ? 'rotate-180' : ''}`}
                   />
                 </button>
                 <div className={`faq-answer ${openFAQ === i ? 'open' : ''}`}>
                   <div>
-                    <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">
+                    <p className="px-5 pb-5 text-base text-text-tertiary leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
@@ -480,8 +480,8 @@ export default function VsGuildedVsSquadPlanner() {
             viewport={{ once: true }}
             className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
             style={{
-              background: 'radial-gradient(ellipse at center, #a855f710 0%, transparent 60%)',
-              borderColor: '#a855f720',
+              background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
+              borderColor: 'var(--color-primary-20)',
             }}
           >
             <m.div
@@ -489,7 +489,7 @@ export default function VsGuildedVsSquadPlanner() {
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               style={{
-                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+                background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
               }}
             />
             <div className="relative z-10">
@@ -497,7 +497,7 @@ export default function VsGuildedVsSquadPlanner() {
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
+                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: 'var(--color-primary)' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
                 C'est bon, tu viens ?

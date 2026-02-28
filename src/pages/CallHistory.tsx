@@ -100,12 +100,10 @@ export function CallHistory() {
               <ArrowLeft className="w-5 h-5 text-text-primary" />
             </button>
             <div className="flex-1">
-              <h1 className="text-lg font-bold text-text-primary">Tes appels récents</h1>
+              <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">Tes appels récents</h1>
               <p className="text-base text-text-tertiary">
                 {totalCalls > 0
-                  ? hasMore
-                    ? `${totalCalls} appel${totalCalls !== 1 ? 's' : ''}`
-                    : `${totalCalls} appel${totalCalls !== 1 ? 's' : ''}`
+                  ? `${totalCalls} appel${totalCalls !== 1 ? 's' : ''}`
                   : 'Aucun appel pour le moment'}
               </p>
             </div>
@@ -149,13 +147,13 @@ export function CallHistory() {
         {isLoading && filteredCalls.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-md text-text-tertiary">Chargement de l'historique...</p>
+            <p className="text-base text-text-tertiary">Chargement de l'historique...</p>
           </div>
         )}
 
         {error && (
           <Card className="p-4 bg-error/5 border-error/10">
-            <p className="text-md text-error">{error}</p>
+            <p className="text-base text-error">{error}</p>
             <Button size="sm" variant="ghost" className="mt-2" onClick={() => fetchCallHistory()}>
               Réessayer
             </Button>

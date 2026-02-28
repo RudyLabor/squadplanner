@@ -236,7 +236,7 @@ export function QualityChangeToast({ isVisible, newQuality, onClose }: QualityCh
 
             {/* Message */}
             <div className="flex flex-col">
-              <span className="text-md font-medium text-text-primary">
+              <span className="text-base font-medium text-text-primary">
                 {isImproving ? 'Connexion améliorée' : 'Connexion dégradée'}
               </span>
               <span className="text-sm" style={{ color: info.color }}>

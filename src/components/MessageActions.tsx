@@ -192,7 +192,7 @@ export function MessageActions({
             {/* Reply */}
             <button
               onClick={handleReply}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-base text-text-primary hover:bg-border-default transition-colors"
               role="menuitem"
               aria-label="Répondre au message"
             >
@@ -204,7 +204,7 @@ export function MessageActions({
             {onThread && (
               <button
                 onClick={handleThread}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-base text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
                 aria-label="Ouvrir le thread de ce message"
               >
@@ -216,7 +216,7 @@ export function MessageActions({
             {/* Copy */}
             <button
               onClick={handleCopy}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-base text-text-primary hover:bg-border-default transition-colors"
               role="menuitem"
               aria-label={copied ? 'Message copié' : 'Copier le texte du message'}
             >
@@ -237,7 +237,7 @@ export function MessageActions({
             {onForward && (
               <button
                 onClick={handleForward}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-base text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
                 aria-label="Transférer ce message"
               >
@@ -250,7 +250,7 @@ export function MessageActions({
             {isAdmin && (
               <button
                 onClick={handlePin}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-base text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
                 aria-label="Épingler ce message"
               >
@@ -265,7 +265,7 @@ export function MessageActions({
                 <div className="my-1.5 h-px bg-border-default" role="separator" />
                 <button
                   onClick={handleEdit}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-base text-text-primary hover:bg-border-default transition-colors"
                   role="menuitem"
                   aria-label="Modifier ce message"
                 >
@@ -279,7 +279,7 @@ export function MessageActions({
             {isOwnMessage && (
               <button
                 onClick={handleDelete}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-md transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-base transition-colors ${
                   showDeleteConfirm ? 'bg-error/15 text-error' : 'text-error hover:bg-error/10'
                 }`}
                 role="menuitem"

@@ -31,8 +31,8 @@ export function NotFound() {
             Oups, cette page n'existe pas !
           </p>
 
-          <p className="text-md text-text-secondary mb-8">
-            La page que tu cherches a peut-être été déplacée ou n'existe plus.
+          <p className="text-base text-text-secondary mb-8">
+            Cette page n'existe pas ou a été déplacée.
           </p>
 
           {/* Action buttons — always visible */}

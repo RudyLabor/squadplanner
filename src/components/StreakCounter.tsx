@@ -153,7 +153,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 >
                   {streakDays}
                 </m.span>
-                <span className="text-md text-text-secondary">
+                <span className="text-base text-text-secondary">
                   {streakDays === 1 ? 'jour' : 'jours'}
                 </span>
               </div>

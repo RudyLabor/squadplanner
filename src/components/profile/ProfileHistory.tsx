@@ -43,7 +43,7 @@ export function ProfileHistory({ profile, hasPremium, aiCoachTip }: ProfileHisto
             <Phone className="w-5 h-5 text-success" />
           </div>
           <div className="flex-1">
-            <h4 className="text-md font-medium text-text-primary">Historique des appels</h4>
+            <h4 className="text-base font-medium text-text-primary">Historique des appels</h4>
             <p className="text-sm text-text-quaternary">Voir tous tes appels passés</p>
           </div>
           <ChevronRight className="w-5 h-5 text-text-quaternary" />
@@ -59,7 +59,7 @@ export function ProfileHistory({ profile, hasPremium, aiCoachTip }: ProfileHisto
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <h3 className="text-md font-medium text-text-primary">Passe Premium</h3>
+                <h3 className="text-base font-medium text-text-primary">Passe Premium</h3>
                 <PremiumBadge small />
               </div>
               <p className="text-sm text-text-quaternary">
@@ -88,7 +88,7 @@ export function ProfileHistory({ profile, hasPremium, aiCoachTip }: ProfileHisto
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h3 className="text-md font-medium text-text-primary">Compte Premium</h3>
+                <h3 className="text-base font-medium text-text-primary">Compte Premium</h3>
                 <PremiumBadge small />
               </div>
               <p className="text-sm text-text-quaternary">

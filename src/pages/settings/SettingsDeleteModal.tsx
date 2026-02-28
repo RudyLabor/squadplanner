@@ -104,7 +104,7 @@ export function SettingsDeleteModal({ isOpen, onClose }: SettingsDeleteModalProp
               </div>
               <h3 className="text-lg font-bold text-text-primary">Supprimer ton compte</h3>
             </div>
-            <p className="text-md text-text-tertiary mb-4">
+            <p className="text-base text-text-tertiary mb-4">
               Cette action est{' '}
               <span className="text-error font-semibold">
                 définitive et irréversible
@@ -155,7 +155,7 @@ export function SettingsDeleteModal({ isOpen, onClose }: SettingsDeleteModalProp
               onChange={(e) => setDeleteConfirmText(e.target.value)}
               placeholder="SUPPRIMER"
               disabled={isDeleting}
-              className="w-full h-11 px-4 rounded-xl bg-surface-card border border-error/15 text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-error mb-4"
+              className="w-full h-11 px-4 rounded-xl bg-surface-card border border-error/15 text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-error mb-4"
             />
             <div className="flex gap-3">
               <button
@@ -164,14 +164,14 @@ export function SettingsDeleteModal({ isOpen, onClose }: SettingsDeleteModalProp
                   setDeleteConfirmText('')
                 }}
                 disabled={isDeleting}
-                className="flex-1 h-11 rounded-xl bg-surface-card text-md text-text-tertiary hover:bg-border-hover transition-colors disabled:opacity-50"
+                className="flex-1 h-11 rounded-xl bg-surface-card text-base text-text-tertiary hover:bg-border-hover transition-colors disabled:opacity-50"
               >
                 Annuler
               </button>
               <button
                 onClick={handleDeleteAccount}
                 disabled={deleteConfirmText !== 'SUPPRIMER' || isDeleting}
-                className="flex-1 h-11 rounded-xl bg-error text-white text-md font-semibold hover:bg-error-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 h-11 rounded-xl bg-error text-white text-base font-semibold hover:bg-error-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isDeleting ? (
                   <>

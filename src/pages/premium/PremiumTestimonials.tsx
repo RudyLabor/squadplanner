@@ -9,7 +9,7 @@ export function PremiumTestimonials() {
       <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
         Cas d'usage Premium
       </h2>
-      <p className="text-md text-text-secondary text-center mb-8">
+      <p className="text-base text-text-secondary text-center mb-8">
         Le Premium s'adapte à ton style de jeu. Voilà à quoi ça ressemble.
       </p>
       <div className="grid md:grid-cols-3 gap-4">
@@ -27,7 +27,7 @@ export function PremiumTestimonials() {
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-md font-semibold text-text-primary truncate">
+                      <span className="text-base font-semibold text-text-primary truncate">
                         {testimonial.name}
                       </span>
                     </div>
@@ -38,7 +38,7 @@ export function PremiumTestimonials() {
                     </div>
                   </div>
                 </div>
-                <p className="text-md text-text-secondary leading-relaxed">
+                <p className="text-base text-text-secondary leading-relaxed">
                   {testimonial.text}
                 </p>
               </Card>

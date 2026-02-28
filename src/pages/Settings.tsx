@@ -211,8 +211,8 @@ export function Settings() {
             <ArrowLeft className="w-5 h-5 text-text-tertiary" aria-hidden="true" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-text-primary">Paramètres</h1>
-            <p className="text-md text-text-tertiary">Personnalise ton expérience</p>
+            <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">Paramètres</h1>
+            <p className="text-base text-text-tertiary">Personnalise ton expérience</p>
           </div>
         </header>
 
@@ -456,7 +456,7 @@ export function Settings() {
                   <Download className="w-5 h-5 text-primary" />
                 )}
                 <div className="text-left">
-                  <p className="text-md text-text-primary">
+                  <p className="text-base text-text-primary">
                     {isExporting ? 'Export en cours...' : 'Exporter mes données'}
                   </p>
                   <p className="text-sm text-text-quaternary">Télécharge toutes tes infos (RGPD)</p>
@@ -471,7 +471,7 @@ export function Settings() {
               <div className="flex items-center gap-3">
                 <Trash2 className="w-5 h-5 text-error" />
                 <div className="text-left">
-                  <p className="text-md text-error">Supprimer mon compte</p>
+                  <p className="text-base text-error">Supprimer mon compte</p>
                   <p className="text-sm text-error">Action irréversible</p>
                 </div>
               </div>
@@ -490,7 +490,7 @@ export function Settings() {
               <div className="flex items-center gap-3">
                 <Gift className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="text-md text-text-primary">Inviter des amis</p>
+                  <p className="text-base text-text-primary">Inviter des amis</p>
                   <p className="text-sm text-text-quaternary">
                     Chaque ami parrainé te rapproche du Premium gratuit
                   </p>
@@ -514,7 +514,7 @@ export function Settings() {
               fallback={
                 <div className="flex items-center justify-center py-8 gap-2">
                   <Loader2 className="w-5 h-5 text-primary animate-spin" />
-                  <span className="text-md text-text-secondary">Chargement...</span>
+                  <span className="text-base text-text-secondary">Chargement...</span>
                 </div>
               }
             >
@@ -537,7 +537,7 @@ export function Settings() {
               <div className="flex items-center gap-3">
                 <FileText className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="text-md text-text-primary">Conditions d'utilisation</p>
+                  <p className="text-base text-text-primary">Conditions d'utilisation</p>
                   <p className="text-sm text-text-quaternary">CGU de Squad Planner</p>
                 </div>
               </div>
@@ -550,7 +550,7 @@ export function Settings() {
               <div className="flex items-center gap-3">
                 <Shield className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="text-md text-text-primary">Politique de confidentialité</p>
+                  <p className="text-base text-text-primary">Politique de confidentialité</p>
                   <p className="text-sm text-text-quaternary">RGPD & protection des données</p>
                 </div>
               </div>
@@ -563,7 +563,7 @@ export function Settings() {
               <div className="flex items-center gap-3">
                 <Globe className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="text-md text-text-primary">Page d'accueil publique</p>
+                  <p className="text-base text-text-primary">Page d'accueil publique</p>
                   <p className="text-sm text-text-quaternary">Voir la page d'accueil</p>
                 </div>
               </div>
@@ -574,7 +574,7 @@ export function Settings() {
 
         <button
           onClick={handleSignOut}
-          className="w-full py-4 text-md text-error hover:text-error-hover transition-colors flex items-center justify-center gap-2"
+          className="w-full py-4 text-base text-error hover:text-error-hover transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
           Se déconnecter
@@ -609,12 +609,12 @@ function DiscordSection() {
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: '#5865F2' }}
+                style={{ backgroundColor: 'var(--color-brand-discord)' }}
               >
                 <DiscordIcon className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="text-md text-text-primary">{profile?.discord_username}</p>
+                <p className="text-base text-text-primary">{profile?.discord_username}</p>
                 <p className="text-sm text-text-quaternary">Discord connecté</p>
               </div>
             </div>
@@ -634,12 +634,12 @@ function DiscordSection() {
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: '#5865F2' }}
+                style={{ backgroundColor: 'var(--color-brand-discord)' }}
               >
                 <DiscordIcon className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
-                <p className="text-md text-text-primary">Connecter Discord</p>
+                <p className="text-base text-text-primary">Connecter Discord</p>
                 <p className="text-sm text-text-quaternary">Lie ton compte pour recevoir les notifs directement sur Discord</p>
               </div>
             </div>
@@ -782,7 +782,7 @@ function SubscriptionSection({ onRefundClick }: { onRefundClick: () => void }) {
               <Crown className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <p className="text-md text-text-primary font-medium">
+              <p className="text-base text-text-primary font-medium">
                 {tierLabels[tier] || 'Gratuit'}
               </p>
               <p className="text-sm text-text-quaternary">
@@ -808,7 +808,7 @@ function SubscriptionSection({ onRefundClick }: { onRefundClick: () => void }) {
           <div className="flex items-center gap-3">
             <Shield className="w-5 h-5 text-primary" />
             <div className="text-left">
-              <p className="text-md text-text-primary">Demander un remboursement</p>
+              <p className="text-base text-text-primary">Demander un remboursement</p>
               <p className="text-sm text-text-quaternary">
                 {isEligibleForRefund
                   ? 'Garantie satisfait ou remboursé — 30 jours'

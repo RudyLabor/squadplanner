@@ -51,7 +51,7 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
           <div className="flex items-center gap-3 px-4 py-3 border-b border-border-default">
             <MessageSquare className="w-5 h-5 text-primary" />
             <div className="flex-1 min-w-0">
-              <h3 className="text-md font-semibold text-text-primary">Thread</h3>
+              <h3 className="text-base font-semibold text-text-primary">Thread</h3>
               <p className="text-xs text-text-tertiary">
                 {parentMessage?.thread_reply_count || messages.length} réponse
                 {(parentMessage?.thread_reply_count || messages.length) !== 1 ? 's' : ''}

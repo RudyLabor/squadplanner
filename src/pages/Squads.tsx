@@ -163,7 +163,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-lg font-bold text-text-primary">Mes Squads</h1>
+              <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">Mes Squads</h1>
               <p className="text-base text-text-quaternary">Chargement...</p>
             </div>
           </div>
@@ -202,7 +202,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
           <div>
             <header className="flex items-center justify-between mb-6">
               <div>
-                <h1 className="text-lg font-bold text-text-primary">Mes Squads</h1>
+                <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">Mes Squads</h1>
                 <p className="text-base text-text-quaternary">{getSubtitle()}</p>
               </div>
               <div className="flex gap-2">
@@ -292,7 +292,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                           <Compass className="w-6 h-6 text-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-md font-semibold text-text-primary mb-0.5">
+                          <h3 className="text-base font-semibold text-text-primary mb-0.5">
                             Des joueurs cherchent une squad comme la tienne
                           </h3>
                           <p className="text-sm text-text-tertiary">
@@ -330,7 +330,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                     <h3 className="text-lg font-semibold text-text-primary mb-2">
                       Chaque soir sans squad, c'est une session que tu rates
                     </h3>
-                    <p className="text-md text-text-tertiary mb-2 max-w-[300px] mx-auto">
+                    <p className="text-base text-text-tertiary mb-2 max-w-[300px] mx-auto">
                       Crée ta squad en 30 secondes, invite tes potes et finis-en avec les "on verra".
                     </p>
                     <p className="text-sm text-text-quaternary mb-6 max-w-[300px] mx-auto">

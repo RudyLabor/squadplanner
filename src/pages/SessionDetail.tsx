@@ -257,7 +257,7 @@ export default function SessionDetail() {
               <ArrowLeft className="w-5 h-5 text-text-secondary" aria-hidden="true" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-lg font-bold text-text-primary">
+              <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">
                 {currentSession.title || currentSession.game || 'Session'}
               </h1>
               {statusInfo && (
@@ -313,7 +313,7 @@ export default function SessionDetail() {
 
           {currentSession.status === 'confirmed' && id && (
             <div className="mb-8">
-              <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
+              <h2 className="text-xs font-medium text-text-tertiary uppercase tracking-[0.05em] mb-4">
                 Chat Vocal
               </h2>
               <VoiceChat
@@ -340,7 +340,7 @@ export default function SessionDetail() {
           {/* Share session */}
           {currentSession.status !== 'cancelled' && id && (
             <div className="mb-8">
-              <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4 flex items-center gap-2">
+              <h2 className="text-xs font-medium text-text-tertiary uppercase tracking-[0.05em] mb-4 flex items-center gap-2">
                 <Share2 className="w-3.5 h-3.5" />
                 Partager la session
               </h2>
@@ -429,7 +429,7 @@ function PostSessionResults({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
+      <h2 className="text-xs font-medium text-text-tertiary uppercase tracking-[0.05em] mb-4">
         Résultats de la session
       </h2>
 
@@ -449,7 +449,7 @@ function PostSessionResults({
           >
             🏅
           </m.span>
-          <p className="text-md font-bold text-text-primary">Squad Parfaite !</p>
+          <p className="text-base font-bold text-text-primary">Squad Parfaite !</p>
           <p className="text-sm text-text-tertiary">100% de présence — tout le monde était là.</p>
         </m.div>
       )}
@@ -458,7 +458,7 @@ function PostSessionResults({
         <div className="p-4 bg-gradient-to-b from-primary/[0.05] to-transparent">
           <div className="flex items-center gap-2 mb-4">
             <Trophy className="w-5 h-5 text-warning" />
-            <span className="text-md font-semibold text-text-primary">Récapitulatif</span>
+            <span className="text-base font-semibold text-text-primary">Récapitulatif</span>
           </div>
 
           <dl className="grid grid-cols-3 gap-3">
@@ -507,7 +507,7 @@ function PostSessionResults({
                     ? 'success'
                     : participationRate >= 50
                       ? 'warning'
-                      : 'danger'
+                      : 'error'
                 }
               >
                 {participationRate}%

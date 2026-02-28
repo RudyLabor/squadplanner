@@ -250,7 +250,7 @@ export function RecurringSessionForm({
           <Gamepad2 className="w-5 h-5 text-primary flex-shrink-0" />
           <div>
             <div className="text-sm text-text-tertiary">Squad Leader de</div>
-            <div className="text-md font-semibold text-text-primary">{squadName}</div>
+            <div className="text-base font-semibold text-text-primary">{squadName}</div>
           </div>
         </div>
 

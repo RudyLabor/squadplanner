@@ -128,7 +128,7 @@ export function OnboardingStepInvite({
         <button
           type="button"
           onClick={() => handleShare('whatsapp')}
-          className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-emerald-500/10 text-emerald-400 font-medium hover:bg-emerald-500/20 transition-colors border border-emerald-500/20"
+          className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-success/10 text-success font-medium hover:bg-success/20 transition-colors border border-success/20"
         >
           💬 WhatsApp
         </button>

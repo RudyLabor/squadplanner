@@ -169,12 +169,12 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
       {/* Launch promo banner */}
       {promoActive && (
         <div
-          className="animate-fade-in-up mb-6 p-4 rounded-2xl bg-bg-surface border border-error/15 text-center"
+          className="animate-fade-in-up mb-6 p-4 rounded-2xl bg-bg-surface border border-warning/20 text-center"
           style={{ animationDelay: '0.1s' }}
         >
           <div className="flex items-center justify-center gap-2 mb-1">
             <Zap className="w-5 h-5 text-error" />
-            <span className="text-md font-bold text-error">Offre de bienvenue -30%</span>
+            <span className="text-base font-bold text-error">Offre de bienvenue -30%</span>
             <Zap className="w-5 h-5 text-error" />
           </div>
           <p className="text-sm text-text-secondary mb-1">
@@ -215,7 +215,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
           <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">
             Teste tout pendant 7 jours — sans rien payer
           </h2>
-          <p className="text-md text-text-secondary mb-1">
+          <p className="text-base text-text-secondary mb-1">
             Active Premium maintenant. Si ça ne change rien, désactive en 1 clic.
           </p>
           <p className="text-base text-text-tertiary mb-5">
@@ -223,7 +223,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
           </p>
           <Button
             onClick={onStartTrial}
-            className="h-12 px-8 text-md bg-gradient-to-r from-success to-success/80 text-white font-semibold hover:opacity-90 shadow-lg mb-5"
+            className="h-12 px-8 text-base bg-gradient-to-r from-success to-success/80 text-white font-semibold hover:opacity-90 shadow-lg mb-5"
           >
             <Gift className="w-5 h-5" /> Commencer l'essai gratuit{' '}
             <ArrowRight className="w-5 h-5" />
@@ -282,7 +282,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
         className="animate-fade-in-up mb-8 p-5 rounded-2xl bg-error/[0.04] border border-error/10"
         style={{ animationDelay: '0.27s' }}
       >
-        <h3 className="text-md font-bold text-text-primary mb-3 text-center">
+        <h3 className="text-base font-bold text-text-primary mb-3 text-center">
           {isConnected ? `${profile?.username || 'Toi'}, voilà ce que tu rates` : 'Ce que tu rates en restant gratuit'}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -457,7 +457,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
           <h3 className="text-xl font-semibold text-text-primary mb-2">
             Ta squad mérite mieux qu'un {'« '}on verra{' »'}
           </h3>
-          <p className="text-md text-text-secondary mb-2 max-w-md mx-auto">
+          <p className="text-base text-text-secondary mb-2 max-w-md mx-auto">
             Les squads Premium jouent 3x plus régulièrement. Plus de montées en rang, plus de souvenirs, zéro soirées gâchées.
           </p>
           <p className="text-base text-success mb-6 font-medium">

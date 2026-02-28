@@ -227,7 +227,7 @@ export function Profile() {
           {/* Sign out */}
           <button
             onClick={handleSignOut}
-            className="w-full py-3 text-md text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 text-base text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
           >
             <LogOut className="w-4 h-4" />
             Se déconnecter

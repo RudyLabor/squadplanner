@@ -102,7 +102,7 @@ export const NavLink = memo(function NavLink({
               animate={{ opacity: 1, width: 'auto' }}
               exit={{ opacity: 0, width: 0 }}
               transition={{ duration: 0.15 }}
-              className="relative z-10 text-md font-medium whitespace-nowrap overflow-hidden"
+              className="relative z-10 text-base font-medium whitespace-nowrap overflow-hidden"
             >
               {label}
             </m.span>
@@ -180,7 +180,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                <div className="text-md font-bold text-text-primary whitespace-nowrap">
+                <div className="text-base font-bold text-text-primary whitespace-nowrap">
                   Squad Planner
                 </div>
                 <div className="text-sm text-text-tertiary whitespace-nowrap">
@@ -249,7 +249,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           <m.button
             type="button"
             onClick={() => onOpenCreateSessionModal()}
-            className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary-bg text-white text-md font-semibold"
+            className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary-bg text-white text-base font-semibold"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.25 }}

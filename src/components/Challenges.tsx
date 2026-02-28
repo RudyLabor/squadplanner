@@ -140,7 +140,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-surface-card flex items-center justify-center">
                 <Target className="w-8 h-8 text-text-tertiary" />
               </div>
-              <p className="text-md text-text-tertiary">Aucun challenge dans cette catégorie</p>
+              <p className="text-base text-text-tertiary">Aucun challenge dans cette catégorie</p>
             </m.div>
           ) : (
             sortedChallenges.map((challenge, index) => (

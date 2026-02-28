@@ -13,6 +13,7 @@ import {
   X,
   Loader2,
 } from '../icons'
+import { Button } from './Button'
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -231,42 +232,41 @@ function PageVariant({
 
       <h2 className="text-xl font-semibold text-text-primary mb-2">{title}</h2>
 
-      {message && <p className="text-md text-text-secondary mb-6 max-w-sm">{message}</p>}
+      {message && <p className="text-base text-text-secondary mb-6 max-w-sm">{message}</p>}
 
       {onRetry && (
-        <button
+        <Button
           onClick={onRetry}
           disabled={isRetrying}
-          className="w-full max-w-xs inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors disabled:opacity-60 mb-3"
+          fullWidth
+          className="max-w-xs mb-3"
+          leftIcon={isRetrying ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
         >
-          {isRetrying ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <RefreshCw className="w-4 h-4" />
-          )}
           {retryText}
-        </button>
+        </Button>
       )}
 
       {(onGoBack || onGoHome) && (
         <div className="flex gap-2 w-full max-w-xs">
           {onGoBack && (
-            <button
+            <Button
               onClick={onGoBack}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-overlay-subtle text-text-secondary text-base font-medium hover:bg-overlay-light transition-colors border border-border-subtle"
+              variant="secondary"
+              className="flex-1"
+              leftIcon={<ArrowLeft className="w-4 h-4" />}
             >
-              <ArrowLeft className="w-4 h-4" />
               Retour
-            </button>
+            </Button>
           )}
           {onGoHome && (
-            <button
+            <Button
               onClick={onGoHome}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-overlay-subtle text-text-secondary text-base font-medium hover:bg-overlay-light transition-colors border border-border-subtle"
+              variant="secondary"
+              className="flex-1"
+              leftIcon={<Home className="w-4 h-4" />}
             >
-              <Home className="w-4 h-4" />
               Accueil
-            </button>
+            </Button>
           )}
         </div>
       )}
@@ -316,18 +316,16 @@ function InlineVariant({
         <p className={`text-sm font-medium ${preset.textClass}`}>{title}</p>
         {message && <p className={`text-xs ${preset.textClass} opacity-80 mt-0.5`}>{message}</p>}
         {onRetry && (
-          <button
+          <Button
             onClick={onRetry}
             disabled={isRetrying}
-            className={`mt-2 inline-flex items-center gap-1.5 text-xs font-medium ${preset.textClass} hover:underline disabled:opacity-60`}
+            variant="link"
+            size="sm"
+            className={`mt-2 text-xs ${preset.textClass}`}
+            leftIcon={isRetrying ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
           >
-            {isRetrying ? (
-              <Loader2 className="w-3 h-3 animate-spin" />
-            ) : (
-              <RefreshCw className="w-3 h-3" />
-            )}
             {retryText}
-          </button>
+          </Button>
         )}
       </div>
     </m.div>
@@ -381,33 +379,33 @@ function BannerVariant({
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className={`text-md font-medium ${preset.textClass}`}>{title}</p>
+              <p className={`text-base font-medium ${preset.textClass}`}>{title}</p>
               {message && <p className={`text-sm ${preset.textClass} opacity-80`}>{message}</p>}
             </div>
 
             {onRetry && (
-              <button
+              <Button
                 onClick={onRetry}
                 disabled={isRetrying}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium ${preset.textClass} ${preset.iconBgClass} hover:opacity-80 transition-opacity disabled:opacity-60 flex items-center gap-1.5`}
+                variant="ghost"
+                size="xs"
+                className={`text-xs ${preset.textClass} ${preset.iconBgClass}`}
+                leftIcon={isRetrying ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
               >
-                {isRetrying ? (
-                  <Loader2 className="w-3 h-3 animate-spin" />
-                ) : (
-                  <RefreshCw className="w-3 h-3" />
-                )}
                 {retryText}
-              </button>
+              </Button>
             )}
 
             {onDismiss && (
-              <button
+              <Button
                 onClick={onDismiss}
-                className="p-2 rounded-lg hover:bg-overlay-light transition-colors"
+                variant="ghost"
+                size="xs"
+                iconOnly
                 aria-label="Fermer"
               >
                 <X className={`w-4 h-4 ${preset.textClass} opacity-60`} />
-              </button>
+              </Button>
             )}
           </div>
         </div>

@@ -23,14 +23,14 @@ export function PremiumFAQ() {
                 onClick={() => setOpenFaq(openFaq === index ? null : index)}
                 className="w-full p-4 flex items-center justify-between text-left"
               >
-                <span className="text-md font-medium text-text-primary">{item.q}</span>
+                <span className="text-base font-medium text-text-primary">{item.q}</span>
                 <ChevronDown
                   className={`w-5 h-5 text-text-tertiary transition-transform ${openFaq === index ? 'rotate-180' : ''}`}
                 />
               </button>
               {openFaq === index && (
                 <div className="animate-fade-in px-4 pb-4">
-                  <p className="text-md text-text-secondary leading-relaxed">{item.a}</p>
+                  <p className="text-base text-text-secondary leading-relaxed">{item.a}</p>
                 </div>
               )}
             </Card>

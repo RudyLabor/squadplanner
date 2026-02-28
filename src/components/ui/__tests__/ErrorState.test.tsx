@@ -80,7 +80,7 @@ describe('ErrorState', () => {
     it('does NOT render message paragraph when message is undefined', () => {
       const { container } = render(<ErrorState />)
       // No message paragraph should exist
-      const paragraphs = container.querySelectorAll('p.text-md')
+      const paragraphs = container.querySelectorAll('p.text-base')
       expect(paragraphs.length).toBe(0)
     })
 

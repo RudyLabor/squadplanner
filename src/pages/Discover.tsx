@@ -64,8 +64,8 @@ export function Discover() {
             <Compass className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-text-primary">Découvrir</h1>
-            <p className="text-xs text-text-tertiary">Trouve des squads et joueurs</p>
+            <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">Découvrir</h1>
+            <p className="text-sm text-text-tertiary">Trouve des squads et joueurs</p>
           </div>
         </div>
 

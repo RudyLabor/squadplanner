@@ -160,7 +160,7 @@ export function CreateSessionModal() {
           <div className="flex items-center gap-3 p-3 rounded-xl bg-primary-10 border border-primary">
             <Users className="w-5 h-5 text-primary" />
             <div>
-              <div className="text-md font-medium text-text-primary">{selectedSquad.name}</div>
+              <div className="text-base font-medium text-text-primary">{selectedSquad.name}</div>
               <div className="text-sm text-text-secondary">{selectedSquad.game}</div>
             </div>
           </div>
@@ -303,14 +303,14 @@ export function CreateSessionModal() {
             <button
               type="button"
               onClick={close}
-              className="flex-1 px-4 py-3 rounded-xl text-md font-medium text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
+              className="flex-1 px-4 py-3 rounded-xl text-base font-medium text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={isLoading || !selectedSquadId}
-              className="flex-1 px-4 py-3 rounded-xl bg-primary-bg text-white text-md font-semibold hover:bg-primary-bg-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-3 rounded-xl bg-primary-bg text-white text-base font-semibold hover:bg-primary-bg-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer la session'}
             </button>

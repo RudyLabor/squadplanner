@@ -154,7 +154,7 @@ export default function SquadDetail() {
           aria-label="Retour aux squads"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span className="text-md">Squads</span>
+          <span className="text-base">Squads</span>
         </button>
 
         <CrossfadeTransition isLoading={showSkeleton} skeleton={<SquadDetailSkeleton />}>

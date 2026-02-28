@@ -288,17 +288,13 @@ ${formData.message}
         ref={heroRef}
         className="relative overflow-hidden bg-gradient-to-br from-purple/15 via-primary/8 to-bg-base pt-8 pb-20 mesh-bg"
       >
-        {/* Animated background blobs */}
+        {/* Static background blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <m.div
-            className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-purple/10 to-primary/5 blur-3xl"
-            animate={isHeroInView ? { x: [0, 80, 0], y: [0, 40, 0] } : {}}
-            transition={{ duration: 3, repeat: 2, ease: 'easeInOut' }}
+          <div
+            className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-purple/5 to-primary/5 blur-3xl opacity-100"
           />
-          <m.div
-            className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-primary/10 to-purple/5 blur-3xl"
-            animate={isHeroInView ? { x: [0, -80, 0], y: [0, -40, 0] } : {}}
-            transition={{ duration: 3, repeat: 2, ease: 'easeInOut', delay: 0.5 }}
+          <div
+            className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-primary/5 to-purple/5 blur-3xl opacity-100"
           />
         </div>
 
@@ -340,7 +336,7 @@ ${formData.message}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15, duration: 0.4, ease }}
-              className="text-lg md:text-xl font-bold text-text-primary mb-4"
+              className="text-3xl md:text-5xl font-display font-extrabold text-text-primary mb-4"
             >
               Monétise{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple to-primary">
@@ -354,7 +350,7 @@ ${formData.message}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.4, ease }}
-              className="text-md md:text-lg text-text-secondary max-w-2xl mx-auto"
+              className="text-base md:text-lg text-text-secondary max-w-2xl mx-auto"
             >
               T'es streamer, créateur ou capitaine de communauté&nbsp;? Partage Squad Planner et gagne 20% de commission, un forfait Squad Leader à vie et un badge ambassadeur.
             </m.p>

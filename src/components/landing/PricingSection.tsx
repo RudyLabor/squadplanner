@@ -130,10 +130,10 @@ export function PricingSection() {
           viewport={{ once: true }}
           className="text-center mb-8"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
             Choisis ton plan — commence gratuit, upgrade quand tu veux
           </h2>
-          <p className="text-text-tertiary text-md max-w-md mx-auto mb-6">
+          <p className="text-text-tertiary text-base max-w-md mx-auto mb-6">
             Le gratuit suffit pour organiser tes sessions. Le premium, c'est pour ceux qui veulent
             tout optimiser.
           </p>
@@ -250,14 +250,16 @@ export function PricingSection() {
                   ))}
                 </ul>
 
-                <Link to="/auth">
-                  <m.button
-                    className={`w-full py-2.5 rounded-xl text-base font-semibold transition-colors ${tier.ctaStyle}`}
+                <Link to="/auth" className="block">
+                  <m.div
+                    role="button"
+                    tabIndex={0}
+                    className={`w-full py-2.5 rounded-xl text-base font-semibold text-center transition-colors ${tier.ctaStyle}`}
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     {tier.cta}
-                  </m.button>
+                  </m.div>
                 </Link>
                 {tier.monthlyPrice > 0 && (
                   <p className="text-xs text-text-quaternary text-center mt-2">

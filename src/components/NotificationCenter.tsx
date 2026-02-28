@@ -277,7 +277,7 @@ export function NotificationBell() {
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border-default">
-              <h3 className="text-md font-semibold text-text-primary">Notifications</h3>
+              <h3 className="text-base font-semibold text-text-primary">Notifications</h3>
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
                   <button

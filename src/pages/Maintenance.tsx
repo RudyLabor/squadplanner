@@ -15,6 +15,7 @@ export default function Maintenance() {
   const [searchParams] = useSearchParams()
   const eta = searchParams.get('eta') // Optional ETA from URL
   const [secondsSinceCheck, setSecondsSinceCheck] = useState(0)
+  const [ariaSeconds, setAriaSeconds] = useState(0)
 
   // Auto-refresh countdown
   useEffect(() => {
@@ -31,6 +32,15 @@ export default function Maintenance() {
 
     return () => clearInterval(interval)
   }, [])
+
+  // Throttled aria-live update every 10 seconds to avoid spamming screen readers
+  useEffect(() => {
+    const ariaInterval = setInterval(() => {
+      setAriaSeconds(secondsSinceCheck)
+    }, 10000)
+
+    return () => clearInterval(ariaInterval)
+  }, [secondsSinceCheck])
 
   const handleManualRefresh = useCallback(() => {
     window.location.reload()
@@ -81,7 +91,7 @@ export default function Maintenance() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.3 }}
-          className="text-xl font-bold text-text-primary mb-3"
+          className="text-2xl font-bold font-display text-text-primary mb-3"
         >
           Maintenance en cours
         </m.h1>
@@ -91,7 +101,7 @@ export default function Maintenance() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.3 }}
-          className="text-md text-text-secondary mb-4"
+          className="text-base text-text-secondary mb-4"
         >
           On fait une petite maintenance. Squad Planner revient très vite.
         </m.p>
@@ -136,11 +146,16 @@ export default function Maintenance() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.3 }}
           className="text-sm text-text-tertiary mb-6"
-          aria-live="polite"
+          aria-hidden="true"
         >
           Dernière vérification il y a {secondsSinceCheck}s &middot; prochaine dans{' '}
           {timeUntilRefresh}s
         </m.p>
+        {/* Throttled aria-live (updates every 10s instead of every 1s) */}
+        <p className="sr-only" aria-live="polite">
+          Dernière vérification il y a {ariaSeconds} secondes, prochaine dans{' '}
+          {AUTO_REFRESH_SECONDS - ariaSeconds} secondes
+        </p>
 
         {/* Manual refresh button */}
         <m.button
@@ -148,7 +163,7 @@ export default function Maintenance() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.3 }}
           onClick={handleManualRefresh}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors mb-6"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-base font-medium hover:bg-primary-bg-hover transition-colors mb-6"
         >
           <RefreshCw className="w-4 h-4" />
           Vérifier maintenant

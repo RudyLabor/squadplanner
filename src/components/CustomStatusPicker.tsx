@@ -88,7 +88,7 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({
                   onChange={(e) => setText(e.target.value)}
                   placeholder="Quel est ton statut ?"
                   maxLength={50}
-                  className="flex-1 bg-transparent text-text-primary placeholder-text-quaternary outline-none text-md"
+                  className="flex-1 bg-transparent text-text-primary placeholder-text-quaternary outline-none text-base"
                   autoFocus
                 />
                 {text && (

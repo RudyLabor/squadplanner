@@ -162,16 +162,9 @@ export function Premium() {
         )}
 
         {/* Social proof */}
-        <div className="flex items-center justify-center gap-3 py-6">
-          <div className="flex -space-x-2">
-            {['bg-primary', 'bg-success', 'bg-warning', 'bg-info', 'bg-purple'].map((bg, i) => (
-              <div key={i} className={`w-8 h-8 rounded-full ${bg} border-2 border-bg-base flex items-center justify-center text-white text-xs font-bold`}>
-                {String.fromCharCode(65 + i)}
-              </div>
-            ))}
-          </div>
+        <div className="flex items-center justify-center py-6">
           <p className="text-sm text-text-secondary">
-            Des centaines de squads sont déjà passées Premium
+            Rejoint par <span className="font-semibold text-text-primary">2 000+</span> squads
           </p>
         </div>
 

@@ -114,10 +114,10 @@
   --color-warning-15: rgba(251, 191, 36, 0.15);
   --color-warning-20: rgba(251, 191, 36, 0.2);
   --color-warning-30: rgba(251, 191, 36, 0.3);
-  --color-info-5: rgba(139, 92, 246, 0.05);
-  --color-info-10: rgba(139, 92, 246, 0.1);
-  --color-info-15: rgba(139, 92, 246, 0.15);
-  --color-info-20: rgba(139, 92, 246, 0.2);
+  --color-info-5: rgba(129, 140, 248, 0.05);
+  --color-info-10: rgba(129, 140, 248, 0.1);
+  --color-info-15: rgba(129, 140, 248, 0.15);
+  --color-info-20: rgba(129, 140, 248, 0.2);
   --color-purple-10: rgba(167, 139, 250, 0.1);
   --color-purple-15: rgba(167, 139, 250, 0.15);
   --color-purple-20: rgba(167, 139, 250, 0.2);
@@ -164,6 +164,12 @@
   --color-rose: #f43f5e;
   --color-rose-15: rgba(244, 63, 94, 0.15);
   --color-rose-30: rgba(244, 63, 94, 0.3);
+
+  /* Brand social colors */
+  --color-brand-discord: #5865F2;
+  --color-brand-whatsapp: #25D366;
+  --color-brand-twitter: #1DA1F2;
+  --color-brand-google: #4285F4;
 
   /* Overlays */
   --color-overlay-light: rgba(255, 255, 255, 0.08);
@@ -242,8 +248,7 @@
   --text-sm--line-height: 1.5;
   --text-base: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
   --text-base--line-height: 1.5;
-  --text-md: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
-  --text-md--line-height: 1.5;
+  /* --text-md removed: consolidated into text-base */
 
   /* Headings */
   --text-lg: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
@@ -405,6 +410,12 @@
   --color-rose: #e11d48;
   --color-rose-15: rgba(225, 29, 72, 0.15);
   --color-rose-30: rgba(225, 29, 72, 0.3);
+
+  /* Brand social colors */
+  --color-brand-discord: #5865F2;
+  --color-brand-whatsapp: #25D366;
+  --color-brand-twitter: #1DA1F2;
+  --color-brand-google: #4285F4;
 
   /* Additional opacity variants - light mode */
   --color-warning-30: rgba(217, 119, 6, 0.3);
@@ -2942,4 +2953,9 @@ select:focus-visible {
   top: 0;
   outline: 2px solid white;
   outline-offset: 2px;
+}
+
+/* Font display utility — maps to the display/heading font-family token */
+.font-display {
+  font-family: var(--font-display);
 }

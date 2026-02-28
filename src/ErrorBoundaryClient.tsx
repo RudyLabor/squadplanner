@@ -72,19 +72,19 @@ export function ErrorBoundaryClient() {
           <h1 className="text-2xl font-bold text-text-primary mb-2">
             {isRoute ? status : "Quelque chose s'est mal passé"}
           </h1>
-          <p className="text-md text-text-secondary mb-8">
+          <p className="text-base text-text-secondary mb-8">
             {message}. Tu peux essayer de recharger la page ou revenir à la navigation.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={() => window.location.reload()}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-base font-medium hover:bg-primary-bg-hover transition-colors"
             >
               Recharger la page
             </button>
             <a
               href="/squads"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-overlay-subtle text-text-secondary text-md font-medium hover:bg-overlay-light transition-colors border border-border-subtle"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-overlay-subtle text-text-secondary text-base font-medium hover:bg-overlay-light transition-colors border border-border-subtle"
             >
               Mes Squads
             </a>

@@ -93,7 +93,7 @@ export const ChatPoll = memo(function ChatPoll({
 
       {/* Question */}
       <div className="px-4 pb-3">
-        <p className={`text-md font-medium ${isOwn ? 'text-text-primary' : 'text-text-primary'}`}>
+        <p className={`text-base font-medium ${isOwn ? 'text-text-primary' : 'text-text-primary'}`}>
           {pollData.question}
         </p>
       </div>

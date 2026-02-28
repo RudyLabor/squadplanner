@@ -62,7 +62,7 @@ export function WeeklyLeaderboard({ compact = false }: { compact?: boolean }) {
               <Trophy className="w-4 h-4 text-warning" />
             </div>
             <div>
-              <h3 className="text-md font-semibold text-text-primary">Classement hebdo</h3>
+              <h3 className="text-base font-semibold text-text-primary">Classement hebdo</h3>
               <p className="text-xs text-text-tertiary">Ta progression cette semaine</p>
             </div>
           </div>
@@ -108,7 +108,7 @@ export function WeeklyLeaderboard({ compact = false }: { compact?: boolean }) {
             <Trophy className="w-4 h-4 text-warning" />
           </div>
           <div>
-            <h3 className="text-md font-semibold text-text-primary">Classement hebdo</h3>
+            <h3 className="text-base font-semibold text-text-primary">Classement hebdo</h3>
             <p className="text-xs text-text-tertiary">Ta progression cette semaine</p>
           </div>
         </div>

@@ -20,7 +20,7 @@ export function LegalSection({
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-4 text-left group"
       >
-        <h3 className="text-md font-semibold text-text-primary group-hover:text-purple transition-colors">
+        <h3 className="text-base font-semibold text-text-primary group-hover:text-purple transition-colors">
           {title}
         </h3>
         <ChevronDown
@@ -28,7 +28,7 @@ export function LegalSection({
         />
       </button>
       {open && (
-        <div className="pb-4 text-md text-text-secondary leading-relaxed space-y-3">{children}</div>
+        <div className="pb-4 text-base text-text-secondary leading-relaxed space-y-3">{children}</div>
       )}
     </div>
   )

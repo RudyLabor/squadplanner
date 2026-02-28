@@ -57,7 +57,7 @@ export function FaqSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
             Questions fréquentes
           </h2>
         </m.div>
@@ -78,14 +78,14 @@ export function FaqSection() {
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-bg-elevated/50 transition-colors"
                 aria-expanded={expandedFaq === i}
               >
-                <span className="text-md font-medium text-text-primary pr-4">{faq.q}</span>
+                <span className="text-base font-medium text-text-primary pr-4">{faq.q}</span>
                 <ChevronDown
                   className={`w-5 h-5 text-text-quaternary shrink-0 transition-transform duration-300 ${expandedFaq === i ? 'rotate-180' : ''}`}
                 />
               </button>
               <div className={`faq-answer ${expandedFaq === i ? 'open' : ''}`}>
                 <div>
-                  <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">{faq.a}</p>
+                  <p className="px-5 pb-5 text-base text-text-tertiary leading-relaxed">{faq.a}</p>
                 </div>
               </div>
             </m.div>

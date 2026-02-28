@@ -151,7 +151,7 @@ export function EditMessageModal({ isOpen, message, onSave, onClose }: EditMessa
                     onKeyDown={handleKeyDown}
                     placeholder="Tape ton message..."
                     rows={3}
-                    className="w-full px-4 py-3 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-tertiary resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-20 focus:shadow-glow-primary-md transition-input min-h-[80px] max-h-[200px]"
+                    className="w-full px-4 py-3 bg-border-subtle border border-border-hover rounded-xl text-base text-text-primary placeholder:text-text-tertiary resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-20 focus:shadow-glow-primary-md transition-input min-h-[80px] max-h-[200px]"
                   />
                   <p className="text-sm text-text-tertiary mt-2">
                     Conseil : Ctrl+Entrée pour sauvegarder rapidement

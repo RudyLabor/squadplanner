@@ -54,8 +54,8 @@ export function Help() {
             <ArrowLeft className="w-5 h-5 text-text-secondary" aria-hidden="true" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-text-primary">Aide & FAQ</h1>
-            <p className="text-md text-text-secondary">Réponse en moins de 24h — cherche d'abord ici, c'est souvent plus rapide</p>
+            <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">Aide & FAQ</h1>
+            <p className="text-base text-text-secondary">Réponse en moins de 24h — cherche d'abord ici, c'est souvent plus rapide</p>
           </div>
         </header>
 
@@ -68,7 +68,7 @@ export function Help() {
             onChange={(e) => setSearchQuery(e.target.value)}
             id="help-search"
             aria-label="Rechercher dans l'aide"
-            className="w-full h-12 pl-12 pr-4 rounded-xl bg-border-subtle border border-border-hover text-md text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary transition-colors"
+            className="w-full h-12 pl-12 pr-4 rounded-xl bg-surface-input border border-border-hover text-base text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary transition-colors"
           />
         </div>
 
@@ -101,7 +101,7 @@ export function Help() {
         {Object.entries(groupedItems).length === 0 ? (
           <Card className="p-8 text-center">
             <HelpCircle className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
-            <p className="text-md text-text-primary mb-1">Aucun résultat</p>
+            <p className="text-base text-text-primary mb-1">Aucun résultat</p>
             <p className="text-base text-text-tertiary mb-4">Essaie avec d'autres mots-clés</p>
             <button
               type="button"
@@ -125,7 +125,7 @@ export function Help() {
                 .replace(/[\u0300-\u036f]/g, '')}
               className="mb-6 scroll-mt-6"
             >
-              <h2 className="text-md font-semibold text-text-secondary mb-3">{category}</h2>
+              <h2 className="text-base font-semibold text-text-primary mb-3">{category}</h2>
               <div className="space-y-2">
                 {items.map((item) => (
                   <Card key={item.globalIndex} className="overflow-hidden">
@@ -136,7 +136,7 @@ export function Help() {
                       aria-expanded={openIndex === item.globalIndex}
                       className="w-full flex items-center justify-between p-4 text-left"
                     >
-                      <span className="text-md font-medium text-text-primary pr-4">
+                      <span className="text-base font-medium text-text-primary pr-4">
                         {item.question}
                       </span>
                       <m.div
@@ -156,7 +156,7 @@ export function Help() {
                           className="overflow-hidden"
                         >
                           <div className="px-4 pb-4">
-                            <p className="text-md text-text-secondary leading-relaxed">
+                            <p className="text-base text-text-secondary leading-relaxed">
                               {item.answer}
                             </p>
                             {item.illustration && <FAQIllustration type={item.illustration} />}

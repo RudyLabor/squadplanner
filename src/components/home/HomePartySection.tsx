@@ -23,13 +23,13 @@ function ActivePartyCard({ squadName, participantCount }: ActiveParty) {
               <Mic className="w-6 h-6 text-primary" />
             </div>
             <div className="flex-1">
-              <div className="text-md font-semibold text-text-primary">
+              <div className="text-base font-semibold text-text-primary">
                 {participantCount} {participantCount > 1 ? 'potes' : 'pote'} dans {squadName}
               </div>
               <div className="text-base text-text-tertiary">Party vocale en cours</div>
             </div>
             <m.div
-              className="px-4 py-2 min-h-[44px] flex items-center rounded-lg bg-primary-bg text-white text-md font-medium"
+              className="px-4 py-2 min-h-[44px] flex items-center rounded-lg bg-primary-bg text-white text-base font-medium"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -68,7 +68,7 @@ function PartyCTA() {
                 <Mic className="w-5 h-5 text-primary" />
               </m.div>
               <div className="flex-1">
-                <div className="text-md font-medium text-text-primary">Lance la party vocale !</div>
+                <div className="text-base font-medium text-text-primary">Lance la party vocale !</div>
                 <div className="text-sm text-text-tertiary">
                   Retrouve ta squad en un clic, vocal toujours ouvert
                 </div>

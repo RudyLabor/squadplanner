@@ -127,13 +127,13 @@ export function DiscordCallback() {
                 />
               </svg>
             </div>
-            <p className="text-md text-text-primary">{error}</p>
+            <p className="text-base text-text-primary">{error}</p>
             <p className="text-sm text-text-quaternary">Redirection...</p>
           </>
         ) : (
           <>
             <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
-            <p className="text-md text-text-primary">Connexion de ton compte Discord...</p>
+            <p className="text-base text-text-primary">Connexion de ton compte Discord...</p>
             <p className="text-sm text-text-quaternary">Ça ne prend qu'un instant</p>
           </>
         )}

@@ -63,11 +63,9 @@ export function EmptyState({
       {(actionLabel || secondaryActionLabel) && (
         <div className="flex items-center gap-2">
           {actionLabel && actionTo && (
-            <Link to={actionTo}>
-              <Button type="button" size="sm">
-                {actionLabel}
-              </Button>
-            </Link>
+            <Button as={Link} to={actionTo} size="sm">
+              {actionLabel}
+            </Button>
           )}
           {actionLabel && onAction && !actionTo && (
             <Button type="button" size="sm" onClick={onAction}>

@@ -38,7 +38,7 @@ export function CallToast({
             className={`flex items-center gap-2 px-4 py-3 rounded-xl ${style.bg} ${style.text} shadow-lg`}
           >
             <Icon className="w-5 h-5" />
-            <span className="text-md font-medium">{message}</span>
+            <span className="text-base font-medium">{message}</span>
           </div>
         </m.div>
       )}

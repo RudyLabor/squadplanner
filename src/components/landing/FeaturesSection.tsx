@@ -6,6 +6,19 @@ import { HeadphonesIllustration } from './illustrations/HeadphonesIllustration'
 import { CalendarIllustration } from './illustrations/CalendarIllustration'
 import { ShieldIllustration } from './illustrations/ShieldIllustration'
 
+// Proper rgba values for box-shadow glows — CSS variables can't be concatenated with hex alpha
+const colorRgbMap: Record<string, { r: number; g: number; b: number }> = {
+  success: { r: 34, g: 197, b: 94 },
+  gold: { r: 245, g: 158, b: 11 },
+  error: { r: 239, g: 68, b: 68 },
+}
+
+function rgba(colorKey: string, alpha: number): string {
+  const c = colorRgbMap[colorKey]
+  if (!c) return `rgba(99, 102, 241, ${alpha})`
+  return `rgba(${c.r}, ${c.g}, ${c.b}, ${alpha})`
+}
+
 const pillars = [
   {
     id: 'voice',
@@ -16,6 +29,7 @@ const pillars = [
     description:
       'Ta squad a son salon vocal toujours ouvert. Rejoins en 1 clic, reste aussi longtemps que tu veux.',
     color: 'var(--color-success)',
+    colorKey: 'success',
     gradient: 'from-success/[0.08] to-success/[0.01]',
     details: [
       '1 squad = 1 party vocale dédiée',
@@ -34,6 +48,7 @@ const pillars = [
     description:
       'Propose un créneau. Chacun répond. Fini les « peut-être » sans suite. On sait qui vient.',
     color: 'var(--color-gold)',
+    colorKey: 'gold',
     gradient: 'from-warning/[0.08] to-warning/[0.01]',
     details: [
       'Confirme ta présence — fini les « peut-être » sans suite',
@@ -52,6 +67,7 @@ const pillars = [
     description:
       'Check-in à chaque session. Ton score montre si tu tiens parole. Tes potes comptent sur toi.',
     color: 'var(--color-error)',
+    colorKey: 'error',
     gradient: 'from-error/[0.08] to-error/[0.01]',
     details: [
       'Check-in obligatoire — les no-shows ne peuvent plus se cacher',
@@ -159,7 +175,7 @@ export function FeaturesSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
             3 problèmes. 3 solutions. 0 prise de tête.
           </h2>
           <p className="text-text-tertiary text-lg">
@@ -184,11 +200,11 @@ export function FeaturesSection() {
                 style={
                   activeFeature === i
                     ? {
-                        backgroundColor: `${pillar.color}20`,
+                        backgroundColor: rgba(pillar.colorKey, 0.12),
                         color: pillar.color,
-                        borderColor: `${pillar.color}40`,
-                        border: `1px solid ${pillar.color}40`,
-                        boxShadow: `0 0 20px ${pillar.color}15`,
+                        borderColor: rgba(pillar.colorKey, 0.25),
+                        border: `1px solid ${rgba(pillar.colorKey, 0.25)}`,
+                        boxShadow: `0 0 20px ${rgba(pillar.colorKey, 0.08)}`,
                       }
                     : undefined
                 }
@@ -201,8 +217,8 @@ export function FeaturesSection() {
         </div>
 
         {/* Active pillar detail card */}
-        {pillars.map((pillar, i) => {
-          if (i !== activeFeature) return null
+        {(() => {
+          const pillar = pillars[activeFeature]
           const PillarIcon = pillar.icon
           return (
             <m.div
@@ -215,8 +231,8 @@ export function FeaturesSection() {
               onMouseLeave={handleMouseLeave}
               className={`p-8 md:p-10 rounded-3xl bg-gradient-to-br ${pillar.gradient} surface-glass glow-border`}
               style={{
-                borderColor: `${pillar.color}30`,
-                boxShadow: `0 0 40px ${pillar.color}12, inset 0 1px 0 rgba(255,255,255,0.04)`,
+                borderColor: rgba(pillar.colorKey, 0.19),
+                boxShadow: `0 0 40px ${rgba(pillar.colorKey, 0.07)}, inset 0 1px 0 rgba(255,255,255,0.04)`,
                 perspective: '1000px',
                 transformStyle: 'preserve-3d',
               }}
@@ -225,7 +241,7 @@ export function FeaturesSection() {
                 <div className="flex-1">
                   <div
                     className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
-                    style={{ backgroundColor: `${pillar.color}12` }}
+                    style={{ backgroundColor: rgba(pillar.colorKey, 0.07) }}
                   >
                     <div className="hidden md:block">
                       <pillar.illustration size={40} />
@@ -241,7 +257,7 @@ export function FeaturesSection() {
                     {pillar.details.map((item) => (
                       <li
                         key={item}
-                        className="flex items-center gap-2 text-md text-text-secondary"
+                        className="flex items-center gap-2 text-base text-text-secondary"
                       >
                         <Check
                           className="w-4 h-4"
@@ -257,13 +273,13 @@ export function FeaturesSection() {
               </div>
             </m.div>
           )
-        })}
+        })()}
 
         <m.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center text-md text-text-quaternary mt-10"
+          className="text-center text-base text-text-quaternary mt-10"
         >
           Tes potes ne sont pas flemmards. Ils manquent juste d'un{' '}
           <span className="text-text-primary font-semibold text-gradient-animated">

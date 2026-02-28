@@ -103,7 +103,7 @@ export default function AlternativeGuilded() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 0%, #a855f712 0%, transparent 60%)',
+            background: 'radial-gradient(circle at 50% 0%, var(--color-primary-10) 0%, transparent 60%)',
             filter: 'blur(40px)',
           }}
         />
@@ -224,14 +224,14 @@ export default function AlternativeGuilded() {
                   <div className="flex items-start gap-4">
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: '#a855f712' }}
+                      style={{ backgroundColor: 'var(--color-primary-10)' }}
                     >
-                      <FeatureIcon className="w-6 h-6" style={{ color: '#a855f7' }} />
+                      <FeatureIcon className="w-6 h-6" style={{ color: 'var(--color-primary)' }} />
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-text-primary mb-2">{feature.name}</h3>
                       <div className="flex items-center gap-2 text-sm text-text-secondary">
-                        <Check className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                        <Check className="w-4 h-4 text-success flex-shrink-0" />
                         <span>Squad Planner</span>
                       </div>
                     </div>
@@ -255,8 +255,8 @@ export default function AlternativeGuilded() {
             viewport={{ once: true }}
             className="relative p-8 md:p-12 rounded-3xl border overflow-hidden text-center"
             style={{
-              background: 'radial-gradient(ellipse at center, #a855f710 0%, transparent 60%)',
-              borderColor: '#a855f720',
+              background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
+              borderColor: 'var(--color-primary-20)',
             }}
           >
             <m.div
@@ -264,7 +264,7 @@ export default function AlternativeGuilded() {
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               style={{
-                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+                background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
               }}
             />
             <div className="relative z-10">
@@ -315,14 +315,14 @@ export default function AlternativeGuilded() {
                   className="w-full flex items-center justify-between p-5 text-left hover:bg-bg-elevated/50 transition-colors"
                   aria-expanded={openFAQ === i}
                 >
-                  <span className="text-md font-medium text-text-primary pr-4">{faq.question}</span>
+                  <span className="text-base font-medium text-text-primary pr-4">{faq.question}</span>
                   <ChevronDown
                     className={`w-5 h-5 text-text-quaternary shrink-0 transition-transform duration-300 ${openFAQ === i ? 'rotate-180' : ''}`}
                   />
                 </button>
                 <div className={`faq-answer ${openFAQ === i ? 'open' : ''}`}>
                   <div>
-                    <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">
+                    <p className="px-5 pb-5 text-base text-text-tertiary leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
@@ -345,8 +345,8 @@ export default function AlternativeGuilded() {
             viewport={{ once: true }}
             className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
             style={{
-              background: 'radial-gradient(ellipse at center, #a855f710 0%, transparent 60%)',
-              borderColor: '#a855f720',
+              background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
+              borderColor: 'var(--color-primary-20)',
             }}
           >
             <m.div
@@ -354,7 +354,7 @@ export default function AlternativeGuilded() {
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               style={{
-                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+                background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
               }}
             />
             <div className="relative z-10">
@@ -362,7 +362,7 @@ export default function AlternativeGuilded() {
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
+                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: 'var(--color-primary)' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
                 Prêt à changer de maison ?

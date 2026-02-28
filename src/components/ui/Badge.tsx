@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { m, AnimatePresence, useAnimate } from 'framer-motion'
+import { m, useAnimate } from 'framer-motion'
 import { X } from '../icons'
 export type BadgeVariant =
   | 'default'
@@ -8,7 +8,6 @@ export type BadgeVariant =
   | 'error'
   | 'info'
   | 'primary'
-  | 'danger'
 
 interface BadgeProps {
   variant?: BadgeVariant
@@ -38,7 +37,6 @@ export function Badge({
     success: 'bg-success/15 text-success',
     warning: 'bg-warning/15 text-warning',
     error: 'bg-error/15 text-error',
-    danger: 'bg-error/15 text-error',
     info: 'bg-info/15 text-info',
     primary: 'bg-primary/15 text-primary',
   }
@@ -48,7 +46,6 @@ export function Badge({
     success: 'bg-success',
     warning: 'bg-warning',
     error: 'bg-error',
-    danger: 'bg-error',
     info: 'bg-info',
     primary: 'bg-primary-bg',
   }
@@ -79,39 +76,36 @@ export function Badge({
   }, [count, animate, scope])
 
   return (
-    <AnimatePresence>
-      <m.span
-        ref={scope}
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-        className={`
-          inline-flex items-center rounded-lg font-medium
-          ${sizes[size]}
-          ${variants[variant]}
-          ${className}
-        `}
-        aria-label={ariaLabel}
-      >
-        {dot && (
-          <span
-            className={`shrink-0 w-1.5 h-1.5 rounded-full ${dotColors[variant]}`}
-            aria-hidden="true"
-          />
-        )}
-        {displayCount !== null ? displayCount : children}
-        {closable && (
-          <button
-            type="button"
-            onClick={onClose}
-            className="shrink-0 -mr-0.5 rounded-full p-0.5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-            aria-label="Remove"
-          >
-            <X className="w-3 h-3" />
-          </button>
-        )}
-      </m.span>
-    </AnimatePresence>
+    <m.span
+      ref={scope}
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+      className={`
+        inline-flex items-center rounded-lg font-medium
+        ${sizes[size]}
+        ${variants[variant]}
+        ${className}
+      `}
+      aria-label={ariaLabel}
+    >
+      {dot && (
+        <span
+          className={`shrink-0 w-1.5 h-1.5 rounded-full ${dotColors[variant]}`}
+          aria-hidden="true"
+        />
+      )}
+      {displayCount !== null ? displayCount : children}
+      {closable && (
+        <button
+          type="button"
+          onClick={onClose}
+          className="shrink-0 -mr-0.5 rounded-full p-0.5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+          aria-label="Supprimer"
+        >
+          <X className="w-3 h-3" />
+        </button>
+      )}
+    </m.span>
   )
 }

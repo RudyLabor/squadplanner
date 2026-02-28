@@ -49,7 +49,7 @@ export function CookieConsent() {
                     <Cookie className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-md font-semibold text-text-primary">
+                    <h3 className="text-base font-semibold text-text-primary">
                       Cookies & confidentialité
                     </h3>
                     <p className="text-sm text-text-tertiary mt-0.5">Tes données, ton choix</p>
@@ -118,13 +118,13 @@ export function CookieConsent() {
               <div className="flex gap-3">
                 <button
                   onClick={handleEssentialOnly}
-                  className="flex-1 h-11 rounded-xl bg-border-subtle text-md text-text-secondary font-medium hover:bg-border-hover transition-colors"
+                  className="flex-1 h-11 rounded-xl bg-border-subtle text-base text-text-secondary font-medium hover:bg-border-hover transition-colors"
                 >
                   Essentiels uniquement
                 </button>
                 <button
                   onClick={handleAcceptAll}
-                  className="flex-1 h-11 rounded-xl bg-primary-bg text-md text-white font-semibold hover:bg-primary-bg-hover transition-colors"
+                  className="flex-1 h-11 rounded-xl bg-primary-bg text-base text-white font-semibold hover:bg-primary-bg-hover transition-colors"
                 >
                   Tout accepter
                 </button>

@@ -21,7 +21,7 @@ export function AISlotSuggestions({
             <Sparkles className="w-5 h-5 text-purple" />
           </div>
           <div className="flex-1">
-            <h3 className="text-md font-semibold text-text-primary mb-2">
+            <h3 className="text-base font-semibold text-text-primary mb-2">
               Meilleurs créneaux suggérés
             </h3>
             {!hasSlotHistory && (
@@ -69,7 +69,7 @@ export function CoachTipsSection({ coachTips }: CoachTipsSectionProps) {
             <Sparkles className="w-5 h-5 text-warning" />
           </div>
           <div>
-            <h3 className="text-md font-semibold text-text-primary mb-1">🎯 Conseil Coach</h3>
+            <h3 className="text-base font-semibold text-text-primary mb-1">🎯 Conseil Coach</h3>
             <p className="text-base text-text-secondary">{coachTips[0].content}</p>
           </div>
         </div>

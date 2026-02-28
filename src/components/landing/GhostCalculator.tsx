@@ -27,7 +27,7 @@ export function GhostCalculator() {
     <section className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-xl mx-auto">
         <div className="text-center mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">
             Combien d'heures ta squad perd au ghosting ?
           </h2>
           <p className="text-text-tertiary">

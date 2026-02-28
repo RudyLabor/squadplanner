@@ -32,7 +32,7 @@ export function SuccessToast({ message, onClose }: { message: string; onClose: (
         >
           <Sparkles className="w-5 h-5" />
         </m.div>
-        <span className="text-md">{message}</span>
+        <span className="text-base">{message}</span>
       </m.div>
     </m.div>
   )

@@ -386,7 +386,7 @@ export default function Home({ loaderData }: HomeProps) {
           className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl bg-success/15 border border-success/20 backdrop-blur-sm"
           role="status"
         >
-          <p className="text-md font-medium text-success">{successMessage}</p>
+          <p className="text-base font-medium text-success">{successMessage}</p>
         </m.div>
       )}
 
@@ -402,7 +402,7 @@ export default function Home({ loaderData }: HomeProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h1 className="text-lg md:text-xl font-bold text-text-primary mb-1">
+              <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary mb-1">
                 {greeting}
                 {profile?.username
                   ? ` ${profile.username.length > 15 ? profile.username.slice(0, 15) + '…' : profile.username}`
@@ -475,7 +475,7 @@ export default function Home({ loaderData }: HomeProps) {
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.03, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <HomeStatsSection
                 squadsCount={squads.length}
@@ -491,7 +491,7 @@ export default function Home({ loaderData }: HomeProps) {
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.04, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <Suspense fallback={null}>
                 <WeeklyLeaderboard />
@@ -503,7 +503,7 @@ export default function Home({ loaderData }: HomeProps) {
               className="grid grid-cols-1 sm:grid-cols-2 gap-4"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <HomeAICoachSection
                 aiCoachTip={aiCoachTip}
@@ -519,7 +519,7 @@ export default function Home({ loaderData }: HomeProps) {
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.07, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <HomeSessionsSection
                 upcomingSessions={upcomingSessions}
@@ -533,7 +533,7 @@ export default function Home({ loaderData }: HomeProps) {
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.09, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <HomeFriendsSection
                 friendsPlaying={friendsPlaying}
@@ -546,7 +546,7 @@ export default function Home({ loaderData }: HomeProps) {
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.11, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <HomeActivityFeed squadIds={(squads || []).map((s) => s.id)} />
             </m.div>
@@ -554,7 +554,7 @@ export default function Home({ loaderData }: HomeProps) {
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.13, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />
             </m.div>

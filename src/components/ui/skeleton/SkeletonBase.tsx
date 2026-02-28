@@ -126,8 +126,8 @@ export function SkeletonButton({
   className = '',
 }: SkeletonButtonProps) {
   const sizeMap = {
-    sm: 'h-8',
-    md: 'h-10',
+    sm: 'h-9',
+    md: 'h-11',
     lg: 'h-12',
   }
 

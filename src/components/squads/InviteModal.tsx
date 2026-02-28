@@ -289,7 +289,7 @@ export function InviteModal({
                       <Users className="w-5 h-5 text-primary" />
                     </div>
                   )}
-                  <span className="flex-1 text-md text-text-primary">{user.username}</span>
+                  <span className="flex-1 text-base text-text-primary">{user.username}</span>
                   {invitedUsers.has(user.id) ? (
                     <span className="text-sm text-success flex items-center gap-1">
                       <Check className="w-4 h-4" /> Ajoute

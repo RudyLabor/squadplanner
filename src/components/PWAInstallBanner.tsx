@@ -34,7 +34,7 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <h3 className="text-md font-semibold text-text-primary">Installer Squad Planner</h3>
+              <h3 className="text-base font-semibold text-text-primary">Installer Squad Planner</h3>
               <p className="text-base text-text-secondary mt-0.5">
                 Ne rate plus jamais une session — notifs directes sur ton tel
               </p>

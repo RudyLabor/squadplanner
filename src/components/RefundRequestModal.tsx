@@ -90,7 +90,7 @@ export function RefundRequestModal({ open, onClose }: RefundRequestModalProps) {
                   <CheckCircle className="w-8 h-8 text-success" />
                 </div>
                 <div className="text-center">
-                  <p className="text-md font-semibold text-text-primary mb-2">
+                  <p className="text-base font-semibold text-text-primary mb-2">
                     Demande envoyée
                   </p>
                   <p className="text-base text-text-secondary">
@@ -131,7 +131,7 @@ export function RefundRequestModal({ open, onClose }: RefundRequestModalProps) {
                     onChange={(e) => setReason(e.target.value)}
                     placeholder="Ton retour nous aide a nous ameliorer..."
                     rows={3}
-                    className="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary resize-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-border-default text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary resize-none transition-colors"
                   />
                 </div>
               </div>

@@ -118,7 +118,7 @@ export function ChallengeCard({ challenge, index, onClaim, isClaiming }: Challen
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                   <h3
-                    className={`text-md font-semibold ${isClaimed ? 'text-text-tertiary line-through' : 'text-text-primary'}`}
+                    className={`text-base font-semibold ${isClaimed ? 'text-text-tertiary line-through' : 'text-text-primary'}`}
                   >
                     {challenge.title}
                   </h3>

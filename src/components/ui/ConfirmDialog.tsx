@@ -48,7 +48,7 @@ export function ConfirmDialog({
             className={`w-5 h-5 ${variant === 'danger' ? 'text-error' : 'text-warning'}`}
           />
         </div>
-        <p className="text-md text-text-secondary">{description}</p>
+        <p className="text-base text-text-secondary">{description}</p>
       </div>
       <div className="flex items-center justify-end gap-3 mt-6">
         <Button variant="secondary" onClick={onClose} disabled={isLoading}>
@@ -82,7 +82,7 @@ export function ConfirmDialog({
               className={`w-5 h-5 ${variant === 'danger' ? 'text-error' : 'text-warning'}`}
             />
           </div>
-          <p className="text-md text-text-secondary">{description}</p>
+          <p className="text-base text-text-secondary">{description}</p>
         </div>
       </DialogBody>
       <DialogFooter>

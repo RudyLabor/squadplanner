@@ -85,7 +85,7 @@ export function SessionExpiredModal({ isOpen, onReconnect, onDismiss }: SessionE
               </h2>
 
               {/* Description */}
-              <p id={descId} className="text-md text-text-secondary mb-6">
+              <p id={descId} className="text-base text-text-secondary mb-6">
                 Ta session a expiré. Reconnecte-toi pour continuer.
               </p>
 
@@ -93,7 +93,7 @@ export function SessionExpiredModal({ isOpen, onReconnect, onDismiss }: SessionE
               <button
                 ref={reconnectRef}
                 onClick={handleReconnect}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors mb-3"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-base font-medium hover:bg-primary-bg-hover transition-colors mb-3"
               >
                 <LogIn className="w-4 h-4" />
                 Se reconnecter

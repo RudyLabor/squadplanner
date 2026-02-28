@@ -72,7 +72,7 @@ export function RateLimitBanner({ retryAfter, onRetry, onDismiss, message }: Rat
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <p className="text-md font-medium text-warning">{message || 'Trop de requêtes'}</p>
+              <p className="text-base font-medium text-warning">{message || 'Trop de requêtes'}</p>
               <p className="text-sm text-warning/80">
                 {timerDone
                   ? 'Tu peux réessayer maintenant'

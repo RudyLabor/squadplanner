@@ -35,7 +35,7 @@ export function InviteUserList({
   if (members.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-md text-text-secondary">Tous les membres sont déjà dans la party !</p>
+        <p className="text-base text-text-secondary">Tous les membres sont déjà dans la party !</p>
       </div>
     )
   }

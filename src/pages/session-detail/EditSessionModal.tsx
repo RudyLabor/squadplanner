@@ -117,7 +117,7 @@ export function EditSessionModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Session ranked, Détente, Tryhard..."
-              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
+              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-base text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
             />
           </div>
 
@@ -131,7 +131,7 @@ export function EditSessionModal({
               value={date}
               onChange={(e) => setDate(e.target.value)}
               min={new Date().toISOString().split('T')[0]}
-              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary focus:border-primary focus:outline-none transition-colors"
+              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-base text-text-primary focus:border-primary focus:outline-none transition-colors"
             />
           </div>
 
@@ -144,7 +144,7 @@ export function EditSessionModal({
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary focus:border-primary focus:outline-none transition-colors"
+              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-base text-text-primary focus:border-primary focus:outline-none transition-colors"
             />
           </div>
 

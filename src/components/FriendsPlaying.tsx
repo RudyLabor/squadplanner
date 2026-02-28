@@ -79,7 +79,7 @@ const FriendCard = memo(function FriendCard({
               />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-md font-semibold text-text-primary truncate">
+              <div className="text-base font-semibold text-text-primary truncate">
                 {friend.username}
               </div>
               <div className="flex items-center gap-1.5 text-sm text-text-secondary">

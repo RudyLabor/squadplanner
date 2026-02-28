@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
-import { m, useInView } from 'framer-motion'
+import { useInView } from 'framer-motion'
 import { Crown, Check, Loader2, Gift, ChevronLeft } from '../../components/icons'
 import Confetti from '../../components/LazyConfetti'
 import { Button } from '../../components/ui'
@@ -60,15 +60,11 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
         className="relative overflow-hidden bg-gradient-to-br from-primary/20 via-purple/10 to-bg-elevated dark:from-surface-dark dark:via-bg-surface dark:to-bg-base pt-8 pb-16"
       >
         <div className="absolute inset-0 overflow-hidden">
-          <m.div
-            className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-primary/10 to-warning/05 blur-3xl"
-            animate={{ x: [0, 80, 0], y: [0, 40, 0] }}
-            transition={{ duration: 3, repeat: 2, ease: 'easeInOut' }}
+          <div
+            className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-primary/5 to-warning/5 blur-3xl opacity-100"
           />
-          <m.div
-            className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-purple/10 to-success/05 blur-3xl"
-            animate={{ x: [0, -80, 0], y: [0, -40, 0] }}
-            transition={{ duration: 3, repeat: 2, ease: 'easeInOut', delay: 0.5 }}
+          <div
+            className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-purple/5 to-success/5 blur-3xl opacity-100"
           />
         </div>
         <div className="relative px-4 md:px-6 max-w-4xl mx-auto">
@@ -86,14 +82,14 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
                 <Crown className="w-10 h-10 text-white" />
               </div>
             </div>
-            <h1 className="text-lg md:text-xl font-bold text-text-primary mb-4">
+            <h1 className="text-2xl md:text-4xl font-display font-bold text-text-primary mb-4">
               Ta squad mérite
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-warning/70">
                 {' '}
                 mieux
               </span>
             </h1>
-            <p className="text-md md:text-lg text-text-secondary max-w-xl mx-auto mb-8">
+            <p className="text-base md:text-lg text-text-secondary max-w-xl mx-auto mb-8">
               Débloque les vrais outils. Heatmaps de présence, IA coach, audio HD
               — tout ce qu'il faut pour dominer.
             </p>
@@ -101,7 +97,7 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
               <div className="mb-8">
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-success/05 border border-success/15">
                   <Check className="w-5 h-5 text-success" />
-                  <span className="text-md font-medium text-success">Tu es déjà Premium !</span>
+                  <span className="text-base font-medium text-success">Tu es déjà Premium !</span>
                 </div>
                 <div className="mt-5">
                   <button

@@ -66,7 +66,7 @@ export default function AlternativeDiscordEvents() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 0%, #a855f712 0%, transparent 60%)',
+            background: 'radial-gradient(circle at 50% 0%, var(--color-primary-10) 0%, transparent 60%)',
             filter: 'blur(40px)',
           }}
         />
@@ -178,28 +178,28 @@ export default function AlternativeDiscordEvents() {
                   className="grid md:grid-cols-2 gap-6"
                 >
                   {/* Discord Version */}
-                  <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-red-500/20 hover:border-red-500/30 transition-all">
+                  <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-error/20 hover:border-error/30 transition-all">
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="p-2 bg-red-500/10 rounded-lg flex-shrink-0">
-                        <Zap className="w-5 h-5 text-red-500" />
+                      <div className="p-2 bg-error/10 rounded-lg flex-shrink-0">
+                        <Zap className="w-5 h-5 text-error" />
                       </div>
                       <h3 className="font-semibold text-text-primary">{item.title}</h3>
                     </div>
-                    <p className="text-text-secondary text-md leading-relaxed">{item.discord}</p>
+                    <p className="text-text-secondary text-base leading-relaxed">{item.discord}</p>
                   </div>
 
                   {/* Squad Planner Version */}
-                  <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-emerald-500/20 hover:border-emerald-500/30 transition-all relative">
+                  <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-success/20 hover:border-success/30 transition-all relative">
                     <div className="absolute -top-3 -right-3 px-3 py-1 bg-primary-bg text-white text-xs font-semibold rounded-full">
                       T'aimes mieux
                     </div>
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="p-2 bg-emerald-500/10 rounded-lg flex-shrink-0">
-                        <Check className="w-5 h-5 text-emerald-500" />
+                      <div className="p-2 bg-success/10 rounded-lg flex-shrink-0">
+                        <Check className="w-5 h-5 text-success" />
                       </div>
                       <h3 className="font-semibold text-text-primary">{item.title}</h3>
                     </div>
-                    <p className="text-text-secondary text-md leading-relaxed">
+                    <p className="text-text-secondary text-base leading-relaxed">
                       {item.squadPlanner}
                     </p>
                   </div>
@@ -246,12 +246,12 @@ export default function AlternativeDiscordEvents() {
                 >
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                    style={{ backgroundColor: '#a855f712' }}
+                    style={{ backgroundColor: 'var(--color-primary-10)' }}
                   >
-                    <Icon className="w-6 h-6" style={{ color: '#a855f7' }} />
+                    <Icon className="w-6 h-6" style={{ color: 'var(--color-primary)' }} />
                   </div>
                   <h3 className="text-lg font-bold text-text-primary mb-2">{advantage.title}</h3>
-                  <p className="text-md text-text-tertiary">{advantage.description}</p>
+                  <p className="text-base text-text-tertiary">{advantage.description}</p>
                 </m.div>
               )
             })}
@@ -272,7 +272,7 @@ export default function AlternativeDiscordEvents() {
             className="p-5 md:p-6 rounded-2xl border border-warning/30 bg-gradient-to-r from-warning/5 to-transparent flex flex-col sm:flex-row items-center gap-4"
           >
             <div className="flex-1 text-center sm:text-left">
-              <p className="text-md font-semibold text-text-primary mb-1">
+              <p className="text-base font-semibold text-text-primary mb-1">
                 Tu migres de Discord Events ? -30% sur ton premier mois
               </p>
               <p className="text-sm text-text-tertiary">
@@ -308,7 +308,7 @@ export default function AlternativeDiscordEvents() {
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-text-primary mb-3">Toujours lié à Discord</h3>
-                <p className="text-text-secondary mb-4 text-md">
+                <p className="text-text-secondary mb-4 text-base">
                   Squad Planner et Discord, ça se parle. Les notifs arrivent dans Discord.
                   L'organisation, c'est chez nous. Zéro config.
                 </p>
@@ -376,8 +376,8 @@ export default function AlternativeDiscordEvents() {
             viewport={{ once: true }}
             className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
             style={{
-              background: 'radial-gradient(ellipse at center, #a855f710 0%, transparent 60%)',
-              borderColor: '#a855f720',
+              background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
+              borderColor: 'var(--color-primary-20)',
             }}
           >
             <m.div
@@ -385,7 +385,7 @@ export default function AlternativeDiscordEvents() {
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               style={{
-                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+                background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
               }}
             />
             <div className="relative z-10">
@@ -393,7 +393,7 @@ export default function AlternativeDiscordEvents() {
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
+                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: 'var(--color-primary)' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
                 Planifie ta première session en 30 secondes

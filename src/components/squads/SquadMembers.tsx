@@ -299,7 +299,7 @@ const MemberCard = memo(function MemberCard({
       )}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-md font-medium text-text-primary truncate">
+          <span className="text-base font-medium text-text-primary truncate">
             {member.profiles?.username || 'Joueur'}
           </span>
           {isOwner && <Crown className="w-4 h-4 text-warning" />}

@@ -83,7 +83,7 @@ export const SidebarFooter = memo(function SidebarFooter({
                   transition={{ duration: 0.15 }}
                   className="flex-1 min-w-0"
                 >
-                  <div className="text-md font-medium text-text-primary truncate">
+                  <div className="text-base font-medium text-text-primary truncate">
                     {profile?.username || 'Mon profil'}
                   </div>
                   <div className="flex items-center gap-2">

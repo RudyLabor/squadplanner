@@ -218,8 +218,8 @@ export default function BlogIndex() {
           {/* Quick stats */}
           <div className="flex items-center justify-center gap-8 md:gap-16">
             {[
-              { value: `${posts.length}`, label: 'articles' },
-              { value: '10+', label: 'min de lecture' },
+              { value: `${posts.length}`, label: 'guides' },
+              { value: `${posts.reduce((sum, p) => sum + p.readTime, 0)}`, label: 'min de lecture au total' },
               { value: '100%', label: 'gratuit' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">

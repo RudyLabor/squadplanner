@@ -45,7 +45,7 @@ export const SessionCard = memo(function SessionCard({
   }
 
   const getStatusBadge = () => {
-    if (session.status === 'cancelled') return { label: 'Annulée', variant: 'danger' as const }
+    if (session.status === 'cancelled') return { label: 'Annulée', variant: 'error' as const }
     if (session.status === 'confirmed') return { label: 'Confirmée', variant: 'success' as const }
     if (isPast) return { label: 'Passée', variant: 'default' as const }
     return null
@@ -72,7 +72,7 @@ export const SessionCard = memo(function SessionCard({
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-md font-medium text-text-primary truncate">
+            <h3 className="text-base font-medium text-text-primary truncate">
               {session.title || session.game || 'Session'}
             </h3>
             {statusBadge && (

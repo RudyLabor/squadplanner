@@ -6,7 +6,7 @@ export function PrivacyContent() {
     <div>
       <div className="mb-8">
         <h1 className="text-lg font-bold text-text-primary mb-2">Politique de Confidentialité</h1>
-        <p className="text-md text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
+        <p className="text-base text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
       </div>
       <Card className="p-6 bg-bg-surface">
         <LegalSection title="1. Responsable du traitement" defaultOpen>

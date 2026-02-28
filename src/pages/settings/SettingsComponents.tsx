@@ -39,7 +39,7 @@ export function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; 
       <div className="w-8 h-8 rounded-lg bg-primary-10 flex items-center justify-center">
         <Icon className="w-4 h-4 text-primary" />
       </div>
-      <h2 className="text-md font-semibold text-text-primary">{title}</h2>
+      <h2 className="text-base font-semibold text-text-primary">{title}</h2>
     </div>
   )
 }
@@ -56,7 +56,7 @@ export function SettingRow({
   return (
     <div className="flex items-center justify-between py-3 border-b border-border-default last:border-0">
       <div className="flex-1 mr-4">
-        <p className="text-md text-text-primary">{label}</p>
+        <p className="text-base text-text-primary">{label}</p>
         {description && <p className="text-sm text-text-quaternary mt-0.5">{description}</p>}
       </div>
       {children}

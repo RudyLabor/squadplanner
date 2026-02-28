@@ -108,7 +108,7 @@ export function SearchResultsList({
                       </div>
                     )}
                     <div className="flex-1 text-left min-w-0">
-                      <div className="text-md text-text-primary truncate">{result.title}</div>
+                      <div className="text-base text-text-primary truncate">{result.title}</div>
                       {result.subtitle && (
                         <div className="text-sm text-text-tertiary truncate">{result.subtitle}</div>
                       )}

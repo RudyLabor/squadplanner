@@ -450,7 +450,7 @@ export function ErrorBoundary() {
                 : message}
           </p>
 
-          <p className="text-md text-text-secondary mb-8">
+          <p className="text-base text-text-secondary mb-8">
             {status === 503
               ? 'Le serveur est temporairement surchargé. Réessaie dans quelques instants.'
               : 'Une erreur inattendue est survenue. Tu peux essayer de recharger la page.'}
@@ -459,13 +459,13 @@ export function ErrorBoundary() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
             <button
               onClick={() => window.location.reload()}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-md font-medium hover:bg-primary-bg-hover transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white text-base font-medium hover:bg-primary-bg-hover transition-colors"
             >
               Recharger la page
             </button>
             <a
               href="/home"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-overlay-subtle text-text-secondary text-md font-medium hover:bg-overlay-light transition-colors border border-border-subtle"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-overlay-subtle text-text-secondary text-base font-medium hover:bg-overlay-light transition-colors border border-border-subtle"
             >
               Retour à l'accueil
             </a>

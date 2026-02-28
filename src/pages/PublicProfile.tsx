@@ -11,6 +11,7 @@ import {
   MapPin,
   ExternalLink,
 } from '../components/icons'
+import { StatCard } from '../components/ui/StatCard'
 import { usePublicProfileQuery } from '../hooks/queries'
 
 const TIERS = [
@@ -212,29 +213,6 @@ export function PublicProfile() {
         </p>
       </div>
     </m.div>
-  )
-}
-
-function StatCard({
-  icon,
-  label,
-  value,
-  sub,
-}: {
-  icon: React.ReactNode
-  label: string
-  value: string
-  sub: string
-}) {
-  return (
-    <div className="rounded-xl border border-border-subtle bg-surface-card p-3">
-      <div className="flex items-center gap-1.5 mb-1">
-        {icon}
-        <span className="text-sm text-text-tertiary">{label}</span>
-      </div>
-      <p className="text-lg font-bold text-text-primary">{value}</p>
-      <p className="text-xs text-text-tertiary">{sub}</p>
-    </div>
   )
 }
 

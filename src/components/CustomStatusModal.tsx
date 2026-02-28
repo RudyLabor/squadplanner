@@ -167,7 +167,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({
                     value={text}
                     onChange={(e) => setText(e.target.value.slice(0, 80))}
                     placeholder="Que fais-tu ?"
-                    className="flex-1 h-12 px-4 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+                    className="flex-1 h-12 px-4 bg-border-subtle border border-border-hover rounded-xl text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                     maxLength={80}
                   />
                 </div>
@@ -231,7 +231,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({
                     onFocus={() => setShowGameSuggestions(true)}
                     onBlur={() => setTimeout(() => setShowGameSuggestions(false), 200)}
                     placeholder="Ex: Valorant, League of Legends..."
-                    className="w-full h-11 px-4 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+                    className="w-full h-11 px-4 bg-border-subtle border border-border-hover rounded-xl text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                   />
                   {/* Autocomplete suggestions */}
                   {showGameSuggestions && filteredGames.length > 0 && (

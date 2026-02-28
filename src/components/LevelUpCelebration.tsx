@@ -111,7 +111,7 @@ export function LevelUpCelebration({
 
             {/* "LEVEL UP" text */}
             <m.div
-              className="text-md font-bold uppercase tracking-[0.3em] mb-4"
+              className="text-base font-bold uppercase tracking-[0.3em] mb-4"
               style={{ color: currentLevel.color }}
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -223,7 +223,7 @@ export function LevelUpCelebration({
 
               {/* Subtitle based on level */}
               <m.p
-                className="text-md text-text-tertiary max-w-[250px]"
+                className="text-base text-text-tertiary max-w-[250px]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}

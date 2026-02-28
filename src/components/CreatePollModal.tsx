@@ -110,7 +110,7 @@ export const CreatePollModal = memo(function CreatePollModal({
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder="Pose ta question..."
-                  className="w-full h-12 px-4 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+                  className="w-full h-12 px-4 bg-border-subtle border border-border-hover rounded-xl text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                   maxLength={200}
                   autoFocus
                 />

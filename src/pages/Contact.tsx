@@ -107,7 +107,7 @@ ${formData.message}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.4, ease }}
-            className="text-md md:text-lg text-text-secondary max-w-2xl mx-auto"
+            className="text-base md:text-lg text-text-secondary max-w-2xl mx-auto"
           >
             Le tier Club est fait pour les structures esport et les organisations gaming.
             On adapte Squad Planner à tes besoins.

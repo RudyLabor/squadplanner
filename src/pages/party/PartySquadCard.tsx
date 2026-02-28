@@ -37,7 +37,7 @@ export function PartySquadCard({
             <Gamepad2 className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-md font-semibold text-text-primary truncate">{squad.name}</h3>
+            <h3 className="text-base font-semibold text-text-primary truncate">{squad.name}</h3>
             <p className="text-sm text-text-secondary">
               {squad.game} · {squad.member_count} membre{squad.member_count > 1 ? 's' : ''}
             </p>

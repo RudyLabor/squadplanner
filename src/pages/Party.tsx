@@ -263,7 +263,7 @@ export function Party() {
           <div>
             <header className="flex items-center justify-between mb-6">
               <div>
-                <h1 className="text-lg font-bold text-text-primary">Party</h1>
+                <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">Party</h1>
                 <p className="text-base text-text-tertiary">
                   {isConnected
                     ? 'Connecté'

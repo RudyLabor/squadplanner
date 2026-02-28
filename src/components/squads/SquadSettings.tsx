@@ -122,7 +122,7 @@ export function SquadSettings({
                 <BarChart3 className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-md font-medium text-text-primary">Analyse de la squad</h3>
+                <h3 className="text-base font-medium text-text-primary">Analyse de la squad</h3>
                 <p className="text-sm text-text-quaternary">Tendances et performances</p>
               </div>
             </div>
@@ -159,7 +159,7 @@ export function SquadSettings({
                   <Download className="w-5 h-5 text-success" />
                 </div>
                 <div>
-                  <h3 className="text-md font-medium text-text-primary">Export calendrier</h3>
+                  <h3 className="text-base font-medium text-text-primary">Export calendrier</h3>
                   <p className="text-sm text-text-quaternary">Synchronise avec Google, Apple...</p>
                 </div>
               </div>
@@ -195,7 +195,7 @@ export function SquadSettings({
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-md font-medium text-text-primary">Squad Premium</h3>
+                  <h3 className="text-base font-medium text-text-primary">Squad Premium</h3>
                   <PremiumBadge small />
                 </div>
                 <p className="text-sm text-text-quaternary">
@@ -210,7 +210,7 @@ export function SquadSettings({
       {/* Classement Squad */}
       {transformedLeaderboard.length > 0 && (
         <div className="mb-6">
-          <h3 className="text-md font-semibold text-text-primary mb-3 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-text-primary mb-3 flex items-center gap-2">
             <Trophy className="w-4 h-4 text-warning" />
             Classement
           </h3>
@@ -230,7 +230,7 @@ export function SquadSettings({
           {isOwner ? (
             <button
               onClick={onDeleteSquad}
-              className="w-full py-3 text-md text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 text-base text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
               Supprimer la squad
@@ -238,7 +238,7 @@ export function SquadSettings({
           ) : (
             <button
               onClick={onLeaveSquad}
-              className="w-full py-3 text-md text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 text-base text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
             >
               <LogOut className="w-4 h-4" />
               Quitter la squad
@@ -248,7 +248,7 @@ export function SquadSettings({
         {/* Mobile: open drawer */}
         <button
           onClick={onOpenActionsDrawer}
-          className="md:hidden w-full py-3 text-md text-text-tertiary hover:text-text-primary transition-colors flex items-center justify-center gap-2 border border-border-subtle rounded-xl"
+          className="md:hidden w-full py-3 text-base text-text-tertiary hover:text-text-primary transition-colors flex items-center justify-center gap-2 border border-border-subtle rounded-xl"
         >
           Actions de la squad
           <ChevronRight className="w-4 h-4" />
@@ -266,7 +266,7 @@ export function SquadSettings({
             className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
           >
             <UserPlus className="w-5 h-5 text-primary" />
-            <span className="text-md text-text-primary">Inviter des joueurs</span>
+            <span className="text-base text-text-primary">Inviter des joueurs</span>
           </button>
           <button
             onClick={() => {
@@ -276,7 +276,7 @@ export function SquadSettings({
             className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
           >
             <Calendar className="w-5 h-5 text-warning" />
-            <span className="text-md text-text-primary">Créer une session</span>
+            <span className="text-base text-text-primary">Créer une session</span>
           </button>
           <button
             onClick={() => {
@@ -286,7 +286,7 @@ export function SquadSettings({
             className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
           >
             <MessageCircle className="w-5 h-5 text-success" />
-            <span className="text-md text-text-primary">Chat de la squad</span>
+            <span className="text-base text-text-primary">Chat de la squad</span>
           </button>
           {isOwner && onEditSquadClick && (
             <button
@@ -297,7 +297,7 @@ export function SquadSettings({
               className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
             >
               <Settings className="w-5 h-5 text-text-secondary" />
-              <span className="text-md text-text-primary">Modifier la squad</span>
+              <span className="text-base text-text-primary">Modifier la squad</span>
             </button>
           )}
           <div className="border-t border-border-subtle pt-2 mt-2">
@@ -310,7 +310,7 @@ export function SquadSettings({
                 className="w-full flex items-center gap-3 p-4 rounded-xl hover:bg-error/5 transition-colors"
               >
                 <Trash2 className="w-5 h-5 text-error" />
-                <span className="text-md text-error">Supprimer la squad</span>
+                <span className="text-base text-error">Supprimer la squad</span>
               </button>
             ) : (
               <button
@@ -321,7 +321,7 @@ export function SquadSettings({
                 className="w-full flex items-center gap-3 p-4 rounded-xl hover:bg-error/5 transition-colors"
               >
                 <LogOut className="w-5 h-5 text-error" />
-                <span className="text-md text-error">Quitter la squad</span>
+                <span className="text-base text-error">Quitter la squad</span>
               </button>
             )}
           </div>

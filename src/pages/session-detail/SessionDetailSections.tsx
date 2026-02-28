@@ -28,7 +28,7 @@ export function SessionInfoCards({ dateInfo, durationMinutes }: SessionInfoCards
             <Calendar className="w-5 h-5 text-warning" />
           </div>
           <div>
-            <div className="text-md font-medium text-text-primary capitalize">{dateInfo.day}</div>
+            <div className="text-base font-medium text-text-primary capitalize">{dateInfo.day}</div>
             <div className="text-base text-text-secondary">{dateInfo.time}</div>
           </div>
         </div>
@@ -39,7 +39,7 @@ export function SessionInfoCards({ dateInfo, durationMinutes }: SessionInfoCards
             <Clock className="w-5 h-5 text-info" />
           </div>
           <div>
-            <div className="text-md font-medium text-text-primary">{durationMinutes} min</div>
+            <div className="text-base font-medium text-text-primary">{durationMinutes} min</div>
             <div className="text-base text-text-secondary">Durée</div>
           </div>
         </div>
@@ -213,7 +213,7 @@ export function ParticipantsList({ rsvps, checkins }: ParticipantsListProps) {
                   <Users className="w-5 h-5 text-purple" />
                 </div>
                 <div className="flex-1">
-                  <span className="text-md text-text-primary">
+                  <span className="text-base text-text-primary">
                     {(rsvp as { profiles?: { username?: string } }).profiles?.username || 'Joueur'}
                   </span>
                 </div>
@@ -225,7 +225,7 @@ export function ParticipantsList({ rsvps, checkins }: ParticipantsListProps) {
                         ? 'success'
                         : rsvp.response === 'maybe'
                           ? 'warning'
-                          : 'danger'
+                          : 'error'
                     }
                   >
                     {rsvp.response === 'present'

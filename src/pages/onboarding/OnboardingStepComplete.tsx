@@ -160,7 +160,7 @@ export function OnboardingStepComplete({
                 </div>
                 <div>
                   <p className="text-sm text-text-tertiary">Squad</p>
-                  <p className="text-md font-semibold text-text-primary">{createdSquadName}</p>
+                  <p className="text-base font-semibold text-text-primary">{createdSquadName}</p>
                 </div>
               </div>
 
@@ -171,7 +171,7 @@ export function OnboardingStepComplete({
                   </div>
                   <div>
                     <p className="text-sm text-text-tertiary">Jeu</p>
-                    <p className="text-md font-semibold text-text-primary">
+                    <p className="text-base font-semibold text-text-primary">
                       {squadGame || 'Non défini'}
                     </p>
                   </div>
@@ -223,7 +223,7 @@ export function OnboardingStepComplete({
                 <Gift className="w-5 h-5 text-warning" />
               </div>
               <div>
-                <p className="text-md font-semibold text-text-primary">Invite tes amis</p>
+                <p className="text-base font-semibold text-text-primary">Invite tes amis</p>
                 <p className="text-sm text-text-tertiary">Gagne 7 jours Premium par filleul</p>
               </div>
             </div>

@@ -69,7 +69,7 @@ const NextSessionCard = memo(function NextSessionCard({
         <Link to={`/squad/${session.squad_id}`}>
           <div className="flex items-start justify-between mb-3">
             <div>
-              <div className="text-md font-semibold text-text-primary hover:text-primary transition-colors duration-400">
+              <div className="text-base font-semibold text-text-primary hover:text-primary transition-colors duration-400">
                 {session.title || session.game || 'Session'}
               </div>
               <div className="text-base text-text-tertiary">{session.squad_name}</div>
@@ -192,17 +192,9 @@ interface HomeSessionsSectionProps {
 const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCreate: () => void }) {
   return (
     <Card className="p-8 border border-border-subtle bg-gradient-to-br from-primary/8 via-transparent to-success/5 relative overflow-hidden">
-      {/* Animated background gradient */}
-      <m.div
-        className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"
-        animate={{
-          opacity: [0.3, 0.6, 0.3],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
+      {/* Static background gradient */}
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none opacity-40"
       />
 
       <div className="relative flex flex-col items-center text-center space-y-5">
@@ -224,12 +216,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
             transition={{ delay: 0.2 }}
           >
             Ne rate pas ta prochaine session
-            <m.span
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            >
-              🎮
-            </m.span>
+            <span>🎮</span>
           </m.h3>
           <m.p
             className="text-base text-text-tertiary max-w-sm mx-auto"
@@ -253,9 +240,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
         >
           <Calendar className="w-5 h-5 group-hover:rotate-12 transition-transform" />
           Planifier une session
-          <m.div animate={{ x: [0, 3, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-            <Sparkles className="w-4 h-4" />
-          </m.div>
+          <Sparkles className="w-4 h-4" />
         </m.button>
 
         {/* Helper text */}

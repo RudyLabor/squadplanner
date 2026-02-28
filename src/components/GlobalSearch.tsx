@@ -283,7 +283,7 @@ export function GlobalSearch() {
                     }}
                     placeholder="Rechercher squads, sessions, messages, membres..."
                     aria-label="Recherche globale"
-                    className="flex-1 bg-transparent text-text-primary placeholder-text-tertiary outline-none text-md"
+                    className="flex-1 bg-transparent text-text-primary placeholder-text-tertiary outline-none text-base"
                   />
                   {query && (
                     <m.button
@@ -324,7 +324,7 @@ export function GlobalSearch() {
                           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-overlay-faint text-left transition-colors"
                         >
                           <Clock className="w-4 h-4 text-text-quaternary flex-shrink-0" />
-                          <span className="text-md text-text-secondary truncate">{h}</span>
+                          <span className="text-base text-text-secondary truncate">{h}</span>
                         </m.button>
                       ))}
                     </div>

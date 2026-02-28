@@ -96,7 +96,7 @@ export default function AlternativeGamerLink() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 0%, #a855f712 0%, transparent 60%)',
+            background: 'radial-gradient(circle at 50% 0%, var(--color-primary-10) 0%, transparent 60%)',
             filter: 'blur(40px)',
           }}
         />
@@ -229,12 +229,12 @@ export default function AlternativeGamerLink() {
                       </td>
                       <td className="px-6 py-4 text-center">
                         {feature.squadPlanner ? (
-                          <Check className="w-6 h-6 text-emerald-400 mx-auto" />
+                          <Check className="w-6 h-6 text-success mx-auto" />
                         ) : null}
                       </td>
                       <td className="px-6 py-4 text-center">
                         {feature.gamerLink ? (
-                          <Check className="w-6 h-6 text-emerald-400 mx-auto" />
+                          <Check className="w-6 h-6 text-success mx-auto" />
                         ) : null}
                       </td>
                     </tr>
@@ -279,12 +279,12 @@ export default function AlternativeGamerLink() {
                 >
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                    style={{ backgroundColor: '#a855f712' }}
+                    style={{ backgroundColor: 'var(--color-primary-10)' }}
                   >
-                    <Icon className="w-6 h-6" style={{ color: '#a855f7' }} />
+                    <Icon className="w-6 h-6" style={{ color: 'var(--color-primary)' }} />
                   </div>
                   <h3 className="text-lg font-bold text-text-primary mb-2">{advantage.title}</h3>
-                  <p className="text-md text-text-tertiary">{advantage.description}</p>
+                  <p className="text-base text-text-tertiary">{advantage.description}</p>
                 </m.div>
               )
             })}
@@ -305,7 +305,7 @@ export default function AlternativeGamerLink() {
             className="p-5 md:p-6 rounded-2xl border border-warning/30 bg-gradient-to-r from-warning/5 to-transparent flex flex-col sm:flex-row items-center gap-4"
           >
             <div className="flex-1 text-center sm:text-left">
-              <p className="text-md font-semibold text-text-primary mb-1">
+              <p className="text-base font-semibold text-text-primary mb-1">
                 Tu viens de GamerLink ? -30% sur ton premier mois
               </p>
               <p className="text-sm text-text-tertiary">
@@ -376,8 +376,8 @@ export default function AlternativeGamerLink() {
             viewport={{ once: true }}
             className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
             style={{
-              background: 'radial-gradient(ellipse at center, #a855f710 0%, transparent 60%)',
-              borderColor: '#a855f720',
+              background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
+              borderColor: 'var(--color-primary-20)',
             }}
           >
             <m.div
@@ -385,7 +385,7 @@ export default function AlternativeGamerLink() {
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               style={{
-                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+                background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
               }}
             />
             <div className="relative z-10">
@@ -393,7 +393,7 @@ export default function AlternativeGamerLink() {
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
+                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: 'var(--color-primary)' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
                 T'as pris ta décision ?

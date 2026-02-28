@@ -48,26 +48,20 @@ export function LandingHero({
         }}
       />
 
-      {/* Floating geometric shapes — subtle depth */}
-      <m.div
-        className="absolute top-[15%] left-[8%] w-40 h-40 rounded-full opacity-[0.10] blur-3xl"
+      {/* Floating geometric shapes — subtle depth (static) */}
+      <div
+        className="absolute top-[15%] left-[8%] w-40 h-40 rounded-full opacity-[0.05] blur-3xl"
         style={{ background: 'radial-gradient(circle, var(--color-primary) 0%, transparent 70%)' }}
-        animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         aria-hidden="true"
       />
-      <m.div
-        className="absolute top-[40%] right-[5%] w-32 h-32 rounded-2xl rotate-45 opacity-[0.08] blur-3xl"
+      <div
+        className="absolute top-[40%] right-[5%] w-32 h-32 rounded-2xl rotate-45 opacity-[0.05] blur-3xl"
         style={{ background: 'linear-gradient(135deg, var(--color-purple) 0%, transparent 70%)' }}
-        animate={{ y: [0, 15, 0], rotate: [45, 50, 45] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         aria-hidden="true"
       />
-      <m.div
-        className="absolute bottom-[20%] left-[15%] w-28 h-28 rounded-full opacity-[0.08] blur-3xl"
+      <div
+        className="absolute bottom-[20%] left-[15%] w-28 h-28 rounded-full opacity-[0.05] blur-3xl"
         style={{ background: 'radial-gradient(circle, var(--color-success) 0%, transparent 70%)' }}
-        animate={{ y: [0, 12, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
         aria-hidden="true"
       />
 
@@ -80,7 +74,7 @@ export function LandingHero({
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-extrabold text-text-primary mb-4 leading-tight tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-text-primary mb-4 leading-tight tracking-tight font-display">
             Arrête de perdre
             <br />
             <span className="text-gradient-animated">
@@ -167,7 +161,7 @@ export function LandingHero({
           {!isLoggedIn && (
             <Link
               to="/auth"
-              className="block mt-4 text-md text-text-quaternary hover:text-text-tertiary transition-colors"
+              className="block mt-4 text-base text-text-quaternary hover:text-text-tertiary transition-colors"
             >
               Déjà un compte ? Se connecter
             </Link>

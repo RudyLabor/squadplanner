@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
+import { toast } from 'sonner'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { Share2, ChevronLeft, ChevronRight } from '../components/icons'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
@@ -154,7 +155,7 @@ export function Wrapped() {
       // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(shareText)
-        alert('Texte copié dans le presse-papiers !')
+        toast.success('Copié !')
       } catch (err) {
         if (!import.meta.env.PROD) console.error('Copy failed:', err)
       }
@@ -169,7 +170,7 @@ export function Wrapped() {
           <m.div
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-            className="w-12 h-12 border-4 border-purple border-t-orange-500 rounded-full"
+            className="w-12 h-12 border-4 border-primary border-t-warning rounded-full"
           />
         </div>
       </div>
@@ -180,8 +181,16 @@ export function Wrapped() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center">
         <MobilePageHeader title="Gaming Wrapped 2026" onBack={() => window.history.back()} />
-        <div className="text-center px-4">
-          <p className="text-white text-lg">{error}</p>
+        <div className="text-center px-4 max-w-md mx-auto">
+          <p className="text-4xl mb-4">😕</p>
+          <p className="text-white text-lg font-semibold mb-2">{error}</p>
+          <p className="text-white/50 text-sm mb-6">Vérifie ta connexion et réessaie.</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2.5 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 transition-colors"
+          >
+            Réessayer
+          </button>
         </div>
       </div>
     )
@@ -229,7 +238,7 @@ export function Wrapped() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl text-purple/70"
+            className="text-xl text-primary/70"
           >
             Tout ce que tu as accompli cette année
           </m.p>
@@ -301,7 +310,7 @@ export function Wrapped() {
             }}
             className="relative mb-8"
           >
-            <div className="text-8xl sm:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-400">
+            <div className="text-8xl sm:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-warning to-error">
               {stats.bestStreak}
             </div>
             <m.div
@@ -411,7 +420,7 @@ export function Wrapped() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="text-lg text-purple/70 mb-6"
+            className="text-lg text-primary/70 mb-6"
           >
             Ta squad préférée
           </m.p>
@@ -444,7 +453,7 @@ export function Wrapped() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-lg text-purple/70 mb-8"
+                className="text-lg text-primary/70 mb-8"
               >
                 {stats.favoriteSquad.sessionsPlayed} session
                 {stats.favoriteSquad.sessionsPlayed > 1 ? 's' : ''} jouée
@@ -457,7 +466,7 @@ export function Wrapped() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.2 }}
-              className="text-2xl text-purple/70 mb-8"
+              className="text-2xl text-primary/70 mb-8"
             >
               Pas encore de squad favorite
             </m.p>
@@ -517,6 +526,7 @@ export function Wrapped() {
     <div
       className="min-h-screen bg-black overflow-hidden mesh-bg"
       onKeyDown={handleKeyDown}
+      tabIndex={0}
       role="region"
       aria-label="Gaming Wrapped 2026"
     >

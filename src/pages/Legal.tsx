@@ -29,12 +29,13 @@ export function Legal() {
           </Link>
           <div className="flex items-center gap-2">
             <SquadPlannerLogo size={24} />
-            <span className="text-md font-semibold text-text-primary">Squad Planner</span>
+            <span className="text-base font-semibold text-text-primary">Squad Planner</span>
           </div>
         </div>
       </header>
 
       <main className="max-w-3xl mx-auto px-4 md:px-6 py-8">
+        <h1 className="sr-only">{activeTab === 'cgu' ? "Conditions g\u00e9n\u00e9rales d'utilisation" : 'Politique de confidentialit\u00e9'}</h1>
         <div
           className="flex gap-2 p-1 rounded-xl bg-surface-card border border-border-default mb-8"
           role="tablist"
@@ -44,7 +45,7 @@ export function Legal() {
             role="tab"
             aria-selected={activeTab === 'cgu'}
             onClick={() => setActiveTab('cgu')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-md font-medium transition-all ${
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-base font-medium transition-all ${
               activeTab === 'cgu'
                 ? 'bg-primary-bg text-white shadow-lg shadow-primary/20'
                 : 'text-text-secondary hover:text-text-primary hover:bg-border-subtle'
@@ -57,7 +58,7 @@ export function Legal() {
             role="tab"
             aria-selected={activeTab === 'privacy'}
             onClick={() => setActiveTab('privacy')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-md font-medium transition-all ${
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-base font-medium transition-all ${
               activeTab === 'privacy'
                 ? 'bg-primary-bg text-white shadow-lg shadow-primary/20'
                 : 'text-text-secondary hover:text-text-primary hover:bg-border-subtle'

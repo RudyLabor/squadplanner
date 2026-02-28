@@ -214,7 +214,7 @@ export function EditSquadModal({
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
+              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-base text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
               required
             />
           </div>
@@ -224,7 +224,7 @@ export function EditSquadModal({
               type="text"
               value={game}
               onChange={(e) => setGame(e.target.value)}
-              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
+              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-base text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
               required
             />
           </div>
@@ -237,7 +237,7 @@ export function EditSquadModal({
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               placeholder="Décris ta squad..."
-              className="w-full px-4 py-3 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors resize-none"
+              className="w-full px-4 py-3 rounded-xl bg-bg-surface border border-border-default text-base text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors resize-none"
             />
           </div>
           <div className="flex gap-3 pt-1">

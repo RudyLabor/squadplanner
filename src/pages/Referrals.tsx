@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { m, useInView } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useRef } from 'react'
 import { useAuthStore, useReferralStore, useAnalytics } from '../hooks'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
+import { StatCard } from '../components/ui/StatCard'
 import {
   Gift,
   UserPlus,
@@ -60,7 +61,6 @@ export function Referrals() {
   const analytics = useAnalytics()
   const [copied, setCopied] = useState(false)
   const heroRef = useRef(null)
-  const isHeroInView = useInView(heroRef, { once: true })
 
   useEffect(() => {
     if (user) {
@@ -109,17 +109,13 @@ export function Referrals() {
         ref={heroRef}
         className="relative overflow-hidden bg-gradient-to-br from-success/15 via-primary/8 to-bg-base pt-8 pb-20"
       >
-        {/* Animated background blobs */}
+        {/* Static background blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <m.div
-            className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-success/10 to-primary/5 blur-3xl"
-            animate={isHeroInView ? { x: [0, 80, 0], y: [0, 40, 0] } : {}}
-            transition={{ duration: 3, repeat: 2, ease: 'easeInOut' }}
+          <div
+            className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-success/5 to-primary/5 blur-3xl opacity-100"
           />
-          <m.div
-            className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-primary/10 to-success/5 blur-3xl"
-            animate={isHeroInView ? { x: [0, -80, 0], y: [0, -40, 0] } : {}}
-            transition={{ duration: 3, repeat: 2, ease: 'easeInOut', delay: 0.5 }}
+          <div
+            className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-primary/5 to-success/5 blur-3xl opacity-100"
           />
         </div>
 
@@ -161,7 +157,7 @@ export function Referrals() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15, duration: 0.4, ease }}
-              className="text-lg md:text-xl font-bold text-text-primary mb-4"
+              className="text-2xl md:text-3xl font-display font-bold text-text-primary mb-4"
             >
               Tes potes galèrent aussi ?{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-success to-primary">
@@ -173,7 +169,7 @@ export function Referrals() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.4, ease }}
-              className="text-md md:text-lg text-text-secondary max-w-xl mx-auto"
+              className="text-base md:text-lg text-text-secondary max-w-xl mx-auto"
             >
               3 inscrits et ta squad grandit — plus les réductions en bonus.
               Ton pote gagne 7 jours Premium. Toi, tu déverrouilles des réductions permanentes sur ton abo + 500 XP.
@@ -201,7 +197,7 @@ export function Referrals() {
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/10">
                     <UserPlus className="h-4 w-4 text-success" />
                   </div>
-                  <h2 className="text-md font-semibold text-text-primary">
+                  <h2 className="text-base font-semibold text-text-primary">
                     Ton code de parrainage
                   </h2>
                 </div>
@@ -231,9 +227,9 @@ export function Referrals() {
                 <div className="mt-4 flex gap-3">
                   <button
                     onClick={handleShareWhatsApp}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all border border-[#25D366]/20 text-[#25D366] hover:bg-[#25D366]/10 active:scale-[0.98]"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all border border-brand-whatsapp/20 text-brand-whatsapp hover:bg-brand-whatsapp/10 active:scale-[0.98]"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(37,211,102,0.05), transparent)',
+                      background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-brand-whatsapp) 5%, transparent), transparent)',
                     }}
                   >
                     <Share2 className="h-4 w-4" />
@@ -241,9 +237,9 @@ export function Referrals() {
                   </button>
                   <button
                     onClick={handleShareTwitter}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all border border-[#1DA1F2]/20 text-[#1DA1F2] hover:bg-[#1DA1F2]/10 active:scale-[0.98]"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all border border-brand-twitter/20 text-brand-twitter hover:bg-brand-twitter/10 active:scale-[0.98]"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(29,161,242,0.05), transparent)',
+                      background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-brand-twitter) 5%, transparent), transparent)',
                     }}
                   >
                     <Share2 className="h-4 w-4" />
@@ -261,28 +257,44 @@ export function Referrals() {
               className="mb-5 grid grid-cols-2 gap-3"
             >
               <StatCard
-                icon={UserPlus}
+                layout="horizontal"
+                icon={
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-success/10">
+                    <UserPlus className="h-5 w-5 text-success" />
+                  </div>
+                }
                 label="Filleuls inscrits"
-                value={stats?.signedUp || 0}
-                color="success"
+                value={(stats?.signedUp || 0).toLocaleString('fr-FR')}
               />
               <StatCard
-                icon={TrendingUp}
+                layout="horizontal"
+                icon={
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                  </div>
+                }
                 label="Convertis Premium"
-                value={stats?.converted || 0}
-                color="primary"
+                value={(stats?.converted || 0).toLocaleString('fr-FR')}
               />
               <StatCard
-                icon={Zap}
+                layout="horizontal"
+                icon={
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-warning/10">
+                    <Zap className="h-5 w-5 text-warning" />
+                  </div>
+                }
                 label="XP gagnés"
-                value={stats?.totalXpEarned || 0}
-                color="warning"
+                value={(stats?.totalXpEarned || 0).toLocaleString('fr-FR')}
               />
               <StatCard
-                icon={Users}
+                layout="horizontal"
+                icon={
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple/10">
+                    <Users className="h-5 w-5 text-purple" />
+                  </div>
+                }
                 label="Total parrainages"
-                value={stats?.totalReferrals || 0}
-                color="purple"
+                value={(stats?.totalReferrals || 0).toLocaleString('fr-FR')}
               />
             </m.div>
 
@@ -297,7 +309,7 @@ export function Referrals() {
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
                     <Sparkles className="h-4 w-4 text-primary" />
                   </div>
-                  <h2 className="text-md font-semibold text-text-primary">Comment ça marche</h2>
+                  <h2 className="text-base font-semibold text-text-primary">Comment ça marche</h2>
                 </div>
                 <div className="space-y-4">
                   <Step
@@ -331,7 +343,7 @@ export function Referrals() {
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning/10">
                     <Trophy className="h-4 w-4 text-warning" />
                   </div>
-                  <h2 className="text-md font-semibold text-text-primary">Paliers de récompense</h2>
+                  <h2 className="text-base font-semibold text-text-primary">Paliers de récompense</h2>
                 </div>
                 <div className="space-y-3">
                   {MILESTONES.map((ms, i) => {
@@ -438,7 +450,7 @@ export function Referrals() {
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
                       <Users className="h-4 w-4 text-primary" />
                     </div>
-                    <h2 className="text-md font-semibold text-text-primary">
+                    <h2 className="text-base font-semibold text-text-primary">
                       Historique ({history.length})
                     </h2>
                   </div>
@@ -479,45 +491,6 @@ export function Referrals() {
         )}
       </div>
     </main>
-  )
-}
-
-/* ─── STAT CARD ─── */
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  color,
-}: {
-  icon: React.ElementType
-  label: string
-  value: number
-  color: 'success' | 'primary' | 'warning' | 'purple'
-}) {
-  const colorMap = {
-    success: { bg: 'bg-success/10', text: 'text-success', glow: 'var(--shadow-glow-success)' },
-    primary: { bg: 'bg-primary/10', text: 'text-primary', glow: 'var(--shadow-glow-primary-sm)' },
-    warning: { bg: 'bg-warning/10', text: 'text-warning', glow: 'var(--shadow-glow-warning)' },
-    purple: { bg: 'bg-purple/10', text: 'text-purple', glow: 'var(--shadow-glow-purple)' },
-  }
-  const c = colorMap[color]
-
-  return (
-    <m.div whileHover={{ y: -2, boxShadow: c.glow }} transition={{ duration: 0.2 }}>
-      <Card variant="default" className="p-4 h-full" hoverable>
-        <div className="flex items-center gap-3">
-          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${c.bg}`}>
-            <Icon className={`h-5 w-5 ${c.text}`} />
-          </div>
-          <div className="min-w-0">
-            <p className={`text-2xl font-bold tracking-tight leading-none ${c.text}`}>
-              {value.toLocaleString('fr-FR')}
-            </p>
-            <p className="text-xs text-text-tertiary mt-1">{label}</p>
-          </div>
-        </div>
-      </Card>
-    </m.div>
   )
 }
 

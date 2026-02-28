@@ -35,7 +35,7 @@ export function PartySingleSquad({
           </m.div>
         </div>
         <h3 className="text-lg font-bold text-text-primary mb-2">Prêt à parler ?</h3>
-        <p className="text-md text-text-secondary mb-2">{squad.name}</p>
+        <p className="text-base text-text-secondary mb-2">{squad.name}</p>
         <p className="text-sm text-text-tertiary mb-3">
           {squad.game} · {memberCount} membre{memberCount > 1 ? 's' : ''}
         </p>

@@ -146,7 +146,7 @@ export function PremiumUpgradeModal({
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Débloque cette fonctionnalité</h2>
-            <p className="text-md text-white/80">Essaie 7 jours gratuit — sans carte bancaire</p>
+            <p className="text-base text-white/80">Essaie 7 jours gratuit — sans carte bancaire</p>
           </div>
         </div>
 
@@ -179,7 +179,7 @@ export function PremiumUpgradeModal({
               )}
               <div className="flex items-center gap-1.5 mb-1">
                 {t.popular && <Crown className="w-3.5 h-3.5 text-warning" />}
-                <span className="text-md font-semibold text-text-primary">{t.name}</span>
+                <span className="text-base font-semibold text-text-primary">{t.name}</span>
               </div>
               <div className="text-lg font-bold text-text-primary">
                 {(isYearly ? t.yearlyPrice / 12 : t.monthlyPrice).toFixed(2)}€
@@ -221,7 +221,7 @@ export function PremiumUpgradeModal({
               <Check
                 className={`w-4 h-4 flex-shrink-0 ${activeTier.popular ? 'text-warning' : 'text-success'}`}
               />
-              <span className="text-md text-text-primary">{feat}</span>
+              <span className="text-base text-text-primary">{feat}</span>
             </div>
           ))}
         </div>

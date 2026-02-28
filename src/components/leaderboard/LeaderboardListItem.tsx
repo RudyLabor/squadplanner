@@ -22,7 +22,7 @@ export function LeaderboardListItem({ entry, isCurrentUser, index }: Leaderboard
         className={`flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer hover:scale-[1.01] hover:shadow-glow-primary-sm ${isCurrentUser ? 'bg-primary-15 border border-primary/30' : 'bg-surface-card hover:bg-border-subtle'}`}
       >
         <div className="w-8 h-8 rounded-lg bg-border-subtle flex items-center justify-center">
-          <span className="text-md font-bold text-text-secondary">{entry.rank ?? index + 4}</span>
+          <span className="text-base font-bold text-text-secondary">{entry.rank ?? index + 4}</span>
         </div>
 
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary-hover/10 flex items-center justify-center overflow-hidden">
@@ -41,7 +41,7 @@ export function LeaderboardListItem({ entry, isCurrentUser, index }: Leaderboard
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-md font-medium text-text-primary truncate">{entry.username}</span>
+            <span className="text-base font-medium text-text-primary truncate">{entry.username}</span>
             {isCurrentUser && (
               <span className="text-xs px-1.5 py-0.5 rounded bg-primary/30 text-primary-hover">
                 Toi

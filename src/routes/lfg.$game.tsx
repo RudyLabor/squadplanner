@@ -472,7 +472,7 @@ export default function Component() {
                       Étape {step.step}
                     </div>
                     <h3 className="text-lg font-bold text-text-primary mb-2">{step.title}</h3>
-                    <p className="text-md text-text-tertiary">{step.desc}</p>
+                    <p className="text-base text-text-tertiary">{step.desc}</p>
                   </div>
                 </m.div>
               )
@@ -530,7 +530,7 @@ export default function Component() {
                         {benefit.details.map((detail) => (
                           <li
                             key={detail}
-                            className="flex items-center gap-2 text-md text-text-secondary"
+                            className="flex items-center gap-2 text-base text-text-secondary"
                           >
                             <Check className="w-4 h-4 flex-shrink-0" style={{ color: gc }} />
                             {detail}
@@ -561,7 +561,7 @@ export default function Component() {
             <h3 className="text-lg font-bold text-text-primary mb-2">
               Passe au niveau supérieur
             </h3>
-            <p className="text-text-tertiary mb-5 text-md max-w-lg mx-auto">
+            <p className="text-text-tertiary mb-5 text-base max-w-lg mx-auto">
               Matchmaking prioritaire, filtres avancés et plus de visibilité pour ta squad. Essaie Premium 7 jours gratuits.
             </p>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="inline-flex">
@@ -699,7 +699,7 @@ export default function Component() {
                 {game.testimonial.author[0]}
               </div>
               <div>
-                <p className="text-text-primary text-md italic mb-2">
+                <p className="text-text-primary text-base italic mb-2">
                   &laquo;{game.testimonial.quote}&raquo;
                 </p>
                 <p className="text-sm text-text-tertiary">
@@ -745,14 +745,14 @@ export default function Component() {
                   className="w-full flex items-center justify-between p-5 text-left hover:bg-bg-elevated/50 transition-colors"
                   aria-expanded={openFAQ === i}
                 >
-                  <span className="text-md font-medium text-text-primary pr-4">{faq.q}</span>
+                  <span className="text-base font-medium text-text-primary pr-4">{faq.q}</span>
                   <ChevronDown
                     className={`w-5 h-5 text-text-quaternary shrink-0 transition-transform duration-300 ${openFAQ === i ? 'rotate-180' : ''}`}
                   />
                 </button>
                 <div className={`faq-answer ${openFAQ === i ? 'open' : ''}`}>
                   <div>
-                    <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">{faq.a}</p>
+                    <p className="px-5 pb-5 text-base text-text-tertiary leading-relaxed">{faq.a}</p>
                   </div>
                 </div>
               </m.div>
@@ -868,7 +868,7 @@ export default function Component() {
             <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">
               Tu joues à d'autres jeux ?
             </h2>
-            <p className="text-text-quaternary text-md">
+            <p className="text-text-quaternary text-base">
               Le matching marche sur tous ces jeux aussi
             </p>
           </m.div>

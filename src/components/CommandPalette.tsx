@@ -621,7 +621,7 @@ export function CommandPalette() {
                     placeholder="Rechercher une commande, squad, session..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="flex-1 bg-transparent text-md text-text-primary placeholder-text-tertiary outline-none"
+                    className="flex-1 bg-transparent text-base text-text-primary placeholder-text-tertiary outline-none"
                   />
                   <button
                     onClick={close}

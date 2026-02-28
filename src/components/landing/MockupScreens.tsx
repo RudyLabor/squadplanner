@@ -162,7 +162,7 @@ export function SquadScreen() {
           animate={{ opacity: 1 }}
           className="flex items-center gap-2"
         >
-          <div className="text-md font-bold text-text-primary">Les Invaincus</div>
+          <div className="text-base font-bold text-text-primary">Les Invaincus</div>
         </m.div>
         <div className="text-xs text-text-tertiary mt-0.5">Valorant · 5 membres</div>
       </div>

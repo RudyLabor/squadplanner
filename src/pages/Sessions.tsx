@@ -113,7 +113,7 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
           <div>
             <header className="flex items-center justify-between mb-8">
               <div>
-                <h1 className="text-lg font-bold text-text-primary mb-1">
+                <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary mb-1">
                   Tes prochaines sessions
                 </h1>
                 <p className="text-sm text-text-secondary">

@@ -33,7 +33,7 @@ export function InviteUserItem({ member, isInvited, isSending, onInvite }: Invit
           />
         ) : (
           <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-            <span className="text-md font-semibold text-primary">
+            <span className="text-base font-semibold text-primary">
               {member.username.charAt(0).toUpperCase()}
             </span>
           </div>
@@ -46,7 +46,7 @@ export function InviteUserItem({ member, isInvited, isSending, onInvite }: Invit
 
       {/* Name */}
       <div className="flex-1 min-w-0">
-        <p className="text-md font-medium text-text-primary truncate">{member.username}</p>
+        <p className="text-base font-medium text-text-primary truncate">{member.username}</p>
         <p className="text-sm text-text-tertiary">{member.is_online ? 'En ligne' : 'Hors ligne'}</p>
       </div>
 

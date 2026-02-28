@@ -95,7 +95,7 @@ describe('useCallActions', () => {
         body: {
           userId: 'receiver-1',
           title: 'Appel entrant',
-          body: 'TestCaller vous appelle',
+          body: "TestCaller t'appelle",
           icon: '/icon-192.svg',
           tag: 'incoming-call-call-record-1',
           data: {

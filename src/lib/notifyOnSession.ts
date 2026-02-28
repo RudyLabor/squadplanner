@@ -34,7 +34,7 @@ export function generateGoogleCalendarUrl(data: {
     action: 'TEMPLATE',
     text: `${data.title}${data.game ? ` (${data.game})` : ''}`,
     dates: `${fmt(start)}/${fmt(end)}`,
-    details: `Session SquadPlanner${data.squadName ? ` — ${data.squadName}` : ''}\n\nOuvre l'app pour accepter ou refuser.`,
+    details: `Session SquadPlanner${data.squadName ? ` — ${data.squadName}` : ''}\n\nOuvre Squad Planner pour accepter ou refuser.`,
     location: 'SquadPlanner',
   })
 

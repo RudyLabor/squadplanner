@@ -337,7 +337,7 @@ export function Settings() {
 
         <Card id="theme" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Palette} title="Apparence" />
-          <SettingRow label="Thème" description="Adapte l'apparence de l'app">
+          <SettingRow label="Thème" description="Change le look de Squad Planner">
             <ThemeSelector onSaved={showSaveToast} />
           </SettingRow>
         </Card>
@@ -522,7 +522,9 @@ export function Settings() {
             </Suspense>
           </Card>
         ) : (
-          <PremiumGate feature="api_webhooks" featureLabel="API Webhooks" />
+          <PremiumGate feature="api_webhooks" featureLabel="Intégrations externes">
+            <span />
+          </PremiumGate>
         )}
 
         <Card id="legal" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">

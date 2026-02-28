@@ -353,7 +353,7 @@ export default function BlogIndex() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6 text-primary" />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Envie de passer à l'action ?
+                Prêt à organiser tes sessions ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
                 Crée ta squad, invite tes potes, et mets ces conseils en pratique dès ce soir.
@@ -363,7 +363,7 @@ export default function BlogIndex() {
                   to="/auth?mode=register&redirect=onboarding"
                   className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-xl font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle hover:shadow-primary/30 transition-all"
                 >
-                  Créer ma squad maintenant
+                  Créer ma squad — c'est gratuit
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>

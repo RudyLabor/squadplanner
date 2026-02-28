@@ -12,6 +12,7 @@ const pillars = [
     icon: Headphones,
     illustration: HeadphonesIllustration,
     title: 'Party vocale 24/7',
+    painLine: 'Tes potes sont sur Discord, TeamSpeak, et 3 serveurs différents ?',
     description:
       'Ta squad a son salon vocal toujours ouvert. Rejoins en 1 clic, reste aussi longtemps que tu veux.',
     color: 'var(--color-success)',
@@ -19,7 +20,7 @@ const pillars = [
     details: [
       '1 squad = 1 party vocale dédiée',
       'Rejoindre en 1 clic',
-      'Qualité HD, latence ultra-faible',
+      'Qualité HD, latence ultra-faible — tes calls passent sans delay, même en plein fight',
     ],
     detailText:
       'Ta squad a son salon vocal 24/7. Pas besoin de planifier. Rejoins quand tu veux, reste aussi longtemps que tu veux.',
@@ -28,14 +29,15 @@ const pillars = [
     id: 'planning',
     icon: Calendar,
     illustration: CalendarIllustration,
-    title: 'Planning intelligent',
+    title: 'Planning avec confirmation',
+    painLine: 'Lundi soir, le message « on joue quand ? » reste sans réponse.',
     description:
       'Propose un créneau. Chacun répond. Fini les « peut-être » sans suite. On sait qui vient.',
     color: 'var(--color-gold)',
     gradient: 'from-warning/[0.08] to-warning/[0.01]',
     details: [
       'Confirme ta présence — fini les « peut-être » sans suite',
-      'Confirmation auto quand assez de joueurs',
+      'Confirmation auto quand assez de joueurs — tu sais que ça se fait, bloque ton soir',
       'Rappels avant chaque session',
     ],
     detailText:
@@ -45,12 +47,17 @@ const pillars = [
     id: 'reliability',
     icon: Target,
     illustration: ShieldIllustration,
-    title: 'Fiabilité mesurée',
+    title: 'Fini le ghosting',
+    painLine: '5 inscrits, 2 présents. Encore.',
     description:
       'Check-in à chaque session. Ton score montre si tu tiens parole. Tes potes comptent sur toi.',
     color: 'var(--color-error)',
     gradient: 'from-error/[0.08] to-error/[0.01]',
-    details: ['Check-in obligatoire', 'Historique visible', 'Score par joueur'],
+    details: [
+      'Check-in obligatoire — les no-shows ne peuvent plus se cacher',
+      'Historique visible — tu sais qui est fiable avant d\'inviter',
+      'Score par joueur — les ghosteurs, ça se voit',
+    ],
     detailText:
       'Chaque membre a un score basé sur sa présence réelle. Tu dis que tu viens ? On vérifie. Les no-shows chroniques, ça se voit.',
   },
@@ -225,6 +232,9 @@ export function FeaturesSection() {
                     </div>
                     <PillarIcon className="w-8 h-8 md:hidden" style={{ color: pillar.color }} />
                   </div>
+                  {pillar.painLine && (
+                    <p className="text-sm text-text-quaternary italic mb-2">{pillar.painLine}</p>
+                  )}
                   <h3 className="text-xl font-bold text-text-primary mb-3">{pillar.title}</h3>
                   <p className="text-text-tertiary mb-4">{pillar.detailText}</p>
                   <ul className="space-y-2">

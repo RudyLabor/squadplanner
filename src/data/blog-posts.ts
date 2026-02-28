@@ -321,6 +321,8 @@ export const BLOG_POSTS: BlogPost[] = [
     content: `<article>
       <h2>5 astuces pour que ta squad ne ghost plus jamais</h2>
 
+      <p>Tu as envoyé le message à 18h. À 20h, 2 réponses sur 5. À 21h, tu annules. Tu joues solo. Encore.</p>
+
       <p>C'est la frustration numéro un des chefs de squad : tu organises une session, 8 personnes confirment, et le jour J, seules 3 apparaissent. C'est ce qu'on appelle le "ghosting" - et c'est une plaie.</p>
 
       <p>Si tu as déjà vécu ça, tu sais à quel point c'est démotivant de devoir annuler ou jouer en mode dégradé parce que les gens ne respectent pas leurs engagements.</p>

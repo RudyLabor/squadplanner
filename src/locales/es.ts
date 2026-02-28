@@ -150,7 +150,7 @@ export const es = {
     members: (count: number) => `${count} miembro${count > 1 ? 's' : ''}`,
     invite: 'Invitar miembros',
     settings: 'Configuración de la squad',
-    stats: 'Estadísticas',
+    stats: 'Stats',
     leaderboard: 'Clasificación',
   },
 
@@ -192,7 +192,7 @@ export const es = {
     appearance: {
       title: 'Apariencia',
       theme: 'Tema',
-      themeDesc: 'Personaliza el aspecto de la app',
+      themeDesc: 'Cambia el look de Squad Planner',
       dark: 'Oscuro',
       light: 'Claro',
       auto: 'Auto',
@@ -230,7 +230,7 @@ export const es = {
       privacy: 'Política de privacidad',
       privacyDesc: 'RGPD y protección de datos',
       landing: 'Página de inicio pública',
-      landingDesc: 'Ver la página de inicio',
+      landingDesc: 'Ver la portada',
     },
     signOut: 'Cerrar sesión',
     version: 'Squad Planner',
@@ -243,7 +243,7 @@ export const es = {
     subtitle: 'Desbloquea todas las funcionalidades',
     features: {
       unlimitedSquads: 'Squads ilimitadas',
-      advancedStats: 'Estadísticas avanzadas',
+      advancedStats: 'Mapas de presencia y tendencias',
       customThemes: 'Temas personalizados',
       prioritySupport: 'Soporte prioritario',
     },

@@ -111,8 +111,8 @@ describe('HowItWorksSection', () => {
     render(<HowItWorksSection {...defaultProps} />)
     expect(screen.getByText('Crée ta Squad')).toBeInTheDocument()
     expect(screen.getByText('Invite tes potes')).toBeInTheDocument()
-    expect(screen.getByText('Planifie, décide, confirme')).toBeInTheDocument()
-    expect(screen.getByText(/Rejouez\. Chaque\. Semaine\./)).toBeInTheDocument()
+    expect(screen.getByText('Tout le monde confirme')).toBeInTheDocument()
+    expect(screen.getByText(/Vous jouez\./)).toBeInTheDocument()
   })
 
   it('renders step icons (Users, MessageCircle, Calendar, Target)', () => {
@@ -132,7 +132,7 @@ describe('HowItWorksSection', () => {
     // Other step descriptions should NOT be visible
     expect(screen.queryByText(/Partage le code/)).not.toBeInTheDocument()
     expect(screen.queryByText(/Propose un créneau/)).not.toBeInTheDocument()
-    expect(screen.queryByText(/Le check-in rend tout le monde responsable/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Le soir arrive, tout le monde est là/)).not.toBeInTheDocument()
   })
 
   it('shows description for step 1 when demoStep=1', () => {
@@ -148,7 +148,7 @@ describe('HowItWorksSection', () => {
 
   it('shows description for step 3 when demoStep=3', () => {
     render(<HowItWorksSection demoStep={3} setDemoStep={vi.fn()} />)
-    expect(screen.getByText(/Le check-in rend tout le monde responsable/)).toBeInTheDocument()
+    expect(screen.getByText(/Le soir arrive, tout le monde est là/)).toBeInTheDocument()
   })
 
   // ─── Step clicks call setDemoStep ──────────────────────
@@ -174,7 +174,7 @@ describe('HowItWorksSection', () => {
 
     const buttons = screen.getAllByRole('button')
     const step3Button = buttons.find((btn) =>
-      btn.textContent?.includes('Planifie, décide, confirme')
+      btn.textContent?.includes('Tout le monde confirme')
     )
     fireEvent.click(step3Button!)
 
@@ -186,7 +186,7 @@ describe('HowItWorksSection', () => {
     render(<HowItWorksSection demoStep={0} setDemoStep={setDemoStep} />)
 
     const buttons = screen.getAllByRole('button')
-    const step4Button = buttons.find((btn) => btn.textContent?.includes('Rejouez. Chaque. Semaine.'))
+    const step4Button = buttons.find((btn) => btn.textContent?.includes('Vous jouez.'))
     fireEvent.click(step4Button!)
 
     expect(setDemoStep).toHaveBeenCalledWith(3)

@@ -56,7 +56,7 @@ const faqs = [
     id: 'data-safety',
     question: 'Mais Squad Planner fermera aussi un jour ?',
     answer:
-      'Squad Planner est viable. On innove, on croît. Mais même si ça arrive (spoiler: ça arrivera pas), tu peux exporter tes données quand tu veux. Zéro piège.',
+      "Squad Planner est là pour durer. Tu peux exporter tes données à tout moment — tu n'es jamais piégé.",
   },
 ]
 
@@ -100,7 +100,7 @@ export default function VsGuildedVsSquadPlanner() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-purple/25 mb-8">
               <span className="text-base font-medium text-purple">
-                Comparatif honnête · Le meilleur choix en 2026
+                Comparatif détaillé · Le meilleur choix en 2026
               </span>
             </div>
           </m.div>
@@ -155,6 +155,24 @@ export default function VsGuildedVsSquadPlanner() {
               </Link>
             </m.div>
           </m.div>
+          <m.p
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-base text-success font-medium mt-4"
+          >
+            +2 000 gamers ont déjà fait le switch
+          </m.p>
+          <m.p
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-base text-text-quaternary mt-2"
+          >
+            100% gratuit · Pas de carte bancaire · Prêt en 30 secondes
+          </m.p>
         </div>
       </section>
 
@@ -298,7 +316,7 @@ export default function VsGuildedVsSquadPlanner() {
                   <ul className="text-text-secondary text-md space-y-1">
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span>Calendrier illimité</span>
+                      <span>1 squad, 5 membres, 2 sessions/semaine — tout ça gratuit</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />

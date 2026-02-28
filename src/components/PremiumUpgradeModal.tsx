@@ -26,7 +26,7 @@ const UPGRADE_TIERS = [
     name: 'Premium',
     monthlyPrice: PREMIUM_PRICE_MONTHLY,
     yearlyPrice: PREMIUM_PRICE_YEARLY,
-    highlights: ['5 squads', 'Sessions illimitées', 'Chat complet', 'Stats avancées', 'IA Coach'],
+    highlights: ['5 squads', 'Sessions illimitées', 'Chat complet', 'Heatmaps d\'activité et fiabilité', 'IA Coach'],
     gradient: 'from-primary to-primary/80',
     borderColor: 'border-primary',
     bgColor: 'bg-primary/5',
@@ -51,7 +51,7 @@ const UPGRADE_TIERS = [
   },
   {
     tier: 'team' as SubscriptionTier,
-    name: 'Team',
+    name: 'Clan',
     monthlyPrice: TEAM_PRICE_MONTHLY,
     yearlyPrice: TEAM_PRICE_YEARLY,
     highlights: [
@@ -145,7 +145,7 @@ export function PremiumUpgradeModal({
             <Crown className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Débloque cette feature</h2>
+            <h2 className="text-xl font-bold text-white">Débloque cette fonctionnalité</h2>
             <p className="text-md text-white/80">Essaie 7 jours gratuit — sans carte bancaire</p>
           </div>
         </div>

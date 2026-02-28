@@ -77,7 +77,7 @@ describe('OnboardingStepSplash', () => {
 
   it('renders value proposition text', () => {
     render(<OnboardingStepSplash {...defaultProps} />)
-    expect(screen.getByText('Jouez vraiment ensemble.')).toBeTruthy()
+    expect(screen.getByText(/on verra/)).toBeTruthy()
   })
 
   it('renders start button', () => {

@@ -125,7 +125,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
             <p className="text-md text-text-secondary mb-6">
               {this.state.isChunkError
-                ? "Une nouvelle version de l'app est disponible. Recharge la page pour en profiter."
+                ? 'Une nouvelle version de Squad Planner est dispo. Recharge la page pour en profiter.'
                 : hasRetried
                   ? "L'erreur persiste. Essaie de vider le cache ou de retourner à l'accueil."
                   : "Une erreur inattendue s'est produite. Essaie de recharger la page."}

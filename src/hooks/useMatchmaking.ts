@@ -185,7 +185,7 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
         .single()
 
       if (profileError) {
-        throw new Error('Impossible de récupérer votre profil')
+        throw new Error('Impossible de récupérer ton profil')
       }
 
       // Construire la requête de recherche

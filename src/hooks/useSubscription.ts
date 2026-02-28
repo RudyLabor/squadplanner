@@ -89,7 +89,7 @@ const PLANS: PricingPlan[] = [
       'Sessions illimitées',
       'Historique 90 jours',
       'Chat complet (GIF, voice msg, polls)',
-      'Stats avancées & tendances',
+      'Heatmaps de présence et tendances',
       'IA Coach basique',
       'Badge Premium violet',
       'Zéro pub',

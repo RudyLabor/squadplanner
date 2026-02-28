@@ -13,6 +13,7 @@ import {
 export const FEATURES = [
   {
     name: 'Squads',
+    description: 'Gère toutes tes équipes au même endroit',
     free: '1 squad',
     premium: '5 squads',
     squadLeader: 'Illimité',
@@ -23,6 +24,7 @@ export const FEATURES = [
   },
   {
     name: 'Membres max',
+    description: 'Invite toute ta team sans restriction',
     free: '5',
     premium: '20',
     squadLeader: '50',
@@ -33,6 +35,7 @@ export const FEATURES = [
   },
   {
     name: 'Sessions par semaine',
+    description: 'Joue autant que tu veux, quand tu veux',
     free: '2',
     premium: 'Illimitées',
     squadLeader: 'Illimitées',
@@ -43,6 +46,7 @@ export const FEATURES = [
   },
   {
     name: 'Historique sessions',
+    description: 'Retrouve n\'importe quelle session passée',
     free: '7 jours',
     premium: '90 jours',
     squadLeader: 'Illimité',
@@ -53,6 +57,7 @@ export const FEATURES = [
   },
   {
     name: 'Chat complet (GIF, voice, polls)',
+    description: 'Communique avec ta squad sans quitter l\'app',
     free: false,
     premium: true,
     squadLeader: true,
@@ -63,6 +68,7 @@ export const FEATURES = [
   },
   {
     name: 'Stats & Analytics',
+    description: 'Comprends les habitudes de ta squad',
     free: 'Basiques',
     premium: 'Avancées',
     squadLeader: 'Avancées',
@@ -73,6 +79,7 @@ export const FEATURES = [
   },
   {
     name: 'IA Coach',
+    description: 'Des conseils personnalisés pour mieux jouer ensemble',
     free: false,
     premium: 'Basique',
     squadLeader: 'Avancé',
@@ -83,6 +90,7 @@ export const FEATURES = [
   },
   {
     name: 'Audio HD Party',
+    description: 'Son cristallin pour tes calls en game',
     free: false,
     premium: false,
     squadLeader: true,
@@ -93,6 +101,7 @@ export const FEATURES = [
   },
   {
     name: 'Rôles avancés (IGL, Coach, Shotcaller)',
+    description: 'Chaque membre sait exactement son rôle',
     free: false,
     premium: false,
     squadLeader: true,
@@ -103,6 +112,7 @@ export const FEATURES = [
   },
   {
     name: 'Export calendrier',
+    description: 'Synchro avec Google Calendar',
     free: false,
     premium: false,
     squadLeader: true,
@@ -113,6 +123,7 @@ export const FEATURES = [
   },
   {
     name: 'Sessions récurrentes',
+    description: 'Crée une fois, ça se répète tout seul',
     free: false,
     premium: false,
     squadLeader: true,
@@ -123,6 +134,7 @@ export const FEATURES = [
   },
   {
     name: 'Dashboard analytics équipe',
+    description: 'Heatmaps, fiabilité et tendances de ta squad',
     free: false,
     premium: false,
     squadLeader: true,
@@ -133,6 +145,7 @@ export const FEATURES = [
   },
   {
     name: 'Priorité matchmaking',
+    description: 'Tu trouves des joueurs 2x plus vite',
     free: false,
     premium: false,
     squadLeader: true,
@@ -143,6 +156,7 @@ export const FEATURES = [
   },
   {
     name: 'Dashboard multi-squads',
+    description: 'Vue unifiée de toutes tes équipes',
     free: false,
     premium: false,
     squadLeader: false,
@@ -153,6 +167,7 @@ export const FEATURES = [
   },
   {
     name: 'Branding personnalisé',
+    description: 'Ton logo, tes couleurs',
     free: false,
     premium: false,
     squadLeader: false,
@@ -163,6 +178,7 @@ export const FEATURES = [
   },
   {
     name: 'API webhooks',
+    description: 'Connecte tes outils existants',
     free: false,
     premium: false,
     squadLeader: false,
@@ -173,6 +189,7 @@ export const FEATURES = [
   },
   {
     name: 'Support prioritaire',
+    description: 'Une vraie personne te répond vite',
     free: 'Sous 48h',
     premium: 'Sous 24h',
     squadLeader: 'Sous 12h',
@@ -183,6 +200,7 @@ export const FEATURES = [
   },
   {
     name: 'Badge exclusif',
+    description: 'Montre ton statut dans ta squad',
     free: false,
     premium: 'Violet',
     squadLeader: 'Doré',
@@ -195,23 +213,23 @@ export const FEATURES = [
 
 export const TESTIMONIALS = [
   {
-    name: 'Le capitaine de squad',
-    squad: 'Exemple : squad ranked',
-    memberSince: 'Cas d\'usage type',
+    name: 'Profil : Capitaine de squad',
+    squad: 'Squad ranked 5v5',
+    memberSince: 'Profil type',
     text: "Plus personne n'oublie les sessions. Le coach IA analyse tes habitudes et te propose les meilleurs créneaux pour ta squad.",
     avatarType: 'alex' as const,
   },
   {
-    name: 'La joueuse compétitive',
-    squad: 'Exemple : squad féminine',
-    memberSince: 'Cas d\'usage type',
+    name: 'Profil : Joueuse compétitive',
+    squad: 'Squad ranked féminine',
+    memberSince: 'Profil type',
     text: "L'audio HD fait la différence en ranked. Les stats détaillées montrent qui clutch le plus — et ça motive tout le monde.",
     avatarType: 'marie' as const,
   },
   {
-    name: 'Le multi-squad',
-    squad: 'Exemple : plusieurs jeux',
-    memberSince: 'Cas d\'usage type',
+    name: 'Profil : Le multi-squad',
+    squad: 'Plusieurs jeux, plusieurs squads',
+    memberSince: 'Profil type',
     text: "Gérer plusieurs squads sur différents jeux, c'est le vrai avantage. Un seul dashboard pour tout organiser.",
     avatarType: 'lucas' as const,
   },

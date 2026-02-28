@@ -242,12 +242,17 @@ export default function SessionSharePage() {
               Cette session est terminée
             </div>
           ) : (
-            <button
-              onClick={handleJoin}
-              className="w-full rounded-xl bg-primary-bg px-6 py-3 text-center text-sm font-semibold text-white transition-transform active:scale-[0.98]"
-            >
-              Rejoindre la session
-            </button>
+            <div>
+              <button
+                onClick={handleJoin}
+                className="w-full rounded-xl bg-primary-bg px-6 py-3 text-center text-sm font-semibold text-white transition-transform active:scale-[0.98]"
+              >
+                Rejoindre la session — gratuit
+              </button>
+              <p className="mt-2 text-center text-xs text-text-tertiary">
+                Inscription en 30 secondes. 100% gratuit.
+              </p>
+            </div>
           )}
 
           {/* Share */}
@@ -259,6 +264,14 @@ export default function SessionSharePage() {
               text={`Rejoins la session ${session.game ? session.game + ' ' : ''}sur Squad Planner !`}
             />
           </div>
+        </div>
+
+        {/* Squad Planner explainer for non-users */}
+        <div className="mt-6 rounded-2xl bg-bg-card p-5 ring-1 ring-border">
+          <h3 className="mb-2 text-sm font-bold text-text-primary">Squad Planner, c'est quoi ?</h3>
+          <p className="text-sm text-text-secondary leading-relaxed">
+            L'app qui permet aux gamers de planifier leurs sessions, confirmer les présences et jouer ensemble. Plus de ghosting.
+          </p>
         </div>
 
         {/* Footer CTA */}

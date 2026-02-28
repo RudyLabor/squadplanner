@@ -22,7 +22,7 @@ export const QUICK_ACTIONS = [
 export const GREETING_MESSAGE: ChatMessage = {
   id: 'greeting',
   role: 'bot',
-  text: "Salut ! Je suis l'assistant Squad Planner. Pose-moi une question sur l'app !",
+  text: 'Salut ! Je suis le bot Squad Planner. Pose-moi une question !',
   timestamp: Date.now(),
 }
 

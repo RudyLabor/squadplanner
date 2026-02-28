@@ -197,7 +197,7 @@ describe('routes/session-share', () => {
       expect(spinner).toBeTruthy()
 
       // 2 - no session title yet
-      expect(screen.queryByText('Rejoindre la session')).toBeNull()
+      expect(screen.queryByText(/Rejoindre la session/)).toBeNull()
 
       // 3 - container renders
       expect(container).toBeTruthy()
@@ -286,7 +286,7 @@ describe('routes/session-share', () => {
       expect(screen.getByText('Valorant')).toBeTruthy()
 
       // 4 - join button is shown (future session)
-      expect(screen.getByText('Rejoindre la session')).toBeTruthy()
+      expect(screen.getByText(/Rejoindre la session/)).toBeTruthy()
     })
 
     it('shows session finished message for past sessions', async () => {
@@ -316,7 +316,7 @@ describe('routes/session-share', () => {
       expect(screen.getByText('Cette session est terminée')).toBeTruthy()
 
       // 2 - no join button for past sessions
-      expect(screen.queryByText('Rejoindre la session')).toBeNull()
+      expect(screen.queryByText(/Rejoindre la session/)).toBeNull()
 
       // 3 - squad name still shown
       expect(screen.getByText('BetaSquad')).toBeTruthy()

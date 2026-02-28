@@ -93,7 +93,7 @@ export default function Maintenance() {
           transition={{ delay: 0.2, duration: 0.3 }}
           className="text-md text-text-secondary mb-4"
         >
-          On effectue une maintenance planifiée. L'app sera de retour très bientôt.
+          On fait une petite maintenance. Squad Planner revient très vite.
         </m.p>
 
         {/* ETA */}

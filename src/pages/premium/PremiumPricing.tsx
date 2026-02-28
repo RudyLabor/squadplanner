@@ -41,16 +41,16 @@ const TIERS = [
   {
     tier: 'premium' as SubscriptionTier,
     name: 'Premium',
-    description: 'Pour les joueurs réguliers.',
+    description: 'Pour les joueurs qui veulent plus de squads et zéro limite.',
     monthlyPrice: PREMIUM_PRICE_MONTHLY,
     yearlyPrice: PREMIUM_PRICE_YEARLY,
     features: [
-      '5 squads',
-      'Sessions illimitées',
-      'Historique 90 jours',
-      'Chat complet (GIF, voice, polls)',
-      'Stats avancées',
-      'IA Coach basique',
+      '5 squads — joue à tous tes jeux sans choisir',
+      'Sessions illimitées — plus de limites',
+      'Historique 90 jours — retrouve n\'importe quelle session',
+      'Chat complet — GIF, vocal, sondages',
+      'Heatmaps de présence et tendances',
+      'IA Coach — conseils pour tes créneaux',
       'Badge Premium violet',
       'Zéro pub',
     ],
@@ -64,19 +64,19 @@ const TIERS = [
   {
     tier: 'squad_leader' as SubscriptionTier,
     name: 'Squad Leader',
-    description: 'Pour les capitaines de squad.',
+    description: 'Pour les capitaines qui veulent des stats et une squad qui ne ghost plus.',
     monthlyPrice: SQUAD_LEADER_PRICE_MONTHLY,
     yearlyPrice: SQUAD_LEADER_PRICE_YEARLY,
     features: [
       'Tout Premium inclus',
       'Squads illimités',
       'Historique illimité',
-      'Audio HD Party',
-      'IA Coach avancé (tactiques)',
-      'Dashboard analytics équipe',
-      'Rôles avancés (IGL, Coach)',
-      'Export calendrier',
-      'Sessions récurrentes',
+      'Audio HD — son cristallin en party',
+      'IA Coach avancé — tactiques personnalisées',
+      'Dashboard analytics — heatmaps et tendances de ta squad',
+      'Rôles avancés — chaque membre sait son rôle',
+      'Export calendrier — synchro Google Calendar',
+      'Sessions récurrentes — crée une fois, ça se répète',
       'Badge Squad Leader doré',
     ],
     ctaLabel: 'Passer Squad Leader — 14,99€/mois',
@@ -88,8 +88,8 @@ const TIERS = [
   },
   {
     tier: 'team' as SubscriptionTier,
-    name: 'Team',
-    description: 'Pour les équipes structurées.',
+    name: 'Clan',
+    description: 'Pour les grosses squads qui veulent scaler.',
     monthlyPrice: TEAM_PRICE_MONTHLY,
     yearlyPrice: TEAM_PRICE_YEARLY,
     features: [
@@ -98,9 +98,9 @@ const TIERS = [
       'Stats cross-squad',
       "Jusqu'à 75 membres",
       'Support prioritaire 8h',
-      'Badge Team bleu',
+      'Badge Clan bleu',
     ],
-    ctaLabel: 'Passer Team — 24,99€/mois',
+    ctaLabel: 'Passer Clan — 24,99€/mois',
     gradient: 'from-info to-info/80',
     badgeClass: 'bg-info/20 text-info',
     borderActive: 'border-info bg-info/5',
@@ -110,17 +110,17 @@ const TIERS = [
   {
     tier: 'club' as SubscriptionTier,
     name: 'Club',
-    description: 'Pour les structures esport.',
+    description: 'Pour les orgas esport.',
     monthlyPrice: CLUB_PRICE_MONTHLY,
     yearlyPrice: CLUB_PRICE_YEARLY,
     features: [
-      'Tout Team inclus',
+      'Tout Clan inclus',
       'Branding personnalisé',
-      'API webhooks',
-      'Onboarding assisté (30 min)',
+      'Intégrations externes',
+      'Mise en route guidée',
       'Support prioritaire 4h',
       "Jusqu'à 100 membres",
-      'Facturation entreprise',
+      'Facture pro dispo',
     ],
     ctaLabel: 'Contacter les ventes',
     gradient: 'from-primary to-purple',
@@ -174,12 +174,13 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
         >
           <div className="flex items-center justify-center gap-2 mb-1">
             <Zap className="w-5 h-5 text-error" />
-            <span className="text-md font-bold text-error">Offre de lancement -30%</span>
+            <span className="text-md font-bold text-error">Offre de bienvenue -30%</span>
             <Zap className="w-5 h-5 text-error" />
           </div>
           <p className="text-sm text-text-secondary mb-1">
             Code <span className="font-mono font-bold text-error">LAUNCH30</span> sur tous les plans
           </p>
+          <p className="text-xs text-success font-medium mb-1">Appliqué automatiquement au checkout</p>
           <p className="text-xs text-text-tertiary">Expire dans {timeLeft}</p>
         </div>
       )}
@@ -290,7 +291,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
                 { text: `Tu as ${squadCount} squad${squadCount > 1 ? 's' : ''} · 5 membres max`, detail: 'Premium : 5 squads · 20 membres' },
                 { text: 'Limité à 2 sessions par semaine', detail: 'Premium : illimité' },
                 { text: 'Historique limité à 7 jours', detail: 'Premium : 90 jours' },
-                { text: 'Pas de stats avancées', detail: 'Premium : analytics complets' },
+                { text: 'Pas de heatmaps ni tendances', detail: 'Premium : analytics complets' },
                 { text: "Pas d'IA Coach", detail: 'Premium : conseils personnalisés' },
                 { text: 'Chat basique (texte seulement)', detail: 'Premium : GIF, voice, polls' },
               ]
@@ -298,7 +299,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
                 { text: '1 squad · 5 membres max', detail: 'Premium : 5 squads · 20 membres' },
                 { text: '2 sessions par semaine max', detail: 'Premium : illimité' },
                 { text: 'Historique limité à 7 jours', detail: 'Premium : 90 jours' },
-                { text: 'Pas de stats avancées', detail: 'Premium : analytics complets' },
+                { text: 'Pas de heatmaps ni tendances', detail: 'Premium : analytics complets' },
                 { text: "Pas d'IA Coach", detail: 'Premium : conseils personnalisés' },
                 { text: 'Chat basique (texte seulement)', detail: 'Premium : GIF, voice, polls' },
               ]
@@ -315,7 +316,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
           ))}
         </div>
         <p className="text-xs text-text-tertiary text-center mt-3">
-          Chaque jour sans Premium, c'est un jour où ta squad joue sans filet.
+          Chaque jour sans Premium, c'est une session de plus où tu ne sais pas qui vient vraiment.
         </p>
       </div>
 
@@ -457,7 +458,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
             Ta squad mérite mieux qu'un {'« '}on verra{' »'}
           </h3>
           <p className="text-md text-text-secondary mb-2 max-w-md mx-auto">
-            Les squads Premium jouent plus régulièrement. À toi de jouer.
+            Les squads Premium jouent 3x plus régulièrement. Plus de montées en rang, plus de souvenirs, zéro soirées gâchées.
           </p>
           <p className="text-base text-success mb-6 font-medium">
             Commence par 7 jours d'essai gratuit — sans carte bancaire

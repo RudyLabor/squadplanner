@@ -152,7 +152,7 @@ export const en: TranslationKeys = {
     members: (count: number) => `${count} member${count > 1 ? 's' : ''}`,
     invite: 'Invite members',
     settings: 'Squad settings',
-    stats: 'Statistics',
+    stats: 'Stats',
     leaderboard: 'Leaderboard',
   },
 
@@ -194,7 +194,7 @@ export const en: TranslationKeys = {
     appearance: {
       title: 'Appearance',
       theme: 'Theme',
-      themeDesc: 'Customize the app appearance',
+      themeDesc: 'Change the look of Squad Planner',
       dark: 'Dark',
       light: 'Light',
       auto: 'Auto',
@@ -232,7 +232,7 @@ export const en: TranslationKeys = {
       privacy: 'Privacy policy',
       privacyDesc: 'GDPR & data protection',
       landing: 'Public homepage',
-      landingDesc: 'View the landing page',
+      landingDesc: 'View the homepage',
     },
     signOut: 'Sign out',
     version: 'Squad Planner',
@@ -245,7 +245,7 @@ export const en: TranslationKeys = {
     subtitle: 'Unlock all features',
     features: {
       unlimitedSquads: 'Unlimited squads',
-      advancedStats: 'Advanced statistics',
+      advancedStats: 'Attendance heatmaps & trends',
       customThemes: 'Custom themes',
       prioritySupport: 'Priority support',
     },

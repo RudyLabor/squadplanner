@@ -117,7 +117,7 @@ export const SidebarFooter = memo(function SidebarFooter({
           >
             <Link
               to="/premium"
-              aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD"
+              aria-label="Passer Premium - Heatmaps de présence, IA coach, audio HD"
             >
               <m.div
                 className="p-4 rounded-xl bg-gradient-to-br from-primary-10 to-purple/3 border border-primary/10 cursor-pointer"
@@ -129,7 +129,7 @@ export const SidebarFooter = memo(function SidebarFooter({
                   <span className="text-base font-semibold text-text-primary">Passe Premium</span>
                 </div>
                 <p className="text-sm text-text-secondary mb-3">
-                  Stats avancées, IA coach, qualité audio HD
+                  Heatmaps de présence, IA coach, audio HD
                 </p>
                 <span className="text-sm font-semibold text-primary hover:text-purple transition-colors duration-300">
                   Découvrir →

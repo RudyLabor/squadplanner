@@ -135,7 +135,7 @@ export default function AlternativeGamerLink() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Plus rapide. Plus fiable. Plus gaming. Squad Planner, c'est conçu pour toi, ta squad,
+            Session planifiée en 30s. Score de fiabilité visible. Conçu 100% pour les gamers. Squad Planner, c'est fait pour toi, ta squad,
             tes sessions. Pas de jargon. Juste l'essentiel.
           </m.p>
 
@@ -165,6 +165,15 @@ export default function AlternativeGamerLink() {
               </a>
             </m.div>
           </m.div>
+          <m.p
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-base text-text-quaternary mt-4"
+          >
+            100% gratuit · Pas de carte bancaire · Prêt en 30 secondes
+          </m.p>
         </div>
       </section>
 

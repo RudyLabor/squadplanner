@@ -55,7 +55,7 @@ export function OnboardingStepSplash({
         transition={{ delay: 0.4 }}
         className="text-lg text-text-secondary mb-10"
       >
-        Joue vraiment avec ta squad.
+        Plus de « on verra demain ». Ta squad s'organise ici.
       </m.p>
 
       <m.div

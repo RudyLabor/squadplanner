@@ -150,14 +150,14 @@ describe('LandingNavbar', () => {
 
   // ─── Logged in: app link ───────────────────────────────
 
-  it('renders "Aller à l\'app" link when logged in', () => {
+  it('renders "Mon dashboard" link when logged in', () => {
     render(<LandingNavbar isLoggedIn={true} />)
-    expect(screen.getByText("Aller à l'app")).toBeInTheDocument()
+    expect(screen.getByText('Mon dashboard')).toBeInTheDocument()
   })
 
   it('app link points to /home', () => {
     render(<LandingNavbar isLoggedIn={true} />)
-    const appLink = screen.getByText("Aller à l'app").closest('a')
+    const appLink = screen.getByText('Mon dashboard').closest('a')
     expect(appLink?.getAttribute('href')).toBe('/home')
   })
 

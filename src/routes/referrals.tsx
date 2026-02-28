@@ -7,7 +7,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Invite tes amis sur Squad Planner et gagnez tous les deux 7 jours Premium gratuit. Débloquez des badges exclusifs et des récompenses.',
+        'Invite tes potes sur Squad Planner et gagne 7 jours Premium gratuit. Débloque des badges exclusifs et des récompenses.',
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/referrals' },
     { property: 'og:url', content: 'https://squadplanner.fr/referrals' },
@@ -16,7 +16,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        'Invite tes amis sur Squad Planner et gagnez tous les deux 7 jours Premium gratuit. Débloquez des badges exclusifs et des récompenses.',
+        'Invite tes potes sur Squad Planner et gagne 7 jours Premium gratuit. Débloque des badges exclusifs et des récompenses.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
     { name: 'twitter:card', content: 'summary_large_image' },
@@ -24,7 +24,7 @@ export function meta() {
     {
       name: 'twitter:description',
       content:
-        'Invite tes amis sur Squad Planner et gagnez tous les deux 7 jours Premium gratuit. Débloquez des badges exclusifs et des récompenses.',
+        'Invite tes potes sur Squad Planner et gagne 7 jours Premium gratuit. Débloque des badges exclusifs et des récompenses.',
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]

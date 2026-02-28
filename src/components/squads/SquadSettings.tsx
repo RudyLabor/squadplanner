@@ -112,7 +112,7 @@ export function SquadSettings({
       {/* Stats Avancees - Premium */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
-          <h2 className="text-base font-semibold text-text-primary">Stats avancées</h2>
+          <h2 className="text-base font-semibold text-text-primary">Heatmaps et tendances</h2>
           {!canAccessAdvancedStats && <PremiumBadge small />}
         </div>
         <PremiumGate feature="advanced_stats" squadId={squadId} fallback="lock">
@@ -199,7 +199,7 @@ export function SquadSettings({
                   <PremiumBadge small />
                 </div>
                 <p className="text-sm text-text-quaternary">
-                  Audio HD, stats avancées, export calendrier actifs
+                  Audio HD, heatmaps de présence, export calendrier actifs
                 </p>
               </div>
             </div>

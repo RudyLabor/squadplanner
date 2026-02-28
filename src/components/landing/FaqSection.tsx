@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import { ChevronDown } from '../icons'
+import { ChevronDown, ArrowRight } from '../icons'
+import { Link } from 'react-router'
 const staggerItemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
@@ -13,11 +14,11 @@ const faqs = [
   },
   {
     q: 'Comment inviter mes amis ?',
-    a: "Tu reçois un code d'invitation unique quand tu crées ta squad. Tu le partages par Discord, WhatsApp, SMS -- n'importe quoi. Tes potes cliquent sur le lien et rejoignent en 10 secondes, sans créer de compte au préalable. Résultat : en 2 minutes ta squad est au complet et prête à planifier.",
+    a: "Tes potes cliquent et rejoignent en 10 secondes. Même pas besoin de compte. Tu partages un lien par Discord, WhatsApp, SMS -- n'importe quoi. En 2 minutes ta squad est au complet et prête à planifier.",
   },
   {
     q: 'Quelle est la différence avec Discord ?',
-    a: "Discord c'est top pour discuter, mais personne ne sait qui vient mardi soir. Squad Planner ajoute le planning avec confirmation de présence, le score de fiabilité et les check-ins. Concrètement, tu sais à 18h qui sera là à 21h -- plus besoin de relancer tout le monde sur Discord.",
+    a: "Discord c'est top pour discuter. Mais qui vient mardi soir ? Personne ne sait. Avec Squad Planner, tu sais à 18h qui sera là à 21h. Plus besoin de relancer.",
   },
   {
     q: 'Combien de joueurs par squad ?',
@@ -29,15 +30,15 @@ const faqs = [
   },
   {
     q: 'Pourquoi pas juste un Google Calendar ou Doodle ?',
-    a: "Parce que Google Calendar c'est fait pour des réunions de boulot, pas pour tes ranked du mardi. Squad Planner est conçu pour le gaming : vocal intégré, score de présence, confirmation auto quand assez de joueurs sont dispo. Résultat : tu passes moins de temps à organiser et plus de temps à jouer.",
+    a: "Google Calendar c'est pour des réunions de boulot. Squad Planner c'est pour tes ranked du mardi. Vocal intégré, confirmation auto, score de présence. Moins d'orga, plus de jeu.",
   },
   {
     q: "Mes potes vont vraiment l'utiliser ?",
-    a: "Oui, parce qu'ils n'ont qu'à cliquer OUI ou NON. Pas d'app à installer (ça marche dans le navigateur). Du coup même les plus flemmards de ta squad peuvent confirmer en 2 secondes. S'ils veulent les notifs push, l'app mobile est dispo.",
+    a: "Oui, parce qu'ils n'ont qu'à cliquer OUI ou NON. Rien à installer (ça marche dans le navigateur). Du coup même les plus flemmards de ta squad peuvent confirmer en 2 secondes. S'ils veulent les notifs push, la version mobile est dispo.",
   },
   {
     q: "C'est vraiment 100% gratuit ?",
-    a: "Oui. 1 squad, 5 membres, 2 sessions par semaine, confirmation de présence, chat basique, vocal -- tout ça gratuit, sans limite de temps. Le premium à partir de 6,99€/mois ajoute le chat complet avec GIF et polls, le coach IA et des stats avancées. Mais honnêtement, tu n'en as pas besoin pour bien organiser tes sessions.",
+    a: "Oui, vraiment. Pas de piège, pas de paywall surprise. Le plan gratuit inclut 1 squad, 5 membres, 2 sessions/semaine, vocal, chat. Le Premium existe pour ceux qui veulent aller plus loin, mais l'essentiel est déjà là.",
   },
 ]
 
@@ -90,6 +91,27 @@ export function FaqSection() {
             </m.div>
           ))}
         </div>
+
+        {/* CTA after FAQ */}
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <p className="text-lg text-text-secondary mb-5 font-medium">Convaincu ?</p>
+          <Link
+            to="/auth?mode=register&redirect=onboarding"
+            className="inline-flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow"
+            data-track="faq_cta_click"
+          >
+            Créer ma squad — c'est gratuit
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+          <p className="text-sm text-text-quaternary mt-4">
+            100% gratuit · Pas de carte bancaire · Prêt en 30 secondes
+          </p>
+        </m.div>
       </div>
     </section>
   )

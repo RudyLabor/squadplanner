@@ -95,11 +95,11 @@ describe('PremiumHero', () => {
     // 1. "Premium" text in header area
     expect(screen.getByText('Premium')).toBeDefined()
     // 2. Main heading
-    expect(screen.getByText(/Passe au niveau/)).toBeDefined()
+    expect(screen.getByText(/Ta squad mérite/)).toBeDefined()
     // 3. Subtitle about serious squads
-    expect(screen.getByText(/Les squads sérieuses méritent des outils sérieux/)).toBeDefined()
-    // 4. Promo badge "2 mois offerts — économise 16,78 €"
-    expect(screen.getByText(/2 mois offerts — économise 16,78/)).toBeDefined()
+    expect(screen.getByText(/Débloque les vrais outils/)).toBeDefined()
+    // 4. Promo badge "Annuel = 2 mois offerts sur tous les plans"
+    expect(screen.getByText(/2 mois offerts sur tous les plans/)).toBeDefined()
     // 5. No premium status shown
     expect(screen.queryByText(/Tu es d/)).toBeNull()
     // 6. No manage subscription button
@@ -116,9 +116,9 @@ describe('PremiumHero', () => {
     // 2. Manage subscription button
     expect(screen.getByText(/abonnement/)).toBeDefined()
     // 3. Title still shown
-    expect(screen.getByText(/Passe au niveau/)).toBeDefined()
+    expect(screen.getByText(/Ta squad mérite/)).toBeDefined()
     // 4. Promo badge still shown
-    expect(screen.getByText(/2 mois offerts — économise 16,78/)).toBeDefined()
+    expect(screen.getByText(/2 mois offerts sur tous les plans/)).toBeDefined()
     // 5. Button is enabled (not loading)
     const manageBtn = screen.getByText(/abonnement/)
     const btn = manageBtn.closest('button') || manageBtn
@@ -140,9 +140,9 @@ describe('PremiumHero', () => {
     // 3. Button is disabled when loading
     expect(disabledBtn).toBeDefined()
     // 4. Title still rendered
-    expect(screen.getByText(/Passe au niveau/)).toBeDefined()
+    expect(screen.getByText(/Ta squad mérite/)).toBeDefined()
     // 5. Description still rendered
-    expect(screen.getByText(/Les squads sérieuses méritent des outils sérieux/)).toBeDefined()
+    expect(screen.getByText(/Débloque les vrais outils/)).toBeDefined()
     // 6. "Premium" header text still present
     expect(screen.getByText('Premium')).toBeDefined()
   })

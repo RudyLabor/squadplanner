@@ -85,12 +85,12 @@ describe('SidebarFooter', () => {
 
     // Premium upsell
     expect(screen.getByText('Passe Premium')).toBeInTheDocument()
-    expect(screen.getByText('Stats avancées, IA coach, qualité audio HD')).toBeInTheDocument()
+    expect(screen.getByText('Heatmaps de présence, IA coach, audio HD')).toBeInTheDocument()
     expect(screen.getByText(/Découvrir/)).toBeInTheDocument()
 
     // Premium link goes to /premium
     const premiumLink = screen.getByLabelText(
-      'Passer Premium - Stats avancées, IA coach, qualité audio HD'
+      'Passer Premium - Heatmaps de présence, IA coach, audio HD'
     )
     expect(premiumLink.closest('a')!.getAttribute('href')).toBe('/premium')
 

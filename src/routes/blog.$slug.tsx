@@ -393,17 +393,17 @@ export default function BlogPost() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6 text-primary" />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Envie de tester par toi-même ?
+                Teste Squad Planner avec ta squad
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Crée ta squad et mets ces conseils en pratique dès ce soir. C'est gratuit.
+                C'est gratuit et prêt en 30 secondes. Crée ta squad et mets ces conseils en pratique dès ce soir.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
                   className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-xl font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle hover:shadow-primary/30 transition-all"
                 >
-                  Créer ma squad maintenant
+                  Commencer maintenant
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>

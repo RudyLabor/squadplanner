@@ -37,9 +37,15 @@ vi.mock('framer-motion', () => ({
   ),
 }))
 
+vi.mock('react-router', () => ({
+  Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+}))
+
 vi.mock('../../icons', () => ({
   ChevronDown: (props: any) =>
     createElement('span', { ...props, 'data-testid': 'chevron-icon' }, 'chevron'),
+  ArrowRight: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'arrow-icon' }, 'arrow'),
 }))
 
 import { FaqSection, faqs } from '../FaqSection'

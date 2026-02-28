@@ -75,16 +75,16 @@ describe('routes/maintenance', () => {
       // 3 - title contains "Squad Planner"
       expect(result[0].title).toContain('Squad Planner')
 
-      // 4 - only 1 entry (no description, no canonical for maintenance)
-      expect(result).toHaveLength(1)
+      // 4 - returns 3 entries (title + description + robots noindex)
+      expect(result).toHaveLength(3)
 
-      // 5 - no description tag (maintenance page should not be indexed)
+      // 5 - has description tag
       const desc = result.find((m: any) => m.name === 'description')
-      expect(desc).toBeUndefined()
+      expect(desc).toBeDefined()
 
-      // 6 - no canonical link
-      const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toBeUndefined()
+      // 6 - has robots noindex (maintenance page should not be indexed)
+      const robots = result.find((m: any) => m.name === 'robots')
+      expect(robots).toEqual({ name: 'robots', content: 'noindex, nofollow' })
     })
   })
 

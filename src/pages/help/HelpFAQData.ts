@@ -61,7 +61,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: 'Party Vocale',
     question: 'Ma voix ne passe pas, que faire ?',
     answer:
-      "Voici les étapes à suivre dans l'ordre : 1) Vérifie que ton micro n'est pas muté dans l'app. 2) Va dans Paramètres > Audio et sélectionne le bon périphérique micro. 3) Vérifie les permissions de ton navigateur (clique sur l'icône cadenas dans la barre d'adresse). 4) Essaie un autre navigateur (Chrome est recommandé pour la meilleure compatibilité). Si le problème persiste, redémarre ton navigateur ou essaie en navigation privée.",
+      "Voici les étapes à suivre dans l'ordre : 1) Vérifie que ton micro n'est pas muté dans Squad Planner. 2) Va dans Paramètres > Audio et sélectionne le bon périphérique micro. 3) Vérifie les permissions de ton navigateur (clique sur l'icône cadenas dans la barre d'adresse). 4) Essaie un autre navigateur (Chrome est recommandé pour la meilleure compatibilité). Si le problème persiste, redémarre ton navigateur ou essaie en navigation privée.",
   },
   {
     category: 'Party Vocale',
@@ -75,7 +75,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: 'Premium',
     question: 'Quels sont les avantages Premium ?',
     answer:
-      "Squads illimitées, stats avancées avec prédictions IA, audio HD pour les parties vocales, historique illimité, rôles personnalisés, et badge Premium visible par ta squad. Tu bénéficies aussi d'un accès prioritaire aux nouvelles fonctionnalités et d'un export calendrier pour synchroniser tes sessions avec Google Calendar ou iCal.",
+      "Squads illimitées, heatmaps de présence et tendances par joueur, prédictions IA, audio HD pour les parties vocales, historique illimité, rôles personnalisés, et badge Premium visible par ta squad. Tu bénéficies aussi d'un accès prioritaire aux nouvelles fonctionnalités et d'un export calendrier pour synchroniser tes sessions avec Google Calendar ou iCal.",
   },
   {
     category: 'Premium',

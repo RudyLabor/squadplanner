@@ -18,7 +18,7 @@ const TIERS = [
     name: 'Gratuit',
     monthlyPrice: 0,
     yearlyPrice: 0,
-    description: "Tout ce qu'il faut pour jouer régulièrement.",
+    description: "L'essentiel pour organiser tes sessions.",
     features: [
       '1 squad · 5 membres max',
       '2 sessions/semaine',
@@ -43,7 +43,7 @@ const TIERS = [
       'Sessions illimitées',
       'Historique 90 jours',
       'Chat complet (GIF, voice, polls)',
-      'Stats avancées',
+      'Heatmaps de présence et tendances',
       'IA Coach basique',
       'Badge Premium violet',
       'Zéro pub',
@@ -64,7 +64,7 @@ const TIERS = [
       'Historique illimité',
       'Audio HD Party',
       'IA Coach avancé',
-      'Dashboard analytics équipe',
+      'Dashboard analytics squad',
       'Rôles avancés (IGL, Coach)',
       'Export calendrier',
       'Sessions récurrentes',
@@ -77,19 +77,19 @@ const TIERS = [
     dailyPrice: true,
   },
   {
-    name: 'Team',
+    name: 'Clan',
     monthlyPrice: TEAM_PRICE_MONTHLY,
     yearlyPrice: TEAM_PRICE_YEARLY,
-    description: 'Pour les équipes structurées.',
+    description: 'Pour les grosses squads qui veulent scaler.',
     features: [
       'Tout Squad Leader inclus',
       'Dashboard multi-squads',
       'Stats cross-squad',
       "Jusqu'à 75 membres",
       'Support prioritaire 8h',
-      'Badge Team bleu',
+      'Badge Clan bleu',
     ],
-    cta: 'Passer Team — 24,99€/mois',
+    cta: 'Passer Clan — 24,99€/mois',
     ctaStyle: 'bg-gradient-to-r from-info to-info/80 text-white hover:opacity-90',
     popular: false,
     badge: null,
@@ -99,18 +99,18 @@ const TIERS = [
     name: 'Club',
     monthlyPrice: CLUB_PRICE_MONTHLY,
     yearlyPrice: CLUB_PRICE_YEARLY,
-    description: 'Pour les structures esport.',
+    description: 'Pour les orgas esport.',
     features: [
       'Tout Squad Leader inclus',
       'Dashboard multi-squads',
       'Stats cross-squad',
       'Branding personnalisé',
-      'API webhooks',
-      'Onboarding assisté',
+      'Intégrations externes',
+      'Mise en route guidée',
       'Support prioritaire 24h',
-      'Facturation entreprise',
+      'Facture pro dispo',
     ],
-    cta: 'Contacter les ventes — 39,99€/mois',
+    cta: 'Passer Club — 39,99€/mois',
     ctaStyle: 'border border-primary text-primary hover:bg-primary-10',
     popular: false,
     badge: 'B2B',
@@ -160,7 +160,7 @@ export function PricingSection() {
             >
               Annuel
               <span className="px-1.5 py-0.5 rounded-full bg-black/25 text-white text-xs font-bold">
-                Économise 2 mois
+                Économise 2 mois (-17%)
               </span>
             </button>
           </div>
@@ -202,6 +202,11 @@ export function PricingSection() {
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="text-lg font-bold text-text-primary">{tier.name}</h3>
                   {tier.popular && <Crown className="w-4 h-4 text-warning" />}
+                  {tier.popular && (
+                    <span className="px-2 py-0.5 rounded-full bg-success/15 text-success text-xs font-semibold">
+                      Essai 7 jours gratuit
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex items-baseline gap-1 mb-2">
@@ -254,6 +259,11 @@ export function PricingSection() {
                     {tier.cta}
                   </m.button>
                 </Link>
+                {tier.monthlyPrice > 0 && (
+                  <p className="text-xs text-text-quaternary text-center mt-2">
+                    Sans engagement · Annule en 1 clic
+                  </p>
+                )}
               </m.div>
             )
           })}

@@ -94,9 +94,16 @@ export function PremiumFeaturesTable() {
                     >
                       <div className="flex items-center gap-2">
                         <feature.icon className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span className="text-xs text-text-primary leading-tight">
-                          {feature.name}
-                        </span>
+                        <div>
+                          <span className="text-xs text-text-primary leading-tight">
+                            {feature.name}
+                          </span>
+                          {'description' in feature && feature.description && (
+                            <p className="text-[10px] text-text-tertiary leading-tight mt-0.5">
+                              {feature.description}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </td>
                     <td className="p-2 text-center align-middle">

@@ -22,7 +22,6 @@ vi.mock('../../../components/icons', () => ({
   Calendar: (p: any) => createElement('span', { ...p, 'data-icon': 'Calendar' }),
   BarChart3: (p: any) => createElement('span', { ...p, 'data-icon': 'BarChart3' }),
   Mic2: (p: any) => createElement('span', { ...p, 'data-icon': 'Mic2' }),
-  Star: (p: any) => createElement('span', { ...p, 'data-icon': 'Star' }),
 }))
 
 vi.mock('../../../components/ui', () => ({
@@ -32,17 +31,17 @@ vi.mock('../../../components/ui', () => ({
 vi.mock('../PremiumData', () => ({
   TESTIMONIALS: [
     {
-      name: 'Alex',
-      squad: 'Les Tryharders',
-      memberSince: '6 mois',
+      name: 'Profil : Capitaine de squad',
+      squad: 'Squad ranked 5v5',
+      memberSince: 'Profil type',
       text: 'Le coach IA a transformé notre squad !',
       avatarType: 'alex',
     },
     {
-      name: 'Marie',
-      squad: 'GameGirls',
-      memberSince: '3 mois',
-      text: 'Les stats avancées sont incroyables.',
+      name: 'Profil : Joueuse compétitive',
+      squad: 'Squad ranked féminine',
+      memberSince: 'Profil type',
+      text: 'Les heatmaps de présence sont incroyables.',
       avatarType: 'marie',
     },
   ],
@@ -55,63 +54,60 @@ vi.mock('../TestimonialAvatars', () => ({
 import { PremiumTestimonials } from '../PremiumTestimonials'
 
 describe('PremiumTestimonials', () => {
-  // STRICT: verifies section title, subtitle, all testimonial names, squad names, membership durations
-  it('renders testimonials section with title, subtitle, and all testimonial metadata', () => {
+  // STRICT: verifies section title, subtitle, all use case names, squad contexts, profile type labels
+  it('renders use cases section with title, subtitle, and all metadata', () => {
     render(<PremiumTestimonials />)
 
     // 1. Section title
-    expect(screen.getByText(/Ce que les joueurs Premium en disent/)).toBeDefined()
+    expect(screen.getByText(/Cas d'usage Premium/)).toBeDefined()
     // 2. Subtitle
-    expect(screen.getByText(/Ils ont upgrade/)).toBeDefined()
-    // 3. First testimonial name
-    expect(screen.getByText('Alex')).toBeDefined()
-    // 4. Second testimonial name
-    expect(screen.getByText('Marie')).toBeDefined()
-    // 5. Squad names
-    expect(screen.getByText('Les Tryharders')).toBeDefined()
-    expect(screen.getByText('GameGirls')).toBeDefined()
-    // 6. Membership durations
-    expect(screen.getByText('6 mois')).toBeDefined()
-    expect(screen.getByText('3 mois')).toBeDefined()
+    expect(screen.getByText(/Le Premium s'adapte/)).toBeDefined()
+    // 3. First use case name
+    expect(screen.getByText('Profil : Capitaine de squad')).toBeDefined()
+    // 4. Second use case name
+    expect(screen.getByText('Profil : Joueuse compétitive')).toBeDefined()
+    // 5. Squad contexts
+    expect(screen.getByText('Squad ranked 5v5')).toBeDefined()
+    expect(screen.getByText('Squad ranked féminine')).toBeDefined()
+    // 6. Profile type labels
+    const profilTypeElements = screen.getAllByText('Profil type')
+    expect(profilTypeElements.length).toBe(2)
   })
 
-  // STRICT: verifies testimonial content — quotes, avatars, star ratings, verified badges
-  it('renders testimonial quotes, avatars, star ratings, and verified badges', () => {
+  // STRICT: verifies use case content — text, avatars, no star ratings
+  it('renders use case text, avatars, and no star ratings', () => {
     const { container } = render(<PremiumTestimonials />)
 
-    // 1. First testimonial quote
+    // 1. First use case text
     expect(screen.getByText(/Le coach IA a transform/)).toBeDefined()
-    // 2. Second testimonial quote
-    expect(screen.getByText(/Les stats avanc/)).toBeDefined()
-    // 3. Avatar for first testimonial
+    // 2. Second use case text
+    expect(screen.getByText(/Les heatmaps de pr/)).toBeDefined()
+    // 3. Avatar for first use case
     expect(screen.getByTestId('avatar-alex')).toBeDefined()
-    // 4. Avatar for second testimonial
+    // 4. Avatar for second use case
     expect(screen.getByTestId('avatar-marie')).toBeDefined()
-    // 5. Star ratings (5 stars per testimonial, 2 testimonials = 10 stars)
+    // 5. No star ratings (removed for honest use case framing)
     const stars = container.querySelectorAll('[data-icon="Star"]')
-    expect(stars.length).toBe(10)
+    expect(stars.length).toBe(0)
   })
 
-  // STRICT: verifies layout structure — grid layout, cards, quote formatting
-  it('has grid layout with cards and proper quote formatting', () => {
+  // STRICT: verifies layout structure — grid layout, cards, text formatting
+  it('has grid layout with cards and proper text formatting', () => {
     const { container } = render(<PremiumTestimonials />)
 
     // 1. Grid layout for cards
     const grid = container.querySelector('.grid')
     expect(grid).not.toBeNull()
-    // 2. Two testimonial cards rendered
+    // 2. Two use case cards rendered
     const avatars = screen.getAllByTestId(/avatar-/)
     expect(avatars.length).toBe(2)
-    // 3. Quotes use guillemet format
-    expect(container.textContent).toContain('\u00ab')
-    expect(container.textContent).toContain('\u00bb')
-    // 4. Clock icons for membership duration
+    // 3. Clock icons for profile type label
     const clocks = container.querySelectorAll('[data-icon="Clock"]')
     expect(clocks.length).toBe(2)
-    // 5. Text content is substantial
+    // 4. Text content is substantial
     expect(container.textContent!.length).toBeGreaterThan(100)
-    // 6. Names are rendered as semibold
-    const nameEl = screen.getByText('Alex')
+    // 5. Names are rendered as semibold
+    const nameEl = screen.getByText('Profil : Capitaine de squad')
     expect(nameEl.className).toContain('font-semibold')
   })
 })

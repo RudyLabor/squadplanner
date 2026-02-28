@@ -90,7 +90,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
                 to="/home"
                 className="px-4 py-2 rounded-lg bg-primary-bg text-white text-base lg:text-md font-medium hover:bg-primary-bg-hover transition-colors duration-300 inline-flex items-center"
               >
-                Aller à l'app
+                Mon dashboard
               </Link>
             ) : (
               <>

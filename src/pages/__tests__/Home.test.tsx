@@ -302,13 +302,13 @@ describe('Home Page', () => {
       expect(screen.getByText(/SuperLongGamerT\u2026/)).toBeInTheDocument()
     })
 
-    it('shows "Ta squad t\'attend" when no upcoming sessions', () => {
+    it('shows default subtitle when no upcoming sessions', () => {
       mockSquadsReturn = { data: [], isLoading: false, isPending: false }
       mockSessionsReturn = { data: [], isLoading: false }
       renderHome({
         loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
       })
-      expect(screen.getByText(/Ta squad t'attend/)).toBeInTheDocument()
+      expect(screen.getByText(/Tes potes ont voté pour la prochaine session/)).toBeInTheDocument()
     })
 
     it('shows pending RSVP count when sessions need response', () => {
@@ -320,7 +320,7 @@ describe('Home Page', () => {
       renderHome({
         loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
       })
-      expect(screen.getByText(/1 session attend ta réponse/)).toBeInTheDocument()
+      expect(screen.getByText(/1 session sans ta réponse/)).toBeInTheDocument()
     })
 
     it('shows plural form for multiple pending RSVPs', () => {
@@ -333,7 +333,7 @@ describe('Home Page', () => {
       renderHome({
         loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
       })
-      expect(screen.getByText(/2 sessions attendent ta réponse/)).toBeInTheDocument()
+      expect(screen.getByText(/2 sessions sans ta réponse/)).toBeInTheDocument()
     })
 
     it('shows "toutes tes sessions sont confirmées" when all RSVPs done', () => {
@@ -510,7 +510,7 @@ describe('Home Page', () => {
 
         expect(mockMutateAsync).toHaveBeenCalledWith({ sessionId: 'ses-1', response: 'present' })
         await waitFor(() => {
-          expect(screen.getByText("T'es confirmé ! Ta squad compte sur toi")).toBeInTheDocument()
+          expect(screen.getByText(/Confirmé ! Ta squad sait qu'elle peut compter sur toi/)).toBeInTheDocument()
         })
       }
     )

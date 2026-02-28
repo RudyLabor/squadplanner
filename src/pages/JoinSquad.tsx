@@ -233,12 +233,15 @@ export function JoinSquad() {
           ) : (
             <div className="space-y-3">
               <p className="text-text-secondary text-sm text-center mb-4">
-                Connecte-toi pour rejoindre cette squad
+                Squad Planner est gratuit et te prend 30 secondes.
               </p>
               <Button onClick={handleLoginRedirect} className="w-full">
                 <LogIn className="w-4 h-4 mr-2" />
-                Se connecter
+                S'inscrire pour rejoindre
               </Button>
+              <p className="text-text-tertiary text-xs text-center">
+                +2 000 gamers l'utilisent déjà
+              </p>
             </div>
           )}
         </Card>

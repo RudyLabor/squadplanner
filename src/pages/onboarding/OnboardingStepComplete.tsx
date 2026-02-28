@@ -119,9 +119,9 @@ export function OnboardingStepComplete({
         className="text-text-secondary mb-4"
       >
         {createdSquadId
-          ? 'Ta squad est créée. Invite tes potes et planifie ta première session !'
+          ? 'Ta squad est prête. Ta première session est à une confirmation près.'
           : squadsLength > 0
-            ? `Tu as rejoint ${firstSquadName} ! L'aventure commence.`
+            ? `Tu as rejoint ${firstSquadName} ! Ta première session est à une confirmation près.`
             : 'Tu peux maintenant explorer ou créer ta squad'}
       </m.p>
 

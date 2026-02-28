@@ -184,7 +184,7 @@ export function OnboardingCallBooking() {
       <SectionHeader icon={Phone} title="Onboarding assisté" />
 
       <p className="text-sm text-text-secondary mb-4">
-        Réserve un appel de 30 min avec notre équipe pour configurer ta squad parfaitement.
+        Réserve un appel de 30 min avec nous pour configurer ta squad parfaitement.
       </p>
 
       <div className="space-y-4">

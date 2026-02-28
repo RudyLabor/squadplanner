@@ -90,7 +90,7 @@ describe('routes/referrals', () => {
       expect(desc!.content.length).toBeGreaterThan(0)
 
       // 3 - description mentions inviting friends or rewards
-      expect(desc!.content).toMatch(/invite|amis|premium|récompense/i)
+      expect(desc!.content).toMatch(/invite|potes|premium|récompense/i)
 
       // 4 - description is a string
       expect(typeof desc!.content).toBe('string')

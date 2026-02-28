@@ -1,4 +1,4 @@
-import { Clock, Star } from '../../components/icons'
+import { Clock } from '../../components/icons'
 import { Card } from '../../components/ui'
 import { TESTIMONIALS } from './PremiumData'
 import { TestimonialAvatar } from './TestimonialAvatars'
@@ -7,10 +7,10 @@ export function PremiumTestimonials() {
   return (
     <div className="animate-fade-in-up mb-16" style={{ animationDelay: '0.4s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
-        Ce que les joueurs Premium en disent
+        Cas d'usage Premium
       </h2>
       <p className="text-md text-text-secondary text-center mb-8">
-        Ils ont upgrade. Voilà ce qui a changé.
+        Le Premium s'adapte à ton style de jeu. Voilà à quoi ça ressemble.
       </p>
       <div className="grid md:grid-cols-3 gap-4">
         {TESTIMONIALS.map((testimonial, index) => (
@@ -39,13 +39,8 @@ export function PremiumTestimonials() {
                   </div>
                 </div>
                 <p className="text-md text-text-secondary leading-relaxed">
-                  « {testimonial.text} »
+                  {testimonial.text}
                 </p>
-                <div className="flex gap-0.5 mt-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-warning text-warning" />
-                  ))}
-                </div>
               </Card>
             </div>
           </div>

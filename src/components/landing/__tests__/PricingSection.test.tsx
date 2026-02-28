@@ -74,19 +74,19 @@ describe('PricingSection', () => {
     it('renders the monthly suffix for all plans', () => {
       render(<PricingSection />)
       const priceSuffixes = screen.getAllByText('/mois')
-      expect(priceSuffixes.length).toBe(4) // one per tier
+      expect(priceSuffixes.length).toBe(5) // one per tier (Gratuit, Premium, Squad Leader, Clan, Club)
     })
 
     it('renders free plan description', () => {
       render(<PricingSection />)
-      expect(screen.getByText("Tout ce qu'il faut pour jouer régulièrement.")).toBeInTheDocument()
+      expect(screen.getByText("L'essentiel pour organiser tes sessions.")).toBeInTheDocument()
     })
 
     it('renders all 6 free plan features', () => {
       render(<PricingSection />)
       const freeFeatures = [
-        '1 squad',
-        '3 sessions/semaine',
+        '1 squad · 5 membres max',
+        '2 sessions/semaine',
         'Historique 7 jours',
         'Chat basique',
         'Score de fiabilité',
@@ -99,9 +99,9 @@ describe('PricingSection', () => {
 
     it('renders check icons for each feature across all tiers', () => {
       render(<PricingSection />)
-      // 6 free + 8 premium + 9 squad leader + 8 club = 31 check icons total
+      // 6 free + 8 premium + 9 squad leader + 6 clan + 8 club = 37 check icons total
       const checkIcons = screen.getAllByTestId('check-icon')
-      expect(checkIcons.length).toBe(31)
+      expect(checkIcons.length).toBe(37)
     })
 
     it('renders free plan CTA button with link to /auth', () => {
@@ -120,9 +120,9 @@ describe('PricingSection', () => {
       expect(screen.getByText('Premium')).toBeInTheDocument()
     })
 
-    it('renders POPULAIRE badge on Squad Leader tier', () => {
+    it('renders RECOMMANDÉ badge on Premium tier', () => {
       render(<PricingSection />)
-      expect(screen.getByText('POPULAIRE')).toBeInTheDocument()
+      expect(screen.getByText('RECOMMANDÉ')).toBeInTheDocument()
     })
 
     it('renders premium plan description', () => {
@@ -137,10 +137,10 @@ describe('PricingSection', () => {
         'Sessions illimitées',
         'Historique 90 jours',
         'Chat complet (GIF, voice, polls)',
-        'Stats avancées',
+        'Heatmaps de présence et tendances',
         'IA Coach basique',
         'Badge Premium violet',
-        'Thèmes personnalisés',
+        'Zéro pub',
       ]
       premiumFeatures.forEach((feature) => {
         expect(screen.getByText(feature)).toBeInTheDocument()
@@ -149,7 +149,7 @@ describe('PricingSection', () => {
 
     it('renders premium plan CTA button with link to /auth', () => {
       render(<PricingSection />)
-      const premiumButton = screen.getByText('Débloquer Premium')
+      const premiumButton = screen.getByText('Passer Premium — 6,99€/mois')
       expect(premiumButton).toBeInTheDocument()
       const link = premiumButton.closest('a')
       expect(link).toHaveAttribute('href', '/auth')
@@ -192,11 +192,11 @@ describe('PricingSection', () => {
       expect(grid).toBeInTheDocument()
     })
 
-    it('contains exactly 4 Link elements pointing to /auth', () => {
+    it('contains exactly 5 Link elements pointing to /auth', () => {
       render(<PricingSection />)
       const links = screen.getAllByRole('link')
       const authLinks = links.filter((l) => l.getAttribute('href') === '/auth')
-      expect(authLinks.length).toBe(4)
+      expect(authLinks.length).toBe(5)
     })
 
     it('renders the section with proper container class', () => {

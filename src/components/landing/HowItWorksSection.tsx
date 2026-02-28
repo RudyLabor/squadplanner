@@ -6,25 +6,25 @@ const steps = [
   {
     step: '1',
     title: 'Crée ta Squad',
-    description: 'Donne un nom, choisis ton jeu. Ta squad a direct sa party vocale et son chat.',
+    description: 'Donne un nom, choisis ton jeu — en 30 secondes, c\'est fait. Ta squad a direct sa party vocale et son chat.',
     icon: Users,
   },
   {
     step: '2',
     title: 'Invite tes potes',
-    description: 'Partage le code. Ils rejoignent en 10 secondes. Tout le monde au même endroit.',
+    description: 'Partage le code — un lien, c\'est tout. Ils rejoignent en 10 secondes. Tout le monde au même endroit.',
     icon: MessageCircle,
   },
   {
     step: '3',
-    title: 'Planifie, décide, confirme',
-    description: 'Propose un créneau. Chacun répond OUI ou NON. Plus de "on verra".',
+    title: 'Tout le monde confirme',
+    description: 'Propose un créneau. Chacun répond OUI ou NON — plus de « on verra ».',
     icon: Calendar,
   },
   {
     step: '4',
-    title: 'Rejouez. Chaque. Semaine.',
-    description: 'Le check-in rend tout le monde responsable. Semaine après semaine, ta squad ne rate plus une session.',
+    title: 'Vous jouez.',
+    description: 'Le soir arrive, tout le monde est là. Vous jouez. Semaine après semaine, ta squad ne rate plus une session.',
     icon: Target,
   },
 ]

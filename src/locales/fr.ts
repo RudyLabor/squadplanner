@@ -51,14 +51,14 @@ export const fr = {
 
   // États vides
   empty: {
-    sessions: 'Aucune session pour le moment',
-    squads: 'Aucune squad',
-    messages: 'Aucun message',
-    notifications: 'Aucune notification',
-    search: 'Aucun résultat',
-    friends: 'Aucun ami en ligne',
-    activities: 'Aucune activité récente',
-    challenges: 'Aucun défi actif',
+    sessions: 'Pas encore de session — crée la première !',
+    squads: 'Pas encore de squad — crée ou rejoins-en une !',
+    messages: 'Pas encore de message — lance la conversation !',
+    notifications: 'Aucune notification pour le moment',
+    search: 'Aucun résultat trouvé',
+    friends: 'Aucun ami en ligne — invite tes potes !',
+    activities: 'Pas encore d\'activité — crée ta première session !',
+    challenges: 'Aucun défi actif — reviens demain !',
   },
 
   // Statuts
@@ -150,7 +150,7 @@ export const fr = {
     members: (count: number) => `${count} membre${count > 1 ? 's' : ''}`,
     invite: 'Inviter des membres',
     settings: 'Paramètres de la squad',
-    stats: 'Statistiques',
+    stats: 'Stats',
     leaderboard: 'Classement',
   },
 
@@ -192,7 +192,7 @@ export const fr = {
     appearance: {
       title: 'Apparence',
       theme: 'Thème',
-      themeDesc: "Adapte l'apparence de l'app",
+      themeDesc: 'Change le look de Squad Planner',
       dark: 'Sombre',
       light: 'Clair',
       auto: 'Auto',
@@ -230,7 +230,7 @@ export const fr = {
       privacy: 'Politique de confidentialité',
       privacyDesc: 'RGPD & protection des données',
       landing: "Page d'accueil publique",
-      landingDesc: 'Voir la landing page',
+      landingDesc: "Voir la page d'accueil",
     },
     signOut: 'Se déconnecter',
     version: 'Squad Planner',
@@ -243,7 +243,7 @@ export const fr = {
     subtitle: 'Débloque toutes les fonctionnalités',
     features: {
       unlimitedSquads: 'Squads illimitées',
-      advancedStats: 'Statistiques avancées',
+      advancedStats: 'Heatmaps de présence et tendances',
       customThemes: 'Thèmes personnalisés',
       prioritySupport: 'Support prioritaire',
     },

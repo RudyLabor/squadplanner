@@ -161,7 +161,7 @@ export function Premium() {
           />
         )}
 
-        {/* Social proof counter */}
+        {/* Social proof */}
         <div className="flex items-center justify-center gap-3 py-6">
           <div className="flex -space-x-2">
             {['bg-primary', 'bg-success', 'bg-warning', 'bg-info', 'bg-purple'].map((bg, i) => (
@@ -171,7 +171,7 @@ export function Premium() {
             ))}
           </div>
           <p className="text-sm text-text-secondary">
-            <span className="font-semibold text-text-primary">2 847+ joueurs</span> sont passés Premium ce mois-ci
+            Des centaines de squads sont déjà passées Premium
           </p>
         </div>
 

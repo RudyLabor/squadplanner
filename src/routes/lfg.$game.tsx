@@ -120,7 +120,7 @@ function GameNotFound() {
 const benefits = [
   {
     icon: Shield,
-    title: 'Zéro toxique, zéro smurf',
+    title: 'Score de fiabilité visible — tu sais sur qui compter',
     desc: (name: string) =>
       `Chaque joueur ${name} est vérifié. Tu vois son score de fiabilité avant de jouer avec. Si quelqu'un est toxique, ça se sait.`,
     details: [
@@ -137,7 +137,7 @@ const benefits = [
     details: [
       'Matching par rang et style de jeu',
       'Préférences de rôle et plateforme',
-      "Le matching s'améliore à chaque session",
+      'Le score de compatibilité prend en compte tes jeux, ta région et ta fiabilité',
     ],
   },
   {
@@ -308,7 +308,7 @@ export default function Component() {
           </m.div>
 
           <p className="text-sm text-text-quaternary -mt-6 mb-8">
-            100% gratuit · Pas de carte bancaire · Premiers matchs en 24h
+            100% gratuit · Pas de carte bancaire · Trouve des coéquipiers dès ton inscription
           </p>
 
           {/* Quick stats */}
@@ -704,7 +704,7 @@ export default function Component() {
                 </p>
                 <p className="text-sm text-text-tertiary">
                   <span className="font-medium text-text-secondary">{game.testimonial.author}</span>
-                  {' '}· {game.testimonial.rank}
+                  {' '}· {game.testimonial.role} · {game.testimonial.rank}
                 </p>
               </div>
             </div>
@@ -793,7 +793,7 @@ export default function Component() {
               <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
                 Squad Planner Premium
               </div>
-              <p className="text-xs text-text-tertiary mt-1">Squads illimitees, stats avancees et plus</p>
+              <p className="text-xs text-text-tertiary mt-1">Squads illimitées, heatmaps de présence et plus</p>
             </Link>
           </div>
         </div>
@@ -846,7 +846,7 @@ export default function Component() {
                 </Link>
               </m.div>
               <p className="text-base text-text-quaternary mt-4">
-                Gratuit · Pas de carte bancaire · Premiers matchs en 24h
+                Gratuit · Pas de carte bancaire · Trouve des coéquipiers dès ton inscription
               </p>
             </div>
           </m.div>

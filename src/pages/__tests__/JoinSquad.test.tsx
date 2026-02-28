@@ -222,11 +222,11 @@ describe('JoinSquad Page', () => {
     })
   })
 
-  it('shows "Se connecter" button when not logged in', async () => {
+  it('shows "S\'inscrire pour rejoindre" button when not logged in', async () => {
     mockSupabaseSquadFound()
     render(<JoinSquad />)
     await waitFor(() => {
-      expect(screen.getByText('Se connecter')).toBeDefined()
+      expect(screen.getByText("S'inscrire pour rejoindre")).toBeDefined()
     })
   })
 
@@ -234,7 +234,7 @@ describe('JoinSquad Page', () => {
     mockSupabaseSquadFound()
     render(<JoinSquad />)
     await waitFor(() => {
-      expect(screen.getByText('Connecte-toi pour rejoindre cette squad')).toBeDefined()
+      expect(screen.getByText('Squad Planner est gratuit et te prend 30 secondes.')).toBeDefined()
     })
   })
 
@@ -246,9 +246,9 @@ describe('JoinSquad Page', () => {
     mockSupabaseSquadFound()
     render(<JoinSquad />)
     await waitFor(() => {
-      expect(screen.getByText('Se connecter')).toBeDefined()
+      expect(screen.getByText("S'inscrire pour rejoindre")).toBeDefined()
     })
-    fireEvent.click(screen.getByText('Se connecter'))
+    fireEvent.click(screen.getByText("S'inscrire pour rejoindre"))
     expect(setItemSpy).toHaveBeenCalledWith('redirectAfterAuth', '/join/ABC123')
     expect(mocks.navigate).toHaveBeenCalledWith('/auth')
     setItemSpy.mockRestore()
@@ -395,7 +395,7 @@ describe('JoinSquad Page', () => {
     mockSupabaseSquadFound()
     render(<JoinSquad />)
     await waitFor(() => {
-      expect(screen.getByText('Se connecter')).toBeDefined()
+      expect(screen.getByText("S'inscrire pour rejoindre")).toBeDefined()
     })
     expect(screen.queryByText('Rejoindre la squad')).toBeNull()
   })

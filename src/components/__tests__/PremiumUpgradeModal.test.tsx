@@ -87,11 +87,11 @@ describe('PremiumUpgradeModal', () => {
 
   it('renders modal when open', () => {
     render(createElement(PremiumUpgradeModal, defaultProps))
-    expect(screen.getByText('Passe au niveau supérieur')).toBeDefined()
+    expect(screen.getByText('Débloque cette fonctionnalité')).toBeDefined()
   })
 
   it('displays feature when provided', () => {
-    render(createElement(PremiumUpgradeModal, { ...defaultProps, feature: 'Stats avancées' }))
+    render(createElement(PremiumUpgradeModal, { ...defaultProps, feature: 'Heatmaps d\'activité et fiabilité' }))
     expect(screen.getByText(/Pour accéder à/)).toBeDefined()
   })
 
@@ -104,7 +104,7 @@ describe('PremiumUpgradeModal', () => {
   it('renders premium features list', () => {
     render(createElement(PremiumUpgradeModal, defaultProps))
     expect(screen.getByText('5 squads')).toBeDefined()
-    expect(screen.getByText('Stats avancées')).toBeDefined()
+    expect(screen.getByText('Heatmaps d\'activité et fiabilité')).toBeDefined()
     expect(screen.getByText('IA Coach')).toBeDefined()
   })
 

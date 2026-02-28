@@ -27,21 +27,21 @@ const MILESTONES = [
     key: 'recruiter3' as const,
     count: 3,
     label: 'Recruteur',
-    reward: 'Badge "Recruteur" + -5% permanent',
+    reward: 'Badge "Recruteur" + 5% de réduction à vie',
     Icon: Award,
   },
   {
     key: 'recruiter10' as const,
     count: 10,
     label: 'Recruteur Pro',
-    reward: '-10% permanent + 1 mois Squad Leader gratuit',
+    reward: '10% de réduction à vie + 1 mois Squad Leader gratuit',
     Icon: Trophy,
   },
   {
     key: 'recruiter25' as const,
     count: 25,
     label: 'Recruteur Légendaire',
-    reward: '-20% permanent + Squad Leader à vie',
+    reward: '20% de réduction à vie + Squad Leader à vie',
     Icon: Crown,
   },
 ] as const
@@ -163,9 +163,9 @@ export function Referrals() {
               transition={{ delay: 0.15, duration: 0.4, ease }}
               className="text-lg md:text-xl font-bold text-text-primary mb-4"
             >
-              Invite 3 potes,{' '}
+              Tes potes galèrent aussi ?{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-success to-primary">
-                débloque des réductions permanentes
+                Invite-les.
               </span>
             </m.h1>
 
@@ -175,8 +175,8 @@ export function Referrals() {
               transition={{ delay: 0.2, duration: 0.4, ease }}
               className="text-md md:text-lg text-text-secondary max-w-xl mx-auto"
             >
+              3 inscrits et ta squad grandit — plus les réductions en bonus.
               Ton pote gagne 7 jours Premium. Toi, tu déverrouilles des réductions permanentes sur ton abo + 500 XP.
-              Plus tu parraines, plus tu économises.
             </m.p>
           </div>
         </div>
@@ -308,12 +308,12 @@ export function Referrals() {
                   <Step number={2} text="Ton ami s'inscrit via ton lien" color="primary" />
                   <Step
                     number={3}
-                    text="Ton ami reçoit 7 jours Premium gratuit. Toi, tu gagnes 500 XP et une réduction permanente"
+                    text="Ton pote reçoit 7 jours Premium gratuit. Toi tu gagnes 500 XP + réduction permanente."
                     color="warning"
                   />
                   <Step
                     number={4}
-                    text="3 parrainages = -5%, 10 = -10%, 25 = -20% permanent sur ton abo"
+                    text="3 parrainages = 5% de réduction à vie, 10 = 10%, 25 = 20% sur ton abo"
                     color="success"
                   />
                 </div>

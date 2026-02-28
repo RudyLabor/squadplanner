@@ -24,7 +24,7 @@ interface PremiumGateProps {
 const FEATURE_LABELS: Record<PremiumFeature, string> = {
   unlimited_squads: 'Squads illimitées',
   unlimited_history: 'Historique illimité',
-  advanced_stats: 'Stats avancées',
+  advanced_stats: 'Graphiques de présence et fiabilité par joueur',
   ai_coach_advanced: 'IA Coach avancé',
   hd_audio: 'Audio HD',
   advanced_roles: 'Rôles avancés',
@@ -33,7 +33,7 @@ const FEATURE_LABELS: Record<PremiumFeature, string> = {
   voice_messages: 'Messages vocaux',
   polls: 'Sondages',
   recurring_sessions: 'Sessions récurrentes',
-  team_analytics: 'Analytics équipe',
+  team_analytics: 'Analytics squad',
   priority_matchmaking: 'Matchmaking prioritaire',
   club_dashboard: 'Dashboard Club',
   custom_branding: 'Branding personnalisé',

@@ -87,7 +87,7 @@ export function CookieConsent() {
                         <div>
                           <p className="text-base font-medium text-text-primary">Essentiels</p>
                           <p className="text-sm text-text-tertiary">
-                            Authentification, thème, état de l'app. Toujours actifs.
+                            Authentification, thème, état de Squad Planner. Toujours actifs.
                           </p>
                         </div>
                       </div>

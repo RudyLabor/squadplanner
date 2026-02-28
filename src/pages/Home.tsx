@@ -96,7 +96,7 @@ interface UpcomingSession {
 // Badge fiabilité avec glow subtil et tooltip
 function ReliabilityBadge({ score }: { score: number }) {
   const tooltipText =
-    'Ton score de fiabilité reflète ta réputation dans ta squad. +5 % quand tu confirmes, -10 % si tu ne réponds pas. Les joueurs au-dessus de 95 % sont les premiers invités aux sessions !'
+    'Ton score de fiabilité montre si tu tiens parole. +5 % quand tu confirmes. -10 % si tu ghost. Au-dessus de 95 %, tu es invité en priorité.'
 
   const getBadgeContent = () => {
     if (score >= 95) {
@@ -319,7 +319,7 @@ export default function Home({ loaderData }: HomeProps) {
     if (pendingRsvps > 0)
       return {
         icon: '⚡',
-        text: `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} attend${pendingRsvps > 1 ? 'ent' : ''} ta réponse. Ta squad ne peut pas s'organiser sans toi.`,
+        text: `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} attend${pendingRsvps > 1 ? 'ent' : ''} ta réponse. Ta squad t'attend — réponds en 2 secondes.`,
         cta: 'Répondre maintenant',
         action: () => navigate(`/session/${upcomingSessions.find((s) => !s.my_rsvp)?.id}`),
         color: 'warning' as const,
@@ -327,7 +327,7 @@ export default function Home({ loaderData }: HomeProps) {
     if (sessionsThisWeek === 0)
       return {
         icon: '📅',
-        text: "Aucune session prévue cette semaine. Crée-en une avant que tes potes s'organisent sans toi.",
+        text: "Pas encore de session cette semaine — crée la première et ta squad sera prévenue.",
         cta: 'Créer une session',
         action: openCreateSessionModal,
         color: 'primary' as const,
@@ -335,7 +335,7 @@ export default function Home({ loaderData }: HomeProps) {
     if (reliabilityScore > 0 && reliabilityScore < 70)
       return {
         icon: '📉',
-        text: `Ton score de fiabilité est à ${reliabilityScore}%. Confirme ta présence à la prochaine session pour le remonter.`,
+        text: `Ton score est à ${reliabilityScore}%. Confirme ta prochaine session pour le remonter.`,
         cta: 'Voir les sessions',
         action: () => navigate('/sessions'),
         color: 'error' as const,
@@ -412,9 +412,9 @@ export default function Home({ loaderData }: HomeProps) {
               <p className="text-sm text-text-tertiary">
                 {upcomingSessions.length > 0
                   ? pendingRsvps > 0
-                    ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} sans ta réponse — ta squad ne peut pas s'organiser sans toi`
+                    ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} sans ta réponse — ta squad t'attend, réponds en 2 secondes`
                     : "T'es carré, toutes tes sessions sont confirmées 🔥"
-                  : "Chaque jour sans session, c'est un soir où ta squad joue sans toi"}
+                  : "Tes potes ont voté pour la prochaine session. Ton avis compte !"}
               </p>
               <div className="flex items-center gap-2 mt-2">
                 <PlanBadge tier={tier} size="sm" />
@@ -440,7 +440,7 @@ export default function Home({ loaderData }: HomeProps) {
                 <span className="text-xl flex-shrink-0">{homeNudge.icon}</span>
                 <p className="text-sm text-text-secondary flex-1">{homeNudge.text}</p>
                 <button
-                  onClick={homeNudge.action}
+                  onClick={() => homeNudge.action()}
                   className={`text-xs font-semibold px-3 py-1.5 rounded-lg flex-shrink-0 transition-colors ${
                     homeNudge.color === 'warning'
                       ? 'bg-warning/15 text-warning hover:bg-warning/25'

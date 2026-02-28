@@ -132,7 +132,7 @@ describe('PremiumGate', () => {
         children: createElement('div', {}, 'Blurred Content'),
       })
     )
-    expect(screen.getByText('Stats avancées')).toBeDefined()
+    expect(screen.getByText('Graphiques de présence et fiabilité par joueur')).toBeDefined()
     expect(screen.getByText('Premium requis')).toBeDefined()
   })
 

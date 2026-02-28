@@ -7,6 +7,7 @@ export interface GameTestimonial {
   quote: string
   author: string
   rank: string
+  role: string
 }
 
 export interface GameInfo {
@@ -50,7 +51,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Organise tes ranked 5-stack et ne joue plus jamais avec un random',
     specificFeatures: ['Matchmaking par rank (Iron à Radiant)', 'Sessions ranked récurrentes', 'Score de fiabilité anti-ghost'],
     lfgSpecificCopy: 'Cherche des coéquipiers ranked pour monter ensemble',
-    testimonial: { quote: "On est passés de Gold à Diamond en 2 mois grâce à une squad stable. Plus de randoms toxiques.", author: 'Alex', rank: 'Diamond 2' },
+    testimonial: { quote: "On est passés de Gold à Diamond en 2 mois grâce à une squad stable. Plus de randoms toxiques.", author: 'Alex_Valo', rank: 'Diamond 2', role: 'Joueur Valorant' },
   },
   {
     slug: 'league-of-legends',
@@ -71,7 +72,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Monte en ranked avec une squad fixe qui connait ses rôles',
     specificFeatures: ['Organisation par rôle (Top, Jungle, Mid, ADC, Support)', 'Sessions Clash planifiées', 'Suivi de progression collective'],
     lfgSpecificCopy: 'Cherche des joueurs pour flex ranked ou Clash',
-    testimonial: { quote: "Enfin une squad Clash stable. On a gagné notre premier tournoi ensemble.", author: 'Sarah', rank: 'Platine 1' },
+    testimonial: { quote: "Enfin une squad Clash stable. On a gagné notre premier tournoi ensemble après 3 mois de sessions régulières.", author: 'SarahLoL', rank: 'Platine 1', role: 'Joueuse League of Legends' },
   },
   {
     slug: 'fortnite',
@@ -91,7 +92,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Coordonne tes sessions cross-platform pour ne rater aucun event',
     specificFeatures: ['Planification cross-platform', 'Alertes events et mises à jour', 'Sessions duo, trio ou squad'],
     lfgSpecificCopy: 'Cherche des joueurs pour ranked, créatif ou events saisonniers',
-    testimonial: { quote: "Avec Squad Planner on rate plus aucun event saisonnier. Tout le monde est prêt.", author: 'Lucas', rank: 'Champion League' },
+    testimonial: { quote: "Avec Squad Planner on rate plus aucun event saisonnier. Tout le monde est prêt et on lance dès la première heure.", author: 'Lucas_FN', rank: 'Champion League', role: 'Joueur Fortnite' },
   },
   {
     slug: 'rocket-league',
@@ -111,7 +112,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Lance des sessions rapides en 2v2 ou 3v3 après le boulot',
     specificFeatures: ['Sessions courtes (15-30 min)', 'Tournois entre amis', 'Matchmaking par rank'],
     lfgSpecificCopy: 'Cherche des coéquipiers 2v2 ou 3v3 pour monter en ranked',
-    testimonial: { quote: "On fait nos sessions 2v2 tous les mardis soir. Plus besoin de chercher un mate.", author: 'Théo', rank: 'Grand Champion' },
+    testimonial: { quote: "On fait nos sessions 2v2 tous les mardis et jeudis soir. Plus besoin de chercher un mate au dernier moment.", author: 'Theo_RL', rank: 'Grand Champion', role: 'Joueur Rocket League' },
   },
   {
     slug: 'cs2',
@@ -132,7 +133,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Assure-toi que ta 5-stack est complète avant de lancer la ranked',
     specificFeatures: ['Confirmation obligatoire avant le match', 'Sessions Premier planifiées', 'Score de fiabilité visible'],
     lfgSpecificCopy: 'Cherche des joueurs pour du compétitif ou Premier',
-    testimonial: { quote: "Depuis qu'on utilise Squad Planner, on a toujours notre 5e. Notre taux de victoire a explosé.", author: 'Maxime', rank: 'Faceit Niveau 8' },
+    testimonial: { quote: "Depuis qu'on utilise Squad Planner, on a toujours notre 5e prêt 15 min avant le match. Notre taux de victoire a explosé.", author: 'Max_CS', rank: 'Faceit Niveau 8', role: 'Joueur CS2' },
   },
   {
     slug: 'apex-legends',
@@ -152,7 +153,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Garde ton trio ranked soudé avec des sessions régulières',
     specificFeatures: ['Squads de 3 optimisées', 'Rappels avant chaque session', 'Suivi de performance squad'],
     lfgSpecificCopy: 'Cherche un 3e fiable pour du ranked ou des arenas',
-    testimonial: { quote: "Plus de duo forcé en ranked. On joue toujours à 3 maintenant.", author: 'Emma', rank: 'Master' },
+    testimonial: { quote: "Plus de duo forcé en ranked. On joue toujours à 3 maintenant, avec les mêmes Légendes complémentaires.", author: 'Emma_Apex', rank: 'Master', role: 'Joueuse Apex Legends' },
   },
   {
     slug: 'minecraft',
@@ -172,7 +173,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Coordonne tes sessions build ou survie pour que tout le monde soit là',
     specificFeatures: ['Sessions longues (2h+)', 'Planification de projets build', 'Coordination serveur multi-joueurs'],
     lfgSpecificCopy: 'Cherche des joueurs pour survie, créatif ou mini-jeux',
-    testimonial: { quote: "Notre serveur survie a jamais été aussi actif. On joue tous les mercredis.", author: 'Jules', rank: 'Joueur régulier' },
+    testimonial: { quote: "Notre serveur survie a jamais été aussi actif. On joue tous les mercredis avec 8 personnes minimum.", author: 'Jules_MC', rank: 'Joueur régulier', role: 'Joueur Minecraft' },
   },
   {
     slug: 'fifa',
@@ -193,7 +194,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Organise tes sessions Pro Clubs et tournois entre amis',
     specificFeatures: ['Planification de matchs Pro Clubs', 'Tournois entre amis', 'Rappels le jour du match'],
     lfgSpecificCopy: 'Cherche des joueurs pour Pro Clubs ou tournois FUT',
-    testimonial: { quote: "On a enfin un club Pro Clubs complet chaque soir. Fini les matchs à 5.", author: 'Karim', rank: 'Division 2' },
+    testimonial: { quote: "On a enfin un club Pro Clubs complet chaque soir. Fini les matchs à 5 contre 11.", author: 'Karim_FC', rank: 'Division 2', role: 'Joueur EA Sports FC' },
   },
   {
     slug: 'call-of-duty',
@@ -214,7 +215,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Planifie tes soirées Warzone, Zombies ou multi avec ta squad fixe',
     specificFeatures: ['Sessions Warzone squad', 'Soirées Zombies planifiées', 'Multi modes (ranked, casual, customs)'],
     lfgSpecificCopy: 'Cherche des joueurs pour Warzone, ranked ou Zombies',
-    testimonial: { quote: "Nos soirées Warzone du vendredi sont devenues sacrées. Tout le monde est là.", author: 'Antoine', rank: 'Iridescent' },
+    testimonial: { quote: "Nos soirées Warzone du vendredi sont devenues sacrées. 6 semaines d'affilée sans une absence.", author: 'Antoine_CoD', rank: 'Iridescent', role: 'Joueur Call of Duty' },
   },
   {
     slug: 'overwatch-2',
@@ -235,7 +236,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Compose ta team par rôle (Tank, DPS, Support) et grimpe en ranked',
     specificFeatures: ['Composition par rôle', 'Sessions ranked planifiées', 'Suivi de SR collectif'],
     lfgSpecificCopy: 'Cherche Tank/DPS/Support pour du ranked ou quickplay',
-    testimonial: { quote: "On compose notre team à l'avance, plus de surprise au dernier moment.", author: 'Marie', rank: 'Master' },
+    testimonial: { quote: "On compose notre team à l'avance avec les bons rôles, plus de surprise au dernier moment.", author: 'Marie_OW', rank: 'Master', role: 'Joueuse Overwatch 2' },
   },
   {
     slug: 'destiny-2',
@@ -255,7 +256,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Planifie tes raids et strikes avec une équipe qui se présente vraiment',
     specificFeatures: ['Sessions longues (raids 3h+)', 'Check-in obligatoire', 'Planification de raids hebdomadaires'],
     lfgSpecificCopy: 'Cherche des gardiens pour raids, donjons ou Trials',
-    testimonial: { quote: "Premier raid Day One réussi grâce à une squad fiable. Tout le monde était prêt.", author: 'Nico', rank: 'Power Level 2000+' },
+    testimonial: { quote: "Premier raid Day One réussi grâce à une squad fiable. 6 gardiens connectés pile à l'heure.", author: 'Nico_D2', rank: 'Power Level 2000+', role: 'Joueur Destiny 2' },
   },
   {
     slug: 'gta-online',
@@ -276,7 +277,7 @@ export const GAMES: GameInfo[] = [
     specificUseCase: 'Organise tes braquages, courses et soirées délire avec ta squad',
     specificFeatures: ['Planification de braquages', 'Sessions soirées thématiques', 'Coordination multi-activités'],
     lfgSpecificCopy: 'Cherche des joueurs pour braquages, courses ou délires',
-    testimonial: { quote: "Nos braquages du dimanche sont devenus un rituel. Zéro annulation.", author: 'Léo', rank: 'Niveau 300+' },
+    testimonial: { quote: "Nos braquages du dimanche sont devenus un rituel. 4 joueurs, zéro annulation depuis 2 mois.", author: 'Leo_GTA', rank: 'Niveau 300+', role: 'Joueur GTA Online' },
   },
 ]
 

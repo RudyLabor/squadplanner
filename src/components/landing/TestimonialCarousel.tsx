@@ -1,83 +1,56 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence, useInView } from 'framer-motion'
-import { Star, ChevronLeft, ChevronRight } from '../icons'
+import { ChevronLeft, ChevronRight } from '../icons'
 interface Testimonial {
   name: string
   squad: string
   text: string
   avatar: string
-  rating: number
   game: string
-  videoId?: string // R29 — YouTube video embed for ambassador testimonials
 }
 
 const testimonials: Testimonial[] = [
   {
-    name: 'Le problème universel',
+    name: 'Le message sans réponse',
     squad: 'Chaque groupe Discord, chaque soir',
-    text: "« On joue ce soir ? » — 3 jours plus tard, toujours rien. Squad Planner met fin aux « on verra » une bonne fois pour toutes.",
+    text: "« On joue ce soir ? » Vu par 8, répondu par 2. Trois jours plus tard, toujours rien. Depuis qu'on a créé notre squad, tout le monde confirme en 30 secondes. On a joué 4 fois cette semaine.",
     avatar: '💬',
-    rating: 5,
     game: 'Valorant',
   },
   {
-    name: 'Fini le ghosting',
-    squad: 'Le constat',
-    text: "Avec la confirmation de présence, plus personne ne ghost. Tu dis OUI, tu viens. Ton score de fiabilité parle pour toi.",
+    name: 'Le ghost du samedi soir',
+    squad: 'Squad ranked, chaque week-end',
+    text: "On était 5 inscrits, 2 connectés. Chaque samedi, la même déception. Depuis qu'on utilise le score de fiabilité, on a enchaîné 12 sessions d'affilée sans une seule annulation.",
     avatar: '🎯',
-    rating: 5,
     game: 'League of Legends',
   },
   {
-    name: 'Des sessions régulières',
-    squad: 'Le résultat',
-    text: "Passe de « on verra demain » à 3 sessions par semaine. Le score de présence motive tout le monde à se pointer.",
+    name: 'Le « on verra demain »',
+    squad: 'Squad casual qui veut progresser',
+    text: "On jouait une fois par mois, toujours au dernier moment, jamais les mêmes. Maintenant on a 3 sessions fixes par semaine. Le score de présence a tout changé : tout le monde se pointe.",
     avatar: '🔥',
-    rating: 5,
     game: 'Apex Legends',
   },
   {
-    name: 'La question qui tue',
-    squad: 'Chaque week-end',
-    text: "« Qui est dispo ce week-end ? » — vu par 8, répondu par 2. Avec Squad Planner, tout le monde répond en 30 secondes.",
+    name: 'Le pote qui ghost',
+    squad: "Groupe d'amis depuis le lycée",
+    text: "On avait un pote qui disait oui à tout mais ne venait jamais. Avec le check-in et le score de fiabilité, il a compris. Maintenant c'est lui qui rappelle aux autres de confirmer.",
     avatar: '😤',
-    rating: 5,
     game: 'Fortnite',
   },
   {
-    name: 'Responsabiliser la squad',
-    squad: 'Le game changer',
-    text: "Le check-in rend tout le monde responsable. Ton pote qui ghost tout le temps ? Son score de fiabilité va le calmer.",
+    name: 'Le 5e qui manque toujours',
+    squad: 'Ranked 5v5',
+    text: "On lançait jamais la ranked parce qu'il manquait toujours quelqu'un. Avec les confirmations obligatoires, on sait 24h avant si on sera 5. Résultat : on a enfin grimpé ensemble.",
     avatar: '🎮',
-    rating: 5,
     game: 'Overwatch 2',
   },
   {
-    name: 'Toujours connectés',
-    squad: 'Le bonus',
-    text: "La party vocale toujours ouverte, c'est le vrai plus. Tu retrouves ta squad même sans session prévue.",
+    name: 'La squad éparpillée',
+    squad: 'Amis sur 3 fuseaux horaires',
+    text: "Avec des potes à Paris, Montréal et Bruxelles, trouver un créneau c'était l'enfer. La planification par timezone a tout simplifié. On se retrouve chaque dimanche sans prise de tête.",
     avatar: '🎧',
-    rating: 5,
     game: 'Rocket League',
-  },
-  // R29 — Ambassador video testimonials
-  {
-    name: 'NexusGaming',
-    squad: 'Ambassadeur Squad Planner',
-    text: "En tant que streamer, j'organise 4 sessions par semaine avec ma communauté. Avant Squad Planner, c'était le chaos. Maintenant tout le monde confirme et personne ne ghost.",
-    avatar: '🎬',
-    rating: 5,
-    game: 'Valorant',
-    videoId: 'ambassador-nexus',
-  },
-  {
-    name: 'PixelSquadFR',
-    squad: 'Ambassadeur Squad Planner',
-    text: "Ma guilde de 40 joueurs utilise Squad Planner depuis le lancement. Le score de fiabilité a changé notre culture : plus de ghosting, plus de drama. On joue juste ensemble.",
-    avatar: '🎥',
-    rating: 5,
-    game: 'League of Legends',
-    videoId: 'ambassador-pixel',
   },
 ]
 
@@ -99,14 +72,6 @@ const slideVariants = {
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
     <div className="surface-glass rounded-2xl p-6 h-full flex flex-col transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(139,92,246,0.08)]" style={{ backdropFilter: 'blur(24px) saturate(1.2)', WebkitBackdropFilter: 'blur(24px) saturate(1.2)' }}>
-      {/* R29 — Video badge for ambassador testimonials */}
-      {t.videoId && (
-        <div className="flex items-center gap-1.5 mb-3">
-          <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-            🎬 Témoignage vidéo
-          </span>
-        </div>
-      )}
       <div className="flex items-center gap-3 mb-4">
         <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xl">
           {t.avatar}
@@ -117,18 +82,8 @@ function TestimonialCard({ t }: { t: Testimonial }) {
           <div className="text-xs text-info mt-0.5">{t.game}</div>
         </div>
       </div>
-      <div className="flex gap-0.5 mb-3">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star
-            key={i}
-            className={`w-3.5 h-3.5 ${i < t.rating ? 'text-warning fill-warning' : 'text-border-subtle'}`}
-          />
-        ))}
-      </div>
       <p className="text-text-secondary text-sm leading-relaxed italic flex-1">
-        {'« '}
         {t.text}
-        {' »'}
       </p>
     </div>
   )
@@ -192,7 +147,7 @@ export function TestimonialCarousel() {
       ref={ref}
       role="region"
       aria-roledescription="carousel"
-      aria-label="Témoignages de joueurs"
+      aria-label="Situations de joueurs"
     >
       <m.h2
         className="text-xl md:text-2xl font-bold text-center text-text-primary mb-3"
@@ -200,7 +155,7 @@ export function TestimonialCarousel() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        Tu reconnais ces situations{' '}?
+        Situations que tu reconnais
       </m.h2>
       <m.p
         className="text-text-tertiary text-center mb-10"
@@ -209,7 +164,7 @@ export function TestimonialCarousel() {
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
       >
-        Si tu as déjà envoyé {'« '}qui est dispo ce soir{' ? »'} sans réponse… on a la solution.
+        Si tu as déjà envoyé {'« '}qui est dispo ce soir{' ? »'} sans réponse… on a la solution.
       </m.p>
 
       <div
@@ -222,7 +177,7 @@ export function TestimonialCarousel() {
           type="button"
           onClick={prev}
           className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-6 z-10 min-w-[44px] min-h-[44px] w-11 h-11 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B5CF6]"
-          aria-label="Témoignage précédent"
+          aria-label="Situation précédente"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -230,12 +185,12 @@ export function TestimonialCarousel() {
           type="button"
           onClick={next}
           className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-6 z-10 min-w-[44px] min-h-[44px] w-11 h-11 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B5CF6]"
-          aria-label="Témoignage suivant"
+          aria-label="Situation suivante"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
 
-        {/* Testimonial cards */}
+        {/* Scenario cards */}
         <div className="overflow-hidden px-6 md:px-2">
           <AnimatePresence mode="wait" custom={direction}>
             <m.div
@@ -262,7 +217,7 @@ export function TestimonialCarousel() {
               }`}
               role="group"
               aria-roledescription="slide"
-              aria-label={`Témoignages ${currentIndex * cardsPerView + 1} à ${Math.min((currentIndex + 1) * cardsPerView, testimonials.length)} sur ${testimonials.length}`}
+              aria-label={`Situations ${currentIndex * cardsPerView + 1} à ${Math.min((currentIndex + 1) * cardsPerView, testimonials.length)} sur ${testimonials.length}`}
             >
               {visibleTestimonials.map((t) => (
                 <TestimonialCard key={t.name} t={t} />
@@ -279,7 +234,7 @@ export function TestimonialCarousel() {
               type="button"
               onClick={() => goToSlide(i)}
               className="min-w-[44px] min-h-[44px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B5CF6]"
-              aria-label={`Témoignage groupe ${i + 1}`}
+              aria-label={`Situation groupe ${i + 1}`}
             >
               <span
                 className={`h-2 rounded-full transition-all duration-300 block ${

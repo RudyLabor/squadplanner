@@ -369,7 +369,7 @@ describe('ErrorBoundary', () => {
     )
     expect(
       screen.getByText(
-        "Une nouvelle version de l'app est disponible. Recharge la page pour en profiter."
+        'Une nouvelle version de Squad Planner est dispo. Recharge la page pour en profiter.'
       )
     ).toBeInTheDocument()
   })

@@ -158,7 +158,7 @@ test.describe('Squad Detail — Section Sessions', () => {
 // ============================================================
 
 test.describe('Squad Detail — Lien vers Analytics', () => {
-  test('la section Stats avancees est visible', async ({ authenticatedPage: page, db }) => {
+  test('la section Heatmaps et tendances est visible', async ({ authenticatedPage: page, db }) => {
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
     const squad = squads[0].squads
@@ -167,8 +167,8 @@ test.describe('Squad Detail — Lien vers Analytics', () => {
     expect(loaded).toBe(true)
     await dismissTourOverlay(page)
 
-    // STRICT: la section "Stats avancées" ou un lien analytics DOIT etre visible
-    const statsSection = page.getByText(/Stats avancées|Analytics/i).first()
+    // STRICT: la section "Heatmaps et tendances" ou un lien analytics DOIT etre visible
+    const statsSection = page.getByText(/Heatmaps et tendances|Analytics/i).first()
     await expect(statsSection).toBeVisible({ timeout: 15000 })
   })
 })

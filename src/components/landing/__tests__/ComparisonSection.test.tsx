@@ -116,7 +116,7 @@ describe('ComparisonSection', () => {
     expect(screen.getByText('Score de fiabilité par joueur')).toBeInTheDocument()
     expect(screen.getByText('Check-in présence réelle')).toBeInTheDocument()
     expect(screen.getByText('Coach IA personnalisé')).toBeInTheDocument()
-    expect(screen.getByText("Stats & analytics d'équipe")).toBeInTheDocument()
+    expect(screen.getByText('Stats & analytics de ta squad')).toBeInTheDocument()
     expect(screen.getByText('Sessions récurrentes')).toBeInTheDocument()
     expect(screen.getByText('Gestion multi-squads')).toBeInTheDocument()
     expect(screen.getByText('Party vocale dédiée')).toBeInTheDocument()

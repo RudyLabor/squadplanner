@@ -70,8 +70,7 @@ describe('HelpContactSection', () => {
     // 1. Section title
     expect(screen.getByText('Contacter le support')).toBeDefined()
     // 2. Description text about response time
-    expect(screen.getByText(/Notre équipe est là pour t'aider/)).toBeDefined()
-    expect(screen.getByText(/On te répond sous 24h/)).toBeDefined()
+    expect(screen.getByText(/Réponse sous 48h/)).toBeDefined()
     // 3. Subject label present
     expect(screen.getByText('Sujet')).toBeDefined()
     // 4. Message label present

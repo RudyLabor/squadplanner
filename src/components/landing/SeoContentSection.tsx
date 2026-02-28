@@ -149,7 +149,7 @@ export function SeoContentSection() {
             <Link to="/premium" className="text-primary hover:underline">
               plans Premium
             </Link>{' '}
-            ajoutent des squads illimitees, le coaching IA, les statistiques avancees et l'audio
+            ajoutent des squads illimitees, le coaching IA, les heatmaps de presence et l'audio
             HD. Decouvre nos{' '}
             <Link to="/blog" className="text-primary hover:underline">
               conseils pour organiser ta squad

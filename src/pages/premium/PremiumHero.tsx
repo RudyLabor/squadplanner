@@ -77,7 +77,7 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-warning/10 to-warning/025 border border-warning/15">
                 <Gift className="w-4 h-4 text-warning" />
                 <span className="text-base font-medium text-warning">
-                  2 mois offerts — économise 16,78{' '}€
+                  Annuel = 2 mois offerts sur tous les plans
                 </span>
               </div>
             </div>
@@ -87,14 +87,14 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
               </div>
             </div>
             <h1 className="text-lg md:text-xl font-bold text-text-primary mb-4">
-              Passe au niveau
+              Ta squad mérite
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-warning/70">
                 {' '}
-                supérieur
+                mieux
               </span>
             </h1>
             <p className="text-md md:text-lg text-text-secondary max-w-xl mx-auto mb-8">
-              Les squads sérieuses méritent des outils sérieux. Stats, IA coach, audio HD
+              Débloque les vrais outils. Heatmaps de présence, IA coach, audio HD
               — tout ce qu'il faut pour dominer.
             </p>
             {hasPremium && (

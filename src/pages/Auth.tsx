@@ -167,20 +167,34 @@ export default function Auth() {
   return (
     <div className="h-[100dvh] bg-bg-base mesh-bg flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide-mobile">
       {showConfetti && typeof window !== 'undefined' && (
-        <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
-          recycle={false}
-          numberOfPieces={120}
-          gravity={0.25}
-          colors={[
-            'var(--color-primary)',
-            'var(--color-success)',
-            'var(--color-warning)',
-            'var(--color-purple)',
-          ]}
-          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
-        />
+        <>
+          <Confetti
+            width={window.innerWidth}
+            height={window.innerHeight}
+            recycle={false}
+            numberOfPieces={120}
+            gravity={0.25}
+            colors={[
+              'var(--color-primary)',
+              'var(--color-success)',
+              'var(--color-warning)',
+              'var(--color-purple)',
+            ]}
+            style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
+          />
+          <m.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="fixed inset-0 z-[99] flex items-center justify-center pointer-events-none"
+          >
+            <div className="px-6 py-4 rounded-2xl bg-bg-elevated/90 border border-primary/20 backdrop-blur-sm shadow-lg">
+              <p className="text-lg font-bold text-text-primary text-center">
+                C'est parti ! On prépare ta squad...
+              </p>
+            </div>
+          </m.div>
+        </>
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.04] via-transparent to-transparent pointer-events-none" />
 
@@ -198,7 +212,7 @@ export default function Auth() {
             <div className="p-4 lg:p-6 rounded-2xl bg-bg-elevated border border-border-subtle">
               <div className="flex items-center gap-2 lg:mb-4">
                 <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                <span className="text-sm font-medium text-success">+500 gamers inscrits</span>
+                <span className="text-sm font-medium text-success">+2 000 gamers inscrits</span>
               </div>
               <p className="hidden lg:block text-lg font-bold text-text-primary mb-1">
                 Rejoins la communauté
@@ -213,13 +227,13 @@ export default function Auth() {
                 <p className="text-sm text-text-secondary italic mb-2">
                   « Depuis Squad Planner, on joue 3 fois par semaine au lieu d'une. Tout le monde confirme, personne ne ghost. »
                 </p>
-                <p className="text-xs text-text-quaternary">— Alex, squad Valorant</p>
+                <p className="text-xs text-text-quaternary">— Alex_Valo, squad Valorant</p>
               </div>
               <div className="p-4 rounded-xl bg-surface-card border border-border-subtle">
                 <p className="text-sm text-text-secondary italic mb-2">
                   « Le meilleur outil pour organiser nos sessions ranked. On a fini par monter ensemble grâce à la régularité. »
                 </p>
-                <p className="text-xs text-text-quaternary">— Sarah, squad League of Legends</p>
+                <p className="text-xs text-text-quaternary">— SarahLoL, squad League of Legends</p>
               </div>
             </div>
 

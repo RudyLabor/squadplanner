@@ -66,13 +66,13 @@ const faqs = [
     id: 'data-loss',
     question: 'Mais je perds mes données ?',
     answer:
-      "Zéro. Squad Planner garde tout : squads, événements, paramètres. Rien ne se perd. T'es tranquille.",
+      "Tu devras recréer tes squads, mais c'est l'affaire de 30 secondes. Et une fois chez nous, tes données sont exportables à tout moment.",
   },
   {
     id: 'free',
     question: "C'est vraiment gratuit ?",
     answer:
-      "Oui. Calendrier illimité, confirmations de présence, notifications. Tout ça gratuit. Premium te donne des analytics avancées si tu veux. Mais l'essentiel reste gratuit.",
+      "Oui. 1 squad, 5 membres, 2 sessions/semaine — tout ça gratuit. Confirmations de présence, notifications incluses. Premium te donne des analytics avancées et plus de squads si tu veux.",
   },
 ]
 
@@ -130,11 +130,11 @@ export default function AlternativeGuilded() {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
           >
-            Guilded s'en va<span className="text-gradient-animated">.</span>
+            Guilded a fermé<span className="text-gradient-animated">.</span>
             <br />
-            Ton nouveau spot gaming
+            Tes squads, tes events, ta communauté
             <br />
-            c'est ici.
+            — tout effacé.
           </m.h1>
 
           <m.p
@@ -144,7 +144,7 @@ export default function AlternativeGuilded() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Même vibe que Guilded, mais taillé pour tes sessions. Calendrier, confirmations qui tiennent,
+            Squad Planner reprend le relais. Même vibe, mais taillé pour tes sessions. Calendrier, confirmations qui tiennent,
             notifications push. Organise sans prise de tête.
           </m.p>
 
@@ -176,6 +176,15 @@ export default function AlternativeGuilded() {
               </Link>
             </m.div>
           </m.div>
+          <m.p
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-base text-text-quaternary mt-4"
+          >
+            100% gratuit · Pas de carte bancaire · Prêt en 30 secondes
+          </m.p>
         </div>
       </section>
 

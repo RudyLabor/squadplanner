@@ -41,7 +41,7 @@ const comparisons = [
   },
   { feature: 'Coach IA personnalisé', discord: false, discordNote: '', squad: true, squadNote: '' },
   {
-    feature: "Stats & analytics d'équipe",
+    feature: 'Stats & analytics de ta squad',
     discord: false,
     discordNote: '',
     squad: true,

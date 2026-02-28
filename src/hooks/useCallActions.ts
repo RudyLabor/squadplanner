@@ -20,7 +20,7 @@ export async function sendCallPushNotification(
       body: {
         userId: receiverId,
         title: 'Appel entrant',
-        body: `${caller.username} vous appelle`,
+        body: `${caller.username} t'appelle`,
         icon: '/icon-192.svg',
         tag: `incoming-call-${callRecordId}`,
         data: {
@@ -93,7 +93,7 @@ export async function initializeNativeWebRTC(
         if (state === 'failed') {
           storeRef.setState({
             isReconnecting: false,
-            error: 'Connexion perdue. Vérifiez votre connexion internet.',
+            error: 'Connexion perdue. Vérifie ta connexion internet.',
           })
           currentState.endCall()
         }

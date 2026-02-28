@@ -37,7 +37,6 @@ vi.mock('framer-motion', () => ({
 }))
 
 vi.mock('../../icons', () => ({
-  Star: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-star' }, 'star'),
   ChevronLeft: (props: any) =>
     createElement('span', { ...props, 'data-testid': 'icon-chevron-left' }, 'left'),
   ChevronRight: (props: any) =>
@@ -57,11 +56,11 @@ describe('TestimonialCarousel', () => {
     vi.useRealTimers()
   })
 
-  // ─── Basic rendering ────────────────────────────────
+  // --- Basic rendering ---
   describe('basic rendering', () => {
     it('renders the heading', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByText(/Tu reconnais ces situations/)).toBeInTheDocument()
+      expect(screen.getByText(/Situations que tu reconnais/)).toBeInTheDocument()
     })
 
     it('renders the subtitle', () => {
@@ -73,7 +72,7 @@ describe('TestimonialCarousel', () => {
 
     it('has carousel role with aria-label', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByRole('region', { name: 'Témoignages de joueurs' })).toBeInTheDocument()
+      expect(screen.getByRole('region', { name: 'Situations de joueurs' })).toBeInTheDocument()
     })
 
     it('renders a slide group with aria-roledescription', () => {
@@ -83,22 +82,22 @@ describe('TestimonialCarousel', () => {
     })
   })
 
-  // ─── Navigation buttons ─────────────────────────────
+  // --- Navigation buttons ---
   describe('navigation buttons', () => {
     it('renders previous button with correct aria-label', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByLabelText('Témoignage précédent')).toBeInTheDocument()
+      expect(screen.getByLabelText('Situation précédente')).toBeInTheDocument()
     })
 
     it('renders next button with correct aria-label', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByLabelText('Témoignage suivant')).toBeInTheDocument()
+      expect(screen.getByLabelText('Situation suivante')).toBeInTheDocument()
     })
 
     it('both buttons are type="button"', () => {
       render(<TestimonialCarousel />)
-      const prevBtn = screen.getByLabelText('Témoignage précédent')
-      const nextBtn = screen.getByLabelText('Témoignage suivant')
+      const prevBtn = screen.getByLabelText('Situation précédente')
+      const nextBtn = screen.getByLabelText('Situation suivante')
       expect(prevBtn).toHaveAttribute('type', 'button')
       expect(nextBtn).toHaveAttribute('type', 'button')
     })
@@ -114,150 +113,138 @@ describe('TestimonialCarousel', () => {
     })
   })
 
-  // ─── Testimonial cards content ──────────────────────
-  describe('testimonial cards', () => {
-    it('renders the first testimonial on initial load (mobile: 1 card)', () => {
+  // --- Scenario cards content ---
+  describe('scenario cards', () => {
+    it('renders the first scenario on initial load (mobile: 1 card)', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
+      expect(screen.getByText('Le message sans réponse')).toBeInTheDocument()
     })
 
-    it('renders testimonial avatar emoji', () => {
+    it('renders scenario avatar emoji', () => {
       render(<TestimonialCarousel />)
       expect(screen.getByText('💬')).toBeInTheDocument()
     })
 
-    it('renders testimonial squad name', () => {
+    it('renders scenario squad context', () => {
       render(<TestimonialCarousel />)
       expect(screen.getByText('Chaque groupe Discord, chaque soir')).toBeInTheDocument()
     })
 
-    it('renders testimonial game info', () => {
+    it('renders scenario game info', () => {
       render(<TestimonialCarousel />)
       expect(screen.getByText('Valorant')).toBeInTheDocument()
     })
 
-    it('renders star rating icons (5 stars per card)', () => {
+    it('does not render star ratings', () => {
       render(<TestimonialCarousel />)
-      const stars = screen.getAllByTestId('icon-star')
-      expect(stars.length).toBe(5) // 5 stars for first card
+      expect(screen.queryByTestId('icon-star')).not.toBeInTheDocument()
     })
 
-    it('renders filled stars based on rating', () => {
+    it('renders scenario text', () => {
       render(<TestimonialCarousel />)
-      const stars = screen.getAllByTestId('icon-star')
-      // First testimonial has rating 5, so all 5 should be filled
-      stars.forEach((star) => {
-        expect(star.className).toContain('text-warning')
-        expect(star.className).toContain('fill-warning')
-      })
-    })
-
-    it('renders testimonial text wrapped in quotes', () => {
-      render(<TestimonialCarousel />)
-      // The first testimonial text contains specific content
       expect(screen.getByText(/On joue ce soir/)).toBeInTheDocument()
     })
   })
 
-  // ─── Next/Prev navigation ──────────────────────────
+  // --- Next/Prev navigation ---
   describe('next/prev navigation', () => {
-    it('clicking next shows the second testimonial', () => {
+    it('clicking next shows the second scenario', () => {
       render(<TestimonialCarousel />)
-      const nextBtn = screen.getByLabelText('Témoignage suivant')
+      const nextBtn = screen.getByLabelText('Situation suivante')
       fireEvent.click(nextBtn)
-      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
+      expect(screen.getByText('Le ghost du samedi soir')).toBeInTheDocument()
     })
 
     it('clicking prev from first goes to last slide (wraps around)', () => {
       render(<TestimonialCarousel />)
-      const prevBtn = screen.getByLabelText('Témoignage précédent')
+      const prevBtn = screen.getByLabelText('Situation précédente')
       fireEvent.click(prevBtn)
-      // With 6 testimonials and 1 per view, last slide = index 5 = "Toujours connectés"
-      expect(screen.getByText('Toujours connectés')).toBeInTheDocument()
+      // With 6 scenarios and 1 per view, last slide = "La squad éparpillée"
+      expect(screen.getByText('La squad éparpillée')).toBeInTheDocument()
     })
 
-    it('clicking next multiple times cycles through testimonials', () => {
+    it('clicking next multiple times cycles through scenarios', () => {
       render(<TestimonialCarousel />)
-      const nextBtn = screen.getByLabelText('Témoignage suivant')
+      const nextBtn = screen.getByLabelText('Situation suivante')
 
       fireEvent.click(nextBtn)
-      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
+      expect(screen.getByText('Le ghost du samedi soir')).toBeInTheDocument()
 
       fireEvent.click(nextBtn)
-      expect(screen.getByText('Des sessions régulières')).toBeInTheDocument()
+      expect(screen.getByText(/on verra demain/)).toBeInTheDocument()
 
       fireEvent.click(nextBtn)
-      expect(screen.getByText('La question qui tue')).toBeInTheDocument()
+      expect(screen.getByText('Le pote qui ghost')).toBeInTheDocument()
     })
 
     it('clicking next wraps back to first after last', () => {
       render(<TestimonialCarousel />)
-      const nextBtn = screen.getByLabelText('Témoignage suivant')
+      const nextBtn = screen.getByLabelText('Situation suivante')
       // Click 6 times to go through all 6 and wrap
       for (let i = 0; i < 6; i++) {
         fireEvent.click(nextBtn)
       }
       // Should be back at first
-      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
+      expect(screen.getByText('Le message sans réponse')).toBeInTheDocument()
     })
   })
 
-  // ─── Dot indicators ─────────────────────────────────
+  // --- Dot indicators ---
   describe('dot indicators', () => {
     it('renders dot buttons for each slide group (6 for mobile)', () => {
       render(<TestimonialCarousel />)
-      // 6 testimonials / 1 per view = 6 dots
-      const dots = screen.getAllByLabelText(/Témoignage groupe/)
+      // 6 scenarios / 1 per view = 6 dots
+      const dots = screen.getAllByLabelText(/Situation groupe/)
       expect(dots).toHaveLength(6)
     })
 
     it('dot buttons have correct aria-labels', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByLabelText('Témoignage groupe 1')).toBeInTheDocument()
-      expect(screen.getByLabelText('Témoignage groupe 2')).toBeInTheDocument()
-      expect(screen.getByLabelText('Témoignage groupe 6')).toBeInTheDocument()
+      expect(screen.getByLabelText('Situation groupe 1')).toBeInTheDocument()
+      expect(screen.getByLabelText('Situation groupe 2')).toBeInTheDocument()
+      expect(screen.getByLabelText('Situation groupe 6')).toBeInTheDocument()
     })
 
     it('clicking a dot navigates to that slide', () => {
       render(<TestimonialCarousel />)
-      const dot3 = screen.getByLabelText('Témoignage groupe 3')
+      const dot3 = screen.getByLabelText('Situation groupe 3')
       fireEvent.click(dot3)
-      // 3rd group (index 2) = "Des sessions régulières"
-      expect(screen.getByText('Des sessions régulières')).toBeInTheDocument()
+      // 3rd group (index 2) = "Le « on verra demain »"
+      expect(screen.getByText(/on verra demain/)).toBeInTheDocument()
     })
 
     it('clicking a dot going forward sets direction to 1', () => {
       render(<TestimonialCarousel />)
       // Navigate to dot 4 from dot 1 (forward)
-      const dot4 = screen.getByLabelText('Témoignage groupe 4')
+      const dot4 = screen.getByLabelText('Situation groupe 4')
       fireEvent.click(dot4)
-      expect(screen.getByText('La question qui tue')).toBeInTheDocument()
+      expect(screen.getByText('Le pote qui ghost')).toBeInTheDocument()
     })
 
     it('clicking a dot going backward sets direction to -1', () => {
       render(<TestimonialCarousel />)
       // First go forward
-      const nextBtn = screen.getByLabelText('Témoignage suivant')
+      const nextBtn = screen.getByLabelText('Situation suivante')
       fireEvent.click(nextBtn)
       fireEvent.click(nextBtn)
       // Now go back to dot 1
-      const dot1 = screen.getByLabelText('Témoignage groupe 1')
+      const dot1 = screen.getByLabelText('Situation groupe 1')
       fireEvent.click(dot1)
-      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
+      expect(screen.getByText('Le message sans réponse')).toBeInTheDocument()
     })
   })
 
-  // ─── Auto-advance ───────────────────────────────────
+  // --- Auto-advance ---
   describe('auto-advance', () => {
     it('auto-advances to next slide after 5 seconds', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
+      expect(screen.getByText('Le message sans réponse')).toBeInTheDocument()
 
       act(() => {
         vi.advanceTimersByTime(5000)
       })
 
-      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
+      expect(screen.getByText('Le ghost du samedi soir')).toBeInTheDocument()
     })
 
     it('auto-advances multiple times', () => {
@@ -266,20 +253,20 @@ describe('TestimonialCarousel', () => {
       act(() => {
         vi.advanceTimersByTime(5000)
       })
-      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
+      expect(screen.getByText('Le ghost du samedi soir')).toBeInTheDocument()
 
       act(() => {
         vi.advanceTimersByTime(5000)
       })
-      expect(screen.getByText('Des sessions régulières')).toBeInTheDocument()
+      expect(screen.getByText(/on verra demain/)).toBeInTheDocument()
     })
   })
 
-  // ─── Pause on hover ────────────────────────────────
+  // --- Pause on hover ---
   describe('pause on hover', () => {
     it('pauses auto-advance on mouseEnter', () => {
       render(<TestimonialCarousel />)
-      const carouselRegion = screen.getByRole('region', { name: 'Témoignages de joueurs' })
+      const carouselRegion = screen.getByRole('region', { name: 'Situations de joueurs' })
       // Get the hoverable container (the div with onMouseEnter)
       const hoverContainer = carouselRegion.querySelector('.relative')!
       fireEvent.mouseEnter(hoverContainer)
@@ -288,12 +275,12 @@ describe('TestimonialCarousel', () => {
         vi.advanceTimersByTime(10000)
       })
       // Should still be on first slide since paused
-      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
+      expect(screen.getByText('Le message sans réponse')).toBeInTheDocument()
     })
 
     it('resumes auto-advance on mouseLeave', () => {
       render(<TestimonialCarousel />)
-      const carouselRegion = screen.getByRole('region', { name: 'Témoignages de joueurs' })
+      const carouselRegion = screen.getByRole('region', { name: 'Situations de joueurs' })
       const hoverContainer = carouselRegion.querySelector('.relative')!
 
       fireEvent.mouseEnter(hoverContainer)
@@ -301,24 +288,24 @@ describe('TestimonialCarousel', () => {
         vi.advanceTimersByTime(10000)
       })
       // Still on first
-      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
+      expect(screen.getByText('Le message sans réponse')).toBeInTheDocument()
 
       fireEvent.mouseLeave(hoverContainer)
       act(() => {
         vi.advanceTimersByTime(5000)
       })
       // Should advance now
-      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
+      expect(screen.getByText('Le ghost du samedi soir')).toBeInTheDocument()
     })
   })
 
-  // ─── Responsive cardsPerView ────────────────────────
+  // --- Responsive cardsPerView ---
   describe('responsive cardsPerView', () => {
     it('shows 1 card on mobile (width < 768)', () => {
       Object.defineProperty(window, 'innerWidth', { value: 500, writable: true })
       render(<TestimonialCarousel />)
-      // 6 testimonials / 1 per view = 6 dots
-      const dots = screen.getAllByLabelText(/Témoignage groupe/)
+      // 6 scenarios / 1 per view = 6 dots
+      const dots = screen.getAllByLabelText(/Situation groupe/)
       expect(dots).toHaveLength(6)
     })
 
@@ -328,7 +315,7 @@ describe('TestimonialCarousel', () => {
       // Fire resize event to trigger recalculation
       fireEvent(window, new Event('resize'))
       // 6 / 2 = 3 dots
-      const dots = screen.getAllByLabelText(/Témoignage groupe/)
+      const dots = screen.getAllByLabelText(/Situation groupe/)
       expect(dots).toHaveLength(3)
     })
 
@@ -337,7 +324,7 @@ describe('TestimonialCarousel', () => {
       render(<TestimonialCarousel />)
       fireEvent(window, new Event('resize'))
       // 6 / 3 = 2 dots
-      const dots = screen.getAllByLabelText(/Témoignage groupe/)
+      const dots = screen.getAllByLabelText(/Situation groupe/)
       expect(dots).toHaveLength(2)
     })
 
@@ -357,63 +344,44 @@ describe('TestimonialCarousel', () => {
     })
   })
 
-  // ─── Slide aria-label ──────────────────────────────
+  // --- Slide aria-label ---
   describe('slide aria-label', () => {
     it('shows correct aria-label for current slide group (mobile)', () => {
       render(<TestimonialCarousel />)
       const group = screen.getByRole('group')
-      expect(group).toHaveAttribute('aria-label', 'Témoignages 1 à 1 sur 6')
+      expect(group).toHaveAttribute('aria-label', 'Situations 1 à 1 sur 6')
     })
 
     it('updates aria-label when navigating to next slide', () => {
       render(<TestimonialCarousel />)
-      const nextBtn = screen.getByLabelText('Témoignage suivant')
+      const nextBtn = screen.getByLabelText('Situation suivante')
       fireEvent.click(nextBtn)
       const group = screen.getByRole('group')
-      expect(group).toHaveAttribute('aria-label', 'Témoignages 2 à 2 sur 6')
+      expect(group).toHaveAttribute('aria-label', 'Situations 2 à 2 sur 6')
     })
   })
 
-  // ─── Rating display variations ─────────────────────
-  describe('rating display', () => {
-    it('testimonial with rating 5 shows all 5 filled stars', () => {
-      render(<TestimonialCarousel />)
-      // Navigate to the 5th testimonial (rating 5) - Responsabiliser la squad
-      const nextBtn = screen.getByLabelText('Témoignage suivant')
-      for (let i = 0; i < 4; i++) {
-        fireEvent.click(nextBtn)
-      }
-      const stars = screen.getAllByTestId('icon-star')
-      expect(stars).toHaveLength(5)
-      // All 5 should be filled
-      const filledStars = stars.filter((s) => s.className.includes('text-warning'))
-      const unfilledStars = stars.filter((s) => s.className.includes('text-border-subtle'))
-      expect(filledStars).toHaveLength(5)
-      expect(unfilledStars).toHaveLength(0)
-    })
-  })
-
-  // ─── Multiple testimonials in desktop view ─────────
-  describe('multiple visible testimonials', () => {
-    it('shows 3 testimonials at once on desktop', () => {
+  // --- Multiple scenarios in desktop view ---
+  describe('multiple visible scenarios', () => {
+    it('shows 3 scenarios at once on desktop', () => {
       Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true })
       render(<TestimonialCarousel />)
       fireEvent(window, new Event('resize'))
-      // First 3 testimonials should be visible
-      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
-      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
-      expect(screen.getByText('Des sessions régulières')).toBeInTheDocument()
+      // First 3 scenarios should be visible
+      expect(screen.getByText('Le message sans réponse')).toBeInTheDocument()
+      expect(screen.getByText('Le ghost du samedi soir')).toBeInTheDocument()
+      expect(screen.getByText(/on verra demain/)).toBeInTheDocument()
     })
 
-    it('navigating next on desktop shows testimonials 4-6', () => {
+    it('navigating next on desktop shows scenarios 4-6', () => {
       Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true })
       render(<TestimonialCarousel />)
       fireEvent(window, new Event('resize'))
-      const nextBtn = screen.getByLabelText('Témoignage suivant')
+      const nextBtn = screen.getByLabelText('Situation suivante')
       fireEvent.click(nextBtn)
-      expect(screen.getByText('La question qui tue')).toBeInTheDocument()
-      expect(screen.getByText('Responsabiliser la squad')).toBeInTheDocument()
-      expect(screen.getByText('Toujours connectés')).toBeInTheDocument()
+      expect(screen.getByText('Le pote qui ghost')).toBeInTheDocument()
+      expect(screen.getByText('Le 5e qui manque toujours')).toBeInTheDocument()
+      expect(screen.getByText('La squad éparpillée')).toBeInTheDocument()
     })
   })
 })

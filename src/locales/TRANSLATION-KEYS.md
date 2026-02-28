@@ -225,7 +225,7 @@ Ce document liste toutes les clés de traduction disponibles dans le système i1
 |-----|----|----|
 | `settings.appearance.title` | Apparence | Appearance |
 | `settings.appearance.theme` | Thème | Theme |
-| `settings.appearance.themeDesc` | Adapte l'apparence de l'app | Customize the app appearance |
+| `settings.appearance.themeDesc` | Change le look de Squad Planner | Change the look of Squad Planner |
 | `settings.appearance.dark` | Sombre | Dark |
 | `settings.appearance.light` | Clair | Light |
 | `settings.appearance.auto` | Auto | Auto |
@@ -282,7 +282,7 @@ Ce document liste toutes les clés de traduction disponibles dans le système i1
 | `premium.title` | Premium | Premium |
 | `premium.subtitle` | Débloquez toutes les fonctionnalités | Unlock all features |
 | `premium.features.unlimitedSquads` | Squads illimitées | Unlimited squads |
-| `premium.features.advancedStats` | Statistiques avancées | Advanced statistics |
+| `premium.features.advancedStats` | Heatmaps de présence et tendances | Attendance heatmaps & trends |
 | `premium.features.customThemes` | Thèmes personnalisés | Custom themes |
 | `premium.features.prioritySupport` | Support prioritaire | Priority support |
 | `premium.upgrade` | Passer Premium | Upgrade to Premium |

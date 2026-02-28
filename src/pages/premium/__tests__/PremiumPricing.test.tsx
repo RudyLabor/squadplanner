@@ -47,6 +47,8 @@ vi.mock('../../../components/icons', () => ({
     createElement('span', { 'data-icon': 'Crown', ...props }, children),
   Zap: ({ children, ...props }: any) =>
     createElement('span', { 'data-icon': 'Zap', ...props }, children),
+  XCircle: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'XCircle', ...props }, children),
 }))
 
 vi.mock('../../../components/ui', () => ({
@@ -61,8 +63,19 @@ vi.mock('../../../hooks/usePremium', () => ({
   PREMIUM_PRICE_YEARLY: 59.88,
   SQUAD_LEADER_PRICE_MONTHLY: 14.99,
   SQUAD_LEADER_PRICE_YEARLY: 143.88,
+  TEAM_PRICE_MONTHLY: 24.99,
+  TEAM_PRICE_YEARLY: 239.88,
   CLUB_PRICE_MONTHLY: 39.99,
   CLUB_PRICE_YEARLY: 383.88,
+  usePremium: () => ({ tier: 'free' }),
+}))
+
+vi.mock('../../../hooks/useAuth', () => ({
+  useAuthStore: () => ({ user: null, profile: null }),
+}))
+
+vi.mock('../../../hooks/queries/useSquadsQuery', () => ({
+  useSquadsQuery: () => ({ data: [] }),
 }))
 
 import { PremiumPricing } from '../PremiumPricing'
@@ -116,7 +129,7 @@ describe('PremiumPricing', () => {
   /* ---------------------------------------------------------------- */
   it('renders launch promo banner with discount code', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Offre de lancement -30%')).toBeDefined()
+    expect(screen.getByText('Offre de bienvenue -30%')).toBeDefined()
     expect(screen.getByText('LAUNCH30')).toBeDefined()
   })
 
@@ -137,24 +150,27 @@ describe('PremiumPricing', () => {
   /* ---------------------------------------------------------------- */
   /*  3 Tier cards                                                     */
   /* ---------------------------------------------------------------- */
-  it('renders all 3 tier names: Premium, Squad Leader, Club', () => {
+  it('renders all 4 tier names: Premium, Squad Leader, Clan, Club', () => {
     render(<PremiumPricing {...defaultProps} />)
     expect(screen.getByText('Premium')).toBeDefined()
     expect(screen.getByText('Squad Leader')).toBeDefined()
+    expect(screen.getByText('Clan')).toBeDefined()
     expect(screen.getByText('Club')).toBeDefined()
   })
 
   it('renders tier descriptions', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Pour les joueurs réguliers.')).toBeDefined()
-    expect(screen.getByText('Pour les capitaines de squad.')).toBeDefined()
-    expect(screen.getByText('Pour les structures esport.')).toBeDefined()
+    expect(screen.getByText(/Pour les joueurs qui veulent plus de squads/)).toBeDefined()
+    expect(screen.getByText(/Pour les capitaines qui veulent des stats/)).toBeDefined()
+    expect(screen.getByText(/Pour les grosses squads qui veulent scaler/)).toBeDefined()
+    expect(screen.getByText('Pour les orgas esport.')).toBeDefined()
   })
 
-  it('renders monthly prices for all 3 tiers', () => {
+  it('renders monthly prices for all 4 tiers', () => {
     render(<PremiumPricing {...defaultProps} />)
     expect(screen.getByText(/6\.99/)).toBeDefined()
     expect(screen.getByText(/14\.99/)).toBeDefined()
+    expect(screen.getByText(/24\.99/)).toBeDefined()
     expect(screen.getByText(/39\.99/)).toBeDefined()
   })
 
@@ -170,9 +186,10 @@ describe('PremiumPricing', () => {
 
   it('renders CTA button for each tier', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Choisir Premium')).toBeDefined()
-    expect(screen.getByText('Choisir Squad Leader')).toBeDefined()
-    expect(screen.getByText('Contacter')).toBeDefined()
+    expect(screen.getByText(/Passer Premium/)).toBeDefined()
+    expect(screen.getByText(/Passer Squad Leader/)).toBeDefined()
+    expect(screen.getByText(/Passer Clan/)).toBeDefined()
+    expect(screen.getByText('Contacter les ventes')).toBeDefined()
   })
 
   /* ---------------------------------------------------------------- */
@@ -180,8 +197,8 @@ describe('PremiumPricing', () => {
   /* ---------------------------------------------------------------- */
   it('renders Premium tier features', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('5 squads')).toBeDefined()
-    expect(screen.getByText('Sessions illimitées')).toBeDefined()
+    expect(screen.getByText(/5 squads — joue/)).toBeDefined()
+    expect(screen.getByText(/Sessions illimitées — plus de limites/)).toBeDefined()
     expect(screen.getByText('Zéro pub')).toBeDefined()
   })
 
@@ -189,14 +206,14 @@ describe('PremiumPricing', () => {
     render(<PremiumPricing {...defaultProps} />)
     expect(screen.getByText('Tout Premium inclus')).toBeDefined()
     expect(screen.getByText('Squads illimités')).toBeDefined()
-    expect(screen.getByText('Sessions récurrentes')).toBeDefined()
+    expect(screen.getByText(/Sessions récurrentes/)).toBeDefined()
   })
 
   it('renders Club tier features', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Tout Squad Leader inclus')).toBeDefined()
-    expect(screen.getByText('Dashboard multi-squads')).toBeDefined()
-    expect(screen.getByText('API webhooks')).toBeDefined()
+    expect(screen.getByText('Tout Clan inclus')).toBeDefined()
+    expect(screen.getByText('Branding personnalisé')).toBeDefined()
+    expect(screen.getByText('Intégrations externes')).toBeDefined()
   })
 
   /* ---------------------------------------------------------------- */
@@ -205,10 +222,12 @@ describe('PremiumPricing', () => {
   it('shows yearly per-month prices after clicking Annuel toggle', () => {
     render(<PremiumPricing {...defaultProps} />)
     fireEvent.click(screen.getByText(/Annuel/))
-    // Premium: 59.88/12 = 4.99, Squad Leader: 143.88/12 = 11.99, Club: 383.88/12 = 31.99
-    expect(screen.getByText(/4\.99/)).toBeDefined()
-    expect(screen.getByText(/11\.99/)).toBeDefined()
-    expect(screen.getByText(/31\.99/)).toBeDefined()
+    // Premium: 59.88/12 = 4.99, Squad Leader: 143.88/12 = 11.99, Clan: 239.88/12 = 19.99, Club: 383.88/12 = 31.99
+    // Use getAllByText since crossed-out monthly prices overlap with yearly per-month (e.g. /4\.99/ matches inside 14.99 and 24.99)
+    expect(screen.getAllByText(/4\.99/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/11\.99/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/19\.99/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/31\.99/).length).toBeGreaterThan(0)
   })
 
   it('shows yearly totals and savings percentage in yearly mode', () => {
@@ -216,28 +235,29 @@ describe('PremiumPricing', () => {
     fireEvent.click(screen.getByText(/Annuel/))
     expect(screen.getByText(/59\.88/)).toBeDefined()
     expect(screen.getByText(/143\.88/)).toBeDefined()
+    expect(screen.getByText(/239\.88/)).toBeDefined()
     expect(screen.getByText(/383\.88/)).toBeDefined()
   })
 
   /* ---------------------------------------------------------------- */
   /*  onUpgrade calls                                                  */
   /* ---------------------------------------------------------------- */
-  it('calls onUpgrade(premium, monthly) when Choisir Premium is clicked', () => {
+  it('calls onUpgrade(premium, monthly) when Passer Premium is clicked', () => {
     render(<PremiumPricing {...defaultProps} />)
-    fireEvent.click(screen.getByText('Choisir Premium').closest('button')!)
+    fireEvent.click(screen.getByText(/Passer Premium/).closest('button')!)
     expect(defaultProps.onUpgrade).toHaveBeenCalledWith('premium', 'monthly')
   })
 
   it('calls onUpgrade(squad_leader, yearly) after toggling to yearly', () => {
     render(<PremiumPricing {...defaultProps} />)
     fireEvent.click(screen.getByText(/Annuel/))
-    fireEvent.click(screen.getByText('Choisir Squad Leader').closest('button')!)
+    fireEvent.click(screen.getByText(/Passer Squad Leader/).closest('button')!)
     expect(defaultProps.onUpgrade).toHaveBeenCalledWith('squad_leader', 'yearly')
   })
 
-  it('calls onUpgrade(club, monthly) when Contacter is clicked', () => {
+  it('calls onUpgrade(club, monthly) when Contacter les ventes is clicked', () => {
     render(<PremiumPricing {...defaultProps} />)
-    fireEvent.click(screen.getByText('Contacter').closest('button')!)
+    fireEvent.click(screen.getByText('Contacter les ventes').closest('button')!)
     expect(defaultProps.onUpgrade).toHaveBeenCalledWith('club', 'monthly')
   })
 
@@ -252,9 +272,10 @@ describe('PremiumPricing', () => {
 
   it('hides tier CTA labels when loading', () => {
     render(<PremiumPricing {...defaultProps} isLoading={true} />)
-    expect(screen.queryByText('Choisir Premium')).toBeNull()
-    expect(screen.queryByText('Choisir Squad Leader')).toBeNull()
-    expect(screen.queryByText('Contacter')).toBeNull()
+    expect(screen.queryByText(/Passer Premium/)).toBeNull()
+    expect(screen.queryByText(/Passer Squad Leader/)).toBeNull()
+    expect(screen.queryByText(/Passer Clan/)).toBeNull()
+    expect(screen.queryByText('Contacter les ventes')).toBeNull()
   })
 
   it('hides final CTA text when loading', () => {

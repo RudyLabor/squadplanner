@@ -284,7 +284,7 @@ describe('Auth Page', () => {
   describe('Login mode (default)', () => {
     it('renders login heading', () => {
       renderAuth()
-      expect(screen.getByText(/Ta squad t'attend — reconnecte-toi/)).toBeTruthy()
+      expect(screen.getByText(/Ta squad t'attend, reconnecte-toi/)).toBeTruthy()
     })
 
     it('renders login subtitle', () => {
@@ -393,14 +393,14 @@ describe('Auth Page', () => {
       // Find the switch button (not the submit button)
       const switchBtn = switchBtns.find((b) => b.type === 'button')
       if (switchBtn) fireEvent.click(switchBtn)
-      expect(screen.getByText(/Ta squad t'attend — reconnecte-toi/)).toBeTruthy()
+      expect(screen.getByText(/Ta squad t'attend, reconnecte-toi/)).toBeTruthy()
     })
 
     it('returns to login from reset mode', () => {
       mockH.mockSearchParams = new URLSearchParams('mode=reset')
       renderAuth()
       fireEvent.click(screen.getByText('Retour à la connexion'))
-      expect(screen.getByText(/Ta squad t'attend — reconnecte-toi/)).toBeTruthy()
+      expect(screen.getByText(/Ta squad t'attend, reconnecte-toi/)).toBeTruthy()
     })
   })
 

@@ -153,9 +153,9 @@ const features = [
     desc: (name: string) =>
       `Chaque joueur répond OUI ou NON. Pas de « peut-être ». Et si quelqu'un ghost ta session ${name}, son score le montre.`,
     details: [
-      'Rappels automatiques avant chaque session',
-      'Score de fiabilité visible par tous',
-      "Confirmation dès qu'assez de joueurs répondent",
+      'Rappels automatiques avant chaque session — plus personne n\'oublie',
+      'Score de fiabilité visible par tous — tu sais sur qui compter',
+      'Confirmation dès qu\'assez de joueurs répondent — bloque ton soir en toute confiance',
     ],
   },
   {
@@ -165,7 +165,7 @@ const features = [
       `T'as pas 5 potes dispos en même temps ? Notre matchmaking te connecte avec des joueurs ${name} de ton niveau.`,
     details: [
       'Matching par niveau et style de jeu',
-      'Profils vérifiés, pas de randoms toxiques',
+      'Profils vérifiés par email, score de fiabilité visible',
       'Historique et avis des coéquipiers',
     ],
   },
@@ -203,7 +203,7 @@ export default function Component() {
     },
     {
       q: `C'est vraiment gratuit ?`,
-      a: `Oui. Créer une squad, planifier des sessions, inviter tes potes, tout ça c'est gratuit. Le Premium ajoute des stats avancées et des sessions illimitées, mais tu peux jouer sans payer.`,
+      a: `Oui. Créer une squad, planifier des sessions, inviter tes potes, tout ça c'est gratuit. Le Premium ajoute des heatmaps de présence, des tendances par joueur et des sessions illimitées, mais tu peux jouer sans payer.`,
     },
     {
       q: `Comment ça gère les joueurs qui ghostent ?`,
@@ -516,7 +516,7 @@ export default function Component() {
                 </p>
                 <p className="text-sm text-text-tertiary">
                   <span className="font-medium text-text-secondary">{game.testimonial.author}</span>
-                  {' '}· {game.testimonial.rank}
+                  {' '}· {game.testimonial.role} · {game.testimonial.rank}
                 </p>
               </div>
             </div>
@@ -540,7 +540,7 @@ export default function Component() {
               Envie de plus pour ta squad {game.shortName || game.name} ?
             </h3>
             <p className="text-text-tertiary mb-5 text-md max-w-lg mx-auto">
-              Sessions illimitées, stats avancées, coach IA et audio HD. Essaie Premium 7 jours gratuit.
+              Sessions illimitées, heatmaps de présence, coach IA et audio HD. Essaie Premium 7 jours gratuit.
             </p>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="inline-flex">
               <Link

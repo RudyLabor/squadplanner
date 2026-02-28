@@ -40,8 +40,8 @@ const advantages = [
     icon: Calendar,
   },
   {
-    title: 'Analytics de ouf',
-    description: 'Vois qui est fiable. Vois qui flake. Vois les tendances. Joue en data.',
+    title: 'Analytics par joueur',
+    description: 'Fiabilité, présence, tendances — vois qui est régulier et qui flake.',
     icon: Sparkles,
   },
   {
@@ -51,7 +51,7 @@ const advantages = [
     icon: Shield,
   },
   {
-    title: 'Fiabilité garantie',
+    title: 'Fiabilité mesurée et visible',
     description:
       'Profils, réputation, historique. Les squads sérieuses voient clairement qui flake.',
     icon: Zap,
@@ -135,6 +135,15 @@ export default function AlternativeDiscordEvents() {
               </a>
             </m.div>
           </m.div>
+          <m.p
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-base text-text-quaternary mt-4"
+          >
+            100% gratuit · Pas de carte bancaire · Prêt en 30 secondes
+          </m.p>
         </div>
       </section>
 
@@ -267,7 +276,7 @@ export default function AlternativeDiscordEvents() {
                 Tu migres de Discord Events ? -30% sur ton premier mois
               </p>
               <p className="text-sm text-text-tertiary">
-                Utilise le code <span className="font-mono font-bold text-warning">GAMER30</span> au moment du paiement. Offre valable jusqu'au 30 juin 2026.
+                Utilise le code <span className="font-mono font-bold text-warning">DISCORD30</span> au moment du paiement. Offre valable jusqu'au 30 juin 2026.
               </p>
             </div>
             <Link
@@ -387,7 +396,7 @@ export default function AlternativeDiscordEvents() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Améliore tes sessions maintenant
+                Planifie ta première session en 30 secondes
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
                 Gratuit pour les trucs importants. Zéro prise de tête. Juste du vrai gaming.

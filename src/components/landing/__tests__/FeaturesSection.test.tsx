@@ -93,8 +93,8 @@ describe('FeaturesSection', () => {
     const buttons = screen.getAllByRole('button')
     expect(buttons.length).toBe(3)
     expect(screen.getByText('Party vocale 24/7')).toBeInTheDocument()
-    expect(screen.getByText('Planning intelligent')).toBeInTheDocument()
-    expect(screen.getByText('Fiabilité mesurée')).toBeInTheDocument()
+    expect(screen.getByText('Planning avec confirmation')).toBeInTheDocument()
+    expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
   })
 
   it('renders each tab button with its icon', () => {
@@ -109,7 +109,7 @@ describe('FeaturesSection', () => {
     expect(screen.getByText(/Ta squad a son salon vocal 24\/7/)).toBeInTheDocument()
     expect(screen.getByText('1 squad = 1 party vocale dédiée')).toBeInTheDocument()
     expect(screen.getByText('Rejoindre en 1 clic')).toBeInTheDocument()
-    expect(screen.getByText('Qualité HD, latence ultra-faible')).toBeInTheDocument()
+    expect(screen.getByText(/Qualité HD, latence ultra-faible/)).toBeInTheDocument()
   })
 
   it('renders Check icons for detail items and VoiceMockup when voice is active', () => {
@@ -135,19 +135,19 @@ describe('FeaturesSection', () => {
   it('applies active styles to the first tab and not to inactive tabs', () => {
     render(<FeaturesSection />)
     const voiceButton = screen.getByText('Party vocale 24/7').closest('button')!
-    const planningButton = screen.getByText('Planning intelligent').closest('button')!
+    const planningButton = screen.getByText('Planning avec confirmation').closest('button')!
     expect(voiceButton.style.backgroundColor).toBeTruthy()
     expect(planningButton.style.backgroundColor).toBeFalsy()
   })
 
   it('switches to planning pillar on click and shows correct details', () => {
     render(<FeaturesSection />)
-    fireEvent.click(screen.getByText('Planning intelligent'))
+    fireEvent.click(screen.getByText('Planning avec confirmation'))
     expect(
-      screen.getByText(/Propose un créneau\. Chaque pote répond OUI ou NON/)
+      screen.getByText(/Propose un créneau\. Chaque pote répond/)
     ).toBeInTheDocument()
-    expect(screen.getByText(/Confirme ta présence OUI ou NON/)).toBeInTheDocument()
-    expect(screen.getByText('Confirmation auto quand assez de joueurs')).toBeInTheDocument()
+    expect(screen.getByText(/Confirme ta présence/)).toBeInTheDocument()
+    expect(screen.getByText(/Confirmation auto quand assez de joueurs/)).toBeInTheDocument()
     expect(screen.getByText('Rappels avant chaque session')).toBeInTheDocument()
     expect(screen.getByTestId('calendar-illust')).toBeInTheDocument()
     expect(screen.queryByText('En ligne')).not.toBeInTheDocument()
@@ -156,20 +156,20 @@ describe('FeaturesSection', () => {
 
   it('switches to reliability pillar on click and shows correct details', () => {
     render(<FeaturesSection />)
-    fireEvent.click(screen.getByText('Fiabilité mesurée'))
+    fireEvent.click(screen.getByText('Fini le ghosting'))
     expect(
       screen.getByText(/Chaque membre a un score basé sur sa présence réelle/)
     ).toBeInTheDocument()
-    expect(screen.getByText('Check-in obligatoire')).toBeInTheDocument()
-    expect(screen.getByText('Historique visible')).toBeInTheDocument()
-    expect(screen.getByText('Score par joueur')).toBeInTheDocument()
+    expect(screen.getByText(/Check-in obligatoire/)).toBeInTheDocument()
+    expect(screen.getByText(/Historique visible/)).toBeInTheDocument()
+    expect(screen.getByText(/Score par joueur/)).toBeInTheDocument()
     expect(screen.getByTestId('shield-illust')).toBeInTheDocument()
     expect(screen.queryByText('En ligne')).not.toBeInTheDocument()
   })
 
   it('switches back to voice pillar and restores VoiceMockup', () => {
     render(<FeaturesSection />)
-    fireEvent.click(screen.getByText('Planning intelligent'))
+    fireEvent.click(screen.getByText('Planning avec confirmation'))
     expect(screen.queryByText('En ligne')).not.toBeInTheDocument()
     fireEvent.click(screen.getByText('Party vocale 24/7'))
     expect(screen.getByText('En ligne')).toBeInTheDocument()
@@ -179,17 +179,17 @@ describe('FeaturesSection', () => {
   it('only renders one detail card at a time', () => {
     render(<FeaturesSection />)
     expect(screen.getByText('1 squad = 1 party vocale dédiée')).toBeInTheDocument()
-    expect(screen.queryByText('Confirmation auto quand assez de joueurs')).not.toBeInTheDocument()
-    expect(screen.queryByText('Check-in obligatoire')).not.toBeInTheDocument()
+    expect(screen.queryByText(/Confirmation auto quand assez de joueurs/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Check-in obligatoire/)).not.toBeInTheDocument()
   })
 
   it('can cycle through all three pillars', () => {
     render(<FeaturesSection />)
     expect(screen.getByText('1 squad = 1 party vocale dédiée')).toBeInTheDocument()
-    fireEvent.click(screen.getByText('Planning intelligent'))
-    expect(screen.getByText('Confirmation auto quand assez de joueurs')).toBeInTheDocument()
-    fireEvent.click(screen.getByText('Fiabilité mesurée'))
-    expect(screen.getByText('Check-in obligatoire')).toBeInTheDocument()
+    fireEvent.click(screen.getByText('Planning avec confirmation'))
+    expect(screen.getByText(/Confirmation auto quand assez de joueurs/)).toBeInTheDocument()
+    fireEvent.click(screen.getByText('Fini le ghosting'))
+    expect(screen.getByText(/Check-in obligatoire/)).toBeInTheDocument()
     fireEvent.click(screen.getByText('Party vocale 24/7'))
     expect(screen.getByText('Rejoindre en 1 clic')).toBeInTheDocument()
   })
@@ -197,7 +197,7 @@ describe('FeaturesSection', () => {
   it('updates active style when switching tabs', () => {
     render(<FeaturesSection />)
     const voiceBtn = screen.getByText('Party vocale 24/7').closest('button')!
-    const planningBtn = screen.getByText('Planning intelligent').closest('button')!
+    const planningBtn = screen.getByText('Planning avec confirmation').closest('button')!
     expect(voiceBtn.style.backgroundColor).toBeTruthy()
     expect(planningBtn.style.backgroundColor).toBeFalsy()
     fireEvent.click(planningBtn)
@@ -209,8 +209,8 @@ describe('FeaturesSection', () => {
     render(<FeaturesSection />)
     const headings = screen.getAllByText('Party vocale 24/7')
     expect(headings.length).toBe(2)
-    fireEvent.click(screen.getByText('Planning intelligent'))
-    expect(screen.getAllByText('Planning intelligent').length).toBe(2)
+    fireEvent.click(screen.getByText('Planning avec confirmation'))
+    expect(screen.getAllByText('Planning avec confirmation').length).toBe(2)
   })
 
   it('renders voice mockup user avatars with initials and names', () => {

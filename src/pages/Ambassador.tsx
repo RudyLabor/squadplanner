@@ -187,7 +187,7 @@ function PendingApplicationBanner() {
           Ta candidature est en cours de traitement
         </h2>
         <p className="text-text-secondary max-w-md mx-auto mb-4">
-          On a bien reçu ta candidature. Notre équipe la revoit sous 48h. Tu recevras un email dès
+          On a bien reçu ta candidature. On la revoit sous 48h. Tu recevras un email dès
           qu'elle sera validée.
         </p>
         <Badge variant="warning">En attente de validation</Badge>
@@ -253,7 +253,7 @@ export function Ambassador() {
       })
     } else {
       // Fallback: mailto for non-authenticated users
-      const subject = 'Candidature Programme Ambassadeur Squad Planner'
+      const subject = 'Candidature ambassadeur Squad Planner'
       const body = `
 Pseudo/Nom: ${formData.pseudo}
 Plateforme: ${formData.platform}
@@ -356,8 +356,7 @@ ${formData.message}
               transition={{ delay: 0.2, duration: 0.4, ease }}
               className="text-md md:text-lg text-text-secondary max-w-2xl mx-auto"
             >
-              T'es streamer, créateur de contenu ou capitaine de communauté gaming&nbsp;? Le programme ambassadeur est en cours de lancement. Partage Squad Planner avec ta communauté et gagne des récompenses
-              exclusives.
+              T'es streamer, créateur ou capitaine de communauté&nbsp;? Partage Squad Planner et gagne 20% de commission, un forfait Squad Leader à vie et un badge ambassadeur.
             </m.p>
           </div>
         </div>
@@ -487,7 +486,7 @@ ${formData.message}
               {
                 step: 2,
                 title: 'On te contacte',
-                description: "Appel de 15 min pour te présenter l'app et répondre à tes questions",
+                description: 'Appel de 15 min pour te présenter Squad Planner et répondre à tes questions',
                 icon: Mic,
               },
               {
@@ -758,6 +757,11 @@ ${formData.message}
                     />
                   </div>
 
+                  {/* What happens next */}
+                  <p className="text-sm text-text-secondary text-center">
+                    On te répond sous 48h par email.
+                  </p>
+
                   {/* Submit Button */}
                   <Button
                     variant="primary"
@@ -785,8 +789,7 @@ ${formData.message}
                   )}
 
                   <p className="text-xs text-text-tertiary text-center">
-                    En soumettant ce formulaire, tu acceptes que nous te contactions à propos du
-                    programme.
+                    On te contactera par email pour la suite.
                   </p>
                 </form>
               )}
@@ -813,7 +816,7 @@ ${formData.message}
               },
               {
                 q: 'Comment fonctionne la commission ?',
-                a: "Tu reçois 20% de commission sur chaque abonnement généré via ton code promo. À 25 filleuls actifs, tu passes Squad Leader gratuit à vie. À 50 filleuls, tu reçois un bonus exceptionnel.",
+                a: "20% de commission sur chaque abonnement. 25 filleuls = Squad Leader gratuit à vie. 50 filleuls = bonus cash + commission 30%.",
               },
               {
                 q: 'Je peux cumuler avec le parrainage normal ?',
@@ -825,7 +828,7 @@ ${formData.message}
               },
               {
                 q: 'Quels outils marketing vas-tu me donner ?',
-                a: "Tu recevras des visuels (bannières, clips), du texte marketing prêt à l'emploi, des graphiques et un support dédié de notre équipe pour booster tes résultats.",
+                a: "Tu recevras des visuels (bannières, clips), du texte marketing prêt à l'emploi, des graphiques et on est là pour booster tes résultats.",
               },
               {
                 q: 'Comment on reste en contact ?',

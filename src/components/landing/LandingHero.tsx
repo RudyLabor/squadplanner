@@ -80,7 +80,7 @@ export function LandingHero({
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-text-primary mb-4 leading-tight tracking-tight">
             Arrête de perdre
             <br />
             <span className="text-gradient-animated">
@@ -89,6 +89,10 @@ export function LandingHero({
             <br />
             joue enfin avec ta squad
           </h1>
+
+          <p className="text-base md:text-lg text-text-quaternary mb-6 max-w-xl mx-auto italic">
+            Tu connais ce moment : lobby ouvert, 3 absents, et un message «&nbsp;désolé j'ai oublié&nbsp;».
+          </p>
 
           <p className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed">
             Tes potes confirment en 2 clics. Plus personne ne ghost.

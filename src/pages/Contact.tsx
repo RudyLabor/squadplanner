@@ -166,7 +166,7 @@ ${formData.message}
                   Message envoyé !
                 </h3>
                 <p className="text-text-secondary max-w-md mx-auto">
-                  Notre équipe te recontacte sous 24h avec un devis adapté à ta structure.
+                  On te recontacte sous 24h avec un devis adapté à ta structure.
                 </p>
               </m.div>
             ) : (

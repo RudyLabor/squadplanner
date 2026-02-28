@@ -168,7 +168,7 @@ export function CommandPalette() {
     {
       id: 'settings',
       label: 'Paramètres',
-      description: "Réglages de l'app",
+      description: 'Réglages de Squad Planner',
       icon: Settings,
       action: () => {
         navigate('/settings')

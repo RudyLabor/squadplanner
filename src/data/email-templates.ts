@@ -150,7 +150,7 @@ const welcome: EmailTemplate = {
 const inviteFriends: EmailTemplate = {
   id: 'invite_friends',
   trigger: 'light_inactivity',
-  subject: 'Invite tes amis et gagne 7 jours Premium 🎁',
+  subject: 'Invite tes potes et gagne 7 jours Premium 🎁',
   delay: '3d',
   html: (vars) => `
     <!DOCTYPE html>
@@ -158,7 +158,7 @@ const inviteFriends: EmailTemplate = {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Invite tes amis et gagne Premium</title>
+      <title>Invite tes potes et gagne Premium</title>
     </head>
     <body style="margin: 0; padding: 0; background-color: #0c0c14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
       <div style="background-color: #0c0c14; padding: 40px 20px;">
@@ -175,7 +175,7 @@ const inviteFriends: EmailTemplate = {
             <td style="background-color: #1c1c2e; border: 1px solid #222238; border-radius: 12px; padding: 40px 30px;">
               <!-- Header -->
               <h1 style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0 0 10px 0; line-height: 1.3;">
-                Invite tes amis 🎁
+                Invite tes potes 🎁
               </h1>
               <p style="color: #9ca3af; font-size: 14px; margin: 0 0 30px 0;">
                 Et gagne 7 jours de Premium gratuit
@@ -224,7 +224,7 @@ const inviteFriends: EmailTemplate = {
                         <div style="background-color: #8B5CF6; color: #ffffff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; margin-right: 12px;">3</div>
                         <div>
                           <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">Vous gagnez tous les deux</p>
-                          <p style="color: #9ca3af; font-size: 13px; margin: 0;">Vous obtenez 7 jours Premium gratuit chacun</p>
+                          <p style="color: #9ca3af; font-size: 13px; margin: 0;">7 jours Premium gratuit chacun</p>
                         </div>
                       </div>
                     </td>
@@ -247,7 +247,7 @@ const inviteFriends: EmailTemplate = {
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0 0 0;">
                 <tr>
                   <td style="text-align: center;">
-                    <a href="https://squadplanner.fr/referrals" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Inviter mes amis</a>
+                    <a href="https://squadplanner.fr/referrals" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Inviter mes potes</a>
                   </td>
                 </tr>
               </table>
@@ -313,7 +313,7 @@ const sessionMissed: EmailTemplate = {
 
               <!-- Main message -->
               <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
-                Tes potes comptent sur toi ! Les membres fiables sont la clé d'une bonne squad. Chaque session manquée impacte la fiabilité de votre groupe et rend plus difficile la planification future.
+                Tes potes comptent sur toi ! Les membres fiables sont la clé d'une bonne squad. Chaque session manquée impacte la fiabilité de ta squad et rend plus difficile la planification future.
               </p>
 
               <!-- Impact card -->
@@ -532,7 +532,7 @@ const trialEnding: EmailTemplate = {
                 <table width="100%" cellpadding="0" cellspacing="0">
                   <tr>
                     <td style="padding: 10px 0; border-bottom: 1px solid #404050;">
-                      <p style="color: #e5e7eb; font-size: 14px; margin: 0;">📊 Stats avancées de ta squad</p>
+                      <p style="color: #e5e7eb; font-size: 14px; margin: 0;">📊 Heatmaps de présence et tendances de ta squad</p>
                     </td>
                   </tr>
                   <tr>
@@ -606,7 +606,7 @@ const trialEnding: EmailTemplate = {
 const trialEnded: EmailTemplate = {
   id: 'trial_ended',
   trigger: 'trial_ended',
-  subject: "Tu as perdu l'accès à tes stats avancées 📊",
+  subject: "Tu as perdu l'accès à tes heatmaps et tendances 📊",
   delay: '1d',
   html: (vars) => `
     <!DOCTYPE html>
@@ -649,7 +649,7 @@ const trialEnded: EmailTemplate = {
                 <table width="100%" cellpadding="0" cellspacing="0">
                   <tr>
                     <td style="padding: 10px 0; border-bottom: 1px solid #404050;">
-                      <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">❌ Stats avancées</p>
+                      <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">❌ Heatmaps de présence et fiabilité</p>
                       <p style="color: #9ca3af; font-size: 13px; margin: 0;">Maintenant masquées et verrouillées</p>
                     </td>
                   </tr>
@@ -979,7 +979,7 @@ const anniversary: EmailTemplate = {
                 <h3 style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0 0 15px 0;">Avec Premium, tu accèdes à</h3>
 
                 <ul style="color: #e5e7eb; font-size: 14px; margin: 0; padding-left: 20px;">
-                  <li style="margin-bottom: 8px;">📊 Statistiques avancées et graphiques détaillés</li>
+                  <li style="margin-bottom: 8px;">📊 Heatmaps de présence, fiabilité détaillée et tendances par joueur</li>
                   <li style="margin-bottom: 8px;">📈 Analyses de performance personnalisées</li>
                   <li style="margin-bottom: 8px;">🏆 Badges et réalisations exclusives</li>
                   <li style="margin-bottom: 8px;">💬 Support prioritaire par email</li>

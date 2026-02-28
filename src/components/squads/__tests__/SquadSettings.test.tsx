@@ -142,7 +142,7 @@ describe('SquadSettings', () => {
 
   it('renders stats section heading', () => {
     render(<SquadSettings {...defaultProps} />)
-    expect(screen.getByText('Stats avancées')).toBeInTheDocument()
+    expect(screen.getByText('Heatmaps et tendances')).toBeInTheDocument()
   })
 
   it('displays stats values', () => {
@@ -226,7 +226,7 @@ describe('SquadSettings', () => {
     render(<SquadSettings {...defaultProps} isSquadPremium={true} />)
     expect(screen.getByText('Squad Premium')).toBeInTheDocument()
     expect(
-      screen.getByText('Audio HD, stats avancées, export calendrier actifs')
+      screen.getByText('Audio HD, heatmaps de présence, export calendrier actifs')
     ).toBeInTheDocument()
   })
 

@@ -13,7 +13,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Débloquez les fonctionnalités Premium de Squad Planner : squads illimitées, analyses avancées, customisation totale. Essai gratuit 7 jours sans carte bancaire.',
+        'Débloquez les fonctionnalités Premium de Squad Planner : squads illimitées, heatmaps de présence, IA Coach personnalisé. Essai gratuit 7 jours sans carte bancaire.',
     },
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/premium' },
@@ -23,7 +23,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        'Débloquez les fonctionnalités Premium de Squad Planner : squads illimitées, analyses avancées, customisation totale. Essai gratuit 7 jours sans carte bancaire.',
+        'Débloquez les fonctionnalités Premium de Squad Planner : squads illimitées, heatmaps de présence, IA Coach personnalisé. Essai gratuit 7 jours sans carte bancaire.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
     { property: 'og:image:width', content: '1200' },
@@ -33,7 +33,7 @@ export function meta() {
     {
       name: 'twitter:description',
       content:
-        'Débloquez les fonctionnalités Premium de Squad Planner : squads illimitées, analyses avancées, customisation totale. Essai gratuit 7 jours sans carte bancaire.',
+        'Débloquez les fonctionnalités Premium de Squad Planner : squads illimitées, heatmaps de présence, IA Coach personnalisé. Essai gratuit 7 jours sans carte bancaire.',
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
     {
@@ -44,7 +44,7 @@ export function meta() {
             '@type': 'Product',
             name: 'Squad Planner Premium',
             description:
-              'Fonctionnalités Premium pour les gamers sérieux : squads illimitées, stats avancées, IA Coach.',
+              'Fonctionnalités Premium pour les gamers sérieux : squads illimitées, heatmaps de présence, IA Coach.',
             brand: { '@type': 'Organization', name: 'Squad Planner' },
             offers: [
               {

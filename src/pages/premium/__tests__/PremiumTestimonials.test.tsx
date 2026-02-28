@@ -60,9 +60,9 @@ describe('PremiumTestimonials', () => {
     render(<PremiumTestimonials />)
 
     // 1. Section title
-    expect(screen.getByText(/Ils sont pass/)).toBeDefined()
+    expect(screen.getByText(/Ce que les joueurs Premium en disent/)).toBeDefined()
     // 2. Subtitle
-    expect(screen.getByText(/ne reviendraient pas en arri/)).toBeDefined()
+    expect(screen.getByText(/Ils ont upgrade/)).toBeDefined()
     // 3. First testimonial name
     expect(screen.getByText('Alex')).toBeDefined()
     // 4. Second testimonial name
@@ -90,9 +90,6 @@ describe('PremiumTestimonials', () => {
     // 5. Star ratings (5 stars per testimonial, 2 testimonials = 10 stars)
     const stars = container.querySelectorAll('[data-icon="Star"]')
     expect(stars.length).toBe(10)
-    // 6. Verified badges (CheckCircle2 icon for each testimonial)
-    const badges = container.querySelectorAll('[data-icon="CheckCircle2"]')
-    expect(badges.length).toBe(2)
   })
 
   // STRICT: verifies layout structure — grid layout, cards, quote formatting

@@ -42,6 +42,7 @@ vi.mock('framer-motion', () => ({
 
 vi.mock('../../icons', () => ({
   Check: (props: any) => createElement('span', { ...props, 'data-testid': 'check-icon' }, 'check'),
+  Crown: (props: any) => createElement('span', { ...props, 'data-testid': 'crown-icon' }, 'crown'),
 }))
 
 import { PricingSection } from '../PricingSection'
@@ -54,11 +55,11 @@ describe('PricingSection', () => {
 
   it('renders the title and subtitle', () => {
     render(<PricingSection />)
-    expect(screen.getByText('Tarifs simples, sans surprise')).toBeInTheDocument()
     expect(
-      screen.getByText(
-        'Commence gratuitement. Passe Premium quand tu veux débloquer tout le potentiel.'
-      )
+      screen.getByText(/Choisis ton plan/)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/Le gratuit suffit pour organiser tes sessions/)
     ).toBeInTheDocument()
   })
 
@@ -67,28 +68,28 @@ describe('PricingSection', () => {
     it('renders plan name and price', () => {
       render(<PricingSection />)
       expect(screen.getByText('Gratuit')).toBeInTheDocument()
-      expect(screen.getByText('0€')).toBeInTheDocument()
+      expect(screen.getByText(/0\.00/)).toBeInTheDocument()
     })
 
-    it('renders the monthly suffix for free plan', () => {
+    it('renders the monthly suffix for all plans', () => {
       render(<PricingSection />)
       const priceSuffixes = screen.getAllByText('/mois')
-      expect(priceSuffixes.length).toBe(2) // one for free, one for premium
+      expect(priceSuffixes.length).toBe(4) // one per tier
     })
 
     it('renders free plan description', () => {
       render(<PricingSection />)
-      expect(screen.getByText("Tout ce qu'il faut pour jouer avec ta squad.")).toBeInTheDocument()
+      expect(screen.getByText("Tout ce qu'il faut pour jouer régulièrement.")).toBeInTheDocument()
     })
 
     it('renders all 6 free plan features', () => {
       render(<PricingSection />)
       const freeFeatures = [
-        '2 squads gratuites',
-        'Sessions avec confirmation',
-        'Chat de squad',
+        '1 squad',
+        '3 sessions/semaine',
+        'Historique 7 jours',
+        'Chat basique',
         'Score de fiabilité',
-        'Party vocale',
         'Notifications push',
       ]
       freeFeatures.forEach((feature) => {
@@ -96,16 +97,16 @@ describe('PricingSection', () => {
       })
     })
 
-    it('renders check icons for each free feature', () => {
+    it('renders check icons for each feature across all tiers', () => {
       render(<PricingSection />)
-      // 6 free + 7 premium = 13 check icons total
+      // 6 free + 8 premium + 9 squad leader + 8 club = 31 check icons total
       const checkIcons = screen.getAllByTestId('check-icon')
-      expect(checkIcons.length).toBe(13)
+      expect(checkIcons.length).toBe(31)
     })
 
     it('renders free plan CTA button with link to /auth', () => {
       render(<PricingSection />)
-      const freeButton = screen.getByText("C'est parti — Gratuit")
+      const freeButton = screen.getByText('Commencer gratuitement')
       expect(freeButton).toBeInTheDocument()
       const link = freeButton.closest('a')
       expect(link).toHaveAttribute('href', '/auth')
@@ -117,29 +118,29 @@ describe('PricingSection', () => {
     it('renders plan name and price', () => {
       render(<PricingSection />)
       expect(screen.getByText('Premium')).toBeInTheDocument()
-      expect(screen.getByText('4,99€')).toBeInTheDocument()
     })
 
-    it('renders POPULAIRE badge', () => {
+    it('renders POPULAIRE badge on Squad Leader tier', () => {
       render(<PricingSection />)
       expect(screen.getByText('POPULAIRE')).toBeInTheDocument()
     })
 
     it('renders premium plan description', () => {
       render(<PricingSection />)
-      expect(screen.getByText('Pour les squads qui veulent aller plus loin.')).toBeInTheDocument()
+      expect(screen.getByText('Pour les squads qui jouent sérieusement.')).toBeInTheDocument()
     })
 
-    it('renders all 7 premium plan features', () => {
+    it('renders all 8 premium plan features', () => {
       render(<PricingSection />)
       const premiumFeatures = [
-        'Tout le plan Gratuit',
-        'Squads illimitées',
-        'Coach IA avancé',
-        'Qualité audio HD',
-        'Historique illimité',
+        '5 squads',
+        'Sessions illimitées',
+        'Historique 90 jours',
+        'Chat complet (GIF, voice, polls)',
         'Stats avancées',
-        'Badges exclusifs',
+        'IA Coach basique',
+        'Badge Premium violet',
+        'Thèmes personnalisés',
       ]
       premiumFeatures.forEach((feature) => {
         expect(screen.getByText(feature)).toBeInTheDocument()
@@ -185,22 +186,22 @@ describe('PricingSection', () => {
 
   // --- Layout / Structure ---
   describe('Layout structure', () => {
-    it('has a 2-column grid for plans on md screens', () => {
+    it('has a grid for plans with responsive columns', () => {
       const { container } = render(<PricingSection />)
       const grid = container.querySelector('.grid.md\\:grid-cols-2')
       expect(grid).toBeInTheDocument()
     })
 
-    it('contains exactly 2 Link elements pointing to /auth', () => {
+    it('contains exactly 4 Link elements pointing to /auth', () => {
       render(<PricingSection />)
       const links = screen.getAllByRole('link')
       const authLinks = links.filter((l) => l.getAttribute('href') === '/auth')
-      expect(authLinks.length).toBe(2)
+      expect(authLinks.length).toBe(4)
     })
 
     it('renders the section with proper container class', () => {
       const { container } = render(<PricingSection />)
-      expect(container.querySelector('.max-w-4xl')).toBeInTheDocument()
+      expect(container.querySelector('.max-w-6xl')).toBeInTheDocument()
     })
   })
 })

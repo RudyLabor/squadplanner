@@ -123,7 +123,7 @@ export function Profile() {
     try {
       const xpReward = await claimXPMutation.mutateAsync(challengeId)
       if (refreshProfile) await refreshProfile()
-      showSuccess(`+${xpReward} XP réclamés !`)
+      showSuccess(`+${xpReward}\u00a0XP r\u00e9clam\u00e9s\u00a0! Continue comme \u00e7a pour monter de niveau`)
     } catch (error) {
       if (!import.meta.env.PROD) console.error('Error claiming XP:', error)
       showError('Erreur lors de la réclamation des XP')

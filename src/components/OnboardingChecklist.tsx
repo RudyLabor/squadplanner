@@ -107,15 +107,15 @@ export function OnboardingChecklist({
     {
       id: 'squad',
       label: 'Crée ou rejoins ta première squad',
-      description: 'Une squad rassemble tes potes de jeu',
+      description: '30 secondes, c\u2019est tout',
       done: hasSquad,
       icon: Users,
       action: hasSquad ? undefined : { type: 'link' as const, to: '/squads' },
     },
     {
       id: 'invite',
-      label: 'Invite un ami',
-      description: 'Plus on est de fous, plus on rit !',
+      label: 'Invite un pote',
+      description: 'Copie le lien, envoie-le. Termin\u00e9.',
       done: inviteCopied,
       icon: UserPlus,
       action: inviteCopied ? undefined : { type: 'button' as const, onClick: handleCopyInvite },
@@ -123,7 +123,7 @@ export function OnboardingChecklist({
     {
       id: 'session',
       label: 'Planifie ta première session',
-      description: 'Organise une partie avec ta squad',
+      description: 'Choisis un cr\u00e9neau, ta squad confirme',
       done: hasSession,
       icon: Calendar,
       action: hasSession ? undefined : { type: 'button' as const, onClick: onCreateSession },

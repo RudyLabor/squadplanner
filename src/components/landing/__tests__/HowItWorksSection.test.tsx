@@ -91,7 +91,7 @@ describe('HowItWorksSection', () => {
   it('renders subtitle text', () => {
     render(<HowItWorksSection {...defaultProps} />)
     expect(
-      screen.getByText('De la création de squad à la session de jeu en 30 secondes')
+      screen.getByText(/De\s.+j'ai pas de squad.+\s.+on joue ce soir.+\sen 30 secondes/)
     ).toBeInTheDocument()
   })
 
@@ -112,7 +112,7 @@ describe('HowItWorksSection', () => {
     expect(screen.getByText('Crée ta Squad')).toBeInTheDocument()
     expect(screen.getByText('Invite tes potes')).toBeInTheDocument()
     expect(screen.getByText('Planifie, décide, confirme')).toBeInTheDocument()
-    expect(screen.getByText('Jouez chaque semaine')).toBeInTheDocument()
+    expect(screen.getByText(/Rejouez\. Chaque\. Semaine\./)).toBeInTheDocument()
   })
 
   it('renders step icons (Users, MessageCircle, Calendar, Target)', () => {
@@ -132,7 +132,7 @@ describe('HowItWorksSection', () => {
     // Other step descriptions should NOT be visible
     expect(screen.queryByText(/Partage le code/)).not.toBeInTheDocument()
     expect(screen.queryByText(/Propose un créneau/)).not.toBeInTheDocument()
-    expect(screen.queryByText(/Check-in, jouez, répétez/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Le check-in rend tout le monde responsable/)).not.toBeInTheDocument()
   })
 
   it('shows description for step 1 when demoStep=1', () => {
@@ -148,7 +148,7 @@ describe('HowItWorksSection', () => {
 
   it('shows description for step 3 when demoStep=3', () => {
     render(<HowItWorksSection demoStep={3} setDemoStep={vi.fn()} />)
-    expect(screen.getByText(/Check-in, jouez, répétez/)).toBeInTheDocument()
+    expect(screen.getByText(/Le check-in rend tout le monde responsable/)).toBeInTheDocument()
   })
 
   // ─── Step clicks call setDemoStep ──────────────────────
@@ -186,7 +186,7 @@ describe('HowItWorksSection', () => {
     render(<HowItWorksSection demoStep={0} setDemoStep={setDemoStep} />)
 
     const buttons = screen.getAllByRole('button')
-    const step4Button = buttons.find((btn) => btn.textContent?.includes('Jouez chaque semaine'))
+    const step4Button = buttons.find((btn) => btn.textContent?.includes('Rejouez. Chaque. Semaine.'))
     fireEvent.click(step4Button!)
 
     expect(setDemoStep).toHaveBeenCalledWith(3)

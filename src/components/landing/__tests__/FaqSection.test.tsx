@@ -218,7 +218,7 @@ describe('FaqSection', () => {
     it('renders answer text for all FAQs', () => {
       render(<FaqSection />)
       faqs.forEach((faq) => {
-        const words = faq.a.split(' ').slice(0, 3).join(' ')
+        const words = faq.a.split(/\s+/).slice(0, 3).join(' ')
         expect(
           screen.getByText(new RegExp(words.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
         ).toBeInTheDocument()

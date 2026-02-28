@@ -23,8 +23,8 @@ const steps = [
   },
   {
     step: '4',
-    title: 'Jouez chaque semaine',
-    description: 'Check-in, jouez, répétez. Semaine après semaine, ta squad devient fiable.',
+    title: 'Rejouez. Chaque. Semaine.',
+    description: 'Le check-in rend tout le monde responsable. Semaine après semaine, ta squad ne rate plus une session.',
     icon: Target,
   },
 ]
@@ -52,7 +52,7 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
             Comment ça marche
           </h2>
           <p className="text-text-tertiary text-lg">
-            De la création de squad à la session de jeu en 30 secondes
+            De {'\u00ab\u00a0'}j'ai pas de squad{'\u00a0\u00bb'} à {'\u00ab\u00a0'}on joue ce soir{'\u00a0\u00bb'} en 30 secondes
           </p>
         </m.div>
 

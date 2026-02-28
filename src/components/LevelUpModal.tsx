@@ -86,7 +86,7 @@ export function LevelUpModal() {
               transition={{ delay: 0.5 }}
               className="relative text-sm text-text-secondary mb-6"
             >
-              Continue comme ça, tu progresses vite !
+              Chaque session te rapproche du niveau suivant. Continue&#x202f;!
             </m.p>
 
             <m.div

@@ -100,7 +100,7 @@ export default function SessionDetail() {
       setRsvpLoading(null)
       if (response === 'present') {
         fireConfetti()
-        setToastMessage("\u2705 Ta squad sait qu'elle peut compter sur toi !")
+        setToastMessage("\u2705 Confirm\u00e9\u00a0! Ta squad sait qu'elle peut compter sur toi")
         setShowToast(true)
       }
     } catch {
@@ -116,7 +116,7 @@ export default function SessionDetail() {
     try {
       await checkinMutation.mutateAsync({ sessionId: id, status: 'present' })
       fireConfetti(4000)
-      setToastMessage('\uD83C\uDFAE Check-in validé ! Bon game !')
+      setToastMessage('\uD83C\uDFAE Check-in valid\u00e9\u00a0! +5\u00a0% fiabilit\u00e9 \u2014 bon game\u00a0!')
       setShowToast(true)
     } catch {
       setToastMessage('Erreur lors du check-in, réessaie')
@@ -347,7 +347,7 @@ export default function SessionDetail() {
               <ShareButtons
                 url={`${typeof window !== 'undefined' ? window.location.origin : 'https://squadplanner.fr'}/s/${id}`}
                 title={`${currentSession.title || currentSession.game || 'Session'} — Squad Planner`}
-                text={`Rejoins notre session ${currentSession.game ? `de ${currentSession.game}` : ''} sur Squad Planner !`}
+                text={`On lance une session ${currentSession.game ? `de ${currentSession.game}` : ''} \u2014 il reste des places, rejoins-nous\u00a0!`}
               />
             </div>
           )}
@@ -376,7 +376,7 @@ export default function SessionDetail() {
         onClose={() => setShowCancelConfirm(false)}
         onConfirm={confirmCancelSession}
         title="Annuler cette session ?"
-        description="Les membres de la squad seront notifiés de l'annulation. Cette action ne peut pas être annulée."
+        description="Tous les membres seront notifi\u00e9s et les r\u00e9ponses RSVP seront perdues. Cette action est irr\u00e9versible."
         confirmLabel="Annuler la session"
         variant="warning"
       />

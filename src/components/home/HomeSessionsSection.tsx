@@ -168,10 +168,10 @@ const NextSessionCard = memo(function NextSessionCard({
             <CheckCircle2 className="w-4 h-4" />
             <span>
               {session.my_rsvp === 'present'
-                ? "T'es chaud, on t'attend !"
+                ? "Confirm\u00e9\u00a0! Ta squad compte sur toi"
                 : session.my_rsvp === 'absent'
-                  ? 'Pas dispo cette fois'
-                  : 'En mode peut-être...'}
+                  ? 'Pas dispo \u2014 ta place est libre pour quelqu\'un d\'autre'
+                  : 'Peut-\u00eatre\u2026 Confirme vite pour ne pas perdre ta place\u00a0!'}
             </span>
           </m.div>
         )}
@@ -223,7 +223,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Ta prochaine session t'attend
+            Ne rate pas ta prochaine session
             <m.span
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
@@ -237,7 +237,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            Propose un créneau et ta squad reçoit une notif instantanément !
+            30 secondes pour proposer un cr\u00e9neau, ta squad re\u00e7oit une notif instantan\u00e9ment.
           </m.p>
         </div>
 
@@ -265,7 +265,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          Ta squad recevra une notification instantanément
+          Gratuit, sans engagement \u2014 ta squad re\u00e7oit la notif en 1 seconde
         </m.p>
       </div>
     </Card>

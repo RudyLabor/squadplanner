@@ -87,21 +87,21 @@ describe('PremiumPricing', () => {
   /* ---------------------------------------------------------------- */
   /*  Free trial banner                                                */
   /* ---------------------------------------------------------------- */
-  it('renders free trial banner with "7 jours d\'essai gratuit"', () => {
+  it('renders free trial banner with heading', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText("7 jours d'essai gratuit")).toBeDefined()
+    expect(screen.getByText(/Teste tout pendant 7 jours/)).toBeDefined()
   })
 
   it('renders trial description text', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Essaie Premium gratuitement pendant 7 jours')).toBeDefined()
+    expect(screen.getByText(/Active Premium maintenant/)).toBeDefined()
   })
 
   it('renders trial trust badges', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Aucun engagement')).toBeDefined()
-    expect(screen.getByText('7 jours complets')).toBeDefined()
-    expect(screen.getByText('Pas de CB requise')).toBeDefined()
+    expect(screen.getByText('Paiement sécurisé Stripe')).toBeDefined()
+    expect(screen.getByText('Annulation en 1 clic')).toBeDefined()
+    expect(screen.getByText('Remboursé sous 30 jours')).toBeDefined()
   })
 
   it('calls onStartTrial when trial button is clicked', () => {
@@ -129,9 +129,9 @@ describe('PremiumPricing', () => {
     expect(screen.getByText(/Annuel/)).toBeDefined()
   })
 
-  it('renders -20% badge on yearly toggle', () => {
+  it('renders "Économise 2 mois" badge on yearly toggle', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('-20%')).toBeDefined()
+    expect(screen.getByText('Économise 2 mois')).toBeDefined()
   })
 
   /* ---------------------------------------------------------------- */
@@ -182,7 +182,7 @@ describe('PremiumPricing', () => {
     render(<PremiumPricing {...defaultProps} />)
     expect(screen.getByText('5 squads')).toBeDefined()
     expect(screen.getByText('Sessions illimitées')).toBeDefined()
-    expect(screen.getByText('Zéro pub')).toBeDefined()
+    expect(screen.getByText('Thèmes personnalisés')).toBeDefined()
   })
 
   it('renders Squad Leader tier features', () => {
@@ -196,7 +196,7 @@ describe('PremiumPricing', () => {
     render(<PremiumPricing {...defaultProps} />)
     expect(screen.getByText('Tout Squad Leader inclus')).toBeDefined()
     expect(screen.getByText('Dashboard multi-squads')).toBeDefined()
-    expect(screen.getByText('API webhooks')).toBeDefined()
+    expect(screen.getByText('Export CSV avancé')).toBeDefined()
   })
 
   /* ---------------------------------------------------------------- */
@@ -280,9 +280,13 @@ describe('PremiumPricing', () => {
   /* ---------------------------------------------------------------- */
   it('renders payment trust badges', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Paiement sécurisé Stripe')).toBeDefined()
-    expect(screen.getByText('Annulation facile')).toBeDefined()
-    expect(screen.getByText('Satisfait ou remboursé 30j')).toBeDefined()
+    // Trust badges are in the trial section now, verify they exist
+    const trustBadges = screen.getAllByText('Paiement sécurisé Stripe')
+    expect(trustBadges.length).toBeGreaterThan(0)
+    const annulBadges = screen.getAllByText('Annulation en 1 clic')
+    expect(annulBadges.length).toBeGreaterThan(0)
+    const rembourseBadges = screen.getAllByText('Remboursé sous 30 jours')
+    expect(rembourseBadges.length).toBeGreaterThan(0)
   })
 
   /* ---------------------------------------------------------------- */
@@ -290,7 +294,7 @@ describe('PremiumPricing', () => {
   /* ---------------------------------------------------------------- */
   it('renders final CTA card section', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText(/Pr.t . passer au niveau sup.rieur/)).toBeDefined()
+    expect(screen.getByText(/Ta squad mérite mieux/)).toBeDefined()
   })
 
   it('calls onStartTrial from final CTA card button', () => {

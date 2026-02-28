@@ -207,17 +207,17 @@ export default function Auth() {
                 </div>
                 <h1 className="text-lg font-bold text-text-primary mb-2">
                   {mode === 'login'
-                    ? "T'as manqué à ta squad !"
+                    ? "Ta squad t'attend — reconnecte-toi\u00a0!"
                     : mode === 'reset'
                       ? 'Nouveau mot de passe'
-                      : "Rejoins l'aventure"}
+                      : 'Rejoins ta squad en 30 secondes'}
                 </h1>
                 <p className="text-md text-text-secondary">
                   {mode === 'login'
-                    ? "Tes potes t'attendent"
+                    ? 'Des sessions sont peut-être déjà planifiées'
                     : mode === 'reset'
                       ? 'Choisis un nouveau mot de passe sécurisé'
-                      : 'Crée ton compte en 30 secondes'}
+                      : 'Inscription gratuite. Pas de carte bancaire. Jamais.'}
                 </p>
               </div>
 
@@ -290,7 +290,7 @@ export default function Auth() {
                     ) : mode === 'reset' ? (
                       'Mettre à jour'
                     ) : (
-                      'Créer mon compte'
+                      'Créer mon compte gratuit'
                     )}
                   </Button>
 

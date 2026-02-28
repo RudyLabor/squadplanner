@@ -62,15 +62,15 @@ describe('ComparisonSection', () => {
 
   it('renders heading and subtitle', () => {
     render(<ComparisonSection />)
-    expect(screen.getByText("Plus qu'un Discord pour gamers")).toBeInTheDocument()
-    expect(screen.getByText(/Discord est fait pour discuter/)).toBeInTheDocument()
-    expect(screen.getByText('jouer ensemble')).toBeInTheDocument()
+    expect(screen.getByText('Ce que Discord ne fait pas pour ta squad')).toBeInTheDocument()
+    expect(screen.getByText(/Tu utilises Discord pour discuter/)).toBeInTheDocument()
+    expect(screen.getByText('enfin jouer')).toBeInTheDocument()
   })
 
   it('renders footer note text', () => {
     render(<ComparisonSection />)
-    expect(screen.getByText(/Discord reste top/)).toBeInTheDocument()
-    expect(screen.getByText(/squad de 3 à 10 joueurs/)).toBeInTheDocument()
+    expect(screen.getByText(/Discord gère tes serveurs/)).toBeInTheDocument()
+    expect(screen.getByText(/combinaison parfaite/)).toBeInTheDocument()
   })
 
   // ─── Table structure ────────────────────────────────────
@@ -108,51 +108,55 @@ describe('ComparisonSection', () => {
     expect(logo.getAttribute('data-size')).toBe('14')
   })
 
-  // ─── All 7 feature rows ────────────────────────────────
+  // ─── All 11 feature rows ────────────────────────────────
 
-  it('renders all 7 comparison features', () => {
+  it('renders all 11 comparison features', () => {
     render(<ComparisonSection />)
     expect(screen.getByText('Planning de sessions avec confirmation')).toBeInTheDocument()
     expect(screen.getByText('Score de fiabilité par joueur')).toBeInTheDocument()
     expect(screen.getByText('Check-in présence réelle')).toBeInTheDocument()
     expect(screen.getByText('Coach IA personnalisé')).toBeInTheDocument()
+    expect(screen.getByText("Stats & analytics d'équipe")).toBeInTheDocument()
+    expect(screen.getByText('Sessions récurrentes')).toBeInTheDocument()
+    expect(screen.getByText('Gestion multi-squads')).toBeInTheDocument()
     expect(screen.getByText('Party vocale dédiée')).toBeInTheDocument()
     expect(screen.getByText('Chat de squad')).toBeInTheDocument()
     expect(screen.getByText('Gamification (XP, challenges)')).toBeInTheDocument()
+    expect(screen.getByText('Parrainage avec récompenses')).toBeInTheDocument()
   })
 
-  it('renders exactly 7 table body rows', () => {
+  it('renders exactly 11 table body rows', () => {
     render(<ComparisonSection />)
     const table = screen.getByRole('table')
     const rows = within(table).getAllByRole('row')
-    // 1 header row + 7 body rows = 8 total
-    expect(rows.length).toBe(8)
+    // 1 header row + 11 body rows = 12 total
+    expect(rows.length).toBe(12)
   })
 
   // ─── Discord column: false values (X icons) ────────────
 
   it('renders X icons for features Discord does not have', () => {
     render(<ComparisonSection />)
-    // 4 features where discord === false: Planning confirmation, Score fiabilité, Check-in, Coach IA
+    // 7 features where discord === false: Planning, Score, Check-in, Coach IA, Stats, Sessions récurrentes, Parrainage
     const xIcons = screen.getAllByTestId('icon-x')
-    expect(xIcons.length).toBe(4)
+    expect(xIcons.length).toBe(7)
   })
 
   it('renders "Non disponible" sr-only text for features Discord lacks', () => {
     render(<ComparisonSection />)
     const nonDispos = screen.getAllByText('Non disponible')
-    expect(nonDispos.length).toBe(4)
+    expect(nonDispos.length).toBe(7)
   })
 
   // ─── Discord column: true values (Check icons with notes) ──
 
-  it('renders Check icons for features Discord has', () => {
+  it('renders Check icons for features Discord has and all SP features', () => {
     render(<ComparisonSection />)
-    // Check icons: in Discord column for Party vocale (true) and Chat de squad (true)
-    // plus all 7 in SP column = total checks should be 2 Discord + 7 SP = 9
-    // plus Gamification has 'partial' so no Check there for discord
+    // Check icons: in Discord column for Party vocale (true) and Chat de squad (true) = 2
+    // plus all 11 in SP column = 11
+    // Total = 2 Discord true + 11 SP true = 13
     const checkIcons = screen.getAllByTestId('icon-check')
-    expect(checkIcons.length).toBe(9) // 2 discord true + 7 squad true
+    expect(checkIcons.length).toBe(13)
   })
 
   it('renders "Basique" note for Discord Party vocale and Chat', () => {
@@ -164,9 +168,10 @@ describe('ComparisonSection', () => {
 
   // ─── Discord column: partial value ──────────────────────
 
-  it('renders partial badge for Gamification in Discord column', () => {
+  it('renders partial badges for Discord column', () => {
     render(<ComparisonSection />)
     expect(screen.getByText('Via bots tiers')).toBeInTheDocument()
+    expect(screen.getByText('Serveurs séparés')).toBeInTheDocument()
   })
 
   it('partial badge has warning styling', () => {
@@ -180,23 +185,29 @@ describe('ComparisonSection', () => {
 
   it('renders "Disponible" sr-only text for features without squadNote', () => {
     render(<ComparisonSection />)
-    // Features without squadNote: Planning, Score, Check-in, Coach IA (4 items)
+    // Features without squadNote in SP column: Planning, Score, Check-in, Coach IA, Sessions récurrentes (5 items)
     // Plus Discord "Disponible" sr-only for discord===true without discordNote: none (both have notes)
-    // Total "Disponible" = 4 from SP + 0 from discord true with no note
+    // Total "Disponible" = 5 from SP + 0 from discord true with no note
     const disponibles = screen.getAllByText('Disponible')
-    expect(disponibles.length).toBe(4) // 4 SP features w/o squadNote
+    expect(disponibles.length).toBe(5)
   })
 
-  it('renders "Optimisé gaming" notes for Squad Planner', () => {
+  it('renders "Optimisé gaming" note for Squad Planner Chat', () => {
     render(<ComparisonSection />)
     const optimised = screen.getAllByText('Optimisé gaming')
-    // Party vocale and Chat de squad in SP column
-    expect(optimised.length).toBe(2)
+    // Only Chat de squad in SP column has "Optimisé gaming"
+    expect(optimised.length).toBe(1)
   })
 
-  it('renders "Natif" note for Squad Planner Gamification', () => {
+  it('renders "Audio HD" note for Squad Planner Party vocale', () => {
     render(<ComparisonSection />)
-    expect(screen.getByText('Natif')).toBeInTheDocument()
+    expect(screen.getByText('Audio HD')).toBeInTheDocument()
+  })
+
+  it('renders "Natif" notes for Squad Planner Gamification and Parrainage', () => {
+    render(<ComparisonSection />)
+    const natifs = screen.getAllByText('Natif')
+    expect(natifs.length).toBe(2)
   })
 
   // ─── Row styling: conditional background ────────────────
@@ -205,20 +216,25 @@ describe('ComparisonSection', () => {
     const { container } = render(<ComparisonSection />)
     const tbody = container.querySelector('tbody')!
     const rows = tbody.querySelectorAll('tr')
-    // Rows 0,1,2,3 (discord===false) should have bg-primary/[0.02]
+    // Rows 0-5 (discord===false) and row 10 (Parrainage, discord===false) should have bg-primary
     expect(rows[0].className).toContain('bg-primary')
     expect(rows[1].className).toContain('bg-primary')
     expect(rows[2].className).toContain('bg-primary')
     expect(rows[3].className).toContain('bg-primary')
+    expect(rows[4].className).toContain('bg-primary')
+    expect(rows[5].className).toContain('bg-primary')
+    expect(rows[10].className).toContain('bg-primary')
   })
 
-  it('does NOT apply primary background to rows where Discord is true', () => {
+  it('does NOT apply primary background to rows where Discord is true or partial', () => {
     const { container } = render(<ComparisonSection />)
     const tbody = container.querySelector('tbody')!
     const rows = tbody.querySelectorAll('tr')
-    // Rows 4,5 (discord===true) should NOT have bg-primary
-    expect(rows[4].className).not.toContain('bg-primary')
-    expect(rows[5].className).not.toContain('bg-primary')
+    // Rows 6 (Gestion multi-squads, partial), 7 (Party, true), 8 (Chat, true), 9 (Gamification, partial)
+    expect(rows[6].className).not.toContain('bg-primary')
+    expect(rows[7].className).not.toContain('bg-primary')
+    expect(rows[8].className).not.toContain('bg-primary')
+    expect(rows[9].className).not.toContain('bg-primary')
   })
 
   // ─── Row borders: last row has no border ────────────────
@@ -228,15 +244,15 @@ describe('ComparisonSection', () => {
     const tbody = container.querySelector('tbody')!
     const rows = tbody.querySelectorAll('tr')
     expect(rows[0].className).toContain('border-b')
-    expect(rows[5].className).toContain('border-b')
+    expect(rows[9].className).toContain('border-b')
   })
 
   it('does NOT apply border to last row', () => {
     const { container } = render(<ComparisonSection />)
     const tbody = container.querySelector('tbody')!
     const rows = tbody.querySelectorAll('tr')
-    // Last row (index 6) should not have border-b
-    expect(rows[6].className).not.toContain('border-b')
+    // Last row (index 10) should not have border-b
+    expect(rows[10].className).not.toContain('border-b')
   })
 
   // ─── DiscordIcon internal render ────────────────────────

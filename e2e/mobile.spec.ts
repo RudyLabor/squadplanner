@@ -324,7 +324,7 @@ test.describe('Mobile viewport — Pages publiques', () => {
     await dismissCookieBanner(page)
 
     // STRICT: le H1 DOIT etre visible
-    await expect(page.getByRole('heading', { name: /Transforme/i })).toBeVisible({ timeout: 10000 })
+    await expect(page.getByRole('heading', { name: /Arrête de perdre/i })).toBeVisible({ timeout: 10000 })
 
     // STRICT: au moins un CTA DOIT etre visible
     const connectLink = page.getByRole('link', { name: /Se connecter/i }).first()

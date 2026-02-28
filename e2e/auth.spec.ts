@@ -30,7 +30,7 @@ async function switchToRegisterMode(page: import('@playwright/test').Page) {
   await expect(registerToggle).toBeVisible({ timeout: 10000 })
   await registerToggle.click()
   // STRICT: le heading d'inscription DOIT apparaitre
-  await expect(page.getByRole('heading', { name: /Rejoins l'aventure/i })).toBeVisible({
+  await expect(page.getByRole('heading', { name: /Rejoins ta squad en 30 secondes/i })).toBeVisible({
     timeout: 10000,
   })
 }
@@ -44,8 +44,8 @@ test.describe('F01 — Landing Page', () => {
     await page.goto('/')
     await dismissCookieBanner(page)
 
-    // STRICT: H1 contenant "Transforme" DOIT etre visible
-    await expect(page.getByRole('heading', { name: /Transforme/i })).toBeVisible({ timeout: 10000 })
+    // STRICT: H1 contenant "Arrête de perdre" DOIT etre visible
+    await expect(page.getByRole('heading', { name: /Arrête de perdre/i })).toBeVisible({ timeout: 10000 })
 
     // STRICT: les deux CTAs principaux DOIVENT etre visibles
     await expect(page.getByRole('link', { name: /Se connecter/i }).first()).toBeVisible({
@@ -194,7 +194,7 @@ test.describe('F03 — Login Form', () => {
     await dismissCookieBanner(page)
 
     // STRICT: le heading de login DOIT etre visible
-    await expect(page.getByRole('heading', { name: /manqué à ta squad/i })).toBeVisible({
+    await expect(page.getByRole('heading', { name: /squad t'attend.*reconnecte-toi/i })).toBeVisible({
       timeout: 10000,
     })
 

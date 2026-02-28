@@ -126,8 +126,8 @@ export function PremiumUpgradeModal({
             <Crown className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Passe au niveau supérieur</h2>
-            <p className="text-md text-white/80">Débloquer toutes les features</p>
+            <h2 className="text-xl font-bold text-white">Débloque cette feature</h2>
+            <p className="text-md text-white/80">Essaie 7 jours gratuit — sans carte bancaire</p>
           </div>
         </div>
 
@@ -189,7 +189,7 @@ export function PremiumUpgradeModal({
             >
               Annuel
               <span className="px-1 py-0.5 rounded text-xs font-bold bg-black/25 text-white">
-                -20%
+                2 mois offerts
               </span>
             </button>
           </div>
@@ -234,7 +234,7 @@ export function PremiumUpgradeModal({
           )}
         </Button>
         <p className="text-xs text-text-tertiary text-center mt-3">
-          Annulation possible à tout moment. Satisfait ou remboursé 30 jours.
+          Annulation en 1 clic. Remboursé sous 30 jours. Zéro risque.
         </p>
       </div>
     </ResponsiveModal>

@@ -16,7 +16,7 @@ const TIERS = [
     name: 'Gratuit',
     monthlyPrice: 0,
     yearlyPrice: 0,
-    description: 'Pour commencer sans engagement.',
+    description: "Tout ce qu'il faut pour jouer régulièrement.",
     features: [
       '1 squad',
       '3 sessions/semaine',
@@ -25,7 +25,7 @@ const TIERS = [
       'Score de fiabilité',
       'Notifications push',
     ],
-    cta: "C'est parti — Gratuit",
+    cta: 'Commencer gratuitement',
     ctaStyle: 'border border-border-default text-text-primary hover:bg-bg-hover',
     popular: false,
     badge: null,
@@ -34,7 +34,7 @@ const TIERS = [
     name: 'Premium',
     monthlyPrice: PREMIUM_PRICE_MONTHLY,
     yearlyPrice: PREMIUM_PRICE_YEARLY,
-    description: 'Joue plus, sans limites.',
+    description: 'Pour les squads qui jouent sérieusement.',
     features: [
       '5 squads',
       'Sessions illimitées',
@@ -43,7 +43,7 @@ const TIERS = [
       'Stats avancées',
       'IA Coach basique',
       'Badge Premium violet',
-      'Zéro pub',
+      'Thèmes personnalisés',
     ],
     cta: 'Débloquer Premium',
     ctaStyle: 'bg-primary-bg text-white hover:bg-primary-bg-hover shadow-glow-primary-sm',
@@ -61,7 +61,7 @@ const TIERS = [
       'Audio HD Party',
       'IA Coach avancé',
       'Dashboard analytics équipe',
-      'Rôles avancés (IGL, Coach)',
+      'Rôles avancés (Leader, Co-leader, Modérateur)',
       'Export calendrier',
       'Sessions récurrentes',
       'Badge Squad Leader doré',
@@ -81,9 +81,9 @@ const TIERS = [
       'Dashboard multi-squads',
       'Stats cross-squad',
       'Branding personnalisé',
-      'API webhooks',
-      'Onboarding assisté',
-      'Support prioritaire 24h',
+      'Export CSV avancé',
+      'Onboarding guidé pas-à-pas',
+      'Support prioritaire par email',
       'Facturation entreprise',
     ],
     cta: 'Contacter',
@@ -106,11 +106,11 @@ export function PricingSection() {
           className="text-center mb-8"
         >
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-            Tarifs simples, sans surprise
+            Choisis ton plan — commence gratuit, upgrade quand tu veux
           </h2>
           <p className="text-text-tertiary text-md max-w-md mx-auto mb-6">
-            Commence gratuitement. Passe au niveau supérieur quand tu veux débloquer tout le
-            potentiel.
+            Le gratuit suffit pour organiser tes sessions. Le premium, c'est pour ceux qui veulent
+            tout optimiser.
           </p>
 
           {/* Toggle mensuel/annuel */}
@@ -135,7 +135,7 @@ export function PricingSection() {
             >
               Annuel
               <span className="px-1.5 py-0.5 rounded-full bg-black/25 text-white text-xs font-bold">
-                Jusqu'à -29%
+                Économise 2 mois
               </span>
             </button>
           </div>
@@ -236,7 +236,7 @@ export function PricingSection() {
                 d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
               />
             </svg>
-            Données hébergées en France
+            Données hébergées en Europe (UE)
           </span>
           <span className="flex items-center gap-1.5">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -271,7 +271,7 @@ export function PricingSection() {
             </svg>
             Paiement sécurisé Stripe
           </span>
-          <span className="flex items-center gap-1.5">Satisfait ou remboursé 30 jours</span>
+          <span className="flex items-center gap-1.5">Remboursé sur demande sous 30 jours</span>
         </div>
       </div>
     </section>

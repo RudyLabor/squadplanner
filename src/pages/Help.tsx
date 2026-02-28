@@ -55,7 +55,7 @@ export function Help() {
           </button>
           <div>
             <h1 className="text-lg font-bold text-text-primary">Aide & FAQ</h1>
-            <p className="text-md text-text-secondary">Trouve des réponses à tes questions</p>
+            <p className="text-md text-text-secondary">R\u00e9ponse en moins de 24h \u2014 cherche d'abord ici, c'est souvent plus rapide</p>
           </div>
         </header>
 

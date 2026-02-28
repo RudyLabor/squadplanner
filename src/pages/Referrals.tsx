@@ -163,9 +163,9 @@ export function Referrals() {
               transition={{ delay: 0.15, duration: 0.4, ease }}
               className="text-lg md:text-xl font-bold text-text-primary mb-4"
             >
-              Invite tes potes,{' '}
+              Invite 3 potes,{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-success to-primary">
-                gagne des récompenses
+                débloque ton premier badge
               </span>
             </m.h1>
 
@@ -175,8 +175,8 @@ export function Referrals() {
               transition={{ delay: 0.2, duration: 0.4, ease }}
               className="text-md md:text-lg text-text-secondary max-w-xl mx-auto"
             >
-              Partage ton lien, ton ami rejoint la squad et vous gagnez tous les deux 7 jours
-              Premium + toi 500 XP.
+              Ton pote gagne 7 jours Premium. Toi aussi + 500 XP en bonus.
+              Tout le monde y gagne.
             </m.p>
           </div>
         </div>

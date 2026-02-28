@@ -134,7 +134,7 @@ const features = [
     icon: Shield,
     title: 'Fini les no-shows',
     desc: (name: string) =>
-      `Chaque joueur répond OUI ou NON. Pas de « peut-être ». Et si quelqu'un ghost ta session ${name}, son score le montre.`,
+      `Chaque joueur répond. Fini les «\u00a0peut-être\u00a0» sans suite. Et si quelqu'un ghost ta session ${name}, son score le montre.`,
     details: [
       'Rappels automatiques avant chaque session',
       'Score de fiabilité visible par tous',
@@ -182,7 +182,7 @@ export default function Component() {
     },
     {
       q: `Mes potes doivent s'inscrire pour rejoindre ?`,
-      a: `Non, tu leur envoies un lien et ils rejoignent en 10 secondes. Ils peuvent créer un compte plus tard s'ils veulent. L'idée c'est zéro friction.`,
+      a: `Oui, mais l'inscription prend 10 secondes. Tu leur envoies un lien, ils créent un compte et rejoignent ta squad. L'idée c'est zéro friction.`,
     },
     {
       q: `C'est vraiment gratuit ?`,
@@ -205,7 +205,7 @@ export default function Component() {
       step: '2',
       icon: Calendar,
       title: 'Propose un créneau',
-      desc: `Vendredi 21h, ranked ${game.shortName || game.name} ? Chacun répond OUI ou NON. Pas de « peut-être ».`,
+      desc: `Vendredi 21h, ranked ${game.shortName || game.name}\u00a0? Chacun répond. Fini les «\u00a0peut-être\u00a0» sans suite.`,
     },
     {
       step: '3',

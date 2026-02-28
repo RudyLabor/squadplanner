@@ -89,11 +89,11 @@ export function OnboardingStepComplete({
       </m.div>
 
       <h2 className="text-xl font-bold text-text-primary mb-2">
-        {createdSquadName ? `${createdSquadName} est pr\u00eate !` : "C'est parti !"}
+        {createdSquadName ? `${createdSquadName} est pr\u00eate \u00e0 jouer\u00a0!` : "C'est parti\u00a0!"}
       </h2>
       <p className="text-text-secondary mb-6">
         {createdSquadId
-          ? 'Invite tes potes et propose une premi\u00e8re session'
+          ? 'Plus qu\u2019une \u00e9tape\u00a0: invite tes potes et planifie ta premi\u00e8re session'
           : squadsLength > 0
             ? `Tu as rejoint ${firstSquadName} !`
             : 'Tu peux maintenant explorer ou cr\u00e9er ta squad'}

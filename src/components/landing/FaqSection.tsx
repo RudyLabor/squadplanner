@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     q: 'Comment inviter mes amis ?',
-    a: "Tu reçois un code d'invitation unique quand tu crées ta squad. Tu le partages par Discord, WhatsApp, SMS -- n'importe quoi. Tes potes cliquent sur le lien et rejoignent en 10 secondes, sans créer de compte au préalable. Résultat : en 2 minutes ta squad est au complet et prête à planifier.",
+    a: "Tu reçois un code d'invitation unique quand tu crées ta squad. Tu le partages par Discord, WhatsApp, SMS -- n'importe quoi. Tes potes cliquent sur le lien et s'inscrivent en 10 secondes, même le pote qui répond jamais sur Discord peut le faire. Résultat : en 2 minutes ta squad est au complet et prête à planifier.",
   },
   {
     q: 'Quelle est la différence avec Discord ?',
@@ -25,15 +25,15 @@ const faqs = [
   },
   {
     q: 'Mes données sont-elles protégées ?',
-    a: "Absolument. Hébergé en France, conforme RGPD. Tes données sont chiffrées et tu peux tout supprimer à tout moment depuis les paramètres. En gros, tes stats de gaming restent les tiennes, point.",
+    a: "Absolument. Hébergé en Europe (UE), conforme RGPD. Tes données sont chiffrées et tu peux tout supprimer à tout moment depuis les paramètres. En gros, tes stats de gaming restent les tiennes, point.",
   },
   {
     q: 'Pourquoi pas juste un Google Calendar ou Doodle ?',
-    a: "Parce que Google Calendar c'est fait pour des réunions de boulot, pas pour tes ranked du mardi. Squad Planner est conçu pour le gaming : vocal intégré, score de présence, confirmation auto quand assez de joueurs sont dispo. Résultat : tu passes moins de temps à organiser et plus de temps à jouer.",
+    a: "Sérieusement\u00a0? Google Calendar c'est fait pour des réunions de boulot, pas pour tes ranked du mardi. Squad Planner est conçu pour le gaming : vocal intégré, score de présence, confirmation auto quand assez de joueurs sont dispo. Résultat : tu passes moins de temps à organiser et plus de temps à jouer.",
   },
   {
     q: "Mes potes vont vraiment l'utiliser ?",
-    a: "Oui, parce qu'ils n'ont qu'à cliquer OUI ou NON. Pas d'app à installer (ça marche dans le navigateur). Du coup même les plus flemmards de ta squad peuvent confirmer en 2 secondes. S'ils veulent les notifs push, l'app mobile est dispo.",
+    a: "Oui — même le pote qui répond jamais sur Discord. L'inscription prend 10 secondes max, et après ils n'ont qu'à cliquer OUI ou NON. Ça marche dans le navigateur, pas d'app à installer. Du coup même les plus flemmards confirment en 2 secondes. S'ils veulent les notifs push, l'app mobile est dispo.",
   },
   {
     q: "C'est vraiment 100% gratuit ?",

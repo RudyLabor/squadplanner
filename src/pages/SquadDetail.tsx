@@ -68,9 +68,9 @@ export default function SquadDetail() {
 
         if (response === 'present') {
           fireConfetti()
-          setSuccessMessage("T'es confirmé ! \uD83D\uDD25 Ta squad compte sur toi")
+          setSuccessMessage("Confirm\u00e9\u00a0! \uD83D\uDD25 Ta squad sait qu'elle peut compter sur toi")
         } else {
-          setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
+          setSuccessMessage(response === 'absent' ? 'Absence enregistr\u00e9e \u2014 ta place est libre pour un autre joueur' : 'R\u00e9ponse enregistr\u00e9e \u2014 confirme vite pour garder ta place')
         }
       } catch (err) {
         if (!import.meta.env.PROD) console.error('RSVP error:', err)
@@ -264,8 +264,8 @@ export default function SquadDetail() {
         open={showLeaveConfirm}
         onClose={() => setShowLeaveConfirm(false)}
         onConfirm={confirmLeaveSquad}
-        title="Quitter cette squad ?"
-        description="Tu ne pourras plus voir les sessions et messages de cette squad. Tu pourras la rejoindre avec un code d'invitation."
+        title="Quitter cette squad\u00a0?"
+        description="Tu perdras l'acc\u00e8s aux sessions, messages et ton historique de fiabilit\u00e9 dans cette squad. Tu pourras la rejoindre \u00e0 nouveau avec un code d'invitation."
         confirmLabel="Quitter"
         variant="danger"
       />

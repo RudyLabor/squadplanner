@@ -144,7 +144,7 @@ const DMConversationCard = memo(function DMConversationCard({
           <p
             className={`text-base truncate ${c.unread_count > 0 ? 'text-text-tertiary' : 'text-text-quaternary'}`}
           >
-            {c.last_message_content || <span className="italic">Nouvelle conversation</span>}
+            {c.last_message_content || <span className="italic">Dis-lui bonjour\u00a0!</span>}
           </p>
         </div>
       </div>
@@ -266,8 +266,8 @@ export function ConversationList({
           squadConversations.length === 0 ? (
             <EmptyState
               type="no_squads"
-              title="Pas encore de squads"
-              message="Rejoins une squad pour discuter avec tes potes."
+              title="Tes potes discutent sans toi"
+              message="Rejoins une squad pour ne plus rater aucune conversation."
               actionLabel="Voir mes squads"
               onAction={() => (window.location.href = '/squads')}
             />
@@ -292,8 +292,8 @@ export function ConversationList({
         ) : dmConversations.length === 0 ? (
           <EmptyState
             type="no_messages"
-            title="Pas encore de messages privés"
-            message="Clique sur un membre de ta squad pour lui envoyer un message."
+            title="Envoie le premier message"
+            message="Clique sur un membre de ta squad pour lancer la conversation \u2014 c'est souvent comme \u00e7a que les meilleures sessions commencent."
             actionLabel="Voir mes squads"
             onAction={() => (window.location.href = '/squads')}
           />

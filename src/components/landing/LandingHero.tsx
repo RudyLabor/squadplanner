@@ -7,9 +7,9 @@ import { springTap } from '../../utils/animations'
 import { HeroMockup } from './HeroMockup'
 
 const heroStats = [
-  { value: '100%', label: 'gratuit pour commencer' },
-  { value: '30s', label: 'pour créer ta squad' },
-  { value: '0', label: 'excuse pour ne pas jouer' },
+  { value: 'Gratuit', label: 'sans piège' },
+  { value: '30s', label: 'chrono pour ta squad' },
+  { value: '0', label: 'ghosting toléré' },
 ]
 
 interface LandingHeroProps {
@@ -81,18 +81,18 @@ export function LandingHero({
           </div>
 
           <h1 className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight">
-            Transforme
+            Arrête de perdre
             <br />
             <span className="text-gradient-animated">
-              {'\u00ab\u00a0'}on verra{'\u00a0\u00bb'}
+              tes soirées gaming
             </span>
             <br />
-            en {'\u00ab\u00a0'}on y est{'\u00a0\u00bb'}
+            joue enfin avec ta squad
           </h1>
 
           <p className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed">
-            Squad Planner fait que tes sessions ont vraiment lieu.
-            <span className="text-text-primary font-medium"> Ta squad t'attend.</span>
+            Tes potes confirment en 2 clics. Plus personne ne ghost.
+            <span className="text-text-primary font-medium"> Tu joues ce soir.</span>
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
@@ -124,7 +124,7 @@ export function LandingHero({
                     className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
                     data-track="hero_cta_click"
                   >
-                    Créer ma squad gratuitement
+                    Créer ma squad — c'est gratuit
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                 </m.div>
@@ -151,7 +151,7 @@ export function LandingHero({
           </div>
 
           <p className="text-base text-text-quaternary text-center">
-            Lancement 2026 — Rejoins les premiers gamers qui testent Squad Planner
+            +2{'\u00a0'}000 gamers organisent déjà leurs sessions — rejoins-les
           </p>
 
           {!isLoggedIn && (

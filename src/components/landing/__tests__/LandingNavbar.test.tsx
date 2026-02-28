@@ -118,22 +118,22 @@ describe('LandingNavbar', () => {
     expect(screen.getByText('Se connecter')).toBeInTheDocument()
   })
 
-  it('renders "Créer ma squad" CTA with ArrowRight icon', () => {
+  it('renders "Créer ma squad — gratuit" CTA with ArrowRight icon', () => {
     render(<LandingNavbar isLoggedIn={false} />)
-    expect(screen.getByText('Créer ma squad')).toBeInTheDocument()
+    expect(screen.getByText(/Créer ma squad — gratuit$/)).toBeInTheDocument()
     // ArrowRight icon next to CTA
     expect(screen.getAllByTestId('icon-arrow').length).toBeGreaterThanOrEqual(1)
   })
 
   it('renders register link with correct href', () => {
     render(<LandingNavbar isLoggedIn={false} />)
-    const ctaLink = screen.getByText('Créer ma squad').closest('a')
+    const ctaLink = screen.getByText(/Créer ma squad — gratuit$/).closest('a')
     expect(ctaLink?.getAttribute('href')).toBe('/auth?mode=register&redirect=onboarding')
   })
 
-  it('renders "Créer ma squad" with data-track attribute', () => {
+  it('renders "Créer ma squad — gratuit" with data-track attribute', () => {
     render(<LandingNavbar isLoggedIn={false} />)
-    const ctaLink = screen.getByText('Créer ma squad').closest('a')
+    const ctaLink = screen.getByText(/Créer ma squad — gratuit$/).closest('a')
     expect(ctaLink?.getAttribute('data-track')).toBe('navbar_cta_click')
   })
 
@@ -168,7 +168,7 @@ describe('LandingNavbar', () => {
 
   it('does NOT render "Créer ma squad" when logged in', () => {
     render(<LandingNavbar isLoggedIn={true} />)
-    expect(screen.queryByText('Créer ma squad')).not.toBeInTheDocument()
+    expect(screen.queryByText(/Créer ma squad/)).not.toBeInTheDocument()
   })
 
   it('does NOT render hamburger menu when logged in', () => {
@@ -194,8 +194,8 @@ describe('LandingNavbar', () => {
   it('opens mobile menu on hamburger click', () => {
     render(<LandingNavbar isLoggedIn={false} />)
     fireEvent.click(screen.getByLabelText('Ouvrir le menu'))
-    // Mobile menu should now show "Créer ma squad gratuitement"
-    expect(screen.getByText('Créer ma squad gratuitement')).toBeInTheDocument()
+    // Mobile menu should now show "Créer ma squad — c'est gratuit"
+    expect(screen.getByText('Créer ma squad — c'est gratuit')).toBeInTheDocument()
   })
 
   it('changes aria-label and aria-expanded when menu opens', () => {
@@ -215,10 +215,10 @@ describe('LandingNavbar', () => {
   it('closes mobile menu on toggle click', () => {
     render(<LandingNavbar isLoggedIn={false} />)
     fireEvent.click(screen.getByLabelText('Ouvrir le menu'))
-    expect(screen.getByText('Créer ma squad gratuitement')).toBeInTheDocument()
+    expect(screen.getByText('Créer ma squad — c'est gratuit')).toBeInTheDocument()
 
     fireEvent.click(screen.getByLabelText('Fermer le menu'))
-    expect(screen.queryByText('Créer ma squad gratuitement')).not.toBeInTheDocument()
+    expect(screen.queryByText('Créer ma squad — c'est gratuit')).not.toBeInTheDocument()
   })
 
   // ─── Mobile menu content ───────────────────────────────
@@ -232,7 +232,7 @@ describe('LandingNavbar', () => {
     expect(foncts.length).toBe(2)
   })
 
-  it('mobile menu renders "Se connecter" and "Créer ma squad gratuitement"', () => {
+  it('mobile menu renders "Se connecter" and "Créer ma squad — c'est gratuit"', () => {
     render(<LandingNavbar isLoggedIn={false} />)
     fireEvent.click(screen.getByLabelText('Ouvrir le menu'))
 
@@ -240,7 +240,7 @@ describe('LandingNavbar', () => {
     const connectLinks = screen.getAllByText('Se connecter')
     expect(connectLinks.length).toBe(2)
 
-    expect(screen.getByText('Créer ma squad gratuitement')).toBeInTheDocument()
+    expect(screen.getByText('Créer ma squad — c'est gratuit')).toBeInTheDocument()
   })
 
   it('mobile menu "Se connecter" links to /auth', () => {
@@ -253,11 +253,11 @@ describe('LandingNavbar', () => {
     })
   })
 
-  it('mobile menu "Créer ma squad gratuitement" links to registration', () => {
+  it('mobile menu "Créer ma squad — c'est gratuit" links to registration', () => {
     render(<LandingNavbar isLoggedIn={false} />)
     fireEvent.click(screen.getByLabelText('Ouvrir le menu'))
 
-    const ctaLink = screen.getByText('Créer ma squad gratuitement').closest('a')
+    const ctaLink = screen.getByText('Créer ma squad — c'est gratuit').closest('a')
     expect(ctaLink?.getAttribute('href')).toBe('/auth?mode=register&redirect=onboarding')
   })
 
@@ -266,13 +266,13 @@ describe('LandingNavbar', () => {
   it('closes mobile menu when a nav link is clicked', () => {
     render(<LandingNavbar isLoggedIn={false} />)
     fireEvent.click(screen.getByLabelText('Ouvrir le menu'))
-    expect(screen.getByText('Créer ma squad gratuitement')).toBeInTheDocument()
+    expect(screen.getByText('Créer ma squad — c'est gratuit')).toBeInTheDocument()
 
     // Click on a mobile menu link (second occurrence is the mobile one)
     const fonctLinks = screen.getAllByText('Fonctionnalités')
     fireEvent.click(fonctLinks[1])
 
-    expect(screen.queryByText('Créer ma squad gratuitement')).not.toBeInTheDocument()
+    expect(screen.queryByText('Créer ma squad — c'est gratuit')).not.toBeInTheDocument()
   })
 
   it('closes mobile menu when "Se connecter" is clicked', () => {
@@ -282,16 +282,16 @@ describe('LandingNavbar', () => {
     const connectLinks = screen.getAllByText('Se connecter')
     fireEvent.click(connectLinks[1]) // mobile version
 
-    expect(screen.queryByText('Créer ma squad gratuitement')).not.toBeInTheDocument()
+    expect(screen.queryByText('Créer ma squad — c'est gratuit')).not.toBeInTheDocument()
   })
 
-  it('closes mobile menu when "Créer ma squad gratuitement" is clicked', () => {
+  it('closes mobile menu when "Créer ma squad — c'est gratuit" is clicked', () => {
     render(<LandingNavbar isLoggedIn={false} />)
     fireEvent.click(screen.getByLabelText('Ouvrir le menu'))
 
-    fireEvent.click(screen.getByText('Créer ma squad gratuitement'))
+    fireEvent.click(screen.getByText('Créer ma squad — c'est gratuit'))
 
-    expect(screen.queryByText('Créer ma squad gratuitement')).not.toBeInTheDocument()
+    expect(screen.queryByText('Créer ma squad — c'est gratuit')).not.toBeInTheDocument()
   })
 
   // ─── Escape key closes mobile menu ─────────────────────
@@ -299,22 +299,22 @@ describe('LandingNavbar', () => {
   it('closes mobile menu on Escape key press', () => {
     render(<LandingNavbar isLoggedIn={false} />)
     fireEvent.click(screen.getByLabelText('Ouvrir le menu'))
-    expect(screen.getByText('Créer ma squad gratuitement')).toBeInTheDocument()
+    expect(screen.getByText('Créer ma squad — c'est gratuit')).toBeInTheDocument()
 
     fireEvent.keyDown(window, { key: 'Escape' })
 
-    expect(screen.queryByText('Créer ma squad gratuitement')).not.toBeInTheDocument()
+    expect(screen.queryByText('Créer ma squad — c'est gratuit')).not.toBeInTheDocument()
   })
 
   it('does nothing on non-Escape key press', () => {
     render(<LandingNavbar isLoggedIn={false} />)
     fireEvent.click(screen.getByLabelText('Ouvrir le menu'))
-    expect(screen.getByText('Créer ma squad gratuitement')).toBeInTheDocument()
+    expect(screen.getByText('Créer ma squad — c'est gratuit')).toBeInTheDocument()
 
     fireEvent.keyDown(window, { key: 'Enter' })
 
     // Menu should still be open
-    expect(screen.getByText('Créer ma squad gratuitement')).toBeInTheDocument()
+    expect(screen.getByText('Créer ma squad — c'est gratuit')).toBeInTheDocument()
   })
 
   // ─── Scroll behavior ──────────────────────────────────

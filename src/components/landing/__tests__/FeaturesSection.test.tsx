@@ -76,16 +76,16 @@ describe('FeaturesSection', () => {
 
   it('renders the heading and subtitle', () => {
     render(<FeaturesSection />)
-    expect(screen.getByText('Les 3 piliers de Squad Planner')).toBeInTheDocument()
+    expect(screen.getByText(/3 problèmes\. 3 solutions\. 0 prise de tête\./)).toBeInTheDocument()
     expect(
-      screen.getByText('Chacun résout un problème précis. Ensemble, ils font la différence.')
+      screen.getByText('Chaque pilier élimine une frustration. Ensemble, ta squad joue chaque semaine.')
     ).toBeInTheDocument()
   })
 
   it('renders footer text about Discord', () => {
     render(<FeaturesSection />)
-    expect(screen.getByText(/habitudes de jeu régulières/)).toBeInTheDocument()
-    expect(screen.getByText(/Plus qu'un simple Discord/)).toBeInTheDocument()
+    expect(screen.getByText(/Tes potes ne sont pas flemmards/)).toBeInTheDocument()
+    expect(screen.getByText(/outil pour s'organiser/)).toBeInTheDocument()
   })
 
   it('renders all three pillar tab buttons', () => {

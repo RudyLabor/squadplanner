@@ -132,7 +132,7 @@ const welcome: EmailTemplate = {
               </p>
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
                 <a href="{{unsubscribe_url}}" style="color: #8B5CF6; text-decoration: none;">Se désabonner</a> ·
-                <a href="https://squadplanner.fr/privacy" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
+                <a href="https://squadplanner.fr/legal" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
               </p>
             </td>
           </tr>
@@ -262,7 +262,7 @@ const inviteFriends: EmailTemplate = {
               </p>
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
                 <a href="{{unsubscribe_url}}" style="color: #8B5CF6; text-decoration: none;">Se désabonner</a> ·
-                <a href="https://squadplanner.fr/privacy" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
+                <a href="https://squadplanner.fr/legal" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
               </p>
             </td>
           </tr>
@@ -364,7 +364,7 @@ const sessionMissed: EmailTemplate = {
               </p>
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
                 <a href="{{unsubscribe_url}}" style="color: #8B5CF6; text-decoration: none;">Se désabonner</a> ·
-                <a href="https://squadplanner.fr/privacy" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
+                <a href="https://squadplanner.fr/legal" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
               </p>
             </td>
           </tr>
@@ -456,7 +456,7 @@ const squadPlaying: EmailTemplate = {
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0 0 0;">
                 <tr>
                   <td style="text-align: center;">
-                    <a href="https://squadplanner.fr/squads/${escapeHtml(vars.squad_id || 'dashboard')}" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Rejoindre ma squad</a>
+                    <a href="https://squadplanner.fr/squad/${escapeHtml(vars.squad_id || 'dashboard')}" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Rejoindre ma squad</a>
                   </td>
                 </tr>
               </table>
@@ -471,7 +471,7 @@ const squadPlaying: EmailTemplate = {
               </p>
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
                 <a href="{{unsubscribe_url}}" style="color: #8B5CF6; text-decoration: none;">Se désabonner</a> ·
-                <a href="https://squadplanner.fr/privacy" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
+                <a href="https://squadplanner.fr/legal" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
               </p>
             </td>
           </tr>
@@ -588,7 +588,7 @@ const trialEnding: EmailTemplate = {
               </p>
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
                 <a href="{{unsubscribe_url}}" style="color: #8B5CF6; text-decoration: none;">Se désabonner</a> ·
-                <a href="https://squadplanner.fr/privacy" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
+                <a href="https://squadplanner.fr/legal" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
               </p>
             </td>
           </tr>
@@ -661,7 +661,7 @@ const trialEnded: EmailTemplate = {
                   </tr>
                   <tr>
                     <td style="padding: 10px 0;">
-                      <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">❌ Support prioritaire</p>
+                      <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">❌ Support prioritaire par email</p>
                       <p style="color: #9ca3af; font-size: 13px; margin: 0;">Tu es revenu au support standard</p>
                     </td>
                   </tr>
@@ -688,13 +688,13 @@ const trialEnded: EmailTemplate = {
                     <td style="width: 50%; padding-right: 10px;">
                       <div style="background-color: #1c1c2e; border: 1px solid #404050; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #9ca3af; font-size: 12px; margin: 0 0 6px 0;">Prix normal</p>
-                        <p style="color: #ef4444; font-size: 20px; font-weight: 700; text-decoration: line-through; margin: 0;">4,99€/mois</p>
+                        <p style="color: #ef4444; font-size: 20px; font-weight: 700; text-decoration: line-through; margin: 0;">6,99€/mois</p>
                       </div>
                     </td>
                     <td style="width: 50%; padding-left: 10px;">
                       <div style="background-color: #1e3a1f; border: 1px solid #10b981; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #10b981; font-size: 12px; font-weight: 600; margin: 0 0 6px 0;">POUR TOI MAINTENANT</p>
-                        <p style="color: #10b981; font-size: 24px; font-weight: 700; margin: 0;">3,99€/mois</p>
+                        <p style="color: #10b981; font-size: 24px; font-weight: 700; margin: 0;">4,99€/mois</p>
                       </div>
                     </td>
                   </tr>
@@ -705,7 +705,7 @@ const trialEnded: EmailTemplate = {
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0 0 0;">
                 <tr>
                   <td style="text-align: center;">
-                    <a href="https://squadplanner.fr/premium?discount=20" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Récupérer mon Premium — -20%</a>
+                    <a href="https://squadplanner.fr/premium" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Récupérer mon Premium — -20%</a>
                   </td>
                 </tr>
               </table>
@@ -724,7 +724,7 @@ const trialEnded: EmailTemplate = {
               </p>
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
                 <a href="{{unsubscribe_url}}" style="color: #8B5CF6; text-decoration: none;">Se désabonner</a> ·
-                <a href="https://squadplanner.fr/privacy" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
+                <a href="https://squadplanner.fr/legal" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
               </p>
             </td>
           </tr>
@@ -770,7 +770,7 @@ const monthlyDigest: EmailTemplate = {
                 Ton récap du mois 📈
               </h1>
               <p style="color: #9ca3af; font-size: 14px; margin: 0 0 30px 0;">
-                Février 2026 — Tu as été en feu ! 🔥
+                ${escapeHtml(vars.month || 'Ce mois-ci')} — Tu as été en feu ! 🔥
               </p>
 
               <!-- Stats overview -->
@@ -820,70 +820,23 @@ const monthlyDigest: EmailTemplate = {
                   <tr>
                     <td style="width: 50%; padding-right: 8px;">
                       <p style="color: #9ca3af; font-size: 12px; margin: 0 0 4px 0;">Membres actifs</p>
-                      <p style="color: #e5e7eb; font-size: 16px; font-weight: 600; margin: 0;">5/5</p>
+                      <p style="color: #e5e7eb; font-size: 16px; font-weight: 600; margin: 0;">${escapeHtml(vars.active_members || '—')}</p>
                     </td>
                     <td style="width: 50%; padding-left: 8px;">
                       <p style="color: #9ca3af; font-size: 12px; margin: 0 0 4px 0;">Confiance squad</p>
-                      <p style="color: #e5e7eb; font-size: 16px; font-weight: 600; margin: 0;">95%</p>
+                      <p style="color: #e5e7eb; font-size: 16px; font-weight: 600; margin: 0;">${escapeHtml(vars.squad_confidence || '—')}</p>
                     </td>
                   </tr>
                 </table>
               </div>
 
-              <!-- Game breakdown -->
+              <!-- Game breakdown (only shown if top_games data is provided) -->
+              ${vars.top_games ? `
               <div style="background-color: #222238; border: 1px solid #404050; border-radius: 8px; padding: 20px; margin: 25px 0;">
                 <h3 style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0 0 15px 0;">Jeux les plus joués</h3>
-
-                <table width="100%" cellpadding="0" cellspacing="0">
-                  <!-- Game 1 -->
-                  <tr>
-                    <td style="padding: 10px 0; border-bottom: 1px solid #404050;">
-                      <table width="100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                          <td style="width: 70%;">
-                            <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0;">Valorant</p>
-                          </td>
-                          <td style="width: 30%; text-align: right;">
-                            <p style="color: #8B5CF6; font-size: 14px; font-weight: 600; margin: 0;">18h 30m</p>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-
-                  <!-- Game 2 -->
-                  <tr>
-                    <td style="padding: 10px 0; border-bottom: 1px solid #404050;">
-                      <table width="100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                          <td style="width: 70%;">
-                            <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0;">CS2</p>
-                          </td>
-                          <td style="width: 30%; text-align: right;">
-                            <p style="color: #8B5CF6; font-size: 14px; font-weight: 600; margin: 0;">15h 20m</p>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-
-                  <!-- Game 3 -->
-                  <tr>
-                    <td style="padding: 10px 0;">
-                      <table width="100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                          <td style="width: 70%;">
-                            <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0;">Fortnite</p>
-                          </td>
-                          <td style="width: 30%; text-align: right;">
-                            <p style="color: #8B5CF6; font-size: 14px; font-weight: 600; margin: 0;">14h 10m</p>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
+                <p style="color: #e5e7eb; font-size: 14px; margin: 0;">${escapeHtml(vars.top_games)}</p>
               </div>
+              ` : ''}
 
               <!-- CTA Button -->
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0 0 0;">
@@ -904,7 +857,7 @@ const monthlyDigest: EmailTemplate = {
               </p>
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
                 <a href="{{unsubscribe_url}}" style="color: #8B5CF6; text-decoration: none;">Se désabonner</a> ·
-                <a href="https://squadplanner.fr/privacy" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
+                <a href="https://squadplanner.fr/legal" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
               </p>
             </td>
           </tr>
@@ -1013,8 +966,8 @@ const anniversary: EmailTemplate = {
                   <tr>
                     <td style="padding: 10px 0; text-align: center;">
                       <p style="color: #9ca3af; font-size: 12px; margin: 0 0 4px 0;">Abonnement annuel</p>
-                      <p style="color: #ef4444; font-size: 18px; text-decoration: line-through; margin: 0 0 6px 0;">49,99€/an</p>
-                      <p style="color: #10b981; font-size: 28px; font-weight: 700; margin: 0;">34,99€/an</p>
+                      <p style="color: #ef4444; font-size: 18px; text-decoration: line-through; margin: 0 0 6px 0;">59,88€/an</p>
+                      <p style="color: #10b981; font-size: 28px; font-weight: 700; margin: 0;">47,88€/an</p>
                       <p style="color: #10b981; font-size: 12px; font-weight: 600; margin: 5px 0 0 0;">-30% 🎁</p>
                     </td>
                   </tr>
@@ -1029,7 +982,7 @@ const anniversary: EmailTemplate = {
                   <li style="margin-bottom: 8px;">📊 Statistiques avancées et graphiques détaillés</li>
                   <li style="margin-bottom: 8px;">📈 Analyses de performance personnalisées</li>
                   <li style="margin-bottom: 8px;">🏆 Badges et réalisations exclusives</li>
-                  <li style="margin-bottom: 8px;">💬 Support prioritaire 24/7</li>
+                  <li style="margin-bottom: 8px;">💬 Support prioritaire par email</li>
                   <li>🎯 Recommandations IA pour améliorer ta squad</li>
                 </ul>
               </div>
@@ -1038,7 +991,7 @@ const anniversary: EmailTemplate = {
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0 0 0;">
                 <tr>
                   <td style="text-align: center;">
-                    <a href="https://squadplanner.fr/premium?discount=anniversary30" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Profiter de -30%</a>
+                    <a href="https://squadplanner.fr/premium" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Voir les offres Premium</a>
                   </td>
                 </tr>
               </table>
@@ -1057,7 +1010,7 @@ const anniversary: EmailTemplate = {
               </p>
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
                 <a href="{{unsubscribe_url}}" style="color: #8B5CF6; text-decoration: none;">Se désabonner</a> ·
-                <a href="https://squadplanner.fr/privacy" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
+                <a href="https://squadplanner.fr/legal" style="color: #8B5CF6; text-decoration: none;">Confidentialité</a>
               </p>
             </td>
           </tr>

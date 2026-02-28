@@ -137,20 +137,20 @@ describe('email-templates', () => {
     it('all templates include privacy link', () => {
       for (const template of EMAIL_TEMPLATES) {
         const result = renderTemplate(template.id, {})
-        expect(result!.html).toContain('squadplanner.fr/privacy')
+        expect(result!.html).toContain('squadplanner.fr/legal')
       }
     })
 
-    it('trial_ended template shows -20% discount', () => {
+    it('trial_ended template shows correct pricing', () => {
       const result = renderTemplate('trial_ended', {})
-      expect(result!.html).toContain('-20%')
-      expect(result!.html).toContain('3,99€')
+      expect(result!.html).toContain('6,99€')
+      expect(result!.html).toContain('4,99€')
     })
 
-    it('anniversary template shows -30% discount', () => {
+    it('anniversary template shows -30% discount with correct pricing', () => {
       const result = renderTemplate('anniversary', {})
       expect(result!.html).toContain('-30%')
-      expect(result!.html).toContain('34,99€')
+      expect(result!.html).toContain('47,88€')
     })
   })
 })

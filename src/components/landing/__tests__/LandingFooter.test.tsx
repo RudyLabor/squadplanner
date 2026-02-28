@@ -215,9 +215,9 @@ describe('LandingFooter', () => {
 
   // ─── Trust badges ──────────────────────────────────
   describe('trust badges', () => {
-    it('renders "Hébergé en France" badge', () => {
+    it('renders "Hébergé en Europe (UE)" badge', () => {
       render(<LandingFooter />)
-      expect(screen.getByText(/Hébergé en France/)).toBeInTheDocument()
+      expect(screen.getByText(/Hébergé en Europe/)).toBeInTheDocument()
     })
 
     it('renders "RGPD compliant" badge', () => {

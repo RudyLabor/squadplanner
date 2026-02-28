@@ -37,7 +37,7 @@ const FEATURE_LABELS: Record<PremiumFeature, string> = {
   priority_matchmaking: 'Matchmaking prioritaire',
   club_dashboard: 'Dashboard Club',
   custom_branding: 'Branding personnalisé',
-  api_webhooks: 'API Webhooks',
+  api_webhooks: 'Export CSV avancé',
 }
 
 export function PremiumGate({

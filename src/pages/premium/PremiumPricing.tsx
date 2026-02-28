@@ -46,7 +46,7 @@ const TIERS = [
       'Stats avancées',
       'IA Coach basique',
       'Badge Premium violet',
-      'Zéro pub',
+      'Thèmes personnalisés',
     ],
     ctaLabel: 'Choisir Premium',
     gradient: 'from-primary to-primary/80',
@@ -68,7 +68,7 @@ const TIERS = [
       'Audio HD Party',
       'IA Coach avancé (tactiques)',
       'Dashboard analytics équipe',
-      'Rôles avancés (IGL, Coach)',
+      'Rôles avancés (Leader, Co-leader, Modérateur)',
       'Export calendrier',
       'Sessions récurrentes',
       'Badge Squad Leader doré',
@@ -91,9 +91,9 @@ const TIERS = [
       'Dashboard multi-squads',
       'Stats cross-squad',
       'Branding personnalisé',
-      'API webhooks',
-      'Onboarding assisté (30 min)',
-      'Support prioritaire 24h',
+      'Export CSV avancé',
+      'Onboarding guidé pas-à-pas',
+      'Support prioritaire par email',
       'Facturation entreprise',
     ],
     ctaLabel: 'Contacter',
@@ -179,10 +179,10 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
             <Gift className="w-7 h-7 text-white" />
           </m.div>
           <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">
-            7 jours d'essai gratuit
+            Teste tout pendant 7 jours — sans rien payer
           </h2>
           <p className="text-md text-text-secondary mb-1">
-            Essaie Premium gratuitement pendant 7 jours
+            Active Premium maintenant. Si ça ne change rien, désactive en 1 clic.
           </p>
           <p className="text-base text-text-tertiary mb-5">
             Pas de carte bancaire requise. Annule à tout moment.
@@ -237,7 +237,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
           >
             Annuel
             <span className="px-1.5 py-0.5 rounded-full bg-black/25 text-white text-xs font-bold">
-              Jusqu'à -29%
+              Économise 2 mois
             </span>
           </button>
         </div>
@@ -358,10 +358,10 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
           </svg>
           Paiement sécurisé Stripe
         </span>
-        <span>·</span>
-        <span>Annulation facile</span>
-        <span>·</span>
-        <span>Satisfait ou remboursé 30j</span>
+        <span>—</span>
+        <span>Annulation en 1 clic</span>
+        <span>—</span>
+        <span>Remboursé sur demande sous 30 jours</span>
       </div>
 
       {/* Final CTA */}
@@ -369,10 +369,10 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
         <Card className="p-8 bg-gradient-to-br from-primary/[0.075] to-warning/5 border-primary">
           <Crown className="w-12 h-12 text-warning mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-text-primary mb-2">
-            Prêt à passer au niveau supérieur ?
+            Ta squad mérite mieux qu'un {'\u00ab\u00a0'}on verra{'\u00a0\u00bb'}
           </h3>
           <p className="text-md text-text-secondary mb-2 max-w-md mx-auto">
-            Rejoins les squads qui ont choisi de jouer sérieusement ensemble.
+            Les squads Premium jouent plus régulièrement. À toi de jouer.
           </p>
           <p className="text-base text-success mb-6 font-medium">
             Commence par 7 jours d'essai gratuit — sans carte bancaire

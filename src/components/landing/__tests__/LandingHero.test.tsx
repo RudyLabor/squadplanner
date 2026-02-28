@@ -92,17 +92,17 @@ describe('LandingHero', () => {
   it('renders h1 heading with expected text', () => {
     render(<LandingHero {...defaultProps} />)
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
-    expect(screen.getByText(/Transforme/)).toBeInTheDocument()
-    expect(screen.getByText(/on verra/)).toBeInTheDocument()
-    expect(screen.getByText(/on y est/)).toBeInTheDocument()
+    expect(screen.getByText(/Arrête de perdre/)).toBeInTheDocument()
+    expect(screen.getByText(/soirées gaming/)).toBeInTheDocument()
+    expect(screen.getByText(/joue enfin avec ta squad/)).toBeInTheDocument()
   })
 
   it('renders description text', () => {
     render(<LandingHero {...defaultProps} />)
     expect(
-      screen.getByText(/Squad Planner fait que tes sessions ont vraiment lieu/)
+      screen.getByText(/Tes potes confirment en 2 clics/)
     ).toBeInTheDocument()
-    expect(screen.getByText("Ta squad t'attend.")).toBeInTheDocument()
+    expect(screen.getByText(/Tu joues ce soir/)).toBeInTheDocument()
   })
 
   it('renders HeroMockup', () => {
@@ -114,36 +114,36 @@ describe('LandingHero', () => {
 
   it('renders all 3 hero stats', () => {
     render(<LandingHero {...defaultProps} />)
-    expect(screen.getByText('100%')).toBeInTheDocument()
-    expect(screen.getByText('gratuit pour commencer')).toBeInTheDocument()
+    expect(screen.getByText('Gratuit')).toBeInTheDocument()
+    expect(screen.getByText('sans piège')).toBeInTheDocument()
     expect(screen.getByText('30s')).toBeInTheDocument()
-    expect(screen.getByText('pour créer ta squad')).toBeInTheDocument()
+    expect(screen.getByText('chrono pour ta squad')).toBeInTheDocument()
     expect(screen.getByText('0')).toBeInTheDocument()
-    expect(screen.getByText('excuse pour ne pas jouer')).toBeInTheDocument()
+    expect(screen.getByText('ghosting toléré')).toBeInTheDocument()
   })
 
-  it('renders launch year note', () => {
+  it('renders bottom text note', () => {
     render(<LandingHero {...defaultProps} />)
-    expect(screen.getByText(/Lancement 2026/)).toBeInTheDocument()
-    expect(screen.getByText(/Rejoins les premiers gamers/)).toBeInTheDocument()
+    expect(screen.getByText(/2\u00a0000 gamers/)).toBeInTheDocument()
+    expect(screen.getByText(/rejoins-les/)).toBeInTheDocument()
   })
 
   // ─── Logged out: CTA buttons ───────────────────────────
 
-  it('renders "Créer ma squad gratuitement" CTA when logged out', () => {
+  it('renders "Créer ma squad — c'est gratuit" CTA when logged out', () => {
     render(<LandingHero {...defaultProps} />)
-    expect(screen.getByText('Créer ma squad gratuitement')).toBeInTheDocument()
+    expect(screen.getByText('Créer ma squad — c'est gratuit')).toBeInTheDocument()
   })
 
   it('renders CTA with data-track attribute', () => {
     render(<LandingHero {...defaultProps} />)
-    const cta = screen.getByText('Créer ma squad gratuitement').closest('a')
+    const cta = screen.getByText('Créer ma squad — c'est gratuit').closest('a')
     expect(cta?.getAttribute('data-track')).toBe('hero_cta_click')
   })
 
   it('renders CTA with correct register link', () => {
     render(<LandingHero {...defaultProps} />)
-    const cta = screen.getByText('Créer ma squad gratuitement').closest('a')
+    const cta = screen.getByText('Créer ma squad — c'est gratuit').closest('a')
     expect(cta?.getAttribute('href')).toBe('/auth?mode=register&redirect=onboarding')
   })
 
@@ -202,7 +202,7 @@ describe('LandingHero', () => {
 
   it('does NOT render "Créer ma squad" when logged in', () => {
     render(<LandingHero {...{ ...defaultProps, isLoggedIn: true }} />)
-    expect(screen.queryByText('Créer ma squad gratuitement')).not.toBeInTheDocument()
+    expect(screen.queryByText('Créer ma squad — c'est gratuit')).not.toBeInTheDocument()
   })
 
   it('does NOT render "Comment ça marche" CTA when logged in', () => {
@@ -249,10 +249,10 @@ describe('LandingHero', () => {
 
   // ─── Gradient animated text ────────────────────────────
 
-  it('renders gradient animated text for "on verra"', () => {
+  it('renders gradient animated text for "tes soirées gaming"', () => {
     const { container } = render(<LandingHero {...defaultProps} />)
     const gradientSpan = container.querySelector('.text-gradient-animated')
     expect(gradientSpan).toBeTruthy()
-    expect(gradientSpan?.textContent).toContain('on verra')
+    expect(gradientSpan?.textContent).toContain('tes soirées gaming')
   })
 })

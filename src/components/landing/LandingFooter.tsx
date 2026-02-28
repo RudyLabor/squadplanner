@@ -57,13 +57,13 @@ export function LandingFooter() {
         <div className="max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full badge-shimmer border border-primary/20 mb-5">
             <Users className="w-3.5 h-3.5 text-primary" />
-            <span className="text-sm font-medium text-primary">Rejoins +2 000 gamers</span>
+            <span className="text-sm font-medium text-primary">+2{'\u00a0'}000 gamers s'organisent déjà</span>
           </div>
           <h3 className="text-lg md:text-xl font-bold text-text-primary mb-2">
-            Reste dans la boucle
+            Sois le premier informé
           </h3>
           <p className="text-md text-text-tertiary mb-6 max-w-md mx-auto">
-            Astuces, mises à jour, nouveaux jeux supportés. Pas de spam.
+            Nouveaux jeux, astuces et mises à jour. Max 2 emails/mois. Zéro spam.
           </p>
           <form onSubmit={handleNewsletterSubmit} noValidate className="max-w-md mx-auto">
             <div className="flex gap-2">
@@ -265,7 +265,7 @@ export function LandingFooter() {
         {/* Trust badges glassmorphiques */}
         <div className="flex flex-wrap justify-center gap-3 mb-6">
           {[
-            { label: 'Hébergé en France', icon: '🇫🇷' },
+            { label: 'Hébergé en Europe (UE)', icon: '🇪🇺' },
             { label: 'Conforme au RGPD', icon: '🛡️' },
             { label: 'Données chiffrées', icon: '🔒' },
           ].map((badge) => (

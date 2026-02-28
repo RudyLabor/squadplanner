@@ -158,10 +158,11 @@ ${formData.message}
               transition={{ delay: 0.15, duration: 0.4, ease }}
               className="text-lg md:text-xl font-bold text-text-primary mb-4"
             >
-              Deviens{' '}
+              Monétise{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple to-primary">
-                Ambassadeur Squad Planner
-              </span>
+                ta communauté gaming
+              </span>{' '}
+              avec Squad Planner
             </m.h1>
 
             {/* Subtitle */}
@@ -171,8 +172,7 @@ ${formData.message}
               transition={{ delay: 0.2, duration: 0.4, ease }}
               className="text-md md:text-lg text-text-secondary max-w-2xl mx-auto"
             >
-              T'es streamer, créateur de contenu ou capitaine de communauté gaming ? On a une offre
-              pour toi. Partage Squad Planner avec ta communauté et gagne des récompenses
+              T'es streamer, créateur de contenu ou capitaine de communauté gaming\u00a0? Le programme ambassadeur est en cours de lancement. Partage Squad Planner avec ta communauté et gagne des récompenses
               exclusives.
             </m.p>
           </div>
@@ -202,7 +202,7 @@ ${formData.message}
               {
                 icon: Gift,
                 title: 'Commission 20% sur chaque abonné',
-                description: 'Gagne 20% de commission sur tous les parrainages que tu génères',
+                description: 'Gagne 20% de commission sur tous les parrainages que tu génères (programme en cours de déploiement)',
                 color: 'success',
               },
               {
@@ -603,7 +603,7 @@ ${formData.message}
               formRef.current?.scrollIntoView({ behavior: 'smooth' })
             }}
           >
-            Candidater maintenant
+            Postule maintenant — places limitées
           </Button>
         </m.div>
       </div>

@@ -30,16 +30,16 @@ const pillars = [
     illustration: CalendarIllustration,
     title: 'Planning intelligent',
     description:
-      'Propose un créneau. Chacun répond OUI ou NON. Pas de « peut-être ». On sait qui vient.',
+      'Propose un créneau. Chacun répond. Fini les «\u00a0peut-être\u00a0» sans suite. On sait qui vient.',
     color: 'var(--color-gold)',
     gradient: 'from-warning/[0.08] to-warning/[0.01]',
     details: [
-      'Confirme ta présence OUI ou NON — pas de « peut-être »',
+      'Confirme ta présence — fini les «\u00a0peut-être\u00a0» sans suite',
       'Confirmation auto quand assez de joueurs',
       'Rappels avant chaque session',
     ],
     detailText:
-      'Propose un créneau. Chaque pote répond OUI ou NON. Pas de « peut-être ». La session se confirme quand vous êtes assez. Plus de ghosting.',
+      'Propose un créneau. Chaque pote répond. Fini les «\u00a0peut-être\u00a0» sans suite. La session se confirme quand vous êtes assez. Plus de ghosting.',
   },
   {
     id: 'reliability',
@@ -153,10 +153,10 @@ export function FeaturesSection() {
           className="text-center mb-12"
         >
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-            Les 3 piliers de Squad Planner
+            3 problèmes. 3 solutions. 0 prise de tête.
           </h2>
           <p className="text-text-tertiary text-lg">
-            Chacun résout un problème précis. Ensemble, ils font la différence.
+            Chaque pilier élimine une frustration. Ensemble, ta squad joue chaque semaine.
           </p>
         </m.div>
 
@@ -255,11 +255,10 @@ export function FeaturesSection() {
           viewport={{ once: true }}
           className="text-center text-md text-text-quaternary mt-10"
         >
-          Plus qu'un simple Discord — Squad Planner crée des{' '}
+          Tes potes ne sont pas flemmards. Ils manquent juste d'un{' '}
           <span className="text-text-primary font-semibold text-gradient-animated">
-            habitudes de jeu régulières
-          </span>{' '}
-          pour ta communauté
+            outil pour s'organiser
+          </span>.
         </m.p>
       </div>
     </section>

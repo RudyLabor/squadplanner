@@ -103,11 +103,11 @@ export function ComparisonSection() {
           className="text-center mb-12"
         >
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-            Plus qu'un Discord pour gamers
+            Ce que Discord ne fait pas pour ta squad
           </h2>
           <p className="text-text-tertiary text-lg">
-            Discord est fait pour discuter. Squad Planner est fait pour{' '}
-            <span className="text-text-primary font-medium">jouer ensemble</span>.
+            Tu utilises Discord pour discuter{'\u00a0'}? Parfait. Utilise Squad Planner pour{' '}
+            <span className="text-text-primary font-medium">enfin jouer</span>.
           </p>
         </m.div>
 
@@ -214,8 +214,8 @@ export function ComparisonSection() {
         </m.div>
 
         <p className="text-center text-base text-text-quaternary mt-6 max-w-lg mx-auto">
-          Discord reste top pour les grandes communautés. Squad Planner, c'est taillé pour
-          ta squad de 3 à 10 joueurs — ni plus, ni moins.
+          Discord gère tes serveurs. Squad Planner gère tes sessions. Ensemble, c'est la
+          combinaison parfaite.
         </p>
       </div>
     </section>

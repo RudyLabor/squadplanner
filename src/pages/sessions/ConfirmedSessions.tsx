@@ -90,10 +90,10 @@ export const ConfirmedSessions = memo(function ConfirmedSessions({
                 <Calendar className="w-12 h-12 mx-auto mb-4 text-text-tertiary" strokeWidth={1} />
               </m.div>
               <h3 className="text-lg font-semibold text-text-primary mb-2">
-                Aucune session confirmée
+                Aucune session confirm\u00e9e pour toi
               </h3>
               <p className="text-md text-text-secondary mb-4">
-                Réponds "Présent" à une session pour la voir ici.
+                Clique "Pr\u00e9sent" sur une session et elle appara\u00eet ici \u2014 ta squad saura qu'elle peut compter sur toi.
               </p>
               <Link to="/squads">
                 <Button variant="secondary" size="sm">
@@ -118,10 +118,10 @@ export function HowItWorksSection() {
         </h2>
         <ol className="space-y-3 list-none">
           {[
-            { num: '1', text: 'Un membre de ta squad propose un créneau' },
-            { num: '2', text: 'Tu cliques "Présent", "Absent" ou "Peut-être"' },
-            { num: '3', text: "À l'heure, tu fais ton check-in" },
-            { num: '4', text: 'Ton score de fiabilité augmente !' },
+            { num: '1', text: 'Un membre de ta squad propose un cr\u00e9neau (30\u00a0secondes)' },
+            { num: '2', text: 'Tu cliques "Pr\u00e9sent" \u2014 ta squad sait qu\'elle peut compter sur toi' },
+            { num: '3', text: '\u00c0 l\'heure, tu fais ton check-in pour valider ta pr\u00e9sence' },
+            { num: '4', text: 'Ta fiabilit\u00e9 monte, tu es invit\u00e9 en premier aux prochaines sessions' },
           ].map((step) => (
             <li key={step.num} className="flex items-center gap-3">
               <div

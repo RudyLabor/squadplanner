@@ -84,9 +84,9 @@ baseTest.describe('F67 — Toggle mensuel/annuel', () => {
     await yearlyCard.click()
     await page.waitForTimeout(800)
 
-    // STRICT: yearly prices MUST show -20% discount badge or different prices
-    // The page shows "-20%" badge on annual toggle — verify discount indicator is visible
-    const discountBadge = page.getByText(/-20%|20\s*%/i).first()
+    // STRICT: yearly prices MUST show savings badge or different prices
+    // The page shows "Économise 2 mois" badge on annual toggle — verify discount indicator is visible
+    const discountBadge = page.getByText(/Économise 2 mois|-20%/i).first()
     await baseExpect(discountBadge).toBeVisible({ timeout: 5000 })
   })
 })

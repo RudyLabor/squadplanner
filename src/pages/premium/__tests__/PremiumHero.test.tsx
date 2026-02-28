@@ -96,10 +96,10 @@ describe('PremiumHero', () => {
     expect(screen.getByText('Premium')).toBeDefined()
     // 2. Main heading
     expect(screen.getByText(/Passe au niveau/)).toBeDefined()
-    // 3. Subtitle about unlocking features
-    expect(screen.getByText(/potentiel de Squad Planner/)).toBeDefined()
-    // 4. Promo badge "2 mois offerts sur l'annuel"
-    expect(screen.getByText(/2 mois offerts/)).toBeDefined()
+    // 3. Subtitle about serious squads
+    expect(screen.getByText(/Les squads sérieuses méritent des outils sérieux/)).toBeDefined()
+    // 4. Promo badge "2 mois offerts — économise 16,78 €"
+    expect(screen.getByText(/2 mois offerts — économise 16,78/)).toBeDefined()
     // 5. No premium status shown
     expect(screen.queryByText(/Tu es d/)).toBeNull()
     // 6. No manage subscription button
@@ -118,7 +118,7 @@ describe('PremiumHero', () => {
     // 3. Title still shown
     expect(screen.getByText(/Passe au niveau/)).toBeDefined()
     // 4. Promo badge still shown
-    expect(screen.getByText(/2 mois offerts/)).toBeDefined()
+    expect(screen.getByText(/2 mois offerts — économise 16,78/)).toBeDefined()
     // 5. Button is enabled (not loading)
     const manageBtn = screen.getByText(/abonnement/)
     const btn = manageBtn.closest('button') || manageBtn
@@ -142,7 +142,7 @@ describe('PremiumHero', () => {
     // 4. Title still rendered
     expect(screen.getByText(/Passe au niveau/)).toBeDefined()
     // 5. Description still rendered
-    expect(screen.getByText(/potentiel de Squad Planner/)).toBeDefined()
+    expect(screen.getByText(/Les squads sérieuses méritent des outils sérieux/)).toBeDefined()
     // 6. "Premium" header text still present
     expect(screen.getByText('Premium')).toBeDefined()
   })

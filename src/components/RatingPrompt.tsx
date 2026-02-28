@@ -48,8 +48,8 @@ export function RatingPrompt() {
               <Star className="w-5 h-5 text-warning" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-text-primary">Tu kiffes Squad Planner ?</p>
-              <p className="text-xs text-text-tertiary">Ton avis compte énormément !</p>
+              <p className="text-sm font-semibold text-text-primary">3 sessions réussies — ton avis compte&#x202f;!</p>
+              <p className="text-xs text-text-tertiary">Dis-nous ce que tu en penses en 30 secondes</p>
             </div>
           </div>
 

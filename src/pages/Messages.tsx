@@ -609,10 +609,10 @@ export function Messages() {
                     <Sparkles className="w-10 h-10 text-primary" />
                   </div>
                   <h3 className="text-xl font-semibold text-text-primary mb-2">
-                    Sélectionne une conversation
+                    Ta squad t'attend
                   </h3>
                   <p className="text-md text-text-quaternary max-w-[250px] mx-auto">
-                    Choisis une conversation dans la liste pour commencer à chatter.
+                    Choisis une conversation pour retrouver tes potes.
                   </p>
                 </div>
               </div>

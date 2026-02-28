@@ -284,12 +284,12 @@ describe('Auth Page', () => {
   describe('Login mode (default)', () => {
     it('renders login heading', () => {
       renderAuth()
-      expect(screen.getByText("T'as manqué à ta squad !")).toBeTruthy()
+      expect(screen.getByText(/Ta squad t'attend — reconnecte-toi/)).toBeTruthy()
     })
 
     it('renders login subtitle', () => {
       renderAuth()
-      expect(screen.getByText("Tes potes t'attendent")).toBeTruthy()
+      expect(screen.getByText(/Des sessions sont peut-être déjà planifiées/)).toBeTruthy()
     })
 
     it('renders "Se connecter" submit button', () => {
@@ -323,14 +323,14 @@ describe('Auth Page', () => {
     it('renders register mode when URL param is register', () => {
       mockH.mockSearchParams = new URLSearchParams('mode=register')
       renderAuth()
-      expect(screen.getByText("Rejoins l'aventure")).toBeTruthy()
-      expect(screen.getByText('Créer mon compte')).toBeTruthy()
+      expect(screen.getByText('Rejoins ta squad en 30 secondes')).toBeTruthy()
+      expect(screen.getByText('Créer mon compte gratuit')).toBeTruthy()
     })
 
     it('renders register subtitle', () => {
       mockH.mockSearchParams = new URLSearchParams('mode=register')
       renderAuth()
-      expect(screen.getByText('Crée ton compte en 30 secondes')).toBeTruthy()
+      expect(screen.getByText('Inscription gratuite. Pas de carte bancaire. Jamais.')).toBeTruthy()
     })
 
     it('shows "Se connecter" switch link in register mode', () => {
@@ -380,7 +380,7 @@ describe('Auth Page', () => {
     it('switches from login to register when "Créer un compte" is clicked', () => {
       renderAuth()
       fireEvent.click(screen.getByText('Créer un compte'))
-      expect(screen.getByText("Rejoins l'aventure")).toBeTruthy()
+      expect(screen.getByText('Rejoins ta squad en 30 secondes')).toBeTruthy()
       expect(screen.getByText('mode:register')).toBeTruthy()
     })
 
@@ -393,14 +393,14 @@ describe('Auth Page', () => {
       // Find the switch button (not the submit button)
       const switchBtn = switchBtns.find((b) => b.type === 'button')
       if (switchBtn) fireEvent.click(switchBtn)
-      expect(screen.getByText("T'as manqué à ta squad !")).toBeTruthy()
+      expect(screen.getByText(/Ta squad t'attend — reconnecte-toi/)).toBeTruthy()
     })
 
     it('returns to login from reset mode', () => {
       mockH.mockSearchParams = new URLSearchParams('mode=reset')
       renderAuth()
       fireEvent.click(screen.getByText('Retour à la connexion'))
-      expect(screen.getByText("T'as manqué à ta squad !")).toBeTruthy()
+      expect(screen.getByText(/Ta squad t'attend — reconnecte-toi/)).toBeTruthy()
     })
   })
 

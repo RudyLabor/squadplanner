@@ -32,13 +32,13 @@ const faqs = [
     id: 'migration-easy',
     question: 'Je peux importer mes données ?',
     answer:
-      "Oui. Si t'as tes squads documentés, on te facilite le move. Support direct pour une migration sans galère.",
+      "Pas d'import automatique depuis Guilded. Mais créer ta squad prend 30 secondes\u00a0: un nom, un jeu, un lien d'invitation. Tes potes rejoignent en 1 clic.",
   },
   {
     id: 'premium-worth',
     question: "C'est quoi Premium ?",
     answer:
-      "Premium, c'est : analytics avancées, custom squads, API. Mais calendrier, confirmations, notif push ? Gratuit. L'essentiel, c'est gratuit.",
+      "Premium, c'est\u00a0: analytics avancées, squads illimités, thèmes personnalisés. Mais calendrier, confirmations, notif push\u00a0? Gratuit. L'essentiel, c'est gratuit.",
   },
   {
     id: 'both-platforms',
@@ -254,7 +254,7 @@ export default function VsGuildedVsSquadPlanner() {
                 </div>
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Guilded Premium</div>
-                  <p className="text-text-secondary text-md">9,99 €/mois</p>
+                  <p className="text-text-secondary text-md">~4,99\u00a0$/mois (prix US estimé)</p>
                   <p className="text-text-tertiary text-sm mt-1">*(supprimé depuis fermeture)</p>
                 </div>
               </div>
@@ -300,7 +300,7 @@ export default function VsGuildedVsSquadPlanner() {
                   <ul className="text-text-secondary text-sm mt-2 space-y-1 pl-4">
                     <li>• Analytics avancées</li>
                     <li>• Personnalisation squad</li>
-                    <li>• API intégrations</li>
+                    <li>• Thèmes personnalisés</li>
                   </ul>
                 </div>
               </div>
@@ -469,7 +469,7 @@ export default function VsGuildedVsSquadPlanner() {
                 C'est bon, tu viens ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Code GUILDED30 = 30\u00a0% sur Premium. Mais calendrier et confirmations, c'est gratuit de toute façon.
+                Calendrier, confirmations, notifications\u00a0: c'est gratuit. Premium pour les stats avancées et plus.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link

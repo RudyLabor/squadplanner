@@ -17,7 +17,7 @@ export function HelpContactSection() {
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-text-primary mb-1">Contacter le support</h3>
           <p className="text-base text-text-secondary">
-            Notre équipe est là pour t'aider. On te répond sous 24h.
+            Notre \u00e9quipe est l\u00e0 pour t'aider. R\u00e9ponse garantie sous 24h, souvent en quelques heures.
           </p>
         </div>
       </div>
@@ -34,9 +34,9 @@ export function HelpContactSection() {
             <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center">
               <CheckCircle className="w-7 h-7 text-success" />
             </div>
-            <p className="text-md font-semibold text-text-primary">Message envoyé !</p>
+            <p className="text-md font-semibold text-text-primary">Message envoy\u00e9\u00a0!</p>
             <p className="text-base text-text-secondary text-center">
-              Merci pour ton message. On te répond dès que possible.
+              Merci pour ton retour\u00a0! On te r\u00e9pond sous 24h, souvent beaucoup plus vite.
             </p>
             <button
               onClick={() => {

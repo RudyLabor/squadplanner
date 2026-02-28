@@ -18,7 +18,7 @@ export function OnboardingStepSquadChoice({
       <div className="h-10 mb-6" />
 
       <div className="text-center mb-8">
-        <h2 className="text-xl font-bold text-text-primary mb-2">Ta premi&egrave;re squad</h2>
+        <h2 className="text-xl font-bold text-text-primary mb-2">Ta squad, ton QG gaming</h2>
         <p className="text-text-secondary">Une squad = tes potes + un salon vocal + un planning</p>
       </div>
 
@@ -38,7 +38,7 @@ export function OnboardingStepSquadChoice({
                 Cr&eacute;er une squad
               </h3>
               <p className="text-md text-text-secondary">
-                Tu invites tes amis avec un code. En 10 secondes, tout le monde est dedans.
+                Tu invites tes potes avec un code. En 10 secondes, ta squad est au complet et prête à jouer.
               </p>
             </div>
             <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-primary transition-colors shrink-0 mt-1" />
@@ -58,7 +58,7 @@ export function OnboardingStepSquadChoice({
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-text-primary mb-1">Rejoindre une squad</h3>
               <p className="text-md text-text-secondary">
-                Un ami t'a donné un code ? Entre-le ici pour la rejoindre direct.
+                Un pote t'a filé un code&#x202f;? Entre-le et retrouve ta squad.
               </p>
             </div>
             <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-success transition-colors shrink-0 mt-1" />

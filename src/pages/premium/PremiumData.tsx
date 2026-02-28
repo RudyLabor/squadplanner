@@ -75,7 +75,7 @@ export const FEATURES = [
     highlight: false,
   },
   {
-    name: 'Rôles avancés (IGL, Coach, Shotcaller)',
+    name: 'Rôles avancés (Leader, Co-leader, Modérateur)',
     free: false,
     premium: false,
     squadLeader: true,
@@ -138,7 +138,7 @@ export const FEATURES = [
     highlight: false,
   },
   {
-    name: 'API webhooks',
+    name: 'Export CSV avancé',
     free: false,
     premium: false,
     squadLeader: false,
@@ -147,7 +147,7 @@ export const FEATURES = [
     highlight: false,
   },
   {
-    name: 'Support prioritaire 24h',
+    name: 'Support prioritaire par email',
     free: false,
     premium: false,
     squadLeader: false,
@@ -201,7 +201,7 @@ export const FAQ = [
   },
   {
     q: "Le tier Club, c'est pour qui ?",
-    a: 'Le Club est conçu pour les structures esport et les organisations qui gèrent plusieurs équipes. Tu as un dashboard multi-squads, du branding personnalisé, des API webhooks et un support prioritaire.',
+    a: 'Le Club est conçu pour les structures esport et les organisations qui gèrent plusieurs équipes. Tu as un dashboard multi-squads, du branding personnalisé, un export CSV avancé et un support prioritaire par email.',
   },
   {
     q: "Y a-t-il une période d'essai ?",

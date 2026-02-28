@@ -75,12 +75,12 @@ describe('OnboardingStepComplete', () => {
 
   it('shows default title when no squad created', () => {
     render(<OnboardingStepComplete {...defaultProps} />)
-    expect(screen.getByText("C'est parti !")).toBeTruthy()
+    expect(screen.getByText(/C'est parti/)).toBeTruthy()
   })
 
   it('shows squad name in title when squad was created', () => {
     render(<OnboardingStepComplete {...defaultProps} createdSquadName="Ma Squad" />)
-    expect(screen.getByText('Ma Squad est prête !')).toBeTruthy()
+    expect(screen.getByText(/Ma Squad est prête à jouer/)).toBeTruthy()
   })
 
   it('shows invite code when squad was created', () => {

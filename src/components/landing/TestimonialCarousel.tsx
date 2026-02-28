@@ -172,7 +172,7 @@ export function TestimonialCarousel() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        Pourquoi les gamers adoptent Squad Planner
+        Tu reconnais ces situations{'\u00a0'}?
       </m.h2>
       <m.p
         className="text-text-tertiary text-center mb-10"
@@ -181,7 +181,7 @@ export function TestimonialCarousel() {
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
       >
-        Les situations que tu connais par cœur — et comment on les résout
+        Si tu as déjà envoyé {'\u00ab\u00a0'}qui est dispo ce soir{'\u00a0?\u00a0\u00bb'} sans réponse… on a la solution.
       </m.p>
 
       <div

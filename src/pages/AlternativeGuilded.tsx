@@ -58,13 +58,13 @@ const faqs = [
     id: 'migration',
     question: 'Comment passer de Guilded à Squad Planner\u00a0?',
     answer:
-      "Ultra simple. Partage tes squads Guilded, on importe l'essentiel. Code GUILDED30 pour 30% sur ton premier mois Premium. Après, t'as les features gratuites à vie.",
+      "Ultra simple. Crée ta squad en 30 secondes et invite tes potes avec un lien. Ton organisation gaming passe au niveau supérieur.",
   },
   {
     id: 'data-loss',
     question: 'Mais je perds mes données\u00a0?',
     answer:
-      "Zéro. Squad Planner garde tout : squads, événements, paramètres. Rien ne se perd. T'es tranquille.",
+      "Zéro. Crée ta squad, invite tes potes avec un lien, et c'est parti. En 30 secondes tu es opérationnel.",
   },
   {
     id: 'free',
@@ -214,42 +214,6 @@ export default function AlternativeGuilded() {
       </section>
 
       <div className="section-divider" />
-
-      {/* Promo Code */}
-      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-purple/[0.015]">
-        <div className="max-w-3xl mx-auto">
-          <m.div
-            variants={scrollReveal}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="relative p-8 md:p-12 rounded-3xl border overflow-hidden text-center"
-            style={{
-              background: 'radial-gradient(ellipse at center, #a855f710 0%, transparent 60%)',
-              borderColor: '#a855f720',
-            }}
-          >
-            <m.div
-              className="absolute inset-0"
-              animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{
-                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
-              }}
-            />
-            <div className="relative z-10">
-              <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-2">
-                30% de réduction pour les migrés de Guilded
-              </h3>
-              <p className="text-text-tertiary mb-6">Tape ce code</p>
-              <div className="inline-block px-8 py-4 bg-purple/10 rounded-xl mb-6 border border-purple/20">
-                <code className="text-2xl md:text-3xl font-bold text-purple">GUILDED30</code>
-              </div>
-              <p className="text-base text-text-secondary">30% sur ton premier mois Premium</p>
-            </div>
-          </m.div>
-        </div>
-      </section>
 
       <div className="section-divider" />
 

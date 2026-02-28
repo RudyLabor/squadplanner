@@ -231,7 +231,7 @@ export function Wrapped() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl text-purple/70"
           >
-            Découvre tes stats gaming !
+            Tout ce que tu as accompli cette ann\u00e9e
           </m.p>
         </div>
       ),
@@ -248,7 +248,7 @@ export function Wrapped() {
             transition={{ duration: 0.4 }}
             className="text-lg text-primary/60 mb-4"
           >
-            Heures jouées
+            Tu as jou\u00e9 avec ta squad pendant
           </m.p>
           <m.div
             key="hours-counter"
@@ -271,7 +271,7 @@ export function Wrapped() {
             transition={{ duration: 0.4, delay: 0.3 }}
             className="text-2xl text-primary/60 font-bold"
           >
-            heures avec ta squad
+            heures de gaming avec tes potes
           </m.p>
         </div>
       ),
@@ -288,7 +288,7 @@ export function Wrapped() {
             transition={{ duration: 0.4 }}
             className="text-lg text-orange-200 mb-4"
           >
-            Ton meilleur streak
+            Ta s\u00e9rie la plus longue
           </m.p>
           <m.div
             key="streak-count"

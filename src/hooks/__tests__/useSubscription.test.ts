@@ -140,8 +140,8 @@ describe('useSubscriptionStore', () => {
         expect(cm.tier).toBe('club')
         expect(cm.interval).toBe('month')
         expect(cm.features).toContain('Dashboard multi-squads (10+ équipes)')
-        expect(cm.features).toContain('API webhook (Discord, Notion, Sheets)')
-        expect(cm.features).toContain('Support prioritaire 24h')
+        expect(cm.features).toContain('Export CSV avancé')
+        expect(cm.features).toContain('Support prioritaire par email')
       })
 
       it('yearly: 383.88€/an', () => {

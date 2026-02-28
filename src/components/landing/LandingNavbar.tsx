@@ -105,7 +105,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
                   className="hidden lg:inline-flex items-center px-3 lg:px-4 py-2 rounded-lg bg-primary-bg text-white text-base lg:text-md font-medium hover:bg-primary-bg-hover transition-colors duration-300"
                   data-track="navbar_cta_click"
                 >
-                  Créer ma squad
+                  Créer ma squad — gratuit
                   <ArrowRight className="w-3.5 h-3.5 inline ml-1" />
                 </Link>
                 <Link
@@ -179,7 +179,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
               onClick={closeMobileMenu}
               className="block w-full py-3 bg-primary-bg text-white rounded-xl font-medium text-center"
             >
-              Créer ma squad gratuitement
+              Créer ma squad — c'est gratuit
             </Link>
           </div>
         </m.div>

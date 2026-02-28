@@ -61,13 +61,13 @@ describe('TestimonialCarousel', () => {
   describe('basic rendering', () => {
     it('renders the heading', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByText('Nos joueurs en parlent mieux que nous')).toBeInTheDocument()
+      expect(screen.getByText(/Tu reconnais ces situations/)).toBeInTheDocument()
     })
 
     it('renders the subtitle', () => {
       render(<TestimonialCarousel />)
       expect(
-        screen.getByText('Bêta en cours — premiers retours de nos testeurs')
+        screen.getByText(/qui est dispo ce soir/)
       ).toBeInTheDocument()
     })
 
@@ -118,7 +118,7 @@ describe('TestimonialCarousel', () => {
   describe('testimonial cards', () => {
     it('renders the first testimonial on initial load (mobile: 1 card)', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByText('Gamer anonyme')).toBeInTheDocument()
+      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
     })
 
     it('renders testimonial avatar emoji', () => {
@@ -128,7 +128,7 @@ describe('TestimonialCarousel', () => {
 
     it('renders testimonial squad name', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByText('Sur Discord, chaque soir')).toBeInTheDocument()
+      expect(screen.getByText('Chaque groupe Discord, chaque soir')).toBeInTheDocument()
     })
 
     it('renders testimonial game info', () => {
@@ -165,15 +165,15 @@ describe('TestimonialCarousel', () => {
       render(<TestimonialCarousel />)
       const nextBtn = screen.getByLabelText('Témoignage suivant')
       fireEvent.click(nextBtn)
-      expect(screen.getByText('Bêta-testeur #12')).toBeInTheDocument()
+      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
     })
 
     it('clicking prev from first goes to last slide (wraps around)', () => {
       render(<TestimonialCarousel />)
       const prevBtn = screen.getByLabelText('Témoignage précédent')
       fireEvent.click(prevBtn)
-      // With 6 testimonials and 1 per view, last slide = index 5 = "Bêta-testeur #19"
-      expect(screen.getByText('Bêta-testeur #19')).toBeInTheDocument()
+      // With 6 testimonials and 1 per view, last slide = index 5 = "Toujours connectés"
+      expect(screen.getByText('Toujours connectés')).toBeInTheDocument()
     })
 
     it('clicking next multiple times cycles through testimonials', () => {
@@ -181,13 +181,13 @@ describe('TestimonialCarousel', () => {
       const nextBtn = screen.getByLabelText('Témoignage suivant')
 
       fireEvent.click(nextBtn)
-      expect(screen.getByText('Bêta-testeur #12')).toBeInTheDocument()
+      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
 
       fireEvent.click(nextBtn)
-      expect(screen.getByText('Bêta-testeur #7')).toBeInTheDocument()
+      expect(screen.getByText('Des sessions régulières')).toBeInTheDocument()
 
       fireEvent.click(nextBtn)
-      expect(screen.getByText('Tout gamer, ever')).toBeInTheDocument()
+      expect(screen.getByText('La question qui tue')).toBeInTheDocument()
     })
 
     it('clicking next wraps back to first after last', () => {
@@ -198,7 +198,7 @@ describe('TestimonialCarousel', () => {
         fireEvent.click(nextBtn)
       }
       // Should be back at first
-      expect(screen.getByText('Gamer anonyme')).toBeInTheDocument()
+      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
     })
   })
 
@@ -222,8 +222,8 @@ describe('TestimonialCarousel', () => {
       render(<TestimonialCarousel />)
       const dot3 = screen.getByLabelText('Témoignage groupe 3')
       fireEvent.click(dot3)
-      // 3rd group (index 2) = "Bêta-testeur #7"
-      expect(screen.getByText('Bêta-testeur #7')).toBeInTheDocument()
+      // 3rd group (index 2) = "Des sessions régulières"
+      expect(screen.getByText('Des sessions régulières')).toBeInTheDocument()
     })
 
     it('clicking a dot going forward sets direction to 1', () => {
@@ -231,7 +231,7 @@ describe('TestimonialCarousel', () => {
       // Navigate to dot 4 from dot 1 (forward)
       const dot4 = screen.getByLabelText('Témoignage groupe 4')
       fireEvent.click(dot4)
-      expect(screen.getByText('Tout gamer, ever')).toBeInTheDocument()
+      expect(screen.getByText('La question qui tue')).toBeInTheDocument()
     })
 
     it('clicking a dot going backward sets direction to -1', () => {
@@ -243,7 +243,7 @@ describe('TestimonialCarousel', () => {
       // Now go back to dot 1
       const dot1 = screen.getByLabelText('Témoignage groupe 1')
       fireEvent.click(dot1)
-      expect(screen.getByText('Gamer anonyme')).toBeInTheDocument()
+      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
     })
   })
 
@@ -251,13 +251,13 @@ describe('TestimonialCarousel', () => {
   describe('auto-advance', () => {
     it('auto-advances to next slide after 5 seconds', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByText('Gamer anonyme')).toBeInTheDocument()
+      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
 
       act(() => {
         vi.advanceTimersByTime(5000)
       })
 
-      expect(screen.getByText('Bêta-testeur #12')).toBeInTheDocument()
+      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
     })
 
     it('auto-advances multiple times', () => {
@@ -266,12 +266,12 @@ describe('TestimonialCarousel', () => {
       act(() => {
         vi.advanceTimersByTime(5000)
       })
-      expect(screen.getByText('Bêta-testeur #12')).toBeInTheDocument()
+      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
 
       act(() => {
         vi.advanceTimersByTime(5000)
       })
-      expect(screen.getByText('Bêta-testeur #7')).toBeInTheDocument()
+      expect(screen.getByText('Des sessions régulières')).toBeInTheDocument()
     })
   })
 
@@ -288,7 +288,7 @@ describe('TestimonialCarousel', () => {
         vi.advanceTimersByTime(10000)
       })
       // Should still be on first slide since paused
-      expect(screen.getByText('Gamer anonyme')).toBeInTheDocument()
+      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
     })
 
     it('resumes auto-advance on mouseLeave', () => {
@@ -301,14 +301,14 @@ describe('TestimonialCarousel', () => {
         vi.advanceTimersByTime(10000)
       })
       // Still on first
-      expect(screen.getByText('Gamer anonyme')).toBeInTheDocument()
+      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
 
       fireEvent.mouseLeave(hoverContainer)
       act(() => {
         vi.advanceTimersByTime(5000)
       })
       // Should advance now
-      expect(screen.getByText('Bêta-testeur #12')).toBeInTheDocument()
+      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
     })
   })
 
@@ -376,20 +376,20 @@ describe('TestimonialCarousel', () => {
 
   // ─── Rating display variations ─────────────────────
   describe('rating display', () => {
-    it('testimonial with rating 4 shows 4 filled and 1 unfilled star', () => {
+    it('testimonial with rating 5 shows all 5 filled stars', () => {
       render(<TestimonialCarousel />)
-      // Navigate to the 5th testimonial (rating 4) - Bêta-testeur #3
+      // Navigate to the 5th testimonial (rating 5) - Responsabiliser la squad
       const nextBtn = screen.getByLabelText('Témoignage suivant')
       for (let i = 0; i < 4; i++) {
         fireEvent.click(nextBtn)
       }
       const stars = screen.getAllByTestId('icon-star')
       expect(stars).toHaveLength(5)
-      // First 4 should be filled, last one should be unfilled
+      // All 5 should be filled
       const filledStars = stars.filter((s) => s.className.includes('text-warning'))
       const unfilledStars = stars.filter((s) => s.className.includes('text-border-subtle'))
-      expect(filledStars).toHaveLength(4)
-      expect(unfilledStars).toHaveLength(1)
+      expect(filledStars).toHaveLength(5)
+      expect(unfilledStars).toHaveLength(0)
     })
   })
 
@@ -400,9 +400,9 @@ describe('TestimonialCarousel', () => {
       render(<TestimonialCarousel />)
       fireEvent(window, new Event('resize'))
       // First 3 testimonials should be visible
-      expect(screen.getByText('Gamer anonyme')).toBeInTheDocument()
-      expect(screen.getByText('Bêta-testeur #12')).toBeInTheDocument()
-      expect(screen.getByText('Bêta-testeur #7')).toBeInTheDocument()
+      expect(screen.getByText('Le problème universel')).toBeInTheDocument()
+      expect(screen.getByText('Fini le ghosting')).toBeInTheDocument()
+      expect(screen.getByText('Des sessions régulières')).toBeInTheDocument()
     })
 
     it('navigating next on desktop shows testimonials 4-6', () => {
@@ -411,9 +411,9 @@ describe('TestimonialCarousel', () => {
       fireEvent(window, new Event('resize'))
       const nextBtn = screen.getByLabelText('Témoignage suivant')
       fireEvent.click(nextBtn)
-      expect(screen.getByText('Tout gamer, ever')).toBeInTheDocument()
-      expect(screen.getByText('Bêta-testeur #3')).toBeInTheDocument()
-      expect(screen.getByText('Bêta-testeur #19')).toBeInTheDocument()
+      expect(screen.getByText('La question qui tue')).toBeInTheDocument()
+      expect(screen.getByText('Responsabiliser la squad')).toBeInTheDocument()
+      expect(screen.getByText('Toujours connectés')).toBeInTheDocument()
     })
   })
 })

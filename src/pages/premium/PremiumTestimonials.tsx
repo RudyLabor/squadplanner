@@ -7,10 +7,10 @@ export function PremiumTestimonials() {
   return (
     <div className="animate-fade-in-up mb-16" style={{ animationDelay: '0.4s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
-        Ce que Premium change concrètement
+        Ce que les joueurs Premium en disent
       </h2>
       <p className="text-md text-text-secondary text-center mb-8">
-        Des cas d'usage réels pour chaque type de joueur
+        Ils ont upgrade. Voilà ce qui a changé.
       </p>
       <div className="grid md:grid-cols-3 gap-4">
         {TESTIMONIALS.map((testimonial, index) => (

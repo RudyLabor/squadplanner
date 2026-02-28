@@ -463,7 +463,7 @@ export function Settings() {
                 <div className="text-left">
                   <p className="text-md text-text-primary">Inviter des amis</p>
                   <p className="text-sm text-text-quaternary">
-                    Gagne du Premium gratuit en parrainant
+                    Chaque ami parrain\u00e9 te rapproche du Premium gratuit
                   </p>
                 </div>
               </div>
@@ -586,7 +586,7 @@ function DiscordSection() {
               </div>
               <div className="text-left">
                 <p className="text-md text-text-primary">Connecter Discord</p>
-                <p className="text-sm text-text-quaternary">Lie ton compte pour utiliser le bot</p>
+                <p className="text-sm text-text-quaternary">Lie ton compte pour recevoir les notifs directement sur Discord</p>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-text-quaternary" />

@@ -20,6 +20,8 @@ import {
   PREMIUM_PRICE_YEARLY,
   SQUAD_LEADER_PRICE_MONTHLY,
   SQUAD_LEADER_PRICE_YEARLY,
+  TEAM_PRICE_MONTHLY,
+  TEAM_PRICE_YEARLY,
   CLUB_PRICE_MONTHLY,
   CLUB_PRICE_YEARLY,
 } from '../../hooks/usePremium'
@@ -52,7 +54,7 @@ const TIERS = [
       'Badge Premium violet',
       'Zéro pub',
     ],
-    ctaLabel: 'Choisir Premium',
+    ctaLabel: 'Passer Premium',
     gradient: 'from-primary to-primary/80',
     badgeClass: 'bg-primary/20 text-primary-hover',
     borderActive: 'border-primary bg-primary/5',
@@ -77,12 +79,33 @@ const TIERS = [
       'Sessions récurrentes',
       'Badge Squad Leader doré',
     ],
-    ctaLabel: 'Choisir Squad Leader',
+    ctaLabel: 'Passer Squad Leader',
     gradient: 'from-warning to-warning/80',
     badgeClass: 'bg-warning/20 text-warning',
     borderActive: 'border-warning bg-warning/5',
     popular: true,
     badge: 'POPULAIRE',
+  },
+  {
+    tier: 'team' as SubscriptionTier,
+    name: 'Team',
+    description: 'Pour les équipes structurées.',
+    monthlyPrice: TEAM_PRICE_MONTHLY,
+    yearlyPrice: TEAM_PRICE_YEARLY,
+    features: [
+      'Tout Squad Leader inclus',
+      'Dashboard multi-squads',
+      'Stats cross-squad',
+      "Jusqu'à 75 membres",
+      'Support prioritaire 8h',
+      'Badge Team bleu',
+    ],
+    ctaLabel: 'Passer Team',
+    gradient: 'from-info to-info/80',
+    badgeClass: 'bg-info/20 text-info',
+    borderActive: 'border-info bg-info/5',
+    popular: false,
+    badge: null,
   },
   {
     tier: 'club' as SubscriptionTier,
@@ -91,16 +114,15 @@ const TIERS = [
     monthlyPrice: CLUB_PRICE_MONTHLY,
     yearlyPrice: CLUB_PRICE_YEARLY,
     features: [
-      'Tout Squad Leader inclus',
-      'Dashboard multi-squads',
-      'Stats cross-squad',
+      'Tout Team inclus',
       'Branding personnalisé',
       'API webhooks',
       'Onboarding assisté (30 min)',
-      'Support prioritaire 24h',
+      'Support prioritaire 4h',
+      "Jusqu'à 100 membres",
       'Facturation entreprise',
     ],
-    ctaLabel: 'Contacter',
+    ctaLabel: 'Contacter les ventes',
     gradient: 'from-primary to-purple',
     badgeClass: 'bg-primary/20 text-primary-hover',
     borderActive: 'border-primary bg-primary/5',
@@ -265,20 +287,20 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {(isConnected
             ? [
-                { text: `Tu as ${squadCount} squad${squadCount > 1 ? 's' : ''}`, detail: 'Premium : 5 squads' },
+                { text: `Tu as ${squadCount} squad${squadCount > 1 ? 's' : ''} · 5 membres max`, detail: 'Premium : 5 squads · 20 membres' },
+                { text: 'Limité à 2 sessions par semaine', detail: 'Premium : illimité' },
                 { text: 'Historique limité à 7 jours', detail: 'Premium : 90 jours' },
                 { text: 'Pas de stats avancées', detail: 'Premium : analytics complets' },
                 { text: "Pas d'IA Coach", detail: 'Premium : conseils personnalisés' },
                 { text: 'Chat basique (texte seulement)', detail: 'Premium : GIF, voice, polls' },
-                { text: 'Pas de badge exclusif', detail: 'Premium : badge violet' },
               ]
             : [
-                { text: '2 squads maximum', detail: 'Premium : 5 squads' },
+                { text: '1 squad · 5 membres max', detail: 'Premium : 5 squads · 20 membres' },
+                { text: '2 sessions par semaine max', detail: 'Premium : illimité' },
                 { text: 'Historique limité à 7 jours', detail: 'Premium : 90 jours' },
                 { text: 'Pas de stats avancées', detail: 'Premium : analytics complets' },
                 { text: "Pas d'IA Coach", detail: 'Premium : conseils personnalisés' },
                 { text: 'Chat basique (texte seulement)', detail: 'Premium : GIF, voice, polls' },
-                { text: 'Pas de badge exclusif', detail: 'Premium : badge violet' },
               ]
           ).map((item) => (
             <div key={item.text} className="flex items-start gap-2.5">
@@ -299,7 +321,7 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
 
       {/* Pricing Cards — 3 tiers */}
       <div
-        className="animate-fade-in-up grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
+        className="animate-fade-in-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         style={{ animationDelay: '0.3s' }}
       >
         {TIERS.map((t, index) => {
@@ -339,13 +361,22 @@ export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: Pr
               <p className="text-sm text-text-tertiary mb-3">{t.description}</p>
 
               <div className="flex items-baseline gap-1 mb-1">
+                {isYearly && (
+                  <span className="text-lg text-text-quaternary line-through mr-1">{t.monthlyPrice.toFixed(2)}€</span>
+                )}
                 <span className="text-2xl font-bold text-text-primary">{price.toFixed(2)}€</span>
                 <span className="text-text-quaternary text-sm">/mois</span>
               </div>
 
               {isYearly && (
-                <p className="text-xs text-success mb-3">
+                <p className="text-xs text-success mb-1">
                   {yearlyTotal.toFixed(2)}€/an · Économise {savings}%
+                </p>
+              )}
+
+              {(t.tier === 'premium' || t.tier === 'squad_leader') && (
+                <p className="text-xs text-text-quaternary mb-2">
+                  Soit <span className="font-semibold text-text-secondary">{(price / 30).toFixed(2)}€/jour</span> — {t.tier === 'premium' ? "le prix d'un bonbon" : "moins qu'un café"}
                 </p>
               )}
 

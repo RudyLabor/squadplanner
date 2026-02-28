@@ -27,21 +27,21 @@ const MILESTONES = [
     key: 'recruiter3' as const,
     count: 3,
     label: 'Recruteur',
-    reward: 'Badge "Recruteur"',
+    reward: 'Badge "Recruteur" + -5% permanent',
     Icon: Award,
   },
   {
     key: 'recruiter10' as const,
     count: 10,
     label: 'Recruteur Pro',
-    reward: '1 mois Squad Leader gratuit',
+    reward: '-10% permanent + 1 mois Squad Leader gratuit',
     Icon: Trophy,
   },
   {
     key: 'recruiter25' as const,
     count: 25,
     label: 'Recruteur Légendaire',
-    reward: 'Squad Leader à vie',
+    reward: '-20% permanent + Squad Leader à vie',
     Icon: Crown,
   },
 ] as const
@@ -83,7 +83,7 @@ export function Referrals() {
   const handleShareWhatsApp = () => {
     const url = generateShareUrl()
     if (!url) return
-    const text = `Rejoins Squad Planner et gagne 7 jours Premium gratuit ! ${url}`
+    const text = `Rejoins Squad Planner et gagne 7 jours Premium gratuit ! Moi j'économise sur mon abo grâce au parrainage. ${url}`
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
     analytics.track('referral_shared' as any, { platform: 'whatsapp' })
   }
@@ -137,7 +137,7 @@ export function Referrals() {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-success/10 to-success/025 border border-success/15">
                 <Sparkles className="w-4 h-4 text-success" />
-                <span className="text-base font-medium text-success">7 jours Premium offerts</span>
+                <span className="text-base font-medium text-success">Réductions permanentes à débloquer</span>
               </div>
             </m.div>
 
@@ -165,7 +165,7 @@ export function Referrals() {
             >
               Invite 3 potes,{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-success to-primary">
-                débloque ton premier badge
+                débloque des réductions permanentes
               </span>
             </m.h1>
 
@@ -175,8 +175,8 @@ export function Referrals() {
               transition={{ delay: 0.2, duration: 0.4, ease }}
               className="text-md md:text-lg text-text-secondary max-w-xl mx-auto"
             >
-              Ton pote gagne 7 jours Premium. Toi aussi + 500 XP en bonus.
-              Tout le monde y gagne.
+              Ton pote gagne 7 jours Premium. Toi, tu déverrouilles des réductions permanentes sur ton abo + 500 XP.
+              Plus tu parraines, plus tu économises.
             </m.p>
           </div>
         </div>
@@ -308,12 +308,12 @@ export function Referrals() {
                   <Step number={2} text="Ton ami s'inscrit via ton lien" color="primary" />
                   <Step
                     number={3}
-                    text="Vous recevez chacun 7 jours Premium gratuit, et toi +500 XP en bonus"
+                    text="Ton ami reçoit 7 jours Premium gratuit. Toi, tu gagnes 500 XP et une réduction permanente"
                     color="warning"
                   />
                   <Step
                     number={4}
-                    text="Si ton ami passe Premium, tu gagnes 1 mois gratuit"
+                    text="3 parrainages = -5%, 10 = -10%, 25 = -20% permanent sur ton abo"
                     color="success"
                   />
                 </div>

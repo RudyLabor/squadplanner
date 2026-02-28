@@ -252,6 +252,37 @@ export default function AlternativeDiscordEvents() {
 
       <div className="section-divider" />
 
+      {/* Promo Code (R9) */}
+      <section className="px-4 md:px-6 py-8">
+        <div className="max-w-3xl mx-auto">
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="p-5 md:p-6 rounded-2xl border border-warning/30 bg-gradient-to-r from-warning/5 to-transparent flex flex-col sm:flex-row items-center gap-4"
+          >
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-md font-semibold text-text-primary mb-1">
+                Tu migres de Discord Events ? -30% sur ton premier mois
+              </p>
+              <p className="text-sm text-text-tertiary">
+                Utilise le code <span className="font-mono font-bold text-warning">GUILDED30</span> au moment du paiement. Offre valable jusqu'au 30 juin 2026.
+              </p>
+            </div>
+            <Link
+              to="/premium"
+              className="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-warning text-bg-base font-semibold text-sm hover:opacity-90 transition-opacity"
+            >
+              Profiter de l'offre
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </m.div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       {/* Integration Banner */}
       <section className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-3xl mx-auto">

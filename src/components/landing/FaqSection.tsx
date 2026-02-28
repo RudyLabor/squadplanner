@@ -9,7 +9,7 @@ const staggerItemVariants = {
 const faqs = [
   {
     q: 'Squad Planner est-il gratuit ?',
-    a: "Oui, 100% gratuit pour commencer. Tu crées ta squad, tu invites tes potes, tu planifies tes sessions -- tout est inclus. Concrètement, ça veut dire que tu peux organiser tes soirées gaming sans sortir ta CB. Le premium est là pour ceux qui veulent du coaching IA et des stats poussées, mais l'essentiel est gratuit.",
+    a: "Oui, 100% gratuit pour commencer. Tu crées 1 squad avec jusqu'à 5 membres, tu planifies 2 sessions par semaine -- tout est inclus. Concrètement, ça veut dire que tu peux organiser tes soirées gaming sans sortir ta CB. Le premium est là pour ceux qui veulent plus de squads, du coaching IA et des stats poussées, mais l'essentiel est gratuit.",
   },
   {
     q: 'Comment inviter mes amis ?',
@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: 'Combien de joueurs par squad ?',
-    a: "De 2 à 10 joueurs par squad. C'est la taille idéale pour une équipe de jeu régulière. Assez pour avoir du choix, assez petit pour que chacun se sente impliqué et responsable. Tu peux créer plusieurs squads si tu joues à différents jeux.",
+    a: "Jusqu'à 5 membres par squad en gratuit. En Premium, tu peux aller jusqu'à 20. En Squad Leader jusqu'à 50, Team jusqu'à 75, et Club jusqu'à 100. Tu peux créer plusieurs squads si tu joues à différents jeux.",
   },
   {
     q: 'Mes données sont-elles protégées ?',
@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     q: "C'est vraiment 100% gratuit ?",
-    a: "Oui. Squads, sessions, confirmation de présence, chat basique, vocal -- tout ça gratuit, sans limite de temps. Le premium ajoute le chat complet avec GIF et polls, le coach IA et des stats avancées. Mais honnêtement, tu n'en as pas besoin pour bien organiser tes sessions.",
+    a: "Oui. 1 squad, 5 membres, 2 sessions par semaine, confirmation de présence, chat basique, vocal -- tout ça gratuit, sans limite de temps. Le premium à partir de 6,99€/mois ajoute le chat complet avec GIF et polls, le coach IA et des stats avancées. Mais honnêtement, tu n'en as pas besoin pour bien organiser tes sessions.",
   },
 ]
 

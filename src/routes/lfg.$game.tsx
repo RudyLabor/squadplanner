@@ -528,6 +528,40 @@ export default function Component() {
 
       <div className="section-divider" />
 
+      {/* ── Premium CTA (R4) ── */}
+      <section className="px-4 md:px-6 py-10 md:py-14">
+        <div className="max-w-3xl mx-auto">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '200px' }}
+            className="p-6 md:p-8 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent text-center"
+          >
+            <h3 className="text-lg font-bold text-text-primary mb-2">
+              Passe au niveau supérieur
+            </h3>
+            <p className="text-text-tertiary mb-5 text-md max-w-lg mx-auto">
+              Matchmaking prioritaire, filtres avancés et plus de visibilité pour ta squad. Essaie Premium 7 jours gratuit.
+            </p>
+            <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="inline-flex">
+              <Link
+                to="/premium"
+                className="flex items-center gap-2 h-12 px-8 rounded-xl bg-gradient-to-r from-primary to-purple text-white font-semibold shadow-lg shadow-primary/10"
+              >
+                Découvrir Premium — à partir de 0,23€/jour
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </m.div>
+            <p className="text-xs text-text-quaternary mt-3">
+              7 jours gratuit · Sans carte bancaire · Remboursé sous 30 jours
+            </p>
+          </m.div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       {/* ── Testimonials ── */}
       <section className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-5xl mx-auto">

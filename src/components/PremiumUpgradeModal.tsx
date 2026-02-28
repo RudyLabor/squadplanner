@@ -7,6 +7,8 @@ import {
   PREMIUM_PRICE_YEARLY,
   SQUAD_LEADER_PRICE_MONTHLY,
   SQUAD_LEADER_PRICE_YEARLY,
+  TEAM_PRICE_MONTHLY,
+  TEAM_PRICE_YEARLY,
   FEATURE_MIN_TIER,
 } from '../hooks/usePremium'
 import type { SubscriptionTier } from '../types/database'
@@ -46,6 +48,23 @@ const UPGRADE_TIERS = [
     borderColor: 'border-warning',
     bgColor: 'bg-warning/5',
     popular: true,
+  },
+  {
+    tier: 'team' as SubscriptionTier,
+    name: 'Team',
+    monthlyPrice: TEAM_PRICE_MONTHLY,
+    yearlyPrice: TEAM_PRICE_YEARLY,
+    highlights: [
+      'Tout Squad Leader',
+      'Dashboard multi-squads',
+      'Stats cross-squad',
+      "Jusqu'à 75 membres",
+      'Support prioritaire 8h',
+    ],
+    gradient: 'from-info to-info/80',
+    borderColor: 'border-info',
+    bgColor: 'bg-info/5',
+    popular: false,
   },
 ]
 
@@ -142,7 +161,7 @@ export function PremiumUpgradeModal({
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
         {/* Tier selector */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
           {UPGRADE_TIERS.map((t) => (
             <button
               key={t.tier}
@@ -229,7 +248,7 @@ export function PremiumUpgradeModal({
           ) : (
             <>
               {activeTier.popular ? <Crown className="w-5 h-5" /> : <Zap className="w-5 h-5" />}
-              Choisir {activeTier.name} — {totalLabel}
+              Passer {activeTier.name} — {totalLabel}
             </>
           )}
         </Button>

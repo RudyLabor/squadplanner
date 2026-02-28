@@ -750,11 +750,11 @@ ${formData.message}
               },
               {
                 q: 'Comment fonctionne la commission ?',
-                a: "Tu reçois une commission de 20% pour chaque nouvel utilisateur qui s'inscrit via ton code promo unique. Si cet utilisateur passe Premium, tu reçois un mois Squad Leader gratuit en plus.",
+                a: "Tu reçois 20% de commission sur chaque abonnement généré via ton code promo. À 25 filleuls actifs, tu passes Squad Leader gratuit à vie. À 50 filleuls, tu reçois un bonus exceptionnel.",
               },
               {
                 q: 'Je peux cumuler avec le parrainage normal ?',
-                a: "Oui ! En tant qu'ambassadeur, tu gardes accès au programme de parrainage standard (7 jours Premium pour chaque ami). La commission ambassadeur s'ajoute à cela.",
+                a: "Oui ! En tant qu'ambassadeur, tu gardes accès au programme de parrainage standard (réductions permanentes). La commission ambassadeur s'ajoute à cela.",
               },
               {
                 q: "C'est obligatoire d'être un gros streamer ?",

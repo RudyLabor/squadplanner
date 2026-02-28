@@ -27,6 +27,13 @@ const TIER_CONFIG: Record<
     border: 'border-purple/20',
     text: 'text-purple',
   },
+  team: {
+    label: 'Team',
+    icon: Crown,
+    bg: 'bg-info/10',
+    border: 'border-info/20',
+    text: 'text-info',
+  },
   club: {
     label: 'Club',
     icon: Crown,

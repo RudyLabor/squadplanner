@@ -7,6 +7,8 @@ import {
   PREMIUM_PRICE_YEARLY,
   SQUAD_LEADER_PRICE_MONTHLY,
   SQUAD_LEADER_PRICE_YEARLY,
+  TEAM_PRICE_MONTHLY,
+  TEAM_PRICE_YEARLY,
   CLUB_PRICE_MONTHLY,
   CLUB_PRICE_YEARLY,
 } from '../../hooks/usePremium'
@@ -18,8 +20,8 @@ const TIERS = [
     yearlyPrice: 0,
     description: "Tout ce qu'il faut pour jouer régulièrement.",
     features: [
-      '1 squad',
-      '3 sessions/semaine',
+      '1 squad · 5 membres max',
+      '2 sessions/semaine',
       'Historique 7 jours',
       'Chat basique',
       'Score de fiabilité',
@@ -46,7 +48,7 @@ const TIERS = [
       'Badge Premium violet',
       'Zéro pub',
     ],
-    cta: 'Débloquer Premium',
+    cta: 'Passer Premium',
     ctaStyle: 'bg-gradient-to-r from-primary to-purple text-white hover:opacity-90 shadow-glow-primary-sm',
     popular: true,
     badge: 'RECOMMANDÉ',
@@ -68,8 +70,27 @@ const TIERS = [
       'Sessions récurrentes',
       'Badge Squad Leader doré',
     ],
-    cta: 'Choisir Squad Leader',
+    cta: 'Passer Squad Leader',
     ctaStyle: 'bg-gradient-to-r from-warning to-warning/80 text-bg-base hover:opacity-90',
+    popular: false,
+    badge: null,
+    dailyPrice: true,
+  },
+  {
+    name: 'Team',
+    monthlyPrice: TEAM_PRICE_MONTHLY,
+    yearlyPrice: TEAM_PRICE_YEARLY,
+    description: 'Pour les équipes structurées.',
+    features: [
+      'Tout Squad Leader inclus',
+      'Dashboard multi-squads',
+      'Stats cross-squad',
+      "Jusqu'à 75 membres",
+      'Support prioritaire 8h',
+      'Badge Team bleu',
+    ],
+    cta: 'Passer Team',
+    ctaStyle: 'bg-gradient-to-r from-info to-info/80 text-white hover:opacity-90',
     popular: false,
     badge: null,
     dailyPrice: false,
@@ -89,7 +110,7 @@ const TIERS = [
       'Support prioritaire 24h',
       'Facturation entreprise',
     ],
-    cta: 'Contacter',
+    cta: 'Contacter les ventes',
     ctaStyle: 'border border-primary text-primary hover:bg-primary-10',
     popular: false,
     badge: 'B2B',
@@ -145,7 +166,7 @@ export function PricingSection() {
           </div>
         </m.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-3">
           {TIERS.map((tier, index) => {
             const price =
               isYearly && tier.monthlyPrice > 0 ? tier.yearlyPrice / 12 : tier.monthlyPrice
@@ -184,6 +205,9 @@ export function PricingSection() {
                 </div>
 
                 <div className="flex items-baseline gap-1 mb-2">
+                  {isYearly && tier.monthlyPrice > 0 && (
+                    <span className="text-lg text-text-quaternary line-through mr-1">{tier.monthlyPrice.toFixed(2)}&euro;</span>
+                  )}
                   <span className="text-2xl font-bold text-text-primary">
                     {price.toFixed(2)}&euro;
                   </span>
@@ -202,7 +226,7 @@ export function PricingSection() {
 
                 {tier.dailyPrice && (
                   <p className="text-xs text-text-quaternary mb-2">
-                    Soit <span className="font-semibold text-text-secondary">{(price / 30).toFixed(2)}&euro;/jour</span> — le prix d'un bonbon
+                    Soit <span className="font-semibold text-text-secondary">{(price / 30).toFixed(2)}&euro;/jour</span> — {price < 10 ? "le prix d'un bonbon" : "moins qu'un café"}
                   </p>
                 )}
 

@@ -42,13 +42,14 @@ export function PremiumFeaturesTable() {
       <div className="hidden sm:block mb-8" />
       <div className="relative rounded-2xl border border-border-subtle overflow-hidden">
         <div ref={scrollRef} className="overflow-x-auto" onScroll={handleScroll}>
-          <table className="w-full border-collapse table-fixed" style={{ minWidth: 600 }}>
+          <table className="w-full border-collapse table-fixed" style={{ minWidth: 720 }}>
             <colgroup>
-              <col style={{ width: 216 }} />
-              <col style={{ width: 96 }} />
-              <col style={{ width: 96 }} />
-              <col style={{ width: 96 }} />
-              <col style={{ width: 96 }} />
+              <col style={{ width: 200 }} />
+              <col style={{ width: 88 }} />
+              <col style={{ width: 88 }} />
+              <col style={{ width: 88 }} />
+              <col style={{ width: 88 }} />
+              <col style={{ width: 88 }} />
             </colgroup>
             <thead>
               <tr className="border-b border-border-default">
@@ -66,6 +67,11 @@ export function PremiumFeaturesTable() {
                 <th className="bg-bg-elevated text-center p-2">
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-warning to-warning/70 text-xs font-bold text-bg-base">
                     <Crown className="w-2.5 h-2.5" /> Leader
+                  </span>
+                </th>
+                <th className="bg-bg-elevated text-center p-2">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-info/20 text-xs font-bold text-info">
+                    Team
                   </span>
                 </th>
                 <th className="bg-bg-elevated text-center p-2">
@@ -101,6 +107,9 @@ export function PremiumFeaturesTable() {
                     </td>
                     <td className="p-2 text-center align-middle">
                       <CellValue value={feature.squadLeader} />
+                    </td>
+                    <td className="p-2 text-center align-middle">
+                      <CellValue value={feature.team} />
                     </td>
                     <td className="p-2 text-center align-middle">
                       <CellValue value={feature.club} />

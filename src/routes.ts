@@ -35,6 +35,9 @@ export default [
   // Ambassador program (public, pre-rendered)
   route('ambassador', './routes/ambassador.tsx'),
 
+  // Contact page for Club tier (public, pre-rendered)
+  route('contact', './routes/contact.tsx'),
+
   // Protected pages (wrapped in auth-checking layout)
   layout('./routes/_protected.tsx', [
     route('home', './routes/home.tsx'),

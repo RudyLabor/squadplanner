@@ -143,8 +143,11 @@ sur PC, console, ou mobile. Age : 16-35 ans.
 
 ### Modele economique
 
-- Freemium : gratuit avec limite de 2 squads
-- Premium : 4.99 EUR/mois ou 47.88 EUR/an (via Stripe)
+- Freemium : gratuit (1 squad, 5 membres, 2 sessions/semaine)
+- Premium : 6.99 EUR/mois ou 69.90 EUR/an (via Stripe)
+- Squad Leader : 14.99 EUR/mois ou 149.90 EUR/an
+- Team : 24.99 EUR/mois ou 239.88 EUR/an
+- Club : 39.99 EUR/mois ou 399.90 EUR/an (facturation entreprise dispo)
 - Features premium : squads illimites, historique etendu, stats avancees, AI Coach, HD voice
 
 ### URLs
@@ -1629,7 +1632,7 @@ Page : /premium
 Etapes :
   1. Naviguer vers /premium
   2. Verifier : comparaison Free vs Premium
-  3. Verifier : prix affiches (4.99/mois, 47.88/an)
+  3. Verifier : prix affiches (6.99/mois Premium, 14.99/mois SL, 24.99/mois Team, 39.99/mois Club)
   4. Cliquer "Souscrire" mensuel → verifier redirect Stripe
   5. Completer le paiement test (carte 4242 4242 4242 4242)
   6. Verifier : retour dans l'app avec premium actif

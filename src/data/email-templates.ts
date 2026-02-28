@@ -1022,6 +1022,109 @@ const anniversary: EmailTemplate = {
 }
 
 // ============================================================================
+// 9. WIN-BACK EMAIL (churned subscribers)
+// ============================================================================
+
+const winBack: EmailTemplate = {
+  id: 'win_back',
+  trigger: 'subscription_cancelled_30d',
+  subject: (vars) => `${escapeHtml(vars.name || 'Hey')}, ta squad te manque`,
+  delay: '30d',
+  html: (vars) => `
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Ta squad te manque</title>
+    </head>
+    <body style="margin:0;padding:0;background-color:#0c0c14;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0c0c14;">
+        <tr>
+          <td align="center" style="padding:40px 20px;">
+            <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+              <!-- Header -->
+              <tr>
+                <td align="center" style="padding-bottom:32px;">
+                  <div style="width:64px;height:64px;background:linear-gradient(135deg,#8B5CF6,#6366f1);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;">
+                    &#127918;
+                  </div>
+                </td>
+              </tr>
+              <!-- Main content -->
+              <tr>
+                <td style="background-color:#1c1c2e;border:1px solid #222238;border-radius:16px;padding:40px 32px;">
+                  <h1 style="color:#f0f0f5;font-size:24px;font-weight:700;margin:0 0 16px 0;text-align:center;">
+                    ${escapeHtml(vars.name || 'Hey')}, ta squad a jou&eacute; sans toi
+                  </h1>
+                  <p style="color:#9ca3af;font-size:16px;line-height:1.6;margin:0 0 24px 0;text-align:center;">
+                    Depuis ton d&eacute;part, ta squad <strong style="color:#f0f0f5;">${escapeHtml(vars.squad_name || 'ta squad')}</strong> a organis&eacute;
+                    <strong style="color:#8B5CF6;">${escapeHtml(vars.sessions_count || 'plusieurs')}</strong> sessions.
+                    Tes potes jouent toujours &mdash; il manque juste toi.
+                  </p>
+
+                  <!-- What you're missing -->
+                  <div style="background-color:#0c0c14;border-radius:12px;padding:20px;margin-bottom:24px;">
+                    <p style="color:#8B5CF6;font-size:14px;font-weight:600;margin:0 0 12px 0;">Ce que tu rates :</p>
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:6px 0;color:#f0f0f5;font-size:14px;">&#9989; Sessions illimit&eacute;es avec ta squad</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;color:#f0f0f5;font-size:14px;">&#9989; Coach IA pour optimiser tes cr&eacute;neaux</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;color:#f0f0f5;font-size:14px;">&#9989; Stats avanc&eacute;es et classement</td>
+                      </tr>
+                    </table>
+                  </div>
+
+                  <!-- Special offer -->
+                  <div style="background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(52,211,153,0.1));border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:20px;margin-bottom:24px;text-align:center;">
+                    <p style="color:#8B5CF6;font-size:18px;font-weight:700;margin:0 0 8px 0;">
+                      -30% sur ton retour
+                    </p>
+                    <p style="color:#9ca3af;font-size:14px;margin:0;">
+                      Code <strong style="color:#f0f0f5;font-family:monospace;background-color:#0c0c14;padding:2px 8px;border-radius:4px;">COMEBACK30</strong> &mdash; valable 7 jours
+                    </p>
+                  </div>
+
+                  <!-- CTA -->
+                  <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td align="center">
+                        <a href="${escapeHtml(vars.app_url || 'https://squadplanner.fr')}/premium"
+                          style="display:inline-block;background:linear-gradient(135deg,#8B5CF6,#6366f1);color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:12px;">
+                          Reviens jouer &mdash; -30% avec COMEBACK30
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <p style="color:#6b7280;font-size:12px;text-align:center;margin:24px 0 0 0;">
+                    Tu peux aussi rester en gratuit (1 squad, 5 membres, 2 sessions/semaine).
+                  </p>
+                </td>
+              </tr>
+              <!-- Footer -->
+              <tr>
+                <td style="padding:24px 0;text-align:center;">
+                  <p style="color:#6b7280;font-size:12px;margin:0;">
+                    Squad Planner &mdash; Organise tes sessions gaming<br/>
+                    <a href="${escapeHtml(vars.app_url || 'https://squadplanner.fr')}/settings" style="color:#8B5CF6;text-decoration:none;">G&eacute;rer mes emails</a>
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `,
+}
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -1034,6 +1137,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
   trialEnded,
   monthlyDigest,
   anniversary,
+  winBack,
 ]
 
 /**

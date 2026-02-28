@@ -3,7 +3,7 @@ import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import type { SubscriptionTier } from '../types/database'
 
 // ── Tier hierarchy (higher index = more access) ──
-const TIER_HIERARCHY: SubscriptionTier[] = ['free', 'premium', 'squad_leader', 'club']
+const TIER_HIERARCHY: SubscriptionTier[] = ['free', 'premium', 'squad_leader', 'team', 'club']
 
 export function tierLevel(tier: SubscriptionTier): number {
   return TIER_HIERARCHY.indexOf(tier)
@@ -41,7 +41,7 @@ export const TIER_LIMITS: Record<SubscriptionTier, TierLimits> = {
   free: {
     maxSquads: 1,
     historyDays: 7,
-    sessionsPerWeek: 3,
+    sessionsPerWeek: 2,
     hasGifs: false,
     hasVoiceMessages: false,
     hasPolls: false,
@@ -58,7 +58,7 @@ export const TIER_LIMITS: Record<SubscriptionTier, TierLimits> = {
     hasCustomBranding: false,
     hasApiWebhooks: false,
     hasPrioritySupport: false,
-    maxMembers: 10,
+    maxMembers: 5,
   },
   premium: {
     maxSquads: 5,
@@ -104,6 +104,28 @@ export const TIER_LIMITS: Record<SubscriptionTier, TierLimits> = {
     hasPrioritySupport: true,
     maxMembers: 50,
   },
+  team: {
+    maxSquads: Infinity,
+    historyDays: Infinity,
+    sessionsPerWeek: Infinity,
+    hasGifs: true,
+    hasVoiceMessages: true,
+    hasPolls: true,
+    hasAdvancedStats: true,
+    hasAiCoach: true,
+    hasAiCoachAdvanced: true,
+    hasHdAudio: true,
+    hasAdvancedRoles: true,
+    hasCalendarExport: true,
+    hasRecurringSessions: true,
+    hasTeamAnalytics: true,
+    hasPriorityMatchmaking: true,
+    hasClubDashboard: true,
+    hasCustomBranding: false,
+    hasApiWebhooks: false,
+    hasPrioritySupport: true,
+    maxMembers: 75,
+  },
   club: {
     maxSquads: Infinity,
     historyDays: Infinity,
@@ -138,8 +160,39 @@ export const PREMIUM_PRICE_MONTHLY = 6.99
 export const PREMIUM_PRICE_YEARLY = 59.88 // 4.99€/mois × 12 — soit ~29% d'économie vs mensuel
 export const SQUAD_LEADER_PRICE_MONTHLY = 14.99
 export const SQUAD_LEADER_PRICE_YEARLY = 143.88 // 11.99€/mois × 12 — soit ~20% d'économie vs mensuel
+export const TEAM_PRICE_MONTHLY = 24.99
+export const TEAM_PRICE_YEARLY = 239.88 // 19.99€/mois × 12 — soit ~20% d'économie vs mensuel
 export const CLUB_PRICE_MONTHLY = 39.99
 export const CLUB_PRICE_YEARLY = 383.88 // 31.99€/mois × 12 — soit ~20% d'économie vs mensuel
+
+// ── Regional pricing (multiplier based on country) ──
+export const REGIONAL_PRICING: Record<string, number> = {
+  FR: 1.0,      // France — prix de base
+  BE: 1.0,      // Belgique
+  CH: 1.15,     // Suisse — coût de vie plus élevé
+  CA: 0.9,      // Canada francophone
+  MA: 0.5,      // Maroc
+  TN: 0.5,      // Tunisie
+  SN: 0.4,      // Sénégal
+  CI: 0.4,      // Côte d'Ivoire
+  DEFAULT: 1.0,
+}
+
+export function getRegionalPrice(basePrice: number, countryCode?: string): number {
+  const multiplier = REGIONAL_PRICING[countryCode || 'DEFAULT'] ?? REGIONAL_PRICING.DEFAULT
+  return Math.round(basePrice * multiplier * 100) / 100
+}
+
+// ── A/B test: trial duration (7 vs 14 days) ──
+export const TRIAL_DURATION_DAYS = 7
+export const TRIAL_VARIANT: 'standard' | 'extended' = 'standard' // Change to 'extended' for 14-day test
+export function getTrialDays(): number {
+  return TRIAL_VARIANT === 'extended' ? 14 : TRIAL_DURATION_DAYS
+}
+
+// ── Penny gap: symbolic 1€ trial option ──
+export const PENNY_GAP_ENABLED = false // Set to true to require 1€ for trial
+export const PENNY_GAP_AMOUNT = 1.0 // EUR
 
 // ── Feature type (used by PremiumGate) ──
 export type PremiumFeature =

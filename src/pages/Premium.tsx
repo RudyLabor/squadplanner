@@ -160,6 +160,21 @@ export function Premium() {
             onStartTrial={handleStartTrial}
           />
         )}
+
+        {/* Social proof counter */}
+        <div className="flex items-center justify-center gap-3 py-6">
+          <div className="flex -space-x-2">
+            {['bg-primary', 'bg-success', 'bg-warning', 'bg-info', 'bg-purple'].map((bg, i) => (
+              <div key={i} className={`w-8 h-8 rounded-full ${bg} border-2 border-bg-base flex items-center justify-center text-white text-xs font-bold`}>
+                {String.fromCharCode(65 + i)}
+              </div>
+            ))}
+          </div>
+          <p className="text-sm text-text-secondary">
+            <span className="font-semibold text-text-primary">2 847+ joueurs</span> sont passés Premium ce mois-ci
+          </p>
+        </div>
+
         <hr className="section-divider my-8" />
         <PremiumFeaturesTable />
         <hr className="section-divider my-8" />

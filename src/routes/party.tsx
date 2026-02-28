@@ -36,6 +36,7 @@ interface PartyLoaderData {
 export function meta() {
   return [
     { title: 'Party - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',
       content:
@@ -43,6 +44,22 @@ export function meta() {
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/party' },
     { property: 'og:url', content: 'https://squadplanner.fr/party' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Party' },
+    {
+      property: 'og:description',
+      content:
+        'Rejoins le chat vocal de ta squad. Lance une party pour jouer ensemble en temps réel.',
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Party' },
+    {
+      name: 'twitter:description',
+      content:
+        'Rejoins le chat vocal de ta squad. Lance une party pour jouer ensemble en temps réel.',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

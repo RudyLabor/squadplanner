@@ -18,7 +18,10 @@ export function headers(_args: HeadersArgs) {
 }
 
 export function meta() {
-  return [{ title: 'Squad Planner Widget' }]
+  return [
+    { title: 'Squad Planner Widget' },
+    { name: 'robots', content: 'noindex, nofollow' },
+  ]
 }
 
 interface WidgetSession {

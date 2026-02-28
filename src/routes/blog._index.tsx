@@ -41,9 +41,47 @@ export const meta: MetaFunction = () => [
     content: 'https://squadplanner.fr/blog',
   },
   {
+    property: 'og:image',
+    content: 'https://squadplanner.fr/og-image.png',
+  },
+  {
+    property: 'og:image:width',
+    content: '1200',
+  },
+  {
+    property: 'og:image:height',
+    content: '630',
+  },
+  {
+    name: 'twitter:card',
+    content: 'summary_large_image',
+  },
+  {
+    name: 'twitter:title',
+    content: 'Blog - Squad Planner | Astuces Gaming & Organisation',
+  },
+  {
+    name: 'twitter:description',
+    content: 'Guides, astuces et actualités pour les gamers organisés',
+  },
+  {
+    name: 'twitter:image',
+    content: 'https://squadplanner.fr/og-image.png',
+  },
+  {
     tagName: 'link',
     rel: 'canonical',
     href: 'https://squadplanner.fr/blog',
+  },
+  {
+    'script:ld+json': {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://squadplanner.fr/blog' },
+      ],
+    },
   },
 ]
 
@@ -249,6 +287,35 @@ export default function BlogIndex() {
       <section className="px-4 md:px-6 py-8">
         <div className="max-w-xl mx-auto">
           <NewsletterCTA />
+        </div>
+      </section>
+
+      {/* ── Explore ── */}
+      <section className="px-4 md:px-6 py-12">
+        <div className="max-w-5xl mx-auto">
+          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <h2 className="text-xl font-bold text-text-primary mb-2">Explore aussi</h2>
+            <p className="text-text-tertiary mb-6">Toutes nos ressources pour les gamers organises</p>
+          </m.div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { to: '/games/valorant', label: 'Sessions Valorant', desc: 'Planifier tes ranked' },
+              { to: '/games/league-of-legends', label: 'Sessions LoL', desc: 'Organise tes Clash' },
+              { to: '/alternative/guilded', label: 'Alternative Guilded', desc: 'Guilded a ferme' },
+              { to: '/premium', label: 'Premium', desc: 'Squads illimitees' },
+            ].map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="p-4 rounded-xl border border-border-subtle hover:border-primary/30 bg-surface-card/50 transition-all group"
+              >
+                <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
+                  {link.label}
+                </div>
+                <p className="text-xs text-text-tertiary mt-1">{link.desc}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

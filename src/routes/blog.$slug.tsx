@@ -70,9 +70,48 @@ export const meta: MetaFunction<typeof loader> = ({ data }: { data: any }) => {
       content: post.author,
     },
     {
+      property: 'og:image',
+      content: 'https://squadplanner.fr/og-image.png',
+    },
+    {
+      property: 'og:image:width',
+      content: '1200',
+    },
+    {
+      property: 'og:image:height',
+      content: '630',
+    },
+    {
+      name: 'twitter:card',
+      content: 'summary_large_image',
+    },
+    {
+      name: 'twitter:title',
+      content: post.title,
+    },
+    {
+      name: 'twitter:description',
+      content: post.excerpt,
+    },
+    {
+      name: 'twitter:image',
+      content: 'https://squadplanner.fr/og-image.png',
+    },
+    {
       tagName: 'link',
       rel: 'canonical',
       href: `https://squadplanner.fr/blog/${post.slug}`,
+    },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://squadplanner.fr/blog' },
+          { '@type': 'ListItem', position: 3, name: post.title, item: `https://squadplanner.fr/blog/${post.slug}` },
+        ],
+      },
     },
   ]
 }
@@ -292,6 +331,35 @@ export default function BlogPost() {
       )}
 
       {relatedPosts.length > 0 && <div className="section-divider" />}
+
+      {/* ── Explore Games ── */}
+      <section className="px-4 md:px-6 py-12 bg-gradient-to-b from-primary/[0.015] to-transparent">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-xl font-bold text-text-primary mb-2">Organise tes sessions par jeu</h2>
+          <p className="text-text-tertiary mb-6">Decouvre nos pages dediees a chaque jeu populaire</p>
+          <div className="flex flex-wrap gap-3">
+            {[
+              { slug: 'valorant', name: 'Valorant', icon: '\uD83C\uDFAF' },
+              { slug: 'league-of-legends', name: 'League of Legends', icon: '\u2694\uFE0F' },
+              { slug: 'fortnite', name: 'Fortnite', icon: '\uD83C\uDFD7\uFE0F' },
+              { slug: 'cs2', name: 'CS2', icon: '\uD83D\uDCA3' },
+              { slug: 'apex-legends', name: 'Apex Legends', icon: '\uD83D\uDD25' },
+              { slug: 'rocket-league', name: 'Rocket League', icon: '\uD83D\uDE97' },
+            ].map((g) => (
+              <Link
+                key={g.slug}
+                to={`/games/${g.slug}`}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border-subtle hover:border-primary/30 bg-surface-card/50 text-sm text-text-secondary hover:text-primary transition-all"
+              >
+                <span>{g.icon}</span>
+                {g.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
 
       {/* ── CTA Final ── */}
       <section className="px-4 md:px-6 py-16">

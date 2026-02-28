@@ -12,15 +12,25 @@ export function headers(_args: HeadersArgs) {
 }
 
 export function meta() {
+  const title = 'Squad Planner - Le Calendly du gaming'
+  const description =
+    'Cree ta squad, planifie tes sessions avec confirmation de presence et fiabilite mesuree. Fini les « on verra ». Gratuit.'
   return [
-    { title: 'Squad Planner - Le Calendly du gaming' },
-    {
-      name: 'description',
-      content:
-        'Crée ta squad, planifie tes sessions avec confirmation de présence et fiabilité mesurée. Fini les « on verra ». Gratuit.',
-    },
+    { title },
+    { name: 'description', content: description },
+    { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/' },
+    { property: 'og:type', content: 'website' },
     { property: 'og:url', content: 'https://squadplanner.fr/' },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: description },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: title },
+    { name: 'twitter:description', content: description },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
     {
       'script:ld+json': {
         '@context': 'https://schema.org',

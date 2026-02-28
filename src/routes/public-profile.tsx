@@ -13,8 +13,7 @@ export function meta() {
       content:
         "Profil public d'un joueur Squad Planner : statistiques, fiabilité et jeux préférés.",
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/profile' },
-    { property: 'og:url', content: 'https://squadplanner.fr/profile' },
+    { name: 'robots', content: 'noindex, nofollow' },
   ]
 }
 

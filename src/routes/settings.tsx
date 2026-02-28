@@ -10,6 +10,7 @@ const Settings = lazy(() => import('../pages/Settings').then((m) => ({ default: 
 export function meta() {
   return [
     { title: 'Paramètres - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',
       content:
@@ -17,6 +18,22 @@ export function meta() {
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/settings' },
     { property: 'og:url', content: 'https://squadplanner.fr/settings' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Parametres' },
+    {
+      property: 'og:description',
+      content:
+        'Configure ton compte Squad Planner : notifications, thème, confidentialité et préférences.',
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Parametres' },
+    {
+      name: 'twitter:description',
+      content:
+        'Configure ton compte Squad Planner : notifications, thème, confidentialité et préférences.',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

@@ -9,6 +9,7 @@ const Wrapped = lazy(() => import('../pages/Wrapped').then((m) => ({ default: m.
 export function meta() {
   return [
     { title: 'Gaming Wrapped 2026 - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',
       content:
@@ -16,11 +17,21 @@ export function meta() {
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/wrapped' },
     { property: 'og:url', content: 'https://squadplanner.fr/wrapped' },
+    { property: 'og:type', content: 'website' },
     { property: 'og:title', content: 'Mon Gaming Wrapped 2026 - Squad Planner' },
     {
       property: 'og:description',
       content: 'Découvre mes stats gaming de 2026 sur Squad Planner !',
     },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Gaming Wrapped 2026' },
+    {
+      name: 'twitter:description',
+      content:
+        'Découvre ton Gaming Wrapped 2026 : sessions jouées, heures avec ta squad, meilleur streak, score de fiabilité. Partage tes stats !',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

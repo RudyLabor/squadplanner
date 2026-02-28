@@ -14,6 +14,7 @@ import { TestimonialCarousel } from '../components/landing/TestimonialCarousel'
 import { PricingSection } from '../components/landing/PricingSection'
 import { FaqSection } from '../components/landing/FaqSection'
 import { CtaSection } from '../components/landing/CtaSection'
+import { SeoContentSection } from '../components/landing/SeoContentSection'
 import { LandingFooter } from '../components/landing/LandingFooter'
 import { MobileStickyCTA } from '../components/landing/MobileStickyCTA'
 import { CaptainQuiz } from '../components/landing/CaptainQuiz'
@@ -152,6 +153,10 @@ export default function Landing() {
       <div className="section-divider" />
       <LazySection id="faq" minHeight={300}>
         <FaqSection />
+      </LazySection>
+      <div className="section-divider" />
+      <LazySection minHeight={300}>
+        <SeoContentSection />
       </LazySection>
       <div className="section-divider" />
       <LazySection minHeight={300}>

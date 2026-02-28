@@ -57,10 +57,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-        <meta
-          name="description"
-          content="Squad Planner | Le Calendly du gaming. Crée ta squad, planifie tes sessions avec confirmation de présence et fiabilité mesurée. Fini les « on verra ». Gratuit."
-        />
+        {/* description, og:*, twitter:* are set per-route via meta() exports.
+            Do NOT hardcode them here — React Router <Meta /> renders route meta tags
+            but does NOT deduplicate against tags already in the JSX. */}
         <meta name="theme-color" content="#0c0c14" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -69,7 +68,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <link rel="apple-touch-startup-image" href="/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" />
         <link rel="apple-touch-startup-image" href="/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)" />
         */}
-        <meta name="robots" content="index, follow" />
+        {/* Default robots — overridden by route meta() where needed (e.g. noindex on protected routes) */}
 
         {/* Preconnect for faster resource loading */}
         <link
@@ -119,28 +118,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           crossOrigin="anonymous"
         />
 
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Squad Planner | Le Calendly du gaming" />
-        <meta
-          property="og:description"
-          content="Crée ta squad, planifie tes sessions avec confirmation de présence et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes."
-        />
-        <meta property="og:url" content="https://squadplanner.fr" />
-        <meta property="og:image" content="https://squadplanner.fr/og-image.png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        {/* OG & Twitter tags are set per-route via meta() exports — NOT here.
+            Only og:locale and og:site_name are global (not page-specific). */}
         <meta property="og:locale" content="fr_FR" />
         <meta property="og:site_name" content="Squad Planner" />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Squad Planner | Le Calendly du gaming" />
-        <meta
-          name="twitter:description"
-          content="Crée ta squad, planifie tes sessions avec confirmation de présence et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes."
-        />
-        <meta name="twitter:image" content="https://squadplanner.fr/og-image.png" />
 
         {/* JSON-LD Structured Data — single @graph reduces DOM nodes and parse time */}
         <script
@@ -171,7 +152,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   name: 'Squad Planner',
                   url: 'https://squadplanner.fr',
                   logo: 'https://squadplanner.fr/favicon.svg',
-                  sameAs: [],
+                  sameAs: [
+                    'https://x.com/squadplannerfr',
+                    'https://discord.gg/squadplanner',
+                  ],
                   contactPoint: {
                     '@type': 'ContactPoint',
                     email: 'contact@squadplanner.fr',
@@ -187,24 +171,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       position: 1,
                       name: 'Accueil',
                       item: 'https://squadplanner.fr/',
-                    },
-                    {
-                      '@type': 'ListItem',
-                      position: 2,
-                      name: 'Premium',
-                      item: 'https://squadplanner.fr/premium',
-                    },
-                    {
-                      '@type': 'ListItem',
-                      position: 3,
-                      name: 'Aide',
-                      item: 'https://squadplanner.fr/help',
-                    },
-                    {
-                      '@type': 'ListItem',
-                      position: 4,
-                      name: 'Découvrir',
-                      item: 'https://squadplanner.fr/discover',
                     },
                   ],
                 },

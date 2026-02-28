@@ -52,18 +52,38 @@ export function meta({ params }: { params: { game: string } }) {
     ]
   }
 
+  const title = `Chercher des joueurs ${game.name} - Squad Planner`
+  const description = `Trouvez des joueurs ${game.name} fiables et formez une squad complète avec Squad Planner. Matchmaking intelligent et communauté vérifiée.`
+
   return [
-    { title: `Chercher des joueurs ${game.name} - Squad Planner` },
-    {
-      name: 'description',
-      content: `Trouvez des joueurs ${game.name} fiables et formez une squad complète avec Squad Planner. Matchmaking intelligent et communauté vérifiée.`,
-    },
+    { title },
+    { name: 'description', content: description },
+    { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `https://squadplanner.fr/lfg/${game.slug}` },
+    { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `https://squadplanner.fr/lfg/${game.slug}` },
     { property: 'og:title', content: `Chercher des joueurs ${game.name}` },
     {
       property: 'og:description',
       content: `Trouve des joueurs ${game.name} et forme ta squad idéale.`,
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: `Chercher des joueurs ${game.name}` },
+    { name: 'twitter:description', content: description },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+          { '@type': 'ListItem', position: 2, name: 'LFG' },
+          { '@type': 'ListItem', position: 3, name: game.name, item: `https://squadplanner.fr/lfg/${game.slug}` },
+        ],
+      },
     },
   ]
 }
@@ -239,9 +259,9 @@ export default function Component() {
             viewport={{ once: true, margin: '200px' }}
             className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
           >
-            Cherche des joueurs
+            Cherche des joueurs{' '}
             <br />
-            <span className="text-gradient-animated">{game.name}</span>
+            <span className="text-gradient-animated">{game.name}</span>{' '}
             <br />
             fiables pour ta squad
           </m.h1>
@@ -737,6 +757,44 @@ export default function Component() {
                 </div>
               </m.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Cross-linking SEO ── */}
+      <section className="px-4 md:px-6 py-12 bg-gradient-to-b from-primary/[0.015] to-transparent">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-xl font-bold text-text-primary mb-6">
+            En savoir plus sur {game.name}
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <Link
+              to={`/games/${game.slug}`}
+              className="p-4 rounded-xl border border-border-subtle hover:border-primary/30 bg-surface-card/50 transition-all group"
+            >
+              <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
+                Sessions {game.name}
+              </div>
+              <p className="text-xs text-text-tertiary mt-1">Planifier et organiser tes sessions {game.name}</p>
+            </Link>
+            <Link
+              to="/blog"
+              className="p-4 rounded-xl border border-border-subtle hover:border-primary/30 bg-surface-card/50 transition-all group"
+            >
+              <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
+                Blog Squad Planner
+              </div>
+              <p className="text-xs text-text-tertiary mt-1">Guides pour mieux organiser tes parties</p>
+            </Link>
+            <Link
+              to="/premium"
+              className="p-4 rounded-xl border border-border-subtle hover:border-primary/30 bg-surface-card/50 transition-all group"
+            >
+              <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
+                Squad Planner Premium
+              </div>
+              <p className="text-xs text-text-tertiary mt-1">Squads illimitees, stats avancees et plus</p>
+            </Link>
           </div>
         </div>
       </section>

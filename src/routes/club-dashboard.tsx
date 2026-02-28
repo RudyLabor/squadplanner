@@ -11,6 +11,7 @@ const ClubDashboard = lazy(() =>
 export function meta() {
   return [
     { title: 'Dashboard Club - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',
       content:
@@ -18,6 +19,22 @@ export function meta() {
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/club' },
     { property: 'og:url', content: 'https://squadplanner.fr/club' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Dashboard Club' },
+    {
+      property: 'og:description',
+      content:
+        'Gère toutes tes équipes gaming depuis un seul dashboard. Analytics cross-squad, export CSV, branding personnalisé.',
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Dashboard Club' },
+    {
+      name: 'twitter:description',
+      content:
+        'Gère toutes tes équipes gaming depuis un seul dashboard. Analytics cross-squad, export CSV, branding personnalisé.',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

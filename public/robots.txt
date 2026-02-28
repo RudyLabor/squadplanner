@@ -1,15 +1,42 @@
 User-agent: *
 Allow: /
+Allow: /games/
+Allow: /lfg/
+Allow: /alternative/
+Allow: /vs/
+Allow: /blog/
+Allow: /ambassador
+Allow: /premium
+Allow: /help
+Allow: /legal
+Allow: /auth
+
+# Protected routes (require authentication)
 Disallow: /home
 Disallow: /squads
+Disallow: /squad/
+Disallow: /sessions
+Disallow: /session/
 Disallow: /messages
 Disallow: /profile
 Disallow: /settings
+Disallow: /discover
+Disallow: /party
+Disallow: /call-history
+Disallow: /referrals
+Disallow: /club
+Disallow: /wrapped
+Disallow: /onboarding
+
+# Dynamic user content (no SEO value)
+Disallow: /u/
+Disallow: /s/
+Disallow: /widget/
+Disallow: /join/
+
+# System routes
 Disallow: /api/
 Disallow: /auth/callback
-Disallow: /onboarding
-Disallow: /party
-Disallow: /session-detail
-Disallow: /call-history
+Disallow: /maintenance
 
 Sitemap: https://squadplanner.fr/sitemap.xml

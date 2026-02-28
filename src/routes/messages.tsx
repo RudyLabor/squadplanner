@@ -23,12 +23,27 @@ interface MessageMembershipRow {
 export function meta() {
   return [
     { title: 'Messages - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',
       content: 'Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad.',
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/messages' },
     { property: 'og:url', content: 'https://squadplanner.fr/messages' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Messages' },
+    {
+      property: 'og:description',
+      content: 'Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad.',
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Messages' },
+    {
+      name: 'twitter:description',
+      content: 'Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad.',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

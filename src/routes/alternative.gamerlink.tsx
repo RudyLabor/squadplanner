@@ -21,6 +21,10 @@ export function meta() {
         "GamerLink n'a pas tout ce dont tu as besoin ? Découvre Squad Planner. Meilleure alternative pour trouver des partenaires et organiser tes sessions gaming.",
     },
     {
+      name: 'robots',
+      content: 'index, follow',
+    },
+    {
       name: 'keywords',
       content:
         'alternative GamerLink, matchmaking gaming, Squad Planner, calendrier sessions, confirmation gaming fiable',
@@ -67,6 +71,17 @@ export function meta() {
     {
       httpEquiv: 'content-language',
       content: 'fr',
+    },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+          { '@type': 'ListItem', position: 2, name: 'Alternatives' },
+          { '@type': 'ListItem', position: 3, name: 'Alternative GamerLink', item: 'https://squadplanner.fr/alternative/gamerlink' },
+        ],
+      },
     },
   ]
 }

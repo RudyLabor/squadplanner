@@ -10,6 +10,7 @@ const Profile = lazy(() => import('../pages/Profile').then((m) => ({ default: m.
 export function meta() {
   return [
     { title: 'Mon Profil - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',
       content:
@@ -17,6 +18,22 @@ export function meta() {
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/profile' },
     { property: 'og:url', content: 'https://squadplanner.fr/profile' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Mon Profil' },
+    {
+      property: 'og:description',
+      content:
+        'Consulte ton profil gaming : statistiques, fiabilité, XP et badges. Personnalise ton identité Squad Planner.',
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Mon Profil' },
+    {
+      name: 'twitter:description',
+      content:
+        'Consulte ton profil gaming : statistiques, fiabilité, XP et badges. Personnalise ton identité Squad Planner.',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

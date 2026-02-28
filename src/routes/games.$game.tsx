@@ -52,50 +52,67 @@ export function meta({ params }: { params: { game: string } }) {
     ]
   }
 
+  const title = `Planifier des sessions ${game.name} - Squad Planner`
+  const description = game.seoDescription
+
   return [
-    { title: `Planifier des sessions ${game.name} - Squad Planner` },
-    { name: 'description', content: game.seoDescription },
+    { title },
+    { name: 'description', content: description },
+    { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `https://squadplanner.fr/games/${game.slug}` },
+    { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `https://squadplanner.fr/games/${game.slug}` },
     { property: 'og:title', content: `Planifier des sessions ${game.name}` },
-    { property: 'og:description', content: game.seoDescription },
+    { property: 'og:description', content: description },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: `Planifier des sessions ${game.name}` },
+    { name: 'twitter:description', content: description },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
     {
-      tagName: 'script',
-      type: 'application/ld+json',
-      children: JSON.stringify({
+      'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'VideoGame',
-        name: game.name,
-        description: game.description,
-        genre: game.genre,
-        url: `https://squadplanner.fr/games/${game.slug}`,
-      }),
-    },
-    {
-      tagName: 'script',
-      type: 'application/ld+json',
-      children: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: [
+        '@graph': [
           {
-            '@type': 'Question',
-            name: `Comment planifier une session ${game.name} ?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: `Utilise Squad Planner pour créer une session ${game.name}, inviter tes amis et gérer les confirmations de présence automatiquement.`,
-            },
+            '@type': 'VideoGame',
+            name: game.name,
+            description: game.description,
+            genre: game.genre,
+            url: `https://squadplanner.fr/games/${game.slug}`,
           },
           {
-            '@type': 'Question',
-            name: `Comment trouver des joueurs ${game.name} ?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: `Activez le matchmaking Squad Planner pour recevoir des invitations de squads ${game.name} compatibles.`,
-            },
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: `Comment planifier une session ${game.name} ?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `Utilise Squad Planner pour créer une session ${game.name}, inviter tes amis et gérer les confirmations de présence automatiquement.`,
+                },
+              },
+              {
+                '@type': 'Question',
+                name: `Comment trouver des joueurs ${game.name} ?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `Activez le matchmaking Squad Planner pour recevoir des invitations de squads ${game.name} compatibles.`,
+                },
+              },
+            ],
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+              { '@type': 'ListItem', position: 2, name: 'Jeux' },
+              { '@type': 'ListItem', position: 3, name: game.name, item: `https://squadplanner.fr/games/${game.slug}` },
+            ],
           },
         ],
-      }),
+      },
     },
   ]
 }
@@ -253,9 +270,9 @@ export default function Component() {
             viewport={{ once: true, margin: '200px' }}
             className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
           >
-            Planifie tes sessions
+            Planifie tes sessions{' '}
             <br />
-            <span className="text-gradient-animated">{game.name}</span>
+            <span className="text-gradient-animated">{game.name}</span>{' '}
             <br />
             avec ta squad
           </m.h1>
@@ -586,6 +603,44 @@ export default function Component() {
                 </div>
               </m.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Cross-linking SEO ── */}
+      <section className="px-4 md:px-6 py-12 bg-gradient-to-b from-primary/[0.015] to-transparent">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-xl font-bold text-text-primary mb-6">
+            Ressources pour les joueurs {game.name}
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <Link
+              to={`/lfg/${game.slug}`}
+              className="p-4 rounded-xl border border-border-subtle hover:border-primary/30 bg-surface-card/50 transition-all group"
+            >
+              <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
+                Chercher des joueurs {game.name}
+              </div>
+              <p className="text-xs text-text-tertiary mt-1">Trouve des coequipiers fiables pour tes sessions</p>
+            </Link>
+            <Link
+              to="/blog"
+              className="p-4 rounded-xl border border-border-subtle hover:border-primary/30 bg-surface-card/50 transition-all group"
+            >
+              <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
+                Guides et astuces gaming
+              </div>
+              <p className="text-xs text-text-tertiary mt-1">Conseils pour organiser ta squad et eviter les no-shows</p>
+            </Link>
+            <Link
+              to="/alternative/guilded"
+              className="p-4 rounded-xl border border-border-subtle hover:border-primary/30 bg-surface-card/50 transition-all group"
+            >
+              <div className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
+                Alternatives a Guilded
+              </div>
+              <p className="text-xs text-text-tertiary mt-1">Guilded a ferme : decouvre les meilleures alternatives</p>
+            </Link>
           </div>
         </div>
       </section>

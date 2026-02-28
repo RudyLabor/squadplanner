@@ -42,6 +42,7 @@ interface HomeLoaderData {
 export function meta() {
   return [
     { title: 'Accueil - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',
       content:
@@ -49,6 +50,22 @@ export function meta() {
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/home' },
     { property: 'og:url', content: 'https://squadplanner.fr/home' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Accueil' },
+    {
+      property: 'og:description',
+      content:
+        "Tableau de bord Squad Planner : tes squads, sessions à venir et activité récente en un coup d'oeil.",
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Accueil' },
+    {
+      name: 'twitter:description',
+      content:
+        "Tableau de bord Squad Planner : tes squads, sessions à venir et activité récente en un coup d'oeil.",
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

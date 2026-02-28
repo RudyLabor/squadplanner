@@ -21,6 +21,10 @@ export function meta() {
         "Comparaison complète Guilded vs Squad Planner. Fonctionnalités, tarification, migration. Guilded a fermé, Squad Planner est l'alternative spécialisée gaming.",
     },
     {
+      name: 'robots',
+      content: 'index, follow',
+    },
+    {
       name: 'keywords',
       content:
         'Guilded vs Squad Planner, fermeture Guilded, alternative Guilded, migration gaming, calendrier événements gaming',
@@ -67,6 +71,17 @@ export function meta() {
     {
       httpEquiv: 'content-language',
       content: 'fr',
+    },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+          { '@type': 'ListItem', position: 2, name: 'Comparatifs' },
+          { '@type': 'ListItem', position: 3, name: 'Guilded vs Squad Planner', item: 'https://squadplanner.fr/vs/guilded-vs-squad-planner' },
+        ],
+      },
     },
   ]
 }

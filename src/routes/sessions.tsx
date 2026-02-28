@@ -36,6 +36,7 @@ interface SessionsLoaderData {
 export function meta() {
   return [
     { title: 'Sessions - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
     {
       name: 'description',
       content:
@@ -43,6 +44,22 @@ export function meta() {
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/sessions' },
     { property: 'og:url', content: 'https://squadplanner.fr/sessions' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Sessions' },
+    {
+      property: 'og:description',
+      content:
+        'Consulte et gère tes sessions de jeu planifiées. Confirme ta présence en un clic.',
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Sessions' },
+    {
+      name: 'twitter:description',
+      content:
+        'Consulte et gère tes sessions de jeu planifiées. Confirme ta présence en un clic.',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

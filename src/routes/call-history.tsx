@@ -10,8 +10,30 @@ const CallHistory = lazy(() =>
 export function meta() {
   return [
     { title: "Historique d'appels - Squad Planner" },
+    { name: 'robots', content: 'noindex, nofollow' },
+    {
+      name: 'description',
+      content:
+        "Retrouve l'historique de tes appels vocaux avec ta squad. Duree, participants et details de chaque party.",
+    },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/call-history' },
     { property: 'og:url', content: 'https://squadplanner.fr/call-history' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: "Historique d'appels" },
+    {
+      property: 'og:description',
+      content:
+        "Retrouve l'historique de tes appels vocaux avec ta squad. Duree, participants et details de chaque party.",
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: "Historique d'appels" },
+    {
+      name: 'twitter:description',
+      content:
+        "Retrouve l'historique de tes appels vocaux avec ta squad. Duree, participants et details de chaque party.",
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

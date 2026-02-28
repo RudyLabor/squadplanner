@@ -8,7 +8,10 @@ export function headers(_args: HeadersArgs) {
 }
 
 export function meta() {
-  return [{ title: 'Page introuvable - Squad Planner' }]
+  return [
+    { title: 'Page introuvable - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
+  ]
 }
 
 export default function Component() {

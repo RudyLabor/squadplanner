@@ -21,6 +21,10 @@ export function meta() {
         'Les événements Discord ne sont pas assez pour les sessions gaming. Squad Planner offre calendrier, confirmation fiable, notifications et analytics. Gratuit.',
     },
     {
+      name: 'robots',
+      content: 'index, follow',
+    },
+    {
       name: 'keywords',
       content:
         'alternative événements Discord, calendrier gaming, confirmation fiable, organisation sessions gaming, Squad Planner',
@@ -67,6 +71,17 @@ export function meta() {
     {
       httpEquiv: 'content-language',
       content: 'fr',
+    },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+          { '@type': 'ListItem', position: 2, name: 'Alternatives' },
+          { '@type': 'ListItem', position: 3, name: 'Alternative Discord Events', item: 'https://squadplanner.fr/alternative/discord-events' },
+        ],
+      },
     },
   ]
 }

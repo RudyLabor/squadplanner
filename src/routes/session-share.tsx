@@ -25,12 +25,23 @@ export function meta({ params }: MetaArgs) {
       name: 'description',
       content: 'Rejoins cette session gaming sur Squad Planner !',
     },
+    { name: 'robots', content: 'noindex, nofollow' },
     { property: 'og:type', content: 'website' },
     { property: 'og:site_name', content: 'Squad Planner' },
+    { property: 'og:title', content: 'Session Gaming - Squad Planner' },
+    {
+      property: 'og:description',
+      content: 'Rejoins cette session gaming sur Squad Planner !',
+    },
     { property: 'og:image', content: ogImageUrl },
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Session Gaming - Squad Planner' },
+    {
+      name: 'twitter:description',
+      content: 'Rejoins cette session gaming sur Squad Planner !',
+    },
     { name: 'twitter:image', content: ogImageUrl },
   ]
 }

@@ -55,7 +55,7 @@ function AmbassadorDashboard({
   const handleCopyCode = () => {
     navigator.clipboard.writeText(promoCode)
     setCopied(true)
-    showSuccess('Code promo copie !')
+    showSuccess('Code promo copié !')
     setTimeout(() => setCopied(false), 2000)
   }
 
@@ -63,7 +63,7 @@ function AmbassadorDashboard({
     const shareUrl = `https://squadplanner.fr/auth?mode=register&promo=${promoCode}`
     navigator.clipboard.writeText(shareUrl)
     setLinkCopied(true)
-    showSuccess('Lien de parrainage copie !')
+    showSuccess('Lien de parrainage copié !')
     setTimeout(() => setLinkCopied(false), 2000)
   }
 
@@ -150,7 +150,7 @@ function AmbassadorDashboard({
               onClick={handleCopyCode}
               leftIcon={copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             >
-              {copied ? 'Copie !' : 'Copier'}
+              {copied ? 'Copié !' : 'Copier'}
             </Button>
           </div>
           <Button
@@ -158,7 +158,7 @@ function AmbassadorDashboard({
             onClick={handleShareLink}
             leftIcon={linkCopied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
           >
-            {linkCopied ? 'Lien copie !' : 'Partager mon code'}
+            {linkCopied ? 'Lien copié !' : 'Partager mon code'}
           </Button>
         </div>
         <p className="text-sm text-text-tertiary mt-3">
@@ -187,8 +187,8 @@ function PendingApplicationBanner() {
           Ta candidature est en cours de traitement
         </h2>
         <p className="text-text-secondary max-w-md mx-auto mb-4">
-          On a bien recu ta candidature. Notre equipe la revoit sous 48h. Tu recevras un email des
-          qu'elle sera validee.
+          On a bien reçu ta candidature. Notre équipe la revoit sous 48h. Tu recevras un email dès
+          qu'elle sera validée.
         </p>
         <Badge variant="warning">En attente de validation</Badge>
       </Card>
@@ -342,7 +342,7 @@ ${formData.message}
               transition={{ delay: 0.15, duration: 0.4, ease }}
               className="text-lg md:text-xl font-bold text-text-primary mb-4"
             >
-              Monetise{' '}
+              Monétise{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple to-primary">
                 ta communauté gaming
               </span>{' '}
@@ -585,11 +585,11 @@ ${formData.message}
                     <Check className="w-8 h-8 text-success" />
                   </div>
                   <h3 className="text-xl font-bold text-text-primary mb-2">
-                    Candidature envoyee !
+                    Candidature envoyée !
                   </h3>
                   <p className="text-text-secondary max-w-md mx-auto">
-                    On te repond sous 48h. En attendant, n'hesite pas a partager Squad Planner avec
-                    ta communaute.
+                    On te répond sous 48h. En attendant, n'hésite pas à partager Squad Planner avec
+                    ta communauté.
                   </p>
                 </m.div>
               ) : (
@@ -641,7 +641,7 @@ ${formData.message}
                   {/* Link */}
                   <div>
                     <label htmlFor="link" className="block text-sm font-medium text-text-primary mb-2">
-                      Lien vers ta chaine / communaute
+                      Lien vers ta chaîne / communauté
                     </label>
                     <input
                       type="url"
@@ -820,10 +820,10 @@ ${formData.message}
             className="text-center py-12"
           >
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
-              Rejoins le programme et fais grandir ta communaute
+              Rejoins le programme et fais grandir ta communauté
             </h2>
             <p className="text-lg text-text-secondary max-w-xl mx-auto mb-6">
-              Deviens ambassadeur Squad Planner et transforme ta passion gaming en opportunite de
+              Deviens ambassadeur Squad Planner et transforme ta passion gaming en opportunité de
               revenus.
             </p>
             <Button
@@ -834,7 +834,7 @@ ${formData.message}
                 formRef.current?.scrollIntoView({ behavior: 'smooth' })
               }}
             >
-              Postule maintenant — places limitees
+              Postule maintenant — places limitées
             </Button>
           </m.div>
         )}

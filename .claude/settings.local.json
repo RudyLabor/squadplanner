@@ -24,7 +24,32 @@
       "Bash(export PATH=\"/Users/rudylabor/.nvm/versions/node/v20.20.0/bin:$PATH\")",
       "Bash(npm run typecheck:*)",
       "Bash(export PATH=\"/Users/rudylabor/.nvm/versions/node/v20.20.0/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH\")",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npx playwright test e2e/auth.spec.ts e2e/onboarding.spec.ts e2e/critical-flows.spec.ts e2e/home-dashboard.spec.ts e2e/squads.spec.ts e2e/squad-detail.spec.ts e2e/squad-analytics.spec.ts e2e/sessions.spec.ts --reporter=list)",
+      "Bash(source ~/.nvm/nvm.sh)",
+      "Bash(npx playwright test e2e/critical-flows.spec.ts e2e/home-dashboard.spec.ts e2e/squads.spec.ts e2e/squad-detail.spec.ts e2e/squad-analytics.spec.ts e2e/sessions.spec.ts e2e/session-share.spec.ts --reporter=list)",
+      "Bash(npx playwright test e2e/auth.spec.ts --reporter=list -g \"Login with real credentials\")",
+      "Bash(npx playwright test e2e/auth.spec.ts --reporter=list -g \"Login with real credentials|Test user exists\")",
+      "Bash(npx playwright test e2e/auth.spec.ts e2e/pages.spec.ts e2e/blog.spec.ts e2e/seo-pages.spec.ts e2e/public-pages.spec.ts e2e/pricing-landing.spec.ts e2e/premium-pricing.spec.ts e2e/premium.spec.ts --reporter=list)",
+      "Bash(npx playwright test e2e/messages.spec.ts e2e/gamification.spec.ts e2e/party.spec.ts e2e/discover.spec.ts e2e/settings.spec.ts e2e/profile.spec.ts --reporter=list)",
+      "Bash(npx playwright test e2e/squads.spec.ts --reporter=list -g \"F15: creer\")",
+      "Bash(npx playwright test e2e/pages.spec.ts --reporter=list -g \"aria-label\")",
+      "Bash(npx playwright test e2e/premium.spec.ts --reporter=list -g \"Toggle\")",
+      "WebFetch(domain:squadplanner.fr)",
+      "Bash(npx playwright test e2e/premium.spec.ts e2e/pages.spec.ts e2e/public-pages.spec.ts --reporter=list)",
+      "Bash(npx playwright test e2e/premium.spec.ts --reporter=list)",
+      "Bash(npx playwright test e2e/premium.spec.ts:336 --reporter=list)",
+      "Bash(npx playwright test e2e/squads.spec.ts --reporter=list)",
+      "Bash(ls e2e/*.spec.ts)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "supabase",
+    "vercel",
+    "stripe",
+    "github",
+    "playwright",
+    "context7",
+    "sequential-thinking"
+  ]
 }

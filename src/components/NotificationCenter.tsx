@@ -166,6 +166,8 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     notifications.forEach((n) => readIds.add(n.id))
     persistReadIds(readIds)
     set({ notifications: notifications.map((n) => ({ ...n, read: true })), unreadCount: 0 })
+    // Reset cooldown so next fetch respects updated readIds immediately
+    lastFetchTime = 0
   },
 }))
 

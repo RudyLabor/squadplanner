@@ -114,9 +114,8 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   } = await supabase.auth.getSession()
   if (!session?.user) return { squads: [] }
 
-  // Reuse squads from React Query cache (seeded by _protected layout)
-  const cached = queryClient.getQueryData(queryKeys.squads.list())
-  if (cached !== undefined) return { squads: cached as PartySquad[] }
+  // Don't reuse squads cache — it lacks accurate member_count.
+  // Always fetch fresh member counts for the Party page.
 
   // Fallback: fetch from Supabase (cold cache / first load)
   const { withTimeout } = await import('../lib/withTimeout')

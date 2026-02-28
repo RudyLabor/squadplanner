@@ -26,6 +26,7 @@ interface SessionDetailLoaderData {
 export function meta() {
   return [
     { title: 'Détail Session - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/sessions' },
     { property: 'og:url', content: 'https://squadplanner.fr/sessions' },
   ]

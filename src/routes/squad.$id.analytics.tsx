@@ -9,6 +9,7 @@ export function meta() {
   return [
     { title: 'Analytiques Squad - Squad Planner' },
     { name: 'description', content: 'Tableau de bord analytique pour ta squad.' },
+    { name: 'robots', content: 'noindex, nofollow' },
   ]
 }
 

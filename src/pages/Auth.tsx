@@ -192,23 +192,23 @@ export default function Auth() {
       </header>
 
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 pb-12">
-        <div className="w-full max-w-[900px] flex gap-12 items-center">
-          {/* Social proof sidebar — desktop only */}
-          <div className="hidden lg:flex flex-col gap-6 w-[380px] flex-shrink-0">
-            <div className="p-6 rounded-2xl bg-bg-elevated border border-border-subtle">
-              <div className="flex items-center gap-2 mb-4">
+        <div className="w-full max-w-[900px] flex flex-col lg:flex-row gap-6 lg:gap-12 items-center">
+          {/* Social proof sidebar — condensed on mobile, full on desktop */}
+          <div className="flex flex-col gap-4 lg:gap-6 w-full lg:w-[380px] lg:flex-shrink-0 order-2 lg:order-1">
+            <div className="p-4 lg:p-6 rounded-2xl bg-bg-elevated border border-border-subtle">
+              <div className="flex items-center gap-2 lg:mb-4">
                 <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
                 <span className="text-sm font-medium text-success">+500 gamers inscrits</span>
               </div>
-              <p className="text-lg font-bold text-text-primary mb-1">
+              <p className="hidden lg:block text-lg font-bold text-text-primary mb-1">
                 Rejoins la communauté
               </p>
-              <p className="text-sm text-text-tertiary">
+              <p className="hidden lg:block text-sm text-text-tertiary">
                 Des squads planifient leurs sessions en ce moment même.
               </p>
             </div>
 
-            <div className="space-y-3">
+            <div className="hidden lg:block space-y-3">
               <div className="p-4 rounded-xl bg-surface-card border border-border-subtle">
                 <p className="text-sm text-text-secondary italic mb-2">
                   « Depuis Squad Planner, on joue 3 fois par semaine au lieu d'une. Tout le monde confirme, personne ne ghost. »
@@ -231,12 +231,12 @@ export default function Auth() {
               ))}
             </div>
 
-            <p className="text-xs text-text-quaternary text-center">
+            <p className="hidden lg:block text-xs text-text-quaternary text-center">
               30 secondes pour commencer · 100% gratuit
             </p>
           </div>
 
-          <div className="w-full max-w-[400px]">
+          <div className="w-full max-w-[400px] mx-auto order-1 lg:order-2">
           <AnimatePresence mode="wait">
             <m.div
               key={mode}
@@ -251,7 +251,7 @@ export default function Auth() {
                 </div>
                 <h1 className="text-lg font-bold text-text-primary mb-2">
                   {mode === 'login'
-                    ? "Ta squad t'attend — reconnecte-toi !"
+                    ? "Ta squad t'attend, reconnecte-toi !"
                     : mode === 'reset'
                       ? 'Nouveau mot de passe'
                       : 'Rejoins ta squad en 30 secondes'}

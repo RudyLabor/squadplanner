@@ -106,7 +106,7 @@ export function LandingFooter() {
             )}
             {newsletterSuccess && (
               <p role="status" className="text-success text-sm mt-2">
-                Merci ! Tu recevras nos updates.
+                Merci\u00a0! Tu recevras nos actus.
               </p>
             )}
           </form>
@@ -298,7 +298,7 @@ export function LandingFooter() {
             </div>
           </div>
           <p className="text-sm text-text-quaternary">
-            © 2026 Squad Planner. Jouez ensemble, pour de vrai.
+            © 2026 Squad Planner. Joue avec ta squad, pour de vrai.
           </p>
         </div>
       </div>

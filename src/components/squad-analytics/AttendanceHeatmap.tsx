@@ -171,7 +171,7 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
                     key={`${dayIdx}-${hour}`}
                     whileHover={{ scale: 1.1 }}
                     className={`w-12 h-12 rounded-lg ${color} border border-border-subtle cursor-pointer transition-all flex items-center justify-center text-xs font-semibold ${count > 0 ? 'text-white' : 'text-text-tertiary'}`}
-                    title={`${day} ${hour}h: ${count} présent${count > 1 ? 's' : ''}`}
+                    title={`${day} ${hour}h\u00a0: ${count} présent${count > 1 ? 's' : ''}`}
                   >
                     {count > 0 && count}
                   </m.div>
@@ -184,7 +184,7 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
 
       {/* Légende */}
       <div className="flex items-center gap-4 mt-6 pt-4 border-t border-border-subtle">
-        <span className="text-xs text-text-secondary font-medium">Légende :</span>
+        <span className="text-xs text-text-secondary font-medium">Légende&nbsp;:</span>
         <div className="flex gap-2">
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 rounded bg-surface-card border border-border-subtle" />

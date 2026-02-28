@@ -96,7 +96,7 @@ describe('LandingFooter', () => {
     it('renders copyright text', () => {
       render(<LandingFooter />)
       expect(
-        screen.getByText('© 2026 Squad Planner. Jouez ensemble, pour de vrai.')
+        screen.getByText('© 2026 Squad Planner. Joue avec ta squad, pour de vrai.')
       ).toBeInTheDocument()
     })
 
@@ -262,7 +262,7 @@ describe('LandingFooter', () => {
 
     it('renders email input with placeholder', () => {
       render(<LandingFooter />)
-      expect(screen.getByPlaceholderText('Reçois les updates Squad Planner')).toBeInTheDocument()
+      expect(screen.getByPlaceholderText('ton@email.com')).toBeInTheDocument()
     })
 
     it('renders submit button with "S\'abonner" text', () => {
@@ -355,7 +355,7 @@ describe('LandingFooter', () => {
       fireEvent.change(input, { target: { value: 'valid@email.com' } })
       fireEvent.click(submitBtn)
       expect(await screen.findByRole('status')).toHaveTextContent(
-        'Merci ! Tu recevras nos updates.'
+        'Merci\u00a0! Tu recevras nos actus.'
       )
 
       // Type to clear success
@@ -391,7 +391,7 @@ describe('LandingFooter', () => {
       fireEvent.click(submitBtn)
 
       expect(await screen.findByRole('status')).toHaveTextContent(
-        'Merci ! Tu recevras nos updates.'
+        'Merci\u00a0! Tu recevras nos actus.'
       )
     })
 

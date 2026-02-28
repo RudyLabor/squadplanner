@@ -531,8 +531,8 @@ ${formData.message}
                 a: "Non ! On recherche aussi des créateurs de contenu plus petits ou des capitaines de communauté motivés. Ce qui compte, c'est ta passion pour le gaming et ton engagement envers ta communauté.",
               },
               {
-                q: 'Quels outils marketing allez-vous me donner ?',
-                a: 'Tu recevras des assets visuels (bannières, clips), du texte marketing pré-écrit, des graphiques, et un support dédié de notre équipe pour maximiser ton succès.',
+                q: 'Quels outils marketing vas-tu me donner\u00a0?',
+                a: 'Tu recevras des visuels (bannières, clips), du texte marketing prêt à l\u2019emploi, des graphiques et un support dédié de notre équipe pour booster tes résultats.',
               },
               {
                 q: 'Comment on reste en contact ?',

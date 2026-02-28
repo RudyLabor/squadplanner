@@ -214,8 +214,8 @@ export function ComparisonSection() {
         </m.div>
 
         <p className="text-center text-base text-text-quaternary mt-6 max-w-lg mx-auto">
-          Discord reste indispensable pour les communautés larges. Squad Planner est conçu
-          spécifiquement pour ta squad de 3 à 10 joueurs.
+          Discord reste top pour les grandes communautés. Squad Planner, c'est taillé pour
+          ta squad de 3 à 10 joueurs — ni plus, ni moins.
         </p>
       </div>
     </section>

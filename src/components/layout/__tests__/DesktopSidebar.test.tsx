@@ -106,9 +106,9 @@ describe('DesktopSidebar', () => {
       expect(screen.getByText('Squad Planner')).toBeInTheDocument()
     })
 
-    it('renders tagline "Jouez ensemble, vraiment" when expanded', () => {
+    it('renders tagline "Joue avec ta squad" when expanded', () => {
       render(<DesktopSidebar {...defaultProps} isExpanded={true} />)
-      expect(screen.getByText('Jouez ensemble, vraiment')).toBeInTheDocument()
+      expect(screen.getByText('Joue avec ta squad')).toBeInTheDocument()
     })
 
     it('renders SidebarFooter', () => {

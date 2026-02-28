@@ -69,7 +69,7 @@ describe('ComparisonSection', () => {
 
   it('renders footer note text', () => {
     render(<ComparisonSection />)
-    expect(screen.getByText(/Discord reste indispensable/)).toBeInTheDocument()
+    expect(screen.getByText(/Discord reste top/)).toBeInTheDocument()
     expect(screen.getByText(/squad de 3 à 10 joueurs/)).toBeInTheDocument()
   })
 

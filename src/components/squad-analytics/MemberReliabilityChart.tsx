@@ -50,7 +50,7 @@ export default function MemberReliabilityChart({ squadId }: { squadId: string })
           squadMembers
             ?.map((member) => ({
               id: member.user_id,
-              username: member.profiles?.username || 'Unknown',
+              username: member.profiles?.username || 'Joueur inconnu',
               reliability_score: member.profiles?.reliability_score || 0,
               avatar_url: member.profiles?.avatar_url || null,
             }))
@@ -129,7 +129,7 @@ export default function MemberReliabilityChart({ squadId }: { squadId: string })
                   ? 'Très fiable'
                   : member.reliability_score >= 50
                     ? 'Fiable'
-                    : 'À améliorer'}
+                    : 'Peut mieux faire'}
               </div>
             </div>
           </m.div>

@@ -250,7 +250,7 @@ export function ClubDashboard() {
     document.body.removeChild(link)
 
     URL.revokeObjectURL(url)
-    toast.success('Export CSV téléchargé !')
+    toast.success('Export CSV téléchargé\u00a0!')
   }, [squads])
 
   // PDF Export handler (placeholder)
@@ -516,7 +516,7 @@ export function ClubDashboard() {
                   <p className="text-text-tertiary mb-4">
                     {searchQuery
                       ? 'Aucune squad trouvée'
-                      : "Tu n'as pas encore de squad. Crée-en une !"}
+                      : "Tu n'as pas encore de squad. Crée-en une\u00a0!"}
                   </p>
                   {!searchQuery && (
                     <Link to="/squads">
@@ -731,7 +731,7 @@ export function ClubDashboard() {
                     <Button variant="ghost" size="sm" disabled className="opacity-50">
                       Choisir un fichier
                     </Button>
-                    <p className="text-xs text-text-quaternary mt-1">(bientôt disponible)</p>
+                    <p className="text-xs text-text-quaternary mt-1">(bientôt)</p>
                   </div>
                 </CardContent>
               </Card>

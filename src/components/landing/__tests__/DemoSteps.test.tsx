@@ -110,7 +110,7 @@ describe('DemoSteps', () => {
 
     it('play step has correct details', () => {
       const step = demoSteps[3]
-      expect(step.title).toBe('Jouez ensemble !')
+      expect(step.title).toBe('Jouez ensemble\u00a0!')
       expect(step.subtitle).toBe('Party vocale en cours')
       expect(step.duration).toBe(3000)
       expect(step.color).toBe('var(--color-purple)')

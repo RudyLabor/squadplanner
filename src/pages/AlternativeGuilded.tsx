@@ -50,25 +50,25 @@ const features = [
 const faqs = [
   {
     id: 'why-closed',
-    question: 'Pourquoi Guilded a fermé ?',
+    question: 'Pourquoi Guilded a fermé\u00a0?',
     answer:
       "Guilded a fermé boutique en 2024. Tous les gamers cherchaient un spot où aller. Squad Planner, c'est là pour ça.",
   },
   {
     id: 'migration',
-    question: 'Comment passer de Guilded à Squad Planner ?',
+    question: 'Comment passer de Guilded à Squad Planner\u00a0?',
     answer:
       "Ultra simple. Partage tes squads Guilded, on importe l'essentiel. Code GUILDED30 pour 30% sur ton premier mois Premium. Après, t'as les features gratuites à vie.",
   },
   {
     id: 'data-loss',
-    question: 'Mais je perds mes données ?',
+    question: 'Mais je perds mes données\u00a0?',
     answer:
       "Zéro. Squad Planner garde tout : squads, événements, paramètres. Rien ne se perd. T'es tranquille.",
   },
   {
     id: 'free',
-    question: "C'est vraiment gratuit ?",
+    question: "C'est vraiment gratuit\u00a0?",
     answer:
       "Oui. Calendrier illimité, confirmations de présence, notifications. Tout ça gratuit. Premium te donne des analytics avancées si tu veux. Mais l'essentiel reste gratuit.",
   },
@@ -334,7 +334,7 @@ export default function AlternativeGuilded() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Prêt à changer de maison ?
+                Prêt à changer de maison\u00a0?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
                 C'est gratuit. Crée ta première session en 30 secondes.

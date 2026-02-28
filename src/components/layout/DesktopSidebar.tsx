@@ -184,7 +184,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
                   Squad Planner
                 </div>
                 <div className="text-sm text-text-tertiary whitespace-nowrap">
-                  Jouez ensemble, vraiment
+                  Joue avec ta squad
                 </div>
               </m.div>
             )}

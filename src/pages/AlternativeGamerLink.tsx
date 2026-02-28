@@ -359,7 +359,7 @@ export default function AlternativeGamerLink() {
                 T'as pris ta décision ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Migrer depuis GamerLink, c'est 5 minutes. Tout se conserve. Pas de perte.
+                Créer ta squad sur Squad Planner, c'est 30 secondes. Tes potes te rejoignent via un code. Simple.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link

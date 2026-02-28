@@ -46,7 +46,7 @@ export const demoSteps: DemoStep[] = [
   },
   {
     id: 'play',
-    title: 'Jouez ensemble !',
+    title: 'Jouez ensemble\u00a0!',
     subtitle: 'Party vocale en cours',
     duration: 3000,
     icon: Headphones,

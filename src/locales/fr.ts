@@ -95,7 +95,7 @@ export const fr = {
     notFound: 'Introuvable',
     validation: 'Données invalides',
     timeout: "Délai d'attente dépassé",
-    offline: 'Vous êtes hors ligne',
+    offline: 'Tu es hors ligne',
     serverError: 'Erreur serveur',
   },
 

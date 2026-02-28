@@ -234,7 +234,7 @@ export default function VsGuildedVsSquadPlanner() {
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Prix : Guilded vs Squad Planner
             </h2>
-            <p className="text-text-tertiary text-lg">C'est où que ça coûte</p>
+            <p className="text-text-tertiary text-lg">Ce que ça coûte vraiment</p>
           </m.div>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -469,7 +469,7 @@ export default function VsGuildedVsSquadPlanner() {
                 C'est bon, tu viens ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Code GUILDED30 = 30% sur Premium. Mais calendrier et confirmations c'est gratuit anyway.
+                Code GUILDED30 = 30\u00a0% sur Premium. Mais calendrier et confirmations, c'est gratuit de toute façon.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link

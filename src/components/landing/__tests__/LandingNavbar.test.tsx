@@ -137,14 +137,14 @@ describe('LandingNavbar', () => {
     expect(ctaLink?.getAttribute('data-track')).toBe('navbar_cta_click')
   })
 
-  it('renders mobile "S\'inscrire" CTA', () => {
+  it('renders mobile "C\'est parti" CTA', () => {
     render(<LandingNavbar isLoggedIn={false} />)
-    expect(screen.getByText("S'inscrire")).toBeInTheDocument()
+    expect(screen.getByText("C'est parti")).toBeInTheDocument()
   })
 
   it('renders mobile CTA with data-track attribute', () => {
     render(<LandingNavbar isLoggedIn={false} />)
-    const mobileCta = screen.getByText("S'inscrire").closest('a')
+    const mobileCta = screen.getByText("C'est parti").closest('a')
     expect(mobileCta?.getAttribute('data-track')).toBe('navbar_mobile_cta_click')
   })
 

@@ -16,7 +16,7 @@ const TIERS = [
     name: 'Gratuit',
     monthlyPrice: 0,
     yearlyPrice: 0,
-    description: 'Pour découvrir Squad Planner.',
+    description: 'Pour commencer sans engagement.',
     features: [
       '1 squad',
       '3 sessions/semaine',
@@ -34,7 +34,7 @@ const TIERS = [
     name: 'Premium',
     monthlyPrice: PREMIUM_PRICE_MONTHLY,
     yearlyPrice: PREMIUM_PRICE_YEARLY,
-    description: 'Pour les joueurs réguliers.',
+    description: 'Joue plus, sans limites.',
     features: [
       '5 squads',
       'Sessions illimitées',

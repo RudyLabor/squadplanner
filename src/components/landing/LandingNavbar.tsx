@@ -113,7 +113,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
                   className="lg:hidden inline-flex items-center px-3 py-2 rounded-lg bg-primary-bg text-white text-sm font-medium"
                   data-track="navbar_mobile_cta_click"
                 >
-                  S'inscrire
+                  C'est parti
                 </Link>
                 <button
                   type="button"

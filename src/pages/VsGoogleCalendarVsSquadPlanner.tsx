@@ -13,7 +13,7 @@ const features = [
   { category: 'Planification', name: 'RSVP avec fiabilité', gcal: false, sp: true },
   { category: 'Planification', name: 'Rappels personnalisés', gcal: true, sp: true },
   { category: 'Planification', name: 'Fuseaux horaires', gcal: true, sp: true },
-  { category: 'Gaming spécifique', name: 'Squads / équipes', gcal: false, sp: true },
+  { category: 'Gaming spécifique', name: 'Squads gaming', gcal: false, sp: true },
   { category: 'Gaming spécifique', name: 'Chat intégré', gcal: false, sp: true },
   { category: 'Gaming spécifique', name: 'Voice chat', gcal: false, sp: true },
   { category: 'Gaming spécifique', name: 'Score de fiabilité', gcal: false, sp: true },

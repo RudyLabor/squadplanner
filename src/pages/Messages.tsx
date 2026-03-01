@@ -610,7 +610,7 @@ export function Messages() {
                   <p className="text-base text-text-quaternary max-w-[280px] mx-auto">
                     {squadConversations.length > 0 || dmConversations.length > 0
                       ? 'Choisis une conversation pour retrouver tes potes.'
-                      : 'Crée ou rejoins un squad pour commencer à chatter avec ta team.'}
+                      : 'Crée ou rejoins un squad pour commencer à chatter avec ta squad.'}
                   </p>
                   {squadConversations.length === 0 && dmConversations.length === 0 && (
                     <Link

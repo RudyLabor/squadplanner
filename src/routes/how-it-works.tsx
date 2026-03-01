@@ -104,12 +104,12 @@ export function meta() {
           {
             '@type': 'HowTo',
             name: 'Comment utiliser Squad Planner',
-            description: 'Guide en 4 étapes pour organiser vos sessions gaming avec Squad Planner.',
+            description: 'Guide en 4 étapes pour organiser tes sessions gaming avec Squad Planner.',
             step: [
               { '@type': 'HowToStep', position: 1, name: 'Crée ta squad', text: 'Crée un groupe et invite tes coéquipiers en 30 secondes.' },
               { '@type': 'HowToStep', position: 2, name: 'Planifie une session', text: 'Choisis la date, l\'heure et le jeu. Tout le monde reçoit une notification.' },
               { '@type': 'HowToStep', position: 3, name: 'Confirme ta présence', text: 'Chaque membre confirme sa présence. Tu vois qui sera là en temps réel.' },
-              { '@type': 'HowToStep', position: 4, name: 'Jouez ensemble', text: 'Rejoins le voice chat intégré et lance la partie avec ton équipe au complet.' },
+              { '@type': 'HowToStep', position: 4, name: 'Jouez ensemble', text: 'Rejoins le voice chat intégré et lance la partie avec ta squad au complet.' },
             ],
           },
         ],

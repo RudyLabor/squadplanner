@@ -226,7 +226,7 @@ export function Profile() {
 
           {/* Challenges Section - moved up for visibility */}
           {challenges.length > 0 && (
-            <section className="mb-5" aria-label="Defis">
+            <section className="mb-5" aria-label="Défis">
               <Challenges challenges={challenges} onClaimXP={handleClaimXP} />
             </section>
           )}

@@ -213,7 +213,7 @@ export function OnboardingStepComplete({
                   </button>
                 </div>
                 <p className="text-xs text-text-tertiary mt-2">
-                  Partage ce code avec tes amis pour qu'ils rejoignent
+                  Partage ce code avec tes potes pour qu'ils rejoignent
                 </p>
               </div>
             </div>
@@ -235,7 +235,7 @@ export function OnboardingStepComplete({
                 <Gift className="w-5 h-5 text-warning" />
               </div>
               <div>
-                <p className="text-base font-semibold text-text-primary">Invite tes amis</p>
+                <p className="text-base font-semibold text-text-primary">Invite tes potes</p>
                 <p className="text-sm text-text-tertiary">Gagne 7 jours Premium par filleul</p>
               </div>
             </div>

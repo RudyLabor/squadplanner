@@ -16,8 +16,8 @@
 **Product type:** SaaS web app (PWA + mobile Capacitor) — freemium
 
 **Business model:**
-- **Gratuit** : 1 squad, 3 sessions/semaine, historique 7 jours, chat basique, score de fiabilite, notifications push
-- **Premium** : 4,99 EUR/mois ou 47,88 EUR/an — 5 squads, sessions illimitees, historique 90 jours, chat complet (GIF, voice, polls), stats avancees, IA Coach, badge Premium violet
+- **Gratuit** : 1 squad, 2 sessions/semaine, historique 7 jours, chat basique, score de fiabilite, notifications push
+- **Premium** : 6,99 EUR/mois ou 69,90 EUR/an — 5 squads, sessions illimitees, historique 90 jours, chat complet (GIF, voice, polls), stats avancees, IA Coach, badge Premium violet
 - **Squad Leader** : Squads illimites, historique illimite, audio HD, IA Coach avance, dashboard analytics, roles avances (IGL, Coach), export calendrier, sessions recurrentes, badge dore
 - **Club** : Forfait B2B pour structures esport — dashboard multi-squads, stats cross-squad, branding personnalise, API webhooks, onboarding assiste, support prioritaire 24h
 

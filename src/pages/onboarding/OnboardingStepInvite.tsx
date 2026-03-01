@@ -86,11 +86,11 @@ export function OnboardingStepInvite({
         <Users className="w-8 h-8 text-primary" />
       </div>
 
-      <h1 className="text-xl font-bold text-text-primary mb-2">Invite tes amis</h1>
+      <h1 className="text-xl font-bold text-text-primary mb-2">Invite tes potes</h1>
       <p className="text-text-secondary mb-6">
         {squadName
           ? `Partage le lien de "${squadName}" à tes coéquipiers pour jouer ensemble.`
-          : 'Partage Squad Planner avec tes amis gamers !'}
+          : 'Partage Squad Planner avec tes potes gamers !'}
       </p>
 
       {/* Invite link */}

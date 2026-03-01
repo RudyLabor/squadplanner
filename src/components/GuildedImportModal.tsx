@@ -72,7 +72,7 @@ export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
     if (!result) return
     navigator.clipboard.writeText(result.inviteCode)
     setCodeCopied(true)
-    showSuccess("Code d'invitation copie !")
+    showSuccess("Code d'invitation copié !")
     setTimeout(() => setCodeCopied(false), 2000)
   }
 
@@ -167,7 +167,7 @@ export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-text-primary mb-1">
-                    Offre speciale migrés Guilded
+                    Offre spéciale migrés Guilded
                   </p>
                   <p className="text-sm text-text-secondary">
                     Utilise le code{' '}
@@ -218,7 +218,7 @@ export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
                 required
                 className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary focus:outline-none focus:border-primary transition-interactive"
               >
-                <option value="">Selectionne un jeu</option>
+                <option value="">Sélectionne un jeu</option>
                 {GAMES.map((g) => (
                   <option key={g.slug} value={g.name}>
                     {g.icon} {g.name}
@@ -253,7 +253,7 @@ export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
                 htmlFor="guilded-members"
                 className="block text-sm font-medium text-text-primary mb-2"
               >
-                Membres a inviter{' '}
+                Membres à inviter{' '}
                 <span className="text-text-quaternary font-normal">(optionnel, un par ligne)</span>
               </label>
               <textarea

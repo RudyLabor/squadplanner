@@ -117,7 +117,7 @@ export function Party() {
       hadDuoCelebration.current = true
       queueMicrotask(() => {
         setShowDuoConfetti(true)
-        setToastMessage('🎉 Vous êtes 2 ! La party commence')
+        setToastMessage('🎉 On est 2 ! La party commence')
         setToastVariant('success')
         setShowToast(true)
         setTimeout(() => setShowDuoConfetti(false), 4000)

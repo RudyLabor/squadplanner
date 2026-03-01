@@ -54,7 +54,7 @@ export function meta() {
           {
             '@type': 'ContactPage',
             name: 'Contacter Squad Planner',
-            description: "Contactez l'équipe Squad Planner pour les offres Club et Entreprise.",
+            description: "Contacte l'équipe Squad Planner pour les offres Club et Entreprise.",
             url: `${baseUrl}/contact`,
             mainEntity: {
               '@type': 'Organization',

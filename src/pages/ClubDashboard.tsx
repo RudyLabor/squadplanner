@@ -210,7 +210,7 @@ export function ClubDashboard() {
                 .filter((p: { reliability_score?: number }) => p.reliability_score && p.reliability_score > 0)
                 .map((p: { id: string; username?: string; reliability_score?: number }) => ({
                   user_id: p.id,
-                  username: p.username || 'Utilisateur',
+                  username: p.username || 'Joueur',
                   reliability_score: p.reliability_score || 0,
                   squad_name: userSquadMap[p.id] || 'Squad',
                 }))

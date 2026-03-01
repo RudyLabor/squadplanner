@@ -15,7 +15,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Gère toutes tes équipes gaming depuis un seul dashboard. Analytics cross-squad, export CSV, branding personnalisé.',
+        'Gère toutes tes squads gaming depuis un seul dashboard. Analytics cross-squad, export CSV, branding personnalisé.',
     },
     { httpEquiv: 'content-language', content: 'fr' },
     { property: 'og:locale', content: 'fr_FR' },
@@ -25,7 +25,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        'Gère toutes tes équipes gaming depuis un seul dashboard. Analytics cross-squad, export CSV, branding personnalisé.',
+        'Gère toutes tes squads gaming depuis un seul dashboard. Analytics cross-squad, export CSV, branding personnalisé.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
     { property: 'og:image:width', content: '1200' },
@@ -35,7 +35,7 @@ export function meta() {
     {
       name: 'twitter:description',
       content:
-        'Gère toutes tes équipes gaming depuis un seul dashboard. Analytics cross-squad, export CSV, branding personnalisé.',
+        'Gère toutes tes squads gaming depuis un seul dashboard. Analytics cross-squad, export CSV, branding personnalisé.',
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]

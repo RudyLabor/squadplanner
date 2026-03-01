@@ -24,7 +24,7 @@ export const FEATURES = [
   },
   {
     name: 'Membres max',
-    description: 'Invite toute ta team sans restriction',
+    description: 'Invite tous tes potes sans restriction',
     free: '5',
     premium: '20',
     squadLeader: '50',

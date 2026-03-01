@@ -36,7 +36,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Gère tes squads gaming : crée, rejoins et organise tes équipes pour planifier des sessions ensemble.',
+        'Gère tes squads gaming : crée, rejoins et organise tes groupes pour planifier des sessions ensemble.',
     },
     { name: 'robots', content: 'noindex, nofollow' },
     { httpEquiv: 'content-language', content: 'fr' },
@@ -47,7 +47,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        'Gère tes squads gaming : crée, rejoins et organise tes équipes pour planifier des sessions ensemble.',
+        'Gère tes squads gaming : crée, rejoins et organise tes groupes pour planifier des sessions ensemble.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
     { property: 'og:image:width', content: '1200' },
@@ -57,7 +57,7 @@ export function meta() {
     {
       name: 'twitter:description',
       content:
-        'Gère tes squads gaming : crée, rejoins et organise tes équipes pour planifier des sessions ensemble.',
+        'Gère tes squads gaming : crée, rejoins et organise tes groupes pour planifier des sessions ensemble.',
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]

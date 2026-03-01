@@ -9,7 +9,7 @@ import prettierConfig from 'eslint-config-prettier'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', '.claude', 'node_modules', '.react-router']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

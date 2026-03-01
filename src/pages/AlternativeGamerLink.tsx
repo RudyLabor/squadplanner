@@ -83,7 +83,7 @@ const advantages = [
     icon: Check,
   },
   {
-    title: 'Une équipe de gamers',
+    title: 'Une squad de gamers',
     description:
       "On est des joueurs, comme toi. Tu demandes un truc, on le fait. Pas de file d'attente, pas de blabla.",
     icon: Zap,

@@ -232,11 +232,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '25M+ joueurs actifs',
     color: 'orange',
     tags: ['hero-shooter', 'fps', 'compétitif', 'blizzard'],
-    specificPainPoint: 'Impossible de composer une team équilibrée quand personne ne confirme son rôle',
-    specificUseCase: 'Compose ta team par rôle (Tank, DPS, Support) et grimpe en ranked',
+    specificPainPoint: 'Impossible de composer une squad équilibrée quand personne ne confirme son rôle',
+    specificUseCase: 'Compose ta squad par rôle (Tank, DPS, Support) et grimpe en ranked',
     specificFeatures: ['Composition par rôle', 'Sessions ranked planifiées', 'Suivi de SR collectif'],
     lfgSpecificCopy: 'Cherche Tank/DPS/Support pour du ranked ou quickplay',
-    testimonial: { quote: "On compose notre team à l'avance avec les bons rôles, plus de surprise au dernier moment.", author: 'Marie_OW', rank: 'Master', role: 'Joueuse Overwatch 2' },
+    testimonial: { quote: "On compose notre squad à l'avance avec les bons rôles, plus de surprise au dernier moment.", author: 'Marie_OW', rank: 'Master', role: 'Joueuse Overwatch 2' },
   },
   {
     slug: 'destiny-2',
@@ -325,7 +325,7 @@ export const GAMES: GameInfo[] = [
     description:
       'Hero shooter 6v6 par NetEase avec les héros Marvel. Chaque personnage a des pouvoirs uniques pour des combats spectaculaires.',
     seoDescription:
-      'Organise tes sessions Marvel Rivals avec Squad Planner. Compose ta team de héros, planifie tes ranked et grimpe ensemble.',
+      'Organise tes sessions Marvel Rivals avec Squad Planner. Compose ta squad de héros, planifie tes ranked et grimpe ensemble.',
     genre: 'Hero Shooter',
     players: '6v6',
     platforms: ['PC', 'PlayStation', 'Xbox'],
@@ -333,11 +333,11 @@ export const GAMES: GameInfo[] = [
     estimatedPlayers: '20M+ joueurs',
     color: 'red',
     tags: ['hero-shooter', 'fps', 'compétitif', 'marvel'],
-    specificPainPoint: 'Composer une team de 6 avec les bons héros quand personne ne confirme son pick',
-    specificUseCase: 'Compose ta team Marvel par rôle et grimpe en ranked avec ta squad fixe',
+    specificPainPoint: 'Composer une squad de 6 avec les bons héros quand personne ne confirme son pick',
+    specificUseCase: 'Compose ta squad Marvel par rôle et grimpe en ranked avec ta squad fixe',
     specificFeatures: ['Composition par rôle (Vanguard, Duelist, Strategist)', 'Sessions ranked planifiées', 'Coordination picks de héros'],
     lfgSpecificCopy: 'Cherche des joueurs pour ranked ou quickplay Marvel Rivals',
-    testimonial: { quote: "On a notre team de 6 avec des mains sur chaque rôle. Le ranked n'a jamais été aussi fun.", author: 'Tom_MR', rank: 'Grand Master', role: 'Joueur Marvel Rivals' },
+    testimonial: { quote: "On a notre squad de 6 avec des mains sur chaque rôle. Le ranked n'a jamais été aussi fun.", author: 'Tom_MR', rank: 'Grand Master', role: 'Joueur Marvel Rivals' },
   },
 ]
 

@@ -181,7 +181,7 @@ export function PublicProfile() {
           icon={<Flame className="w-4 h-4 text-warning" />}
           label="Streak"
           value={`${profile.streak_days ?? 0} ${(profile.streak_days ?? 0) <= 1 ? 'jour' : 'jours'}`}
-          sub="Connexions consécutives"
+          sub="Jours consécutifs"
         />
       </div>
 

@@ -24,7 +24,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        'La solution tout-en-un pour gérer tes équipes esport. Analytics, planning, engagement.',
+        'La solution tout-en-un pour gérer tes squads esport. Analytics, planning, engagement.',
     },
     { property: 'og:url', content: `${baseUrl}/solutions/clubs-esport` },
     { property: 'og:locale', content: 'fr_FR' },

@@ -156,7 +156,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   const copyInviteCode = async (code: string) => {
     await navigator.clipboard.writeText(code)
     setCopiedCode(code)
-    showSuccess("Code d'invitation copie !")
+    showSuccess("Code d'invitation copié !")
     setTimeout(() => setCopiedCode(null), 2000)
   }
 
@@ -303,7 +303,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                             Des joueurs cherchent une squad comme la tienne
                           </h3>
                           <p className="text-sm text-text-tertiary">
-                            Explore les squads publiques et agrandis ton réseau de joueurs.
+                            Explore les squads publics et agrandis ton réseau de joueurs.
                           </p>
                         </div>
                         <Link to="/discover" className="flex-shrink-0">

@@ -29,7 +29,7 @@ const glossaryTerms: GlossaryTerm[] = [
   { term: 'Ping', definition: "Latence réseau entre ton PC et le serveur de jeu. Plus c'est bas, mieux c'est." },
   { term: 'RSVP', definition: "Confirmation de présence à une session planifiée. Présent, absent ou peut-être.", link: { label: 'Comment ça marche', to: '/how-it-works' } },
   { term: 'Scrim', definition: "Scrimmage. Match d'entraînement organisé entre deux équipes pour progresser." },
-  { term: 'Squad', definition: 'Groupe de joueurs qui jouent régulièrement ensemble. Ta team, ton crew.', link: { label: 'Créer un squad', to: '/auth?mode=register&redirect=onboarding' } },
+  { term: 'Squad', definition: 'Groupe de joueurs qui jouent régulièrement ensemble. Tes potes, ton crew.', link: { label: 'Créer un squad', to: '/auth?mode=register&redirect=onboarding' } },
   { term: 'Streak', definition: "Série de jours consécutifs avec activité. Plus ton streak est long, plus tu gagnes d'XP.", link: { label: 'Gamification', to: '/features/gamification' } },
   { term: 'Tilt', definition: "État émotionnel négatif qui affecte tes performances. Quand la frustration prend le dessus." },
   { term: 'Tryhard', definition: 'Joueur qui donne absolument tout pour gagner, même en partie casual.' },

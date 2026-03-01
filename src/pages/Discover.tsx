@@ -218,7 +218,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           </m.div>
           <h2 className="text-lg font-bold text-text-primary mb-2">Sois parmi les premiers !</h2>
           <p className="text-sm text-text-secondary mb-1">
-            Les squads publiques apparaissent ici — crée la tienne et elle sera visible par tous les joueurs.
+            Les squads publics apparaissent ici — crée la tienne et elle sera visible par tous les joueurs.
           </p>
           <p className="text-xs text-text-tertiary mb-5">
             Gratuit, en 30 secondes. Tes futurs coéquipiers te cherchent déjà.

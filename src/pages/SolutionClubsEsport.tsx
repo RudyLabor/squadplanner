@@ -10,7 +10,7 @@ const painPoints = [
   {
     title: 'Trop de squads à gérer',
     description:
-      "Entre les équipes ranked, les remplaçants et les tryouts, tu passes plus de temps à organiser qu'à jouer.",
+      "Entre les squads ranked, les remplaçants et les tryouts, tu passes plus de temps à organiser qu'à jouer.",
   },
   {
     title: 'Joueurs qui ghostent',
@@ -29,7 +29,7 @@ const features = [
     icon: Users,
     title: 'Dashboard multi-squads',
     description:
-      "Vue d'ensemble de toutes tes équipes. Présences, sessions, activité — tout au même endroit.",
+      "Vue d'ensemble de toutes tes squads. Présences, sessions, activité — tout au même endroit.",
   },
   {
     icon: BarChart3,
@@ -93,7 +93,7 @@ export default function SolutionClubsEsport() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Gère tes équipes, suis l'engagement de tes joueurs et professionnalise ton club. Tout en un seul outil.
+            Gère tes squads, suis l'engagement de tes joueurs et professionnalise ton club. Tout en un seul outil.
           </m.p>
           <m.div
             variants={scrollRevealLight}

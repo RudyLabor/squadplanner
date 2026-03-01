@@ -143,6 +143,11 @@ export function LandingFooter() {
                   Programme Ambassadeur
                 </Link>
               </li>
+              <li>
+                <Link to="/referrals" className={linkClass}>
+                  Parrainage
+                </Link>
+              </li>
             </ul>
           </div>
 

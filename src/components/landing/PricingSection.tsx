@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { m } from 'framer-motion'
 import { Check, Crown } from '../icons'
 import { Link } from 'react-router'
+import { trackEvent } from '../../utils/analytics'
 import {
   PREMIUM_PRICE_MONTHLY,
   PREMIUM_PRICE_YEARLY,
@@ -120,6 +121,14 @@ const TIERS = [
 
 export function PricingSection() {
   const [isYearly, setIsYearly] = useState(false)
+
+  const handlePricingCTA = useCallback((tierName: string, isYearlyBilling: boolean) => {
+    trackEvent('landing_cta_clicked', {
+      position: 'pricing',
+      tier: tierName.toLowerCase(),
+      billing: isYearlyBilling ? 'yearly' : 'monthly',
+    })
+  }, [])
 
   return (
     <section aria-label="Tarifs" className="px-4 md:px-6 py-10 md:py-14">
@@ -260,7 +269,12 @@ export function PricingSection() {
                   ))}
                 </ul>
 
-                <Link to="/auth" className="block">
+                <Link
+                  to="/auth?mode=register&redirect=onboarding"
+                  className="block"
+                  onClick={() => handlePricingCTA(tier.name, isYearly)}
+                  data-track={`pricing_cta_${tier.name.toLowerCase().replace(/\s+/g, '_')}`}
+                >
                   <m.div
                     role="button"
                     tabIndex={0}

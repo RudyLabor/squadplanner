@@ -45,6 +45,10 @@ vi.mock('../../icons', () => ({
   Crown: (props: any) => createElement('span', { ...props, 'data-testid': 'crown-icon' }, 'crown'),
 }))
 
+vi.mock('../../../utils/analytics', () => ({
+  trackEvent: vi.fn(),
+}))
+
 import { PricingSection } from '../PricingSection'
 
 describe('PricingSection', () => {
@@ -109,7 +113,7 @@ describe('PricingSection', () => {
       const freeButton = screen.getByText('Commencer gratuitement')
       expect(freeButton).toBeInTheDocument()
       const link = freeButton.closest('a')
-      expect(link).toHaveAttribute('href', '/auth')
+      expect(link).toHaveAttribute('href', '/auth?mode=register&redirect=onboarding')
     })
   })
 
@@ -147,30 +151,31 @@ describe('PricingSection', () => {
       })
     })
 
-    it('renders premium plan CTA button with link to /auth', () => {
+    it('renders premium plan CTA button with link to /auth register', () => {
       render(<PricingSection />)
-      const premiumButton = screen.getByText('Passer Premium — 6,99€/mois')
+      const premiumButton = screen.getByText('Essayer 7 jours gratuit')
       expect(premiumButton).toBeInTheDocument()
       const link = premiumButton.closest('a')
-      expect(link).toHaveAttribute('href', '/auth')
+      expect(link).toHaveAttribute('href', '/auth?mode=register&redirect=onboarding')
     })
   })
 
   // --- Trust badges ---
   describe('Trust badges', () => {
-    it('renders all 4 trust badges', () => {
+    it('renders all 5 trust badges', () => {
       render(<PricingSection />)
       expect(screen.getByText('Données hébergées en France')).toBeInTheDocument()
       expect(screen.getByText('Chiffrement SSL')).toBeInTheDocument()
       expect(screen.getByText('Conforme RGPD')).toBeInTheDocument()
       expect(screen.getByText('Paiement sécurisé Stripe')).toBeInTheDocument()
+      expect(screen.getByText('Remboursé sous 30 jours')).toBeInTheDocument()
     })
 
     it('trust badges contain SVG icons', () => {
       const { container } = render(<PricingSection />)
       // Each trust badge has an SVG icon
       const trustBadgeSvgs = container.querySelectorAll('svg.w-4.h-4')
-      expect(trustBadgeSvgs.length).toBe(4)
+      expect(trustBadgeSvgs.length).toBe(5)
     })
 
     it('SVG icons have correct attributes', () => {
@@ -192,10 +197,10 @@ describe('PricingSection', () => {
       expect(grid).toBeInTheDocument()
     })
 
-    it('contains exactly 5 Link elements pointing to /auth', () => {
+    it('contains exactly 5 Link elements pointing to /auth register', () => {
       render(<PricingSection />)
       const links = screen.getAllByRole('link')
-      const authLinks = links.filter((l) => l.getAttribute('href') === '/auth')
+      const authLinks = links.filter((l) => l.getAttribute('href') === '/auth?mode=register&redirect=onboarding')
       expect(authLinks.length).toBe(5)
     })
 

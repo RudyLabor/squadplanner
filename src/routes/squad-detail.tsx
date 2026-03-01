@@ -36,8 +36,6 @@ export function meta() {
       content:
         'Consulte les détails de ta squad : membres, sessions planifiées, classement et code d\'invitation.',
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/squads' },
-    { property: 'og:url', content: 'https://squadplanner.fr/squads' },
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: 'Détail Squad' },
     {
@@ -46,6 +44,8 @@ export function meta() {
         'Consulte les détails de ta squad : membres, sessions planifiées, classement et code d\'invitation.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: 'Détail Squad' },
     {

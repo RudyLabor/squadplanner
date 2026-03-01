@@ -53,7 +53,15 @@ export function meta() {
     },
     {
       property: 'og:image',
-      content: `${baseUrl}/og-guilded-vs-squadplanner.png`,
+      content: `${baseUrl}/og-image.png`,
+    },
+    {
+      property: 'og:image:width',
+      content: '1200',
+    },
+    {
+      property: 'og:image:height',
+      content: '630',
     },
     {
       name: 'twitter:card',

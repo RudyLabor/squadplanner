@@ -27,8 +27,29 @@ export function meta() {
   return [
     { title: 'Détail Session - Squad Planner' },
     { name: 'robots', content: 'noindex, nofollow' },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/sessions' },
-    { property: 'og:url', content: 'https://squadplanner.fr/sessions' },
+    {
+      name: 'description',
+      content:
+        'Consulte les détails de ta session de jeu : date, heure, participants et statut RSVP.',
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Détail Session - Squad Planner' },
+    {
+      property: 'og:description',
+      content:
+        'Consulte les détails de ta session de jeu : date, heure, participants et statut RSVP.',
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Détail Session - Squad Planner' },
+    {
+      name: 'twitter:description',
+      content:
+        'Consulte les détails de ta session de jeu : date, heure, participants et statut RSVP.',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

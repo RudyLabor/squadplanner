@@ -36,6 +36,7 @@ export function meta() {
         'Débloquez les fonctionnalités Premium de Squad Planner : squads illimitées, heatmaps de présence, IA Coach personnalisé. Essai gratuit 7 jours sans carte bancaire.',
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
+    { httpEquiv: 'content-language', content: 'fr' },
     {
       'script:ld+json': {
         '@context': 'https://schema.org',

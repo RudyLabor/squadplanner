@@ -31,6 +31,7 @@ export function meta() {
     { name: 'twitter:title', content: title },
     { name: 'twitter:description', content: description },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
+    { httpEquiv: 'content-language', content: 'fr' },
     {
       'script:ld+json': {
         '@context': 'https://schema.org',

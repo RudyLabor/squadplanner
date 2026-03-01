@@ -7,8 +7,29 @@ export function meta() {
   return [
     { title: 'Bienvenue - Squad Planner' },
     { name: 'robots', content: 'noindex, nofollow' },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/onboarding' },
-    { property: 'og:url', content: 'https://squadplanner.fr/onboarding' },
+    {
+      name: 'description',
+      content:
+        'Configure ton compte Squad Planner : crée ou rejoins une squad, personnalise ton profil et active les notifications.',
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Bienvenue - Squad Planner' },
+    {
+      property: 'og:description',
+      content:
+        'Configure ton compte Squad Planner : crée ou rejoins une squad, personnalise ton profil et active les notifications.',
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Bienvenue - Squad Planner' },
+    {
+      name: 'twitter:description',
+      content:
+        'Configure ton compte Squad Planner : crée ou rejoins une squad, personnalise ton profil et active les notifications.',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

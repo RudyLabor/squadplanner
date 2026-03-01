@@ -36,6 +36,7 @@ export function meta() {
         "Mentions légales, conditions d'utilisation et politique de confidentialité de Squad Planner.",
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
+    { httpEquiv: 'content-language', content: 'fr' },
     {
       'script:ld+json': {
         '@context': 'https://schema.org',

@@ -33,6 +33,7 @@ export function meta() {
       content: 'Connecte-toi ou crée ton compte Squad Planner pour planifier tes sessions gaming.',
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
+    { httpEquiv: 'content-language', content: 'fr' },
   ]
 }
 

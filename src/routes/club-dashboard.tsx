@@ -27,6 +27,8 @@ export function meta() {
         'Gère toutes tes équipes gaming depuis un seul dashboard. Analytics cross-squad, export CSV, branding personnalisé.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: 'Dashboard Club' },
     {

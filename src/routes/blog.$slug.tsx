@@ -107,6 +107,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }: { data: any }) => {
       href: `https://squadplanner.fr/blog/${post.slug}`,
     },
     {
+      httpEquiv: 'content-language',
+      content: 'fr',
+    },
+    {
       'script:ld+json': {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',

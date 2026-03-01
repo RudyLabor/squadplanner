@@ -36,6 +36,7 @@ export function meta() {
         "Centre d'aide Squad Planner : trouve des réponses à tes questions sur la création de squads, la planification de sessions et les fonctionnalités Premium.",
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
+    { httpEquiv: 'content-language', content: 'fr' },
     {
       'script:ld+json': {
         '@context': 'https://schema.org',

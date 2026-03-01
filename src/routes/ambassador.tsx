@@ -4,6 +4,12 @@ const Ambassador = lazy(() =>
   import('../pages/Ambassador').then((m) => ({ default: m.Ambassador }))
 )
 
+export function headers() {
+  return {
+    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+  }
+}
+
 export function meta() {
   return [
     { title: 'Programme Ambassadeur - Squad Planner' },
@@ -33,6 +39,7 @@ export function meta() {
         'Deviens ambassadeur Squad Planner : Squad Leader gratuit à vie, 20% de commission sur chaque abonné parrainé.',
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
+    { httpEquiv: 'content-language', content: 'fr' },
     {
       'script:ld+json': {
         '@context': 'https://schema.org',

@@ -37,6 +37,8 @@ export function meta() {
       content: 'Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: 'Messages' },
     {

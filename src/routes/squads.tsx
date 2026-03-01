@@ -39,8 +39,24 @@ export function meta() {
         'Gère tes squads gaming : crée, rejoins et organise tes équipes pour planifier des sessions ensemble.',
     },
     { name: 'robots', content: 'noindex, nofollow' },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/squads' },
-    { property: 'og:url', content: 'https://squadplanner.fr/squads' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Mes Squads — Squad Planner' },
+    {
+      property: 'og:description',
+      content:
+        'Gère tes squads gaming : crée, rejoins et organise tes équipes pour planifier des sessions ensemble.',
+    },
+    { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Mes Squads — Squad Planner' },
+    {
+      name: 'twitter:description',
+      content:
+        'Gère tes squads gaming : crée, rejoins et organise tes équipes pour planifier des sessions ensemble.',
+    },
+    { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
   ]
 }
 

@@ -16,8 +16,6 @@ export function meta() {
       content:
         "Retrouve l'historique de tes appels vocaux avec ta squad. Durée, participants et détails de chaque party.",
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/call-history' },
-    { property: 'og:url', content: 'https://squadplanner.fr/call-history' },
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: "Historique d'appels" },
     {
@@ -26,6 +24,8 @@ export function meta() {
         "Retrouve l'historique de tes appels vocaux avec ta squad. Durée, participants et détails de chaque party.",
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: "Historique d'appels" },
     {

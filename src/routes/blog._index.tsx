@@ -74,6 +74,10 @@ export const meta: MetaFunction = () => [
     href: 'https://squadplanner.fr/blog',
   },
   {
+    httpEquiv: 'content-language',
+    content: 'fr',
+  },
+  {
     'script:ld+json': {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',

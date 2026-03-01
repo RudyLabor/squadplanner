@@ -52,6 +52,8 @@ export function meta() {
         'Rejoins le chat vocal de ta squad. Lance une party pour jouer ensemble en temps réel.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: 'Party' },
     {

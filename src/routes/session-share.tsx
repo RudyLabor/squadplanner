@@ -2,6 +2,12 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import type { MetaArgs } from 'react-router'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
+
+export function headers() {
+  return {
+    'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+  }
+}
 import { ShareButtons } from '../components/ShareButtons'
 
 interface SessionPreview {

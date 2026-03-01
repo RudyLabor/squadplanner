@@ -176,7 +176,7 @@ export function Referrals() {
               className="text-base md:text-lg text-text-secondary max-w-xl mx-auto"
             >
               Invite tes potes et gagne 1 mois Premium gratuit pour chaque inscription.
-              Ton pote recoit 7 jours Premium. Toi, tu deverrouilles des reductions permanentes sur ton abo + 500 XP.
+              Ton pote reçoit 7 jours Premium. Toi, tu déverrouilles des réductions permanentes sur ton abo + 500 XP.
             </m.p>
           </div>
         </div>

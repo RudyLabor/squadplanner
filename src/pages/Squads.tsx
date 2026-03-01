@@ -212,7 +212,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                 </Button>
                 <Button size="sm" onClick={handleOpenCreate}>
                   <Plus className="w-4 h-4" />
-                  <span className="hidden sm:inline">Creer</span>
+                  <span className="hidden sm:inline">Créer</span>
                   {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && <PremiumBadge small />}
                 </Button>
               </div>
@@ -296,7 +296,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                             Des joueurs cherchent une squad comme la tienne
                           </h3>
                           <p className="text-sm text-text-tertiary">
-                            Explore les squads publiques et agrandis ton reseau de joueurs.
+                            Explore les squads publiques et agrandis ton réseau de joueurs.
                           </p>
                         </div>
                         <Link to="/discover" className="flex-shrink-0">

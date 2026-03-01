@@ -78,7 +78,21 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
                 {streakDays <= 1 ? 'jour' : 'jours'}
               </span>
             </div>
-            <p className="text-xs text-text-quaternary">Série en cours</p>
+            <p className="text-xs text-text-quaternary">
+              {streakDays === 0
+                ? 'Joue aujourd\'hui pour lancer ta série !'
+                : streakDays <= 2
+                  ? 'Bon début, reviens demain pour continuer !'
+                  : streakDays <= 5
+                    ? 'Beau rythme ! Ta régularité paie.'
+                    : streakDays === 6
+                      ? 'Demain c\'est le palier 1 semaine !'
+                      : streakDays < 14
+                        ? 'Machine ! Ta squad peut compter sur toi.'
+                        : streakDays < 30
+                          ? 'Inarrêtable ! Le palier 1 mois approche.'
+                          : 'Légende vivante ! Tu inspires ta squad.'}
+            </p>
           </div>
           {streakDays > 0 && (
             <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-success/12">

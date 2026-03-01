@@ -361,6 +361,46 @@ export default function BlogPost() {
 
       <div className="section-divider" />
 
+      {/* ── Bannière essai gratuit ── */}
+      <section className="px-4 md:px-6 py-8">
+        <div className="max-w-3xl mx-auto">
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="flex flex-col md:flex-row items-center gap-4 md:gap-6 p-5 md:p-6 rounded-2xl border"
+            style={{
+              background: 'linear-gradient(135deg, var(--color-warning-10) 0%, var(--color-primary-08) 100%)',
+              borderColor: 'var(--color-warning-20)',
+            }}
+          >
+            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-warning/15 flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-warning" />
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <h3 className="text-base font-bold text-text-primary mb-1">
+                Essaie Premium 7 jours gratuit
+              </h3>
+              <p className="text-sm text-text-tertiary">
+                Stats avancées, sessions récurrentes, coach IA et audio HD. Sans engagement, annule quand tu veux.
+              </p>
+            </div>
+            <m.div whileHover={{ scale: 1.03 }} {...springTap} className="flex-shrink-0">
+              <Link
+                to="/premium"
+                className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-gradient-to-r from-warning to-warning/80 text-bg-base font-bold text-sm shadow-md hover:shadow-lg transition-all"
+              >
+                Essayer gratuitement
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </m.div>
+          </m.div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       {/* ── CTA Final ── */}
       <section className="px-4 md:px-6 py-16">
         <div className="max-w-2xl mx-auto">

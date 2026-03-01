@@ -123,7 +123,18 @@ export function Profile() {
     try {
       const xpReward = await claimXPMutation.mutateAsync(challengeId)
       if (refreshProfile) await refreshProfile()
-      showSuccess(`+${xpReward} XP réclamés ! Continue comme ça pour monter de niveau`)
+      // Forward-looking: montrer combien d'XP restent pour le prochain niveau
+      const newXP = (profile?.xp || 0) + xpReward
+      const lvl = profile?.level || 1
+      const THRESHOLDS = [0, 100, 300, 600, 1000, 1500, 2500, 4000, 6000, 10000]
+      const nextThreshold = THRESHOLDS[Math.min(lvl, THRESHOLDS.length - 1)]
+      const remaining = nextThreshold ? nextThreshold - newXP : 0
+
+      if (remaining > 0) {
+        showSuccess(`+${xpReward} XP ! Plus que ${remaining} XP pour le niveau ${lvl + 1}`)
+      } else {
+        showSuccess(`+${xpReward} XP ! Tu es au top, continue comme ça !`)
+      }
     } catch (error) {
       if (!import.meta.env.PROD) console.error('Error claiming XP:', error)
       showError('Erreur lors de la réclamation des XP')

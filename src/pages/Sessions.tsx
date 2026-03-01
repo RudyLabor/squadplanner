@@ -1,9 +1,10 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { Plus, Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
 import { Button } from '../components/ui'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { useAuthStore, useAIStore, useConfetti } from '../hooks'
+import { usePremiumStore } from '../hooks/usePremium'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
 import { queryClient } from '../lib/queryClient'
@@ -22,6 +23,35 @@ interface SessionsProps {
   }
 }
 
+function SessionLimitBanner({ sessionsThisWeek }: { sessionsThisWeek: number }) {
+  const remaining = 2 - sessionsThisWeek
+  if (remaining > 0) return null
+
+  return (
+    <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-warning/10 to-primary/5 border border-warning/20">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-xl bg-warning/15 flex items-center justify-center flex-shrink-0">
+          <Plus className="w-5 h-5 text-warning" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-base font-semibold text-text-primary mb-1">
+            Limite de 2 sessions atteinte cette semaine
+          </h3>
+          <p className="text-sm text-text-tertiary mb-3">
+            Passe Premium pour planifier des sessions illimitées et ne plus jamais rater un créneau avec ta squad.
+          </p>
+          <a
+            href="/premium"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-warning to-warning/80 text-bg-base text-sm font-bold hover:shadow-md transition-all"
+          >
+            Essaie 7 jours gratuit
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function Sessions({ loaderData: _loaderData }: SessionsProps) {
   const { user, isInitialized } = useAuthStore()
   const {
@@ -31,6 +61,7 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
   } = useSquadsQuery()
   const squadsLoading = squadsLoadingRaw || squadsLoadingPending
   const { data: sessions = [], isLoading: sessionsLoading } = useUpcomingSessionsQuery(user?.id)
+  const { tier } = usePremiumStore()
   const { slotSuggestions, hasSlotHistory, coachTips, fetchSlotSuggestions, fetchCoachTips } =
     useAIStore()
   const openCreateSession = useCreateSessionModal((s) => s.open)
@@ -70,6 +101,15 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
 
   const needsResponse = upcomingSessions.filter((s) => !s.my_rsvp)
   const confirmed = upcomingSessions.filter((s) => s.my_rsvp === 'present')
+
+  // Count sessions created this week (for free tier limit banner)
+  const sessionsThisWeek = useMemo(() => {
+    const now = new Date()
+    const startOfWeek = new Date(now)
+    startOfWeek.setDate(now.getDate() - now.getDay() + 1) // Monday
+    startOfWeek.setHours(0, 0, 0, 0)
+    return sessions.filter((s) => new Date(s.scheduled_at) >= startOfWeek).length
+  }, [sessions])
 
   useEffect(() => {
     if (
@@ -129,6 +169,8 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
                 Créer
               </Button>
             </header>
+
+            {tier === 'free' && <SessionLimitBanner sessionsThisWeek={sessionsThisWeek} />}
 
             <WeekCalendar
               sessions={upcomingSessions}

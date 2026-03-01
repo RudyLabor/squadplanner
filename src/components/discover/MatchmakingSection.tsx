@@ -33,11 +33,11 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
           <Users className="w-8 h-8 text-primary" />
         </div>
         <h3 className="text-lg font-semibold text-text-primary mb-2">
-          Sois le premier à chercher une squad !
+          Trouve des coéquipiers qui jouent comme toi
         </h3>
         <p className="text-base text-text-secondary max-w-sm mx-auto mb-4">
-          Active la recherche dans ton profil — les joueurs qui matchent avec toi
-          verront ton profil ici. Plus tu joues, mieux le matching fonctionne.
+          Active la recherche dans ton profil pour apparaître ici. Le matchmaking analyse tes jeux,
+          tes horaires et ta fiabilité pour te proposer les meilleurs coéquipiers.
         </p>
         <div className="flex flex-col items-center gap-3">
           <Link

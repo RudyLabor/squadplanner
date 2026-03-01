@@ -89,7 +89,7 @@ export function MessageComposer({
                       if (newMessage.trim() && !isSending)
                         onSubmit({ preventDefault: () => {} } as React.FormEvent)
                     }}
-                    placeholder="Message..."
+                    placeholder={`Écris à ${chatName}…`}
                     disabled={isSending}
                     members={mentionMembers}
                     inputRef={inputRef}
@@ -101,7 +101,7 @@ export function MessageComposer({
                       type="text"
                       value={newMessage}
                       onChange={onInputChange}
-                      placeholder="Message..."
+                      placeholder={`Message à ${chatName}…`}
                       aria-label={`Écrire un message à ${chatName}`}
                       className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                       autoComplete="off"

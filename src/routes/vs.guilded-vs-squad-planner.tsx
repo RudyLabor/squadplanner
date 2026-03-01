@@ -52,6 +52,14 @@ export function meta() {
       content: `${baseUrl}/vs/guilded-vs-squad-planner`,
     },
     {
+      property: 'og:locale',
+      content: 'fr_FR',
+    },
+    {
+      property: 'og:site_name',
+      content: 'Squad Planner',
+    },
+    {
       property: 'og:image',
       content: `${baseUrl}/og-image.png`,
     },
@@ -77,6 +85,10 @@ export function meta() {
         "Guilded a fermé. Découvre comment Squad Planner se compare et pourquoi c'est le meilleur remplacement pour les gamers.",
     },
     {
+      name: 'twitter:image',
+      content: `${baseUrl}/og-image.png`,
+    },
+    {
       httpEquiv: 'content-language',
       content: 'fr',
     },
@@ -86,8 +98,64 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Comparatifs' },
+          { '@type': 'ListItem', position: 2, name: 'Comparatifs', item: 'https://squadplanner.fr/vs/guilded-vs-squad-planner' },
           { '@type': 'ListItem', position: 3, name: 'Guilded vs Squad Planner', item: 'https://squadplanner.fr/vs/guilded-vs-squad-planner' },
+        ],
+      },
+    },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'Pourquoi pas rester sur Guilded ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Guilded a fermé définitivement en 2024. La plateforme n\'est plus accessible et les serveurs ont été coupés.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Je peux importer mes données depuis Guilded ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Guilded ayant fermé, l\'import direct n\'est pas possible. Mais créer ta squad sur Squad Planner prend moins de 2 minutes.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'C\'est quoi Premium ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Premium débloque les squads illimitées, l\'historique étendu, les stats avancées, le coach IA et le voice chat HD pour 6,99\u00a0\u20ac/mois.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Je peux utiliser Squad Planner ET Discord ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Oui, les deux sont complémentaires. Discord gère la communication, Squad Planner gère l\'organisation des sessions gaming.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Ça marche pour tous les jeux ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Oui. Squad Planner est compatible avec tous les jeux multijoueur : Valorant, League of Legends, Fortnite, Apex, CS2, et bien d\'autres.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Mais Squad Planner fermera aussi un jour ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Squad Planner est un produit indépendant avec un modèle économique durable. L\'export RGPD permet de récupérer tes données à tout moment.',
+            },
+          },
         ],
       },
     },

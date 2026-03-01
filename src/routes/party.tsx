@@ -42,10 +42,11 @@ export function meta() {
       content:
         'Rejoins le chat vocal de ta squad. Lance une party pour jouer ensemble en temps réel.',
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/party' },
-    { property: 'og:url', content: 'https://squadplanner.fr/party' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Party' },
+    { property: 'og:title', content: 'Party - Squad Planner' },
     {
       property: 'og:description',
       content:
@@ -55,7 +56,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Party' },
+    { name: 'twitter:title', content: 'Party - Squad Planner' },
     {
       name: 'twitter:description',
       content:

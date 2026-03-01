@@ -44,7 +44,7 @@ function SessionLimitBanner({ sessionsThisWeek }: { sessionsThisWeek: number }) 
             href="/premium"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-warning to-warning/80 text-bg-base text-sm font-bold hover:shadow-md transition-all"
           >
-            Essaie 7 jours gratuit
+            Essaie 7 jours gratuits
           </a>
         </div>
       </div>

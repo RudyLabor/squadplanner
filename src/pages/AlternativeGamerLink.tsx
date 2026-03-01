@@ -180,7 +180,7 @@ export default function AlternativeGamerLink() {
       <div className="section-divider" />
 
       {/* Comparison Table */}
-      <section className="px-4 md:px-6 py-12 md:py-16">
+      <section id="comparison" className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-5xl mx-auto">
           <m.div
             variants={scrollReveal}

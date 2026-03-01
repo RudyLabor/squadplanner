@@ -26,6 +26,8 @@ export function meta() {
       content: 'Ce que les gamers pensent de Squad Planner. +4.8/5 de moyenne.',
     },
     { property: 'og:url', content: `${baseUrl}/avis` },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:image', content: `${baseUrl}/og-image.png` },
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },

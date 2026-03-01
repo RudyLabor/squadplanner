@@ -52,6 +52,14 @@ export function meta() {
       content: `${baseUrl}/alternative/guilded`,
     },
     {
+      property: 'og:locale',
+      content: 'fr_FR',
+    },
+    {
+      property: 'og:site_name',
+      content: 'Squad Planner',
+    },
+    {
       property: 'og:image',
       content: `${baseUrl}/og-image.png`,
     },
@@ -77,6 +85,10 @@ export function meta() {
         'La plateforme gaming parfaite pour remplacer Guilded. Calendrier, confirmations, notifications. Gratuit.',
     },
     {
+      name: 'twitter:image',
+      content: `${baseUrl}/og-image.png`,
+    },
+    {
       httpEquiv: 'content-language',
       content: 'fr',
     },
@@ -86,8 +98,48 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Alternatives' },
+          { '@type': 'ListItem', position: 2, name: 'Alternatives', item: 'https://squadplanner.fr/alternative/guilded' },
           { '@type': 'ListItem', position: 3, name: 'Alternative Guilded', item: 'https://squadplanner.fr/alternative/guilded' },
+        ],
+      },
+    },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'Pourquoi Guilded a fermé ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Guilded a fermé boutique en 2024 après son rachat par Roblox. Les serveurs ont été coupés et la plateforme n\'est plus accessible.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Comment passer de Guilded à Squad Planner ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Crée ton compte gratuit en 30 secondes, crée ta squad, partage le lien d\'invitation à tes coéquipiers. Tout est opérationnel en moins de 2 minutes.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Mais je perds mes données ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Tu devras recréer tes squads et sessions, mais Squad Planner offre des fonctionnalités que Guilded n\'avait pas comme le score de fiabilité et les confirmations intelligentes.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'C\'est vraiment gratuit ?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Oui. Le plan gratuit inclut 1 squad, 5 membres et 2 sessions par semaine. Le Premium à 6,99\u00a0\u20ac/mois débloque les squads illimitées et les fonctionnalités avancées.',
+            },
+          },
         ],
       },
     },

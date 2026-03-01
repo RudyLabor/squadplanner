@@ -14,6 +14,9 @@ export function meta() {
         "Profil public d'un joueur Squad Planner : statistiques, fiabilité et jeux préférés.",
     },
     { name: 'robots', content: 'noindex, nofollow' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: 'Profil joueur - Squad Planner' },
     {

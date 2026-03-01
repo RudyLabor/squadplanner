@@ -89,7 +89,7 @@ export default function SolutionClubsEsport() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Gérez vos équipes, suivez l'engagement de vos joueurs et professionnalisez votre club. Tout en un seul outil.
+            Gère tes équipes, suis l'engagement de tes joueurs et professionnalise ton club. Tout en un seul outil.
           </m.p>
           <m.div
             variants={scrollRevealLight}
@@ -123,7 +123,7 @@ export default function SolutionClubsEsport() {
             className="text-center mb-12"
           >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              On connaît vos galères
+              On connaît tes galères
             </h2>
             <p className="text-text-tertiary text-lg">
               Gérer un club esport, c'est un taf à plein temps. On simplifie tout.
@@ -161,7 +161,7 @@ export default function SolutionClubsEsport() {
             className="text-center mb-12"
           >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Tout ce qu'il faut pour scaler
+              Tout ce qu'il faut pour grandir
             </h2>
           </m.div>
           <div className="grid md:grid-cols-2 gap-6">

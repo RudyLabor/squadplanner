@@ -162,7 +162,7 @@ describe('PremiumPricing', () => {
     render(<PremiumPricing {...defaultProps} />)
     expect(screen.getByText(/Pour les joueurs qui veulent plus de squads/)).toBeDefined()
     expect(screen.getByText(/Pour les capitaines qui veulent des stats/)).toBeDefined()
-    expect(screen.getByText(/Pour les grosses squads qui veulent scaler/)).toBeDefined()
+    expect(screen.getByText(/Pour les grosses squads qui veulent grandir/)).toBeDefined()
     expect(screen.getByText('Pour les orgas esport.')).toBeDefined()
   })
 

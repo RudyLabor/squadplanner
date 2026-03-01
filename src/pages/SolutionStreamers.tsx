@@ -27,7 +27,7 @@ const features = [
     icon: Calendar,
     title: 'Sessions planifiées',
     description:
-      "Crée des sessions récurrentes pour tes viewers games. Chaque semaine, même heure, même crew. Tes viewers savent quand se connecter.",
+      "Crée des sessions récurrentes pour tes soirées communautaires. Chaque semaine, même heure, même crew. Tes viewers savent quand se connecter.",
   },
   {
     icon: ShieldCheck,

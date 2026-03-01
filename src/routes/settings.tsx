@@ -16,10 +16,11 @@ export function meta() {
       content:
         'Configure ton compte Squad Planner : notifications, thème, confidentialité et préférences.',
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/settings' },
-    { property: 'og:url', content: 'https://squadplanner.fr/settings' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Paramètres' },
+    { property: 'og:title', content: 'Paramètres — Squad Planner' },
     {
       property: 'og:description',
       content:
@@ -29,7 +30,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Paramètres' },
+    { name: 'twitter:title', content: 'Paramètres — Squad Planner' },
     {
       name: 'twitter:description',
       content:

@@ -163,10 +163,10 @@ ${formData.message}
                   <Check className="w-8 h-8 text-success" />
                 </div>
                 <h3 className="text-xl font-bold text-text-primary mb-2">
-                  Message envoyé !
+                  Ton client email va s'ouvrir
                 </h3>
                 <p className="text-text-secondary max-w-md mx-auto">
-                  On te recontacte sous 24h avec un devis adapté à ta structure.
+                  Envoie le message depuis ton client email. On te recontacte sous 24h avec un devis adapté à ta structure.
                 </p>
               </m.div>
             ) : (

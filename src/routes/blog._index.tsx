@@ -78,6 +78,14 @@ export const meta: MetaFunction = () => [
     content: 'fr',
   },
   {
+    property: 'og:locale',
+    content: 'fr_FR',
+  },
+  {
+    property: 'og:site_name',
+    content: 'Squad Planner',
+  },
+  {
     'script:ld+json': {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',

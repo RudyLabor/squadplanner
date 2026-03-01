@@ -89,6 +89,7 @@ const contentPages = [
   buildUrl('/solutions/clubs-esport', '0.8', 'monthly'),
   buildUrl('/solutions/streamers', '0.8', 'monthly'),
   buildUrl('/avis', '0.8', 'weekly'),
+  buildUrl('/contact', '0.5', 'monthly'),
 ]
 
 // Blog pages (dynamically extracted from blog-posts.ts)

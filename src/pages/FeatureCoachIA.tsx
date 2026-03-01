@@ -181,7 +181,7 @@ export default function FeatureCoachIA() {
           >
             <div className="relative z-10">
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">Envie d'un coach perso ?</h2>
-              <p className="text-text-tertiary mb-8 text-lg">Essaie Premium 7 jours gratuit. Le coach IA est inclus.</p>
+              <p className="text-text-tertiary mb-8 text-lg">Essaie Premium 7 jours gratuits. Le coach IA est inclus.</p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
@@ -191,7 +191,7 @@ export default function FeatureCoachIA() {
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>
-              <p className="text-base text-text-quaternary mt-4">7 jours gratuit &middot; Annulation libre</p>
+              <p className="text-base text-text-quaternary mt-4">7 jours gratuits &middot; Annulation libre</p>
             </div>
           </m.div>
         </div>

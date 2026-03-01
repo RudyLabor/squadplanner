@@ -6,6 +6,14 @@ import type { LoaderFunctionArgs } from 'react-router'
  * Users may try to access /login, but the auth page is at /auth.
  * This loader redirect ensures old links and bookmarks still work.
  */
+
+export function meta() {
+  return [
+    { title: 'Connexion - Squad Planner' },
+    { name: 'robots', content: 'noindex, nofollow' },
+  ]
+}
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url)
   // Preserve query params (e.g., ?redirect_to=/home)

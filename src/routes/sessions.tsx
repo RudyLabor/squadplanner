@@ -42,10 +42,11 @@ export function meta() {
       content:
         'Consulte et gère tes sessions de jeu planifiées. Confirme ta présence en un clic.',
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/sessions' },
-    { property: 'og:url', content: 'https://squadplanner.fr/sessions' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Sessions' },
+    { property: 'og:title', content: 'Sessions — Squad Planner' },
     {
       property: 'og:description',
       content:
@@ -55,7 +56,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Sessions' },
+    { name: 'twitter:title', content: 'Sessions — Squad Planner' },
     {
       name: 'twitter:description',
       content:

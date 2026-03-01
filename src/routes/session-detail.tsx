@@ -32,6 +32,9 @@ export function meta() {
       content:
         'Consulte les détails de ta session de jeu : date, heure, participants et statut RSVP.',
     },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: 'Détail Session - Squad Planner' },
     {

@@ -28,10 +28,11 @@ export function meta() {
       name: 'description',
       content: 'Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad.',
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/messages' },
-    { property: 'og:url', content: 'https://squadplanner.fr/messages' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Messages' },
+    { property: 'og:title', content: 'Messages — Squad Planner' },
     {
       property: 'og:description',
       content: 'Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad.',
@@ -40,7 +41,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Messages' },
+    { name: 'twitter:title', content: 'Messages — Squad Planner' },
     {
       name: 'twitter:description',
       content: 'Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad.',

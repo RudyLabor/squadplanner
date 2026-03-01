@@ -52,6 +52,14 @@ export function meta() {
       content: `${baseUrl}/alternative/discord-events`,
     },
     {
+      property: 'og:locale',
+      content: 'fr_FR',
+    },
+    {
+      property: 'og:site_name',
+      content: 'Squad Planner',
+    },
+    {
       property: 'og:image',
       content: `${baseUrl}/og-image.png`,
     },
@@ -77,6 +85,10 @@ export function meta() {
         "Discord pour la commu, Squad Planner pour l'organisation. Confirmation fiable, calendrier, notifications push.",
     },
     {
+      name: 'twitter:image',
+      content: `${baseUrl}/og-image.png`,
+    },
+    {
       httpEquiv: 'content-language',
       content: 'fr',
     },
@@ -86,7 +98,7 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Alternatives' },
+          { '@type': 'ListItem', position: 2, name: 'Alternatives', item: 'https://squadplanner.fr/alternative/discord-events' },
           { '@type': 'ListItem', position: 3, name: 'Alternative Discord Events', item: 'https://squadplanner.fr/alternative/discord-events' },
         ],
       },

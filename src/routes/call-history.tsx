@@ -16,8 +16,11 @@ export function meta() {
       content:
         "Retrouve l'historique de tes appels vocaux avec ta squad. Durée, participants et détails de chaque party.",
     },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: "Historique d'appels" },
+    { property: 'og:title', content: "Historique d'appels - Squad Planner" },
     {
       property: 'og:description',
       content:
@@ -27,7 +30,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: "Historique d'appels" },
+    { name: 'twitter:title', content: "Historique d'appels - Squad Planner" },
     {
       name: 'twitter:description',
       content:

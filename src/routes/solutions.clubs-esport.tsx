@@ -27,6 +27,8 @@ export function meta() {
         'La solution tout-en-un pour gérer vos équipes esport. Analytics, planning, engagement.',
     },
     { property: 'og:url', content: `${baseUrl}/solutions/clubs-esport` },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:image', content: `${baseUrl}/og-image.png` },
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
@@ -41,7 +43,7 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${baseUrl}/` },
-          { '@type': 'ListItem', position: 2, name: 'Solutions' },
+          { '@type': 'ListItem', position: 2, name: 'Solutions', item: `${baseUrl}/solutions/clubs-esport` },
           {
             '@type': 'ListItem',
             position: 3,

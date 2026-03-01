@@ -48,10 +48,11 @@ export function meta() {
       content:
         "Tableau de bord Squad Planner : tes squads, sessions à venir et activité récente en un coup d'oeil.",
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/home' },
-    { property: 'og:url', content: 'https://squadplanner.fr/home' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Accueil' },
+    { property: 'og:title', content: 'Accueil — Squad Planner' },
     {
       property: 'og:description',
       content:
@@ -61,7 +62,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Accueil' },
+    { name: 'twitter:title', content: 'Accueil — Squad Planner' },
     {
       name: 'twitter:description',
       content:

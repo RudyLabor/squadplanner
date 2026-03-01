@@ -46,6 +46,14 @@ export function meta() {
       content: `${baseUrl}/features/analytics`,
     },
     {
+      property: 'og:locale',
+      content: 'fr_FR',
+    },
+    {
+      property: 'og:site_name',
+      content: 'Squad Planner',
+    },
+    {
       property: 'og:image',
       content: `${baseUrl}/og-image.png`,
     },
@@ -83,7 +91,7 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Features' },
+          { '@type': 'ListItem', position: 2, name: 'Features', item: 'https://squadplanner.fr/features/analytics' },
           {
             '@type': 'ListItem',
             position: 3,

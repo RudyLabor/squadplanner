@@ -89,7 +89,7 @@ const TIERS = [
   {
     tier: 'team' as SubscriptionTier,
     name: 'Clan',
-    description: 'Pour les grosses squads qui veulent scaler.',
+    description: 'Pour les grosses squads qui veulent grandir.',
     monthlyPrice: TEAM_PRICE_MONTHLY,
     yearlyPrice: TEAM_PRICE_YEARLY,
     features: [

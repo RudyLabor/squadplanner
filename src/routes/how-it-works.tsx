@@ -46,6 +46,14 @@ export function meta() {
       content: `${baseUrl}/how-it-works`,
     },
     {
+      property: 'og:locale',
+      content: 'fr_FR',
+    },
+    {
+      property: 'og:site_name',
+      content: 'Squad Planner',
+    },
+    {
       property: 'og:image',
       content: `${baseUrl}/og-image.png`,
     },

@@ -22,8 +22,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 8,
     coverEmoji: '🎮',
     content: `<article>
-      <h2>Guilded a fermé : les 5 meilleures alternatives en 2026</h2>
-
       <p>La plateforme Guilded, pendant longtemps considérée comme une excellente alternative à Discord pour les communautés gaming, a cessé ses activités en 2024. Cette fermeture a laissé de nombreuses équipes et guildes en quête d'une solution comparable pour organiser leurs événements, gérer leurs membres et maintenir une communication efficace.</p>
 
       <p>Si toi aussi tu cherches la meilleure plateforme pour remplacer Guilded, cet article te présentera les 5 meilleures alternatives disponibles en 2026, avec leurs avantages et inconvénients respectifs.</p>
@@ -158,8 +156,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 10,
     coverEmoji: '🏆',
     content: `<article>
-      <h2>Comment organiser un tournoi entre amis en 5 étapes</h2>
-
       <p>Organiser un tournoi gaming entre amis peut sembler complexe : coordonner les horaires, gérer les brackets, communiquer avec les participants, valider les résultats... Mais avec une bonne méthode et les bons outils, c'est bien plus simple qu'il n'y paraît\u00a0!</p>
 
       <p>Dans ce guide complet, je te montrerai comment organiser un tournoi fluide et mémorable en utilisant Squad Planner. Que tu organises ton premier tournoi ou que tu sois déjà expérimenté, tu trouveras des astuces pour améliorer ton approche.</p>
@@ -319,8 +315,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 7,
     coverEmoji: '👥',
     content: `<article>
-      <h2>5 astuces pour que ta squad ne ghost plus jamais</h2>
-
       <p>Tu as envoyé le message à 18h. À 20h, 2 réponses sur 5. À 21h, tu annules. Tu joues solo. Encore.</p>
 
       <p>C'est la frustration numéro un des chefs de squad : tu organises une session, 8 personnes confirment, et le jour J, seules 3 apparaissent. C'est ce qu'on appelle le "ghosting" - et c'est une plaie.</p>
@@ -469,8 +463,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 9,
     coverEmoji: '🏆',
     content: `<article>
-      <h2>Comment créer une team esport en 2026</h2>
-
       <p>Créer une team esport, ce n'est pas juste rassembler 5 potes sur Discord et lancer une ranked. C'est un vrai projet qui demande de la structure, de la rigueur et une vision claire. En 2026, l'écosystème compétitif est plus accessible que jamais, mais la concurrence est féroce. Voici comment poser les bases d'une équipe solide et durable.</p>
 
       <h3>1. Définis ton identité et tes objectifs</h3>
@@ -564,8 +556,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 6,
     coverEmoji: '⏰',
     content: `<article>
-      <h2>Les meilleurs horaires pour jouer en équipe</h2>
-
       <p>Tu le sais\u00a0: trouver un créneau qui convient à tout le monde, c'est le défi numéro un des squads. Entre le boulot, les cours, la vie perso et les fuseaux horaires différents, coordonner 4 ou 5 personnes relève parfois de l'exploit. Pourtant, certains créneaux fonctionnent nettement mieux que d'autres.</p>
 
       <h3>Les créneaux en semaine</h3>
@@ -637,8 +627,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 8,
     coverEmoji: '⚔️',
     content: `<article>
-      <h2>Discord vs Squad Planner\u00a0: quelle différence\u00a0?</h2>
-
       <p>On nous pose souvent la question\u00a0: "Pourquoi utiliser Squad Planner si on a déjà Discord\u00a0?" C'est une question légitime. Discord est fantastique pour la communication, mais quand il s'agit d'organiser concrètement les sessions de jeu de ta squad, ses limites apparaissent rapidement.</p>
 
       <h3>Discord\u00a0: le roi de la communication</h3>
@@ -716,8 +704,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 7,
     coverEmoji: '🎮',
     content: `<article>
-      <h2>5 jeux parfaits pour jouer entre potes en 2026</h2>
-
       <p>Trouver le bon jeu pour ta squad, c'est la moitié du succès. Un jeu trop compétitif peut créer des tensions, un jeu trop simple peut ennuyer. Voici notre sélection 2026 des jeux qui offrent le meilleur équilibre entre fun, coopération et replay value quand on joue en groupe.</p>
 
       <h3>1. Valorant — Le tactique qui soude les équipes</h3>
@@ -808,8 +794,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 7,
     coverEmoji: '💬',
     content: `<article>
-      <h2>Comment améliorer la communication dans ta squad</h2>
-
       <p>Tu peux avoir les meilleurs joueurs du monde dans ta squad\u00a0: sans communication efficace, vous perdrez contre des équipes moins skilled mais mieux coordonnées. La communication est le multiplicateur de force ultime en gaming.</p>
 
       <h3>Les bases\u00a0: la communication en jeu</h3>
@@ -884,8 +868,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 10,
     coverEmoji: '🧠',
     content: `<article>
-      <h2>Le guide du IGL (In-Game Leader)</h2>
-
       <p>L'IGL, c'est le cerveau de l'équipe. Pas forcément le meilleur joueur en termes de skill pur, mais celui qui fait gagner les rounds grâce à ses décisions. Si tu veux assumer ce rôle — ou si tu le fais déjà sans le savoir — ce guide est pour toi.</p>
 
       <h3>Qu'est-ce qu'un IGL exactement\u00a0?</h3>
@@ -977,8 +959,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 8,
     coverEmoji: '💀',
     content: `<article>
-      <h2>Pourquoi les squads meurent (et comment sauver la tienne)</h2>
-
       <p>Tu as déjà vécu ça\u00a0: une squad qui commence dans l'enthousiasme, des sessions enflammées pendant 2-3 semaines, puis les absences s'accumulent, les messages se font rares, et un jour tu réalises que c'est fini. Personne ne joue plus ensemble.</p>
 
       <p>Ce n'est pas une fatalité. La plupart des squads meurent pour des raisons identifiables — et évitables. Voici les 5 causes principales et comment les contrer.</p>
@@ -1068,8 +1048,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 9,
     coverEmoji: '📈',
     content: `<article>
-      <h2>Ranked à 5\u00a0: le guide pour monter ensemble</h2>
-
       <p>Jouer en ranked à 5, c'est l'expérience la plus intense et gratifiante du gaming compétitif. Mais c'est aussi la plus exigeante\u00a0: contrairement au solo queue où tu ne dépends que de toi, le 5-stack demande une coordination parfaite. Voici comment transformer ta squad en machine à LP.</p>
 
       <h3>Le prérequis\u00a0: un planning d'entraînement sérieux</h3>
@@ -1161,8 +1139,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 6,
     coverEmoji: '🛡️',
     content: `<article>
-      <h2>Comment gérer un joueur toxique dans ta squad</h2>
-
       <p>Il y a ce joueur qui rage après chaque défaite. Qui blame ses coéquipiers systématiquement. Qui transforme chaque session en expérience stressante. Tu le connais, et tu sais que ça plombe l'ambiance pour tout le monde. Mais comment gérer la situation sans faire exploser la squad\u00a0?</p>
 
       <h3>Reconnaître la toxicité</h3>
@@ -1263,8 +1239,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 7,
     coverEmoji: '🎮',
     content: `<article>
-      <h2>Les 10 meilleurs jeux coop à jouer entre amis en 2026</h2>
-
       <p>Jouer en coop, c'est le meilleur moyen de renforcer les liens dans ta squad. Mais encore faut-il choisir le bon jeu. Voici notre sélection des 10 meilleurs jeux coopératifs de 2026, testés et approuvés par la communauté Squad Planner.</p>
 
       <h3>1. Helldivers 2</h3>
@@ -1324,8 +1298,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 6,
     coverEmoji: '🆓',
     content: `<article>
-      <h2>Top 8 jeux gratuits pour jouer entre amis en 2026</h2>
-
       <p>Pas besoin de casser sa tirelire pour passer de bonnes soirées gaming. Voici les 8 meilleurs jeux gratuits pour jouer en squad en 2026.</p>
 
       <h3>1. Valorant</h3>
@@ -1375,8 +1347,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 6,
     coverEmoji: '👥',
     content: `<article>
-      <h2>Les 8 meilleurs jeux à 2 joueurs en 2026</h2>
-
       <p>Parfois, pas besoin d'une squad de 5. Jouer à deux, c'est intime, intense, et souvent plus stratégique. Voici les meilleurs jeux duo de 2026.</p>
 
       <h3>1. It Takes Two</h3>
@@ -1418,8 +1388,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 8,
     coverEmoji: '👻',
     content: `<article>
-      <h2>Pourquoi les joueurs ghostent (et comment y remédier)</h2>
-
       <p>Tu crées une session pour 21h. Cinq personnes disent "je serai là". À 21h15, vous êtes trois. Deux joueurs ont disparu sans un mot. Classique.</p>
 
       <p>Le ghosting — ne pas se présenter à une session sans prévenir — est le problème numéro un des squads gaming. Mais pourquoi ça arrive, et surtout, comment l'éviter ?</p>
@@ -1472,8 +1440,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 9,
     coverEmoji: '🖥️',
     content: `<article>
-      <h2>Comment organiser une soirée LAN parfaite en 2026</h2>
-
       <p>Les LAN parties ne sont pas mortes. En 2026, elles vivent un vrai revival. Rien ne remplace le plaisir de jouer côte à côte, de crier ensemble après un clutch, et de partager une pizza à 3h du mat'. Voici comment organiser une LAN mémorable.</p>
 
       <h3>1. Le lieu</h3>

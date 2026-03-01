@@ -72,6 +72,8 @@ export function meta({ params }: { params: { game: string } }) {
     { name: 'twitter:description', content: description },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
     { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     {
       'script:ld+json': {
         '@context': 'https://schema.org',

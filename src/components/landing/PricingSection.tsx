@@ -204,7 +204,7 @@ export function PricingSection() {
                   {tier.popular && <Crown className="w-4 h-4 text-warning" />}
                   {tier.popular && (
                     <span className="px-2 py-0.5 rounded-full bg-success/15 text-success text-xs font-semibold">
-                      Essai 7 jours gratuit
+                      Essai 7 jours gratuits
                     </span>
                   )}
                 </div>

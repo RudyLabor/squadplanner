@@ -39,6 +39,9 @@ export function meta() {
         'Gère tes squads gaming : crée, rejoins et organise tes équipes pour planifier des sessions ensemble.',
     },
     { name: 'robots', content: 'noindex, nofollow' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: 'Mes Squads — Squad Planner' },
     {

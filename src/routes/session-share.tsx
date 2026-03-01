@@ -24,6 +24,7 @@ interface SessionPreview {
 export function meta({ params }: MetaArgs) {
   const sessionId = params.id || ''
   const ogImageUrl = `https://nxbqiwmfyafgshxzczxo.supabase.co/functions/v1/og-image?sessionId=${sessionId}`
+  const shareUrl = `https://squadplanner.fr/s/${sessionId}`
 
   return [
     { title: 'Session Gaming - Squad Planner' },
@@ -31,7 +32,10 @@ export function meta({ params }: MetaArgs) {
       name: 'description',
       content: 'Rejoins cette session gaming sur Squad Planner !',
     },
-    { name: 'robots', content: 'noindex, nofollow' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { tagName: 'link', rel: 'canonical', href: shareUrl },
+    { property: 'og:url', content: shareUrl },
+    { property: 'og:locale', content: 'fr_FR' },
     { property: 'og:type', content: 'website' },
     { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:title', content: 'Session Gaming - Squad Planner' },

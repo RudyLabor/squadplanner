@@ -150,7 +150,7 @@ export default function AlternativeDiscordEvents() {
       <div className="section-divider" />
 
       {/* Limitations vs Advantages */}
-      <section className="px-4 md:px-6 py-12 md:py-16">
+      <section id="comparison" className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-5xl mx-auto">
           <m.div
             variants={scrollReveal}

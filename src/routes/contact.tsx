@@ -19,6 +19,8 @@ export function meta() {
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `${baseUrl}/contact` },
     { property: 'og:type', content: 'website' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:url', content: `${baseUrl}/contact` },
     { property: 'og:title', content: 'Nous contacter — Squad Planner' },
     {

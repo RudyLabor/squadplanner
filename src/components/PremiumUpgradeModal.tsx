@@ -146,7 +146,7 @@ export function PremiumUpgradeModal({
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Débloque cette fonctionnalité</h2>
-            <p className="text-base text-white/80">Essaie 7 jours gratuit — sans carte bancaire</p>
+            <p className="text-base text-white/80">Essaie 7 jours gratuits — sans carte bancaire</p>
           </div>
         </div>
 

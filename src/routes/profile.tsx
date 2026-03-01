@@ -16,10 +16,11 @@ export function meta() {
       content:
         'Consulte ton profil gaming : statistiques, fiabilité, XP et badges. Personnalise ton identité Squad Planner.',
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/profile' },
-    { property: 'og:url', content: 'https://squadplanner.fr/profile' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Mon Profil' },
+    { property: 'og:title', content: 'Mon Profil — Squad Planner' },
     {
       property: 'og:description',
       content:
@@ -29,7 +30,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Mon Profil' },
+    { name: 'twitter:title', content: 'Mon Profil — Squad Planner' },
     {
       name: 'twitter:description',
       content:

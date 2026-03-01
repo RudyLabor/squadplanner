@@ -111,6 +111,14 @@ export const meta: MetaFunction<typeof loader> = ({ data }: { data: any }) => {
       content: 'fr',
     },
     {
+      property: 'og:locale',
+      content: 'fr_FR',
+    },
+    {
+      property: 'og:site_name',
+      content: 'Squad Planner',
+    },
+    {
       'script:ld+json': {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
@@ -132,9 +140,19 @@ function ArticleJsonLd({ post }: { post: BlogPost }) {
     description: post.excerpt,
     image: 'https://squadplanner.fr/og-image.png',
     datePublished: post.date,
+    dateModified: post.date,
     author: {
       '@type': 'Organization',
       name: post.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Squad Planner',
+      url: 'https://squadplanner.fr',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://squadplanner.fr/blog/${post.slug}`,
     },
     keywords: post.tags.join(', '),
   }
@@ -388,7 +406,7 @@ export default function BlogPost() {
             </div>
             <div className="flex-1 text-center md:text-left">
               <h3 className="text-base font-bold text-text-primary mb-1">
-                Essaie Premium 7 jours gratuit
+                Essaie Premium 7 jours gratuits
               </h3>
               <p className="text-sm text-text-tertiary">
                 Stats avancées, sessions récurrentes, coach IA et audio HD. Sans engagement, annule quand tu veux.

@@ -19,6 +19,8 @@ export function meta() {
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/legal' },
     { property: 'og:url', content: 'https://squadplanner.fr/legal' },
     { property: 'og:type', content: 'website' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:title', content: 'Mentions légales - Squad Planner' },
     {
       property: 'og:description',

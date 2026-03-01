@@ -21,6 +21,8 @@ export function meta() {
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/' },
     { property: 'og:type', content: 'website' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:url', content: 'https://squadplanner.fr/' },
     { property: 'og:title', content: title },
     { property: 'og:description', content: description },

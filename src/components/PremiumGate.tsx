@@ -94,7 +94,7 @@ export function PremiumGate({
           >
             <Lock className="w-6 h-6 text-warning" aria-hidden="true" />
             <span className="text-base font-medium text-white">{label}</span>
-            <span className="text-xs text-text-tertiary">Essaie 7 jours gratuit</span>
+            <span className="text-xs text-text-tertiary">Essaie 7 jours gratuits</span>
           </button>
         </div>
         <PremiumUpgradeModal
@@ -126,7 +126,7 @@ export function PremiumGate({
               <span className="text-base font-medium text-text-primary">{label}</span>
               <PremiumBadge small />
             </div>
-            <span className="text-sm text-text-tertiary">Essaie 7 jours gratuit pour débloquer</span>
+            <span className="text-sm text-text-tertiary">Essaie 7 jours gratuits pour débloquer</span>
           </div>
           <Zap className="w-5 h-5 text-warning" aria-hidden="true" />
         </div>
@@ -183,7 +183,7 @@ export function SquadLimitReached({
         <div className="flex-1">
           <h3 className="text-base font-semibold text-text-primary mb-1">Limite atteinte</h3>
           <p className="text-base text-text-secondary mb-3">
-            Tu as {currentCount}/{maxCount} squad{maxCount > 1 ? 's' : ''}. Premium te donne jusqu'à 5 squads. Essaie 7 jours gratuit !
+            Tu as {currentCount}/{maxCount} squad{maxCount > 1 ? 's' : ''}. Premium te donne jusqu'à 5 squads. Essaie 7 jours gratuits !
           </p>
           <Button
             size="sm"

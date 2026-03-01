@@ -12,6 +12,9 @@ export function meta() {
       content:
         'Configure ton compte Squad Planner : crée ou rejoins une squad, personnalise ton profil et active les notifications.',
     },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: 'Bienvenue - Squad Planner' },
     {

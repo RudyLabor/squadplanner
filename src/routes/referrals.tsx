@@ -15,26 +15,27 @@ export function meta() {
       content:
         'Invite tes potes sur Squad Planner et gagne 7 jours Premium gratuit. Débloque des badges exclusifs et des récompenses.',
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/referrals' },
-    { property: 'og:url', content: 'https://squadplanner.fr/referrals' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Parrainage' },
+    { property: 'og:title', content: 'Parrainage - Squad Planner' },
     {
       property: 'og:description',
       content:
         'Invite tes potes sur Squad Planner et gagne 7 jours Premium gratuit. Débloque des badges exclusifs et des récompenses.',
     },
     { property: 'og:image', content: 'https://squadplanner.fr/og-image.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Parrainage' },
+    { name: 'twitter:title', content: 'Parrainage - Squad Planner' },
     {
       name: 'twitter:description',
       content:
         'Invite tes potes sur Squad Planner et gagne 7 jours Premium gratuit. Débloque des badges exclusifs et des récompenses.',
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
-    { property: 'og:image:width', content: '1200' },
-    { property: 'og:image:height', content: '630' },
   ]
 }
 

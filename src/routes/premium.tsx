@@ -19,6 +19,8 @@ export function meta() {
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/premium' },
     { property: 'og:url', content: 'https://squadplanner.fr/premium' },
     { property: 'og:type', content: 'website' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:title', content: 'Premium - Squad Planner' },
     {
       property: 'og:description',

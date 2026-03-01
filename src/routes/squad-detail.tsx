@@ -36,8 +36,11 @@ export function meta() {
       content:
         'Consulte les détails de ta squad : membres, sessions planifiées, classement et code d\'invitation.',
     },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Détail Squad' },
+    { property: 'og:title', content: 'Détail Squad — Squad Planner' },
     {
       property: 'og:description',
       content:
@@ -47,7 +50,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Détail Squad' },
+    { name: 'twitter:title', content: 'Détail Squad — Squad Planner' },
     {
       name: 'twitter:description',
       content:

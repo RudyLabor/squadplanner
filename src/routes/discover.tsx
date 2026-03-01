@@ -16,10 +16,11 @@ export function meta() {
       content:
         'Découvre de nouvelles squads et joueurs. Trouve des partenaires de jeu qui correspondent à ton style.',
     },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/discover' },
-    { property: 'og:url', content: 'https://squadplanner.fr/discover' },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: 'Découvrir' },
+    { property: 'og:title', content: 'Découvrir — Squad Planner' },
     {
       property: 'og:description',
       content:
@@ -29,7 +30,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Découvrir' },
+    { name: 'twitter:title', content: 'Découvrir — Squad Planner' },
     {
       name: 'twitter:description',
       content:

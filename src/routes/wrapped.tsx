@@ -15,6 +15,9 @@ export function meta() {
       content:
         'Découvre ton Gaming Wrapped 2026 : sessions jouées, heures avec ta squad, meilleur streak, score de fiabilité. Partage tes stats !',
     },
+    { httpEquiv: 'content-language', content: 'fr' },
+    { property: 'og:locale', content: 'fr_FR' },
+    { property: 'og:site_name', content: 'Squad Planner' },
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: 'Mon Gaming Wrapped 2026 - Squad Planner' },
     {
@@ -25,7 +28,7 @@ export function meta() {
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Gaming Wrapped 2026' },
+    { name: 'twitter:title', content: 'Gaming Wrapped 2026 - Squad Planner' },
     {
       name: 'twitter:description',
       content:

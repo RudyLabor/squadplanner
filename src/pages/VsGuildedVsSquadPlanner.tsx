@@ -148,10 +148,10 @@ export default function VsGuildedVsSquadPlanner() {
             </m.div>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
               <Link
-                to="/alternative/guilded"
+                to="/premium"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
               >
-                Alternative à Guilded
+                Voir le plan gratuit
               </Link>
             </m.div>
           </m.div>

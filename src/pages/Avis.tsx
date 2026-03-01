@@ -255,7 +255,7 @@ export default function Avis() {
                 </Link>
               </m.div>
               <p className="text-base text-text-tertiary mt-4">
-                Gratuit - Pas de carte bancaire - 30 secondes
+                Gratuit · Pas de carte bancaire · 30 secondes
               </p>
             </div>
           </m.div>

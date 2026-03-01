@@ -300,7 +300,7 @@ describe('HomeSessionsSection', () => {
     const sessions = [mockSession, { ...mockSession, id: 'session-2' }]
     render(createElement(HomeSessionsSection, { ...defaultProps, upcomingSessions: sessions }))
     expect(screen.getByText('Voir tout (2)')).toBeDefined()
-    expect(screen.getByText('Voir tout (2)').closest('a')?.getAttribute('href')).toBe('/squads')
+    expect(screen.getByText('Voir tout (2)').closest('a')?.getAttribute('href')).toBe('/sessions')
   })
 
   it('does not show Voir tout when only one session or loading', () => {

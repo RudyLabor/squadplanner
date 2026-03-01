@@ -164,7 +164,7 @@ export function Premium() {
         {/* Social proof */}
         <div className="flex items-center justify-center py-6">
           <p className="text-sm text-text-secondary">
-            Rejoints par <span className="font-semibold text-text-primary">2 000+</span> squads
+            Rejoint par <span className="font-semibold text-text-primary">2 000+</span> squads
           </p>
         </div>
 

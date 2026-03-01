@@ -80,7 +80,7 @@ export default function FeatureAnalytics() {
                 to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow"
               >
-                Voir les analytics
+                Analyse ta squad
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </m.div>
@@ -176,13 +176,13 @@ export default function FeatureAnalytics() {
           >
             <div className="relative z-10">
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">Prêt à piloter ta squad ?</h2>
-              <p className="text-text-tertiary mb-8 text-lg">Les analytics sont inclus dans tous les plans. Commence maintenant.</p>
+              <p className="text-text-tertiary mb-8 text-lg">Crée ta squad et accède aux analytics dès ta première session.</p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
                   className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow"
                 >
-                  Essayer gratuitement
+                  Analyse ta squad
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>

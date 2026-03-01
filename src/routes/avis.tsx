@@ -15,7 +15,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Découvrez les avis des joueurs sur Squad Planner : organisation de sessions, fiabilité, analytics, gamification. +4.8/5 de moyenne.',
+        'Découvre les avis des joueurs sur Squad Planner : organisation de sessions, fiabilité, analytics, gamification. +4.8/5 de moyenne.',
     },
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `${baseUrl}/avis` },

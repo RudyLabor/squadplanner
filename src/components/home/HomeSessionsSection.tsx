@@ -272,7 +272,7 @@ export const HomeSessionsSection = memo(function HomeSessionsSection({
         <h2 className="text-base font-semibold text-text-primary">Prochaine session</h2>
         {!sessionsLoading && upcomingSessions.length > 1 && (
           <Link
-            to="/squads"
+            to="/sessions"
             className="text-sm text-primary font-medium min-h-[44px] flex items-center px-2"
           >
             Voir tout ({upcomingSessions.length})

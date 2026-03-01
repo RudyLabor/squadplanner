@@ -99,10 +99,10 @@ export default function SolutionClubsEsport() {
           >
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="inline-flex">
               <Link
-                to="/contact"
+                to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow"
               >
-                Contacter l'équipe
+                Essayer gratuitement
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </m.div>
@@ -235,10 +235,10 @@ export default function SolutionClubsEsport() {
             </ul>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="inline-flex">
               <Link
-                to="/contact"
+                to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow"
               >
-                Contacter l'équipe
+                Essayer gratuitement
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </m.div>

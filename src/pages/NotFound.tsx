@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import { Home, Gamepad2, ArrowLeft, Users, MessageCircle, HelpCircle } from '../components/icons'
+import { Home, Gamepad2, ArrowLeft, Search, Compass, HelpCircle } from '../components/icons'
 import { Button } from '../components/ui'
 
 export function NotFound() {
@@ -59,8 +59,8 @@ export function NotFound() {
             <p className="text-sm text-text-tertiary mb-4">Pages populaires</p>
             <div className="flex flex-wrap justify-center gap-3">
               {[
-                { to: '/squads', icon: Users, label: 'Mes squads' },
-                { to: '/messages', icon: MessageCircle, label: 'Messages' },
+                { to: '/discover', icon: Compass, label: 'Découvrir' },
+                { to: '/premium', icon: Search, label: 'Premium' },
                 { to: '/help', icon: HelpCircle, label: 'Aide' },
               ].map(({ to, icon: Icon, label }) => (
                 <Link

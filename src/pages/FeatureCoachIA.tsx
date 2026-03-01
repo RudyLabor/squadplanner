@@ -86,7 +86,7 @@ export default function FeatureCoachIA() {
                 to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow"
               >
-                Découvrir le Coach IA
+                Essaie le Coach IA — 7 jours gratuits
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </m.div>
@@ -187,11 +187,11 @@ export default function FeatureCoachIA() {
                   to="/auth?mode=register&redirect=onboarding"
                   className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow"
                 >
-                  Essayer gratuitement
+                  Essaie le Coach IA — 7 jours gratuits
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>
-              <p className="text-base text-text-quaternary mt-4">7 jours gratuits &middot; Annulation libre</p>
+              <p className="text-base text-text-quaternary mt-4">Gratuit · Annulation libre · Sans engagement</p>
             </div>
           </m.div>
         </div>

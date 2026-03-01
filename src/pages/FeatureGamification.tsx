@@ -182,7 +182,7 @@ export default function FeatureGamification() {
                   to="/auth?mode=register&redirect=onboarding"
                   className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary-bg text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow"
                 >
-                  C'est parti
+                  Monte de niveau
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>

@@ -167,6 +167,33 @@ export default function Glossaire() {
         </div>
       </section>
 
+      {/* Mid-content CTA */}
+      <section className="px-4 md:px-6 py-8">
+        <div className="max-w-4xl mx-auto">
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="p-6 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/5 to-transparent text-center"
+          >
+            <p className="text-lg font-semibold text-text-primary mb-2">
+              Marre du ghosting dans ta squad ?
+            </p>
+            <p className="text-text-tertiary mb-4">
+              Le Score de Fiabilité de Squad Planner identifie les joueurs sérieux. Fini les sessions annulées.
+            </p>
+            <Link
+              to="/auth?mode=register&redirect=onboarding"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-bg text-white font-semibold shadow-lg shadow-primary/10 hover:scale-[1.02] transition-transform"
+            >
+              Crée ta squad gratuitement
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </m.div>
+        </div>
+      </section>
+
       <div className="section-divider" />
 
       {/* CTA */}

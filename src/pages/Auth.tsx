@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Loader2, Gamepad2, CheckCircle } from '../components/icons'
-import { Link, useNavigate, useSearchParams, Navigate } from 'react-router'
+import { Link, useNavigate, useSearchParams } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card } from '../components/ui'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
@@ -37,9 +37,14 @@ export default function Auth() {
   const { signIn, signUp, signInWithGoogle, user, isInitialized } = useAuthStore()
   const navigate = useNavigate()
 
-  if (isInitialized && user && mode !== 'reset') {
-    return <Navigate to="/home" replace />
-  }
+  // Redirect logged-in users via useEffect (not conditional render)
+  // to avoid SSR/client hydration mismatch — SSR always renders the form
+  // since auth state isn't available server-side.
+  useEffect(() => {
+    if (isInitialized && user && mode !== 'reset') {
+      navigate('/home', { replace: true })
+    }
+  }, [isInitialized, user, mode, navigate])
 
   const isFormValid = useMemo(() => {
     if (mode === 'login') {

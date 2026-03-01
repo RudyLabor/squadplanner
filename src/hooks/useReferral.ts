@@ -81,12 +81,23 @@ export const useReferralStore = create<ReferralState>((set, get) => ({
           // Fallback: read directly from profiles
           const { data: profile } = await supabase
             .from('profiles')
-            .select('referral_code')
+            .select('referral_code, username')
             .eq('id', user.id)
             .single()
 
+          let code = profile?.referral_code || null
+
+          // Auto-generate referral code if missing
+          if (!code && profile?.username) {
+            code = profile.username.replace(/\s+/g, '').slice(0, 12).toUpperCase() + '-SP26'
+            await supabase
+              .from('profiles')
+              .update({ referral_code: code })
+              .eq('id', user.id)
+          }
+
           set({
-            stats: { ...DEFAULT_STATS, referralCode: profile?.referral_code || null },
+            stats: { ...DEFAULT_STATS, referralCode: code },
             isLoading: false,
           })
           return
@@ -96,10 +107,28 @@ export const useReferralStore = create<ReferralState>((set, get) => ({
 
       const result = data as Record<string, unknown> | null
       if (result) {
+        let referralCode = (result.referral_code as string) || null
+
+        // Auto-generate referral code if missing
+        if (!referralCode) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq('id', user.id)
+            .single()
+          if (profile?.username) {
+            referralCode = profile.username.replace(/\s+/g, '').slice(0, 12).toUpperCase() + '-SP26'
+            await supabase
+              .from('profiles')
+              .update({ referral_code: referralCode })
+              .eq('id', user.id)
+          }
+        }
+
         const milestones = result.milestones as Record<string, boolean> | undefined
         set({
           stats: {
-            referralCode: (result.referral_code as string) || null,
+            referralCode,
             totalReferrals: (result.total_referrals as number) || 0,
             signedUp: (result.signed_up as number) || 0,
             converted: (result.converted as number) || 0,

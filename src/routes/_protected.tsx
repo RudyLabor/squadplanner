@@ -127,6 +127,25 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     }))
   }
 
+  // Fix stale member counts: query actual counts from squad_members
+  if (squads.length > 0) {
+    const squadIds = squads.map((s) => s.id)
+    const { data: allMembers } = (await withTimeout(
+      supabase.from('squad_members').select('squad_id').in('squad_id', squadIds),
+      3000
+    )) as any
+    if (allMembers) {
+      const countMap = new Map<string, number>()
+      for (const m of allMembers as { squad_id: string }[]) {
+        countMap.set(m.squad_id, (countMap.get(m.squad_id) || 0) + 1)
+      }
+      squads = squads.map((s) => ({
+        ...s,
+        member_count: countMap.get(s.id) ?? s.member_count,
+      }))
+    }
+  }
+
   return {
     user: { id: user.id, email: user.email },
     profile,
@@ -195,6 +214,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ...squad,
       member_count: squad.total_members ?? 1,
     }))
+  }
+
+  // Fix stale member counts: query actual counts from squad_members
+  if (squads.length > 0) {
+    const squadIds = squads.map((s) => s.id)
+    const { data: allMembers } = await supabase
+      .from('squad_members')
+      .select('squad_id')
+      .in('squad_id', squadIds)
+    if (allMembers) {
+      const countMap = new Map<string, number>()
+      for (const m of allMembers as { squad_id: string }[]) {
+        countMap.set(m.squad_id, (countMap.get(m.squad_id) || 0) + 1)
+      }
+      squads = squads.map((s) => ({
+        ...s,
+        member_count: countMap.get(s.id) ?? s.member_count,
+      }))
+    }
   }
 
   return data(

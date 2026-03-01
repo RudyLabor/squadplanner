@@ -37,12 +37,36 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: faqs.map((f) => ({
-          '@type': 'Question',
-          name: f.q,
-          acceptedAnswer: { '@type': 'Answer', text: f.a },
-        })),
+        '@graph': [
+          {
+            '@type': 'FAQPage',
+            mainEntity: faqs.map((f) => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+          },
+          {
+            '@type': 'SoftwareApplication',
+            name: 'Squad Planner',
+            applicationCategory: 'GameApplication',
+            operatingSystem: 'Web, iOS, Android',
+            url: 'https://squadplanner.fr',
+            description,
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'EUR',
+              description: 'Gratuit — 1 squad, 2 sessions/semaine, chat, notifications',
+            },
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: '4.9',
+              bestRating: '5',
+              ratingCount: '2000',
+            },
+          },
+        ],
       },
     },
   ]

@@ -275,10 +275,10 @@ export function LandingFooter() {
             </ul>
           </div>
 
-          {/* Légal */}
+          {/* Légal & Communauté */}
           <div>
             <p className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-normal md:tracking-wider">
-              Légal
+              Communauté
             </p>
             <ul className="space-y-0.5">
               <li>
@@ -314,6 +314,24 @@ export function LandingFooter() {
                   Twitter / X
                 </a>
               </li>
+              <li>
+                <a
+                  href="https://discord.gg/squadplanner"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${linkClass} inline-flex items-center gap-1.5`}
+                >
+                  <svg
+                    className="w-3.5 h-3.5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+                  </svg>
+                  Discord
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -340,6 +358,18 @@ export function LandingFooter() {
               {badge.icon} {badge.label}
             </span>
           ))}
+        </div>
+
+        {/* App Store badges */}
+        <div className="flex flex-wrap justify-center gap-3 mb-6">
+          <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-surface-card/50 backdrop-blur-sm border border-border-subtle text-sm text-text-secondary">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83"/><path d="M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11"/></svg>
+            Bientôt sur iOS
+          </span>
+          <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-surface-card/50 backdrop-blur-sm border border-border-subtle text-sm text-text-secondary">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.523 2.234l-1.964 3.39A9.96 9.96 0 0 0 12 4.96a9.96 9.96 0 0 0-3.559.663L6.477 2.234a.424.424 0 0 0-.728.432l1.94 3.354A10.007 10.007 0 0 0 2 15h20a10.007 10.007 0 0 0-5.689-8.98l1.94-3.354a.424.424 0 0 0-.728-.432zM8 12a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM2 16h20v1a7 7 0 0 1-7 7H9a7 7 0 0 1-7-7v-1z"/></svg>
+            Bientôt sur Android
+          </span>
         </div>
 
         {/* Stats */}

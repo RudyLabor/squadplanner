@@ -125,7 +125,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }: { data: any }) => {
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
           { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://squadplanner.fr/blog' },
-          { '@type': 'ListItem', position: 3, name: post.title, item: `https://squadplanner.fr/blog/${post.slug}` },
+          { '@type': 'ListItem', position: 3, name: post.title },
         ],
       },
     },

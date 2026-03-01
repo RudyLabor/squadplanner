@@ -36,6 +36,16 @@ export function meta() {
     },
     { name: 'twitter:image', content: 'https://squadplanner.fr/og-image.png' },
     { httpEquiv: 'content-language', content: 'fr' },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+          { '@type': 'ListItem', position: 2, name: 'Connexion' },
+        ],
+      },
+    },
   ]
 }
 

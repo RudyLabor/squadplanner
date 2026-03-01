@@ -83,6 +83,7 @@ export function meta({ params }: { params: { game: string } }) {
             name: game.name,
             description: game.description,
             genre: game.genre,
+            gamePlatform: ['PC', 'PlayStation', 'Xbox', 'Nintendo Switch'],
             url: `https://squadplanner.fr/games/${game.slug}`,
           },
           {
@@ -111,7 +112,7 @@ export function meta({ params }: { params: { game: string } }) {
             itemListElement: [
               { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
               { '@type': 'ListItem', position: 2, name: 'Jeux' },
-              { '@type': 'ListItem', position: 3, name: game.name, item: `https://squadplanner.fr/games/${game.slug}` },
+              { '@type': 'ListItem', position: 3, name: game.name },
             ],
           },
         ],

@@ -40,15 +40,21 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${baseUrl}/` },
-          { '@type': 'ListItem', position: 2, name: 'Solutions', item: `${baseUrl}/solutions/streamers` },
+        '@graph': [
           {
-            '@type': 'ListItem',
-            position: 3,
-            name: 'Streamers',
-            item: `${baseUrl}/solutions/streamers`,
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${baseUrl}/` },
+              { '@type': 'ListItem', position: 2, name: 'Solutions', item: `${baseUrl}/solutions` },
+              { '@type': 'ListItem', position: 3, name: 'Streamers' },
+            ],
+          },
+          {
+            '@type': 'WebPage',
+            name: 'Squad Planner pour les Streamers',
+            description: 'Organise tes sessions gaming avec ta communauté. Sessions planifiées, RSVP fiable, widget embeddable, programme ambassadeur. La solution pour les streamers.',
+            url: `${baseUrl}/solutions/streamers`,
+            inLanguage: 'fr',
           },
         ],
       },

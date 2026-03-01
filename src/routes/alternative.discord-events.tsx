@@ -98,8 +98,47 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Alternatives', item: 'https://squadplanner.fr/alternative/discord-events' },
-          { '@type': 'ListItem', position: 3, name: 'Alternative Discord Events', item: 'https://squadplanner.fr/alternative/discord-events' },
+          { '@type': 'ListItem', position: 2, name: 'Alternative Discord Events' },
+        ],
+      },
+    },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: "Les événements Discord suffisent pour organiser des sessions gaming ?",
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: "Les événements Discord sont basiques : pas de confirmation fiable (OUI/NON/Peut-être sans engagement), pas de score de fiabilité, pas de rappels automatiques ni d'analytics de présence. Squad Planner comble ces lacunes.",
+            },
+          },
+          {
+            '@type': 'Question',
+            name: "Je dois quitter Discord pour utiliser Squad Planner ?",
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: "Non. Discord et Squad Planner sont complémentaires. Discord gère la communication (chat, voice), Squad Planner gère l'organisation des sessions gaming (calendrier, confirmations, fiabilité).",
+            },
+          },
+          {
+            '@type': 'Question',
+            name: "C'est gratuit ?",
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: "Oui. Le plan gratuit de Squad Planner inclut 1 squad, 5 membres et 2 sessions par semaine. Le Premium à 6,99 €/mois ajoute les squads illimitées et les fonctionnalités avancées.",
+            },
+          },
+          {
+            '@type': 'Question',
+            name: "Squad Planner a un système de rappels automatiques ?",
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: "Oui. Squad Planner envoie des rappels automatiques par email et push notification avant chaque session. Plus personne n'oublie qu'il y a une session ce soir.",
+            },
+          },
         ],
       },
     },

@@ -12,12 +12,12 @@ export function meta() {
   const baseUrl = 'https://squadplanner.fr'
   return [
     {
-      title: 'Comment \u00e7a marche - Squad Planner',
+      title: 'Comment ça marche - Squad Planner',
     },
     {
       name: 'description',
       content:
-        'D\u00e9couvre comment Squad Planner fonctionne en 4 \u00e9tapes simples : cr\u00e9e ta squad, planifie tes sessions, confirme ta pr\u00e9sence, joue ensemble.',
+        'Découvre comment Squad Planner fonctionne en 4 étapes simples : crée ta squad, planifie tes sessions, confirme ta présence, joue ensemble.',
     },
     {
       name: 'robots',
@@ -34,12 +34,12 @@ export function meta() {
     },
     {
       property: 'og:title',
-      content: 'Comment \u00e7a marche - Squad Planner',
+      content: 'Comment ça marche - Squad Planner',
     },
     {
       property: 'og:description',
       content:
-        '4 \u00e9tapes pour organiser tes sessions gaming sans prise de t\u00eate.',
+        '4 étapes pour organiser tes sessions gaming sans prise de tête.',
     },
     {
       property: 'og:url',
@@ -88,14 +88,29 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+        '@graph': [
           {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'Comment \u00e7a marche',
-            item: 'https://squadplanner.fr/how-it-works',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Comment ça marche',
+                item: 'https://squadplanner.fr/how-it-works',
+              },
+            ],
+          },
+          {
+            '@type': 'HowTo',
+            name: 'Comment utiliser Squad Planner',
+            description: 'Guide en 4 étapes pour organiser vos sessions gaming avec Squad Planner.',
+            step: [
+              { '@type': 'HowToStep', position: 1, name: 'Crée ta squad', text: 'Crée un groupe et invite tes coéquipiers en 30 secondes.' },
+              { '@type': 'HowToStep', position: 2, name: 'Planifie une session', text: 'Choisis la date, l\'heure et le jeu. Tout le monde reçoit une notification.' },
+              { '@type': 'HowToStep', position: 3, name: 'Confirme ta présence', text: 'Chaque membre confirme sa présence. Tu vois qui sera là en temps réel.' },
+              { '@type': 'HowToStep', position: 4, name: 'Jouez ensemble', text: 'Rejoins le voice chat intégré et lance la partie avec ton équipe au complet.' },
+            ],
           },
         ],
       },
@@ -105,7 +120,7 @@ export function meta() {
 
 export const handle = {
   breadcrumb: () => ({
-    label: 'Comment \u00e7a marche',
+    label: 'Comment ça marche',
     path: '/how-it-works',
   }),
 }

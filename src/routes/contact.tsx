@@ -43,10 +43,32 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${baseUrl}/` },
-          { '@type': 'ListItem', position: 2, name: 'Contact', item: `${baseUrl}/contact` },
+        '@graph': [
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${baseUrl}/` },
+              { '@type': 'ListItem', position: 2, name: 'Contact', item: `${baseUrl}/contact` },
+            ],
+          },
+          {
+            '@type': 'ContactPage',
+            name: 'Contacter Squad Planner',
+            description: "Contactez l'équipe Squad Planner pour les offres Club et Entreprise.",
+            url: `${baseUrl}/contact`,
+            mainEntity: {
+              '@type': 'Organization',
+              name: 'Squad Planner',
+              url: `${baseUrl}`,
+              email: 'contact@squadplanner.fr',
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                email: 'contact@squadplanner.fr',
+                availableLanguage: ['French', 'English'],
+              },
+            },
+          },
         ],
       },
     },

@@ -17,7 +17,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Visualise les tendances de ta squad avec des heatmaps de pr\u00e9sence, la fiabilit\u00e9 par joueur et les cr\u00e9neaux optimaux pour jouer ensemble.',
+        'Visualise les tendances de ta squad avec des heatmaps de présence, la fiabilité par joueur et les créneaux optimaux pour jouer ensemble.',
     },
     {
       name: 'robots',
@@ -39,7 +39,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        'Heatmaps, fiabilit\u00e9 par joueur, tendances sessions. Les analytics pour optimiser ta squad.',
+        'Heatmaps, fiabilité par joueur, tendances sessions. Les analytics pour optimiser ta squad.',
     },
     {
       property: 'og:url',
@@ -88,15 +88,21 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Features', item: 'https://squadplanner.fr/features/analytics' },
+        '@graph': [
           {
-            '@type': 'ListItem',
-            position: 3,
-            name: 'Analytics Squad',
-            item: 'https://squadplanner.fr/features/analytics',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+              { '@type': 'ListItem', position: 2, name: 'Fonctionnalités', item: 'https://squadplanner.fr/features' },
+              { '@type': 'ListItem', position: 3, name: 'Analytics' },
+            ],
+          },
+          {
+            '@type': 'WebPage',
+            name: 'Analytics Squad - Squad Planner',
+            description: 'Visualise les tendances de ta squad avec des heatmaps de présence, la fiabilité par joueur et les créneaux optimaux pour jouer ensemble.',
+            url: `${baseUrl}/features/analytics`,
+            inLanguage: 'fr',
           },
         ],
       },

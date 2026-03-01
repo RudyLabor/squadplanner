@@ -39,8 +39,7 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Comparatifs', item: 'https://squadplanner.fr/vs/google-calendar-vs-squad-planner' },
-          { '@type': 'ListItem', position: 3, name: 'Google Calendar vs Squad Planner', item: 'https://squadplanner.fr/vs/google-calendar-vs-squad-planner' },
+          { '@type': 'ListItem', position: 2, name: 'Google Calendar vs Squad Planner' },
         ],
       },
     },
@@ -62,7 +61,7 @@ export function meta() {
             name: 'Google Calendar est gratuit, pourquoi payer Squad Planner ?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Squad Planner est aussi gratuit (1 squad, 5 membres, 2 sessions/semaine). Premium ajoute les fonctionnalités avancées pour 6,99\u00a0\u20ac/mois.',
+              text: 'Squad Planner est aussi gratuit (1 squad, 5 membres, 2 sessions/semaine). Premium ajoute les fonctionnalités avancées pour 6,99 €/mois.',
             },
           },
           {

@@ -98,8 +98,47 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Alternatives', item: 'https://squadplanner.fr/alternative/gamerlink' },
-          { '@type': 'ListItem', position: 3, name: 'Alternative GamerLink', item: 'https://squadplanner.fr/alternative/gamerlink' },
+          { '@type': 'ListItem', position: 2, name: 'Alternative GamerLink' },
+        ],
+      },
+    },
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: "Quelle est la différence entre GamerLink et Squad Planner ?",
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: "GamerLink se concentre sur le matchmaking social entre joueurs. Squad Planner va plus loin en ajoutant la planification de sessions, les confirmations de présence, le score de fiabilité et les analytics de squad.",
+            },
+          },
+          {
+            '@type': 'Question',
+            name: "Squad Planner a un système de matchmaking ?",
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: "Oui. Squad Planner propose un matchmaking algorithmique basé sur le niveau, le style de jeu, les horaires et la fiabilité. Tu trouves des joueurs compatibles, pas juste des randoms.",
+            },
+          },
+          {
+            '@type': 'Question',
+            name: "C'est gratuit de passer de GamerLink à Squad Planner ?",
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: "Oui. Le plan gratuit de Squad Planner inclut 1 squad, 5 membres et 2 sessions par semaine. Crée ton compte en 30 secondes et commence à organiser tes sessions.",
+            },
+          },
+          {
+            '@type': 'Question',
+            name: "Squad Planner fonctionne sur mobile ?",
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: "Oui. Squad Planner est une PWA responsive qui fonctionne sur tous les navigateurs mobiles. Une version native iOS et Android est en préparation.",
+            },
+          },
         ],
       },
     },

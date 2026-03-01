@@ -17,7 +17,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Gagne de l\'XP, rel\u00e8ve des challenges quotidiens, maintiens tes streaks et d\u00e9bloque des badges. La gamification qui rend tes sessions addictives.',
+        'Gagne de l\'XP, relève des challenges quotidiens, maintiens tes streaks et débloque des badges. La gamification qui rend tes sessions addictives.',
     },
     {
       name: 'robots',
@@ -88,15 +88,21 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Features', item: 'https://squadplanner.fr/features/gamification' },
+        '@graph': [
           {
-            '@type': 'ListItem',
-            position: 3,
-            name: 'Gamification',
-            item: 'https://squadplanner.fr/features/gamification',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+              { '@type': 'ListItem', position: 2, name: 'Fonctionnalités', item: 'https://squadplanner.fr/features' },
+              { '@type': 'ListItem', position: 3, name: 'Gamification' },
+            ],
+          },
+          {
+            '@type': 'WebPage',
+            name: 'Gamification XP & Challenges - Squad Planner',
+            description: 'Gagne de l\'XP, relève des challenges quotidiens, maintiens tes streaks et débloque des badges. La gamification qui rend tes sessions addictives.',
+            url: `${baseUrl}/features/gamification`,
+            inLanguage: 'fr',
           },
         ],
       },

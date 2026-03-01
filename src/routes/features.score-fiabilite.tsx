@@ -12,12 +12,12 @@ export function meta() {
   const baseUrl = 'https://squadplanner.fr'
   return [
     {
-      title: 'Score de Fiabilit\u00e9 - Squad Planner',
+      title: 'Score de Fiabilité - Squad Planner',
     },
     {
       name: 'description',
       content:
-        "Le Score de Fiabilit\u00e9 Squad Planner mesure la ponctualit\u00e9 et l'engagement de chaque joueur. Fini les ghosts, place aux joueurs s\u00e9rieux.",
+        "Le Score de Fiabilité Squad Planner mesure la ponctualité et l'engagement de chaque joueur. Fini les ghosts, place aux joueurs sérieux.",
     },
     {
       name: 'robots',
@@ -34,12 +34,12 @@ export function meta() {
     },
     {
       property: 'og:title',
-      content: 'Score de Fiabilit\u00e9 - Squad Planner',
+      content: 'Score de Fiabilité - Squad Planner',
     },
     {
       property: 'og:description',
       content:
-        'Mesure la fiabilit\u00e9 de chaque joueur. Plus de ghosts dans ta squad.',
+        'Mesure la fiabilité de chaque joueur. Plus de ghosts dans ta squad.',
     },
     {
       property: 'og:url',
@@ -88,15 +88,21 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Features', item: 'https://squadplanner.fr/features/score-fiabilite' },
+        '@graph': [
           {
-            '@type': 'ListItem',
-            position: 3,
-            name: 'Score de Fiabilit\u00e9',
-            item: 'https://squadplanner.fr/features/score-fiabilite',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+              { '@type': 'ListItem', position: 2, name: 'Fonctionnalités', item: 'https://squadplanner.fr/features' },
+              { '@type': 'ListItem', position: 3, name: 'Score de Fiabilité' },
+            ],
+          },
+          {
+            '@type': 'WebPage',
+            name: 'Score de Fiabilité - Squad Planner',
+            description: "Le Score de Fiabilité Squad Planner mesure la ponctualité et l'engagement de chaque joueur. Fini les ghosts, place aux joueurs sérieux.",
+            url: `${baseUrl}/features/score-fiabilite`,
+            inLanguage: 'fr',
           },
         ],
       },
@@ -106,7 +112,7 @@ export function meta() {
 
 export const handle = {
   breadcrumb: () => ({
-    label: 'Score de Fiabilit\u00e9',
+    label: 'Score de Fiabilité',
     path: '/features/score-fiabilite',
   }),
 }

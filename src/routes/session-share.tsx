@@ -32,6 +32,7 @@ export function meta({ params }: MetaArgs) {
       name: 'description',
       content: 'Rejoins cette session gaming sur Squad Planner !',
     },
+    { name: 'robots', content: 'noindex, nofollow' },
     { httpEquiv: 'content-language', content: 'fr' },
     { tagName: 'link', rel: 'canonical', href: shareUrl },
     { property: 'og:url', content: shareUrl },

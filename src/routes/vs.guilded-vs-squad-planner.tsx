@@ -98,8 +98,7 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Comparatifs', item: 'https://squadplanner.fr/vs/guilded-vs-squad-planner' },
-          { '@type': 'ListItem', position: 3, name: 'Guilded vs Squad Planner', item: 'https://squadplanner.fr/vs/guilded-vs-squad-planner' },
+          { '@type': 'ListItem', position: 2, name: 'Guilded vs Squad Planner' },
         ],
       },
     },
@@ -129,7 +128,7 @@ export function meta() {
             name: 'C\'est quoi Premium ?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Premium débloque les squads illimitées, l\'historique étendu, les stats avancées, le coach IA et le voice chat HD pour 6,99\u00a0\u20ac/mois.',
+              text: 'Premium débloque les squads illimitées, l\'historique étendu, les stats avancées, le coach IA et le voice chat HD pour 6,99 €/mois.',
             },
           },
           {

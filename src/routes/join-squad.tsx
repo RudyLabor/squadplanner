@@ -15,6 +15,7 @@ export function meta() {
       content:
         'Rejoins une squad gaming sur Squad Planner via un code d\'invitation. Planifie tes sessions et joue en équipe.',
     },
+    { name: 'robots', content: 'noindex, nofollow' },
     { httpEquiv: 'content-language', content: 'fr' },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/join' },
     { property: 'og:url', content: 'https://squadplanner.fr/join' },

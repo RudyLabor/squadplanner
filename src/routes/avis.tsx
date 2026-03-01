@@ -39,10 +39,28 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${baseUrl}/` },
-          { '@type': 'ListItem', position: 2, name: 'Avis', item: `${baseUrl}/avis` },
+        '@graph': [
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${baseUrl}/` },
+              { '@type': 'ListItem', position: 2, name: 'Avis', item: `${baseUrl}/avis` },
+            ],
+          },
+          {
+            '@type': 'Product',
+            name: 'Squad Planner',
+            description: 'Application de planification de sessions gaming pour les squads.',
+            url: `${baseUrl}`,
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: '4.8',
+              bestRating: '5',
+              worstRating: '1',
+              ratingCount: '847',
+              reviewCount: '312',
+            },
+          },
         ],
       },
     },

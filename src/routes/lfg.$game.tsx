@@ -80,11 +80,32 @@ export function meta({ params }: { params: { game: string } }) {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'LFG' },
-          { '@type': 'ListItem', position: 3, name: game.name, item: `https://squadplanner.fr/lfg/${game.slug}` },
+        '@graph': [
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+              { '@type': 'ListItem', position: 2, name: 'LFG' },
+              { '@type': 'ListItem', position: 3, name: game.name },
+            ],
+          },
+          {
+            '@type': 'WebPage',
+            name: `Chercher des joueurs ${game.name} - Squad Planner`,
+            description: `Trouve des joueurs ${game.name} fiables et formez une squad complète avec Squad Planner. Matchmaking intelligent et communauté vérifiée.`,
+            url: `https://squadplanner.fr/lfg/${game.slug}`,
+            isPartOf: {
+              '@type': 'WebSite',
+              name: 'Squad Planner',
+              url: 'https://squadplanner.fr',
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: 'Squad Planner',
+              url: 'https://squadplanner.fr',
+            },
+            inLanguage: 'fr',
+          },
         ],
       },
     },

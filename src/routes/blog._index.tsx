@@ -88,10 +88,31 @@ export const meta: MetaFunction = () => [
   {
     'script:ld+json': {
       '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://squadplanner.fr/blog' },
+      '@graph': [
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+            { '@type': 'ListItem', position: 2, name: 'Blog' },
+          ],
+        },
+        {
+          '@type': 'CollectionPage',
+          name: 'Blog Squad Planner',
+          description: 'Guides et astuces pour organiser tes sessions gaming, créer des tournois et faire de ta squad une machine de guerre.',
+          url: 'https://squadplanner.fr/blog',
+          isPartOf: {
+            '@type': 'WebSite',
+            name: 'Squad Planner',
+            url: 'https://squadplanner.fr',
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Squad Planner',
+            url: 'https://squadplanner.fr',
+          },
+          inLanguage: 'fr',
+        },
       ],
     },
   },

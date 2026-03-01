@@ -17,7 +17,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Ton coach IA personnel analyse tes habitudes de jeu et te donne des conseils personnalis\u00e9s pour optimiser tes sessions et ta squad.',
+        'Ton coach IA personnel analyse tes habitudes de jeu et te donne des conseils personnalisés pour optimiser tes sessions et ta squad.',
     },
     {
       name: 'robots',
@@ -39,7 +39,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        'Un coach IA qui analyse tes habitudes et te donne des tips personnalis\u00e9s pour tes sessions.',
+        'Un coach IA qui analyse tes habitudes et te donne des tips personnalisés pour tes sessions.',
     },
     {
       property: 'og:url',
@@ -88,15 +88,21 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Features', item: 'https://squadplanner.fr/features/coach-ia' },
+        '@graph': [
           {
-            '@type': 'ListItem',
-            position: 3,
-            name: 'Coach IA',
-            item: 'https://squadplanner.fr/features/coach-ia',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+              { '@type': 'ListItem', position: 2, name: 'Fonctionnalités', item: 'https://squadplanner.fr/features' },
+              { '@type': 'ListItem', position: 3, name: 'Coach IA' },
+            ],
+          },
+          {
+            '@type': 'WebPage',
+            name: 'Coach IA - Squad Planner',
+            description: 'Ton coach IA personnel analyse tes habitudes de jeu et te donne des conseils personnalisés pour optimiser tes sessions et ta squad.',
+            url: `${baseUrl}/features/coach-ia`,
+            inLanguage: 'fr',
           },
         ],
       },

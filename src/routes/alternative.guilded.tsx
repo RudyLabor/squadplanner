@@ -98,8 +98,7 @@ export function meta() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-          { '@type': 'ListItem', position: 2, name: 'Alternatives', item: 'https://squadplanner.fr/alternative/guilded' },
-          { '@type': 'ListItem', position: 3, name: 'Alternative Guilded', item: 'https://squadplanner.fr/alternative/guilded' },
+          { '@type': 'ListItem', position: 2, name: 'Alternative Guilded' },
         ],
       },
     },
@@ -137,7 +136,7 @@ export function meta() {
             name: 'C\'est vraiment gratuit ?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Oui. Le plan gratuit inclut 1 squad, 5 membres et 2 sessions par semaine. Le Premium à 6,99\u00a0\u20ac/mois débloque les squads illimitées et les fonctionnalités avancées.',
+              text: 'Oui. Le plan gratuit inclut 1 squad, 5 membres et 2 sessions par semaine. Le Premium à 6,99 €/mois débloque les squads illimitées et les fonctionnalités avancées.',
             },
           },
         ],

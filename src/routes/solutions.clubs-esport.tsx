@@ -40,15 +40,21 @@ export function meta() {
     {
       'script:ld+json': {
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${baseUrl}/` },
-          { '@type': 'ListItem', position: 2, name: 'Solutions', item: `${baseUrl}/solutions/clubs-esport` },
+        '@graph': [
           {
-            '@type': 'ListItem',
-            position: 3,
-            name: 'Clubs Esport',
-            item: `${baseUrl}/solutions/clubs-esport`,
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${baseUrl}/` },
+              { '@type': 'ListItem', position: 2, name: 'Solutions', item: `${baseUrl}/solutions` },
+              { '@type': 'ListItem', position: 3, name: 'Clubs Esport' },
+            ],
+          },
+          {
+            '@type': 'WebPage',
+            name: 'Squad Planner pour les Clubs Esport',
+            description: 'Gère tes squads esport avec Squad Planner : dashboard multi-squads, analytics cross-squad, branding personnalisé, export CSV. La solution pour les clubs esport.',
+            url: `${baseUrl}/solutions/clubs-esport`,
+            inLanguage: 'fr',
           },
         ],
       },

@@ -814,7 +814,7 @@ function SubscriptionSection({ onRefundClick }: { onRefundClick: () => void }) {
                   ? 'Garantie satisfait ou remboursé — 30 jours'
                   : subscriptionAge !== null
                     ? 'Période de garantie expirée (plus de 30 jours)'
-                    : 'Verification en cours...'}
+                    : 'Vérification en cours...'}
               </p>
             </div>
           </div>

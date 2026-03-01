@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: 'Combien de joueurs par squad ?',
-    a: "Jusqu'à 5 membres par squad en gratuit. En Premium, tu peux aller jusqu'à 20. En Squad Leader jusqu'à 50, Team jusqu'à 75, et Club jusqu'à 100. Tu peux créer plusieurs squads si tu joues à différents jeux.",
+    a: "Jusqu'à 5 membres par squad en gratuit. En Premium, tu peux aller jusqu'à 20. En Squad Leader jusqu'à 50, en Team jusqu'à 75, et en Club jusqu'à 100. Tu peux créer plusieurs squads si tu joues à différents jeux.",
   },
   {
     q: 'Mes données sont-elles protégées ?',
@@ -39,6 +39,10 @@ const faqs = [
   {
     q: "C'est vraiment 100% gratuit ?",
     a: "Oui, vraiment. Pas de piège, pas de paywall surprise. Le plan gratuit inclut 1 squad, 5 membres, 2 sessions/semaine, vocal, chat. Le Premium existe pour ceux qui veulent aller plus loin, mais l'essentiel est déjà là.",
+  },
+  {
+    q: "Puis-je annuler mon abonnement Premium à tout moment ?",
+    a: "Oui, sans engagement. Tu peux annuler en 1 clic depuis tes paramètres, et tu conserves ton accès Premium jusqu'à la fin de la période payée. Et si tu n'es pas satisfait, tu es remboursé sur demande sous 30 jours.",
   },
 ]
 

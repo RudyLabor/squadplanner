@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Loader2, Gamepad2, CheckCircle } from '../components/icons'
 import { Link, useNavigate, useSearchParams, Navigate } from 'react-router'
@@ -12,6 +12,8 @@ import { translateAuthError } from './auth/AuthHelpers'
 import { AuthGoogleButton } from './auth/AuthGoogleButton'
 import { AuthFormFields } from './auth/AuthFormFields'
 import type { FieldErrors } from './auth/AuthFormFields'
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function Auth() {
   const [searchParams] = useSearchParams()
@@ -38,6 +40,22 @@ export default function Auth() {
   if (isInitialized && user && mode !== 'reset') {
     return <Navigate to="/home" replace />
   }
+
+  const isFormValid = useMemo(() => {
+    if (mode === 'login') {
+      return email.trim().length > 0 && EMAIL_REGEX.test(email) && password.length > 0
+    }
+    if (mode === 'register') {
+      return (
+        username.trim().length > 0 &&
+        email.trim().length > 0 &&
+        EMAIL_REGEX.test(email) &&
+        password.length >= 6
+      )
+    }
+    // mode === 'reset'
+    return password.length >= 6 && confirmPassword === password
+  }, [mode, email, password, confirmPassword, username])
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -95,11 +113,10 @@ export default function Auth() {
     e.preventDefault()
     setError(null)
     setFieldErrors({})
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const errors: FieldErrors = {}
     if (mode === 'register' && !username.trim()) errors.username = 'Le pseudo est requis'
     if (mode !== 'reset' && !email.trim()) errors.email = "L'email est requis"
-    else if (mode !== 'reset' && !emailRegex.test(email))
+    else if (mode !== 'reset' && !EMAIL_REGEX.test(email))
       errors.email = "L'adresse email n'est pas valide"
     if (!password) errors.password = 'Le mot de passe est requis'
     else if (password.length < 6)
@@ -338,8 +355,8 @@ export default function Auth() {
 
                   <Button
                     type="submit"
-                    className="w-full h-12"
-                    disabled={isSubmitting || isResetting}
+                    className={`w-full h-12 ${!isFormValid && !isSubmitting && !isResetting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={isSubmitting || isResetting || !isFormValid}
                   >
                     {isSubmitting || isResetting ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -348,7 +365,7 @@ export default function Auth() {
                     ) : mode === 'reset' ? (
                       'Mettre à jour'
                     ) : (
-                      'Créer mon compte gratuit'
+                      'Créer ma squad — c\u2019est gratuit'
                     )}
                   </Button>
 

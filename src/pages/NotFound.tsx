@@ -32,7 +32,7 @@ export function NotFound() {
           </p>
 
           <p className="text-base text-text-secondary mb-8">
-            Cette page n'existe pas ou a été déplacée.
+            Elle a peut-être été déplacée ou supprimée.
           </p>
 
           {/* Action buttons — always visible */}

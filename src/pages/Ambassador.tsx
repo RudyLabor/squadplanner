@@ -187,7 +187,7 @@ function PendingApplicationBanner() {
           Ta candidature est en cours de traitement
         </h2>
         <p className="text-text-secondary max-w-md mx-auto mb-4">
-          On a bien reçu ta candidature. On la revoit sous 48h. Tu recevras un email dès
+          On a bien reçu ta candidature. On l'examine sous 48h. Tu recevras un email dès
           qu'elle sera validée.
         </p>
         <Badge variant="warning">En attente de validation</Badge>

@@ -51,9 +51,9 @@ export function ChatPanel({
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       className="fixed z-50 bottom-0 left-0 right-0 max-h-[85vh] rounded-t-2xl md:bottom-24 md:right-8 md:left-auto md:w-[400px] md:max-h-[560px] md:rounded-2xl"
     >
-      <div className="flex flex-col h-full max-h-[85vh] md:max-h-[560px] bg-bg-base border border-border-subtle rounded-t-2xl md:rounded-2xl shadow-xl overflow-hidden">
+      <div className="flex flex-col h-full max-h-[85vh] md:max-h-[560px] bg-bg-surface border border-primary/20 rounded-t-2xl md:rounded-2xl shadow-2xl shadow-primary/10 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-border-subtle bg-bg-elevated shrink-0">
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-primary/15 bg-bg-hover shrink-0">
           <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
             <Sparkles className="w-5 h-5 text-primary" />
           </div>
@@ -152,7 +152,7 @@ export function ChatPanel({
         </div>
 
         {/* Input area */}
-        <div className="shrink-0 border-t border-border-subtle bg-bg-elevated px-3 py-3">
+        <div className="shrink-0 border-t border-primary/15 bg-bg-hover px-3 py-3">
           <div className="flex items-center gap-2">
             <input
               ref={inputRef}

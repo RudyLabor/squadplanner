@@ -15,7 +15,8 @@ import {
   Search,
   Zap,
 } from '../components/icons'
-import { Card, CardContent, Button, Input, toast } from '../components/ui'
+import { Card, CardContent, Button, Input } from '../components/ui'
+import { showInfo, showSuccess } from '../lib/toast'
 import { PremiumGate } from '../components/PremiumGate'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useAuthStore } from '../hooks'
@@ -250,12 +251,12 @@ export function ClubDashboard() {
     document.body.removeChild(link)
 
     URL.revokeObjectURL(url)
-    toast.success('Export CSV téléchargé — tes stats, tes données')
+    showSuccess('Export CSV téléchargé — tes stats, tes données')
   }, [squads])
 
   // PDF Export handler (placeholder)
   const handleExportPDF = useCallback(() => {
-    toast.info('Export PDF bientôt disponible')
+    showInfo('L\'export PDF arrive bientôt ! En attendant, utilise l\'export CSV.')
   }, [])
 
   // Color presets
@@ -665,11 +666,10 @@ export function ClubDashboard() {
                       variant="secondary"
                       size="sm"
                       onClick={handleExportPDF}
-                      className="w-full justify-start opacity-50"
-                      disabled
+                      className="w-full justify-start"
                     >
                       <Download className="w-4 h-4 mr-2" />
-                      Exporter PDF (bientôt)
+                      Exporter PDF
                     </Button>
                   </div>
                 </CardContent>
@@ -684,54 +684,65 @@ export function ClubDashboard() {
             >
               <Card>
                 <CardContent className="p-6">
-                  <h3 className="font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <h3 className="font-bold text-text-primary mb-1 flex items-center gap-2">
                     <Zap className="w-5 h-5 text-warning" />
                     Branding Club
                   </h3>
+                  <p className="text-xs text-text-tertiary mb-4">
+                    Ces fonctionnalités arrivent prochainement
+                  </p>
 
-                  {/* Club Name Input */}
-                  <div className="mb-4">
-                    <label className="text-xs font-medium text-text-tertiary mb-2 block">
-                      Nom du club <span className="text-text-quaternary">(bientôt)</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Mon Club Esports"
-                      value={clubName}
-                      onChange={(e) => setClubName(e.target.value)}
-                      className="w-full px-3 py-2 bg-bg-base border border-border-subtle rounded-lg text-text-primary text-sm placeholder-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
+                  {/* Badge prochainement */}
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-warning/10 border border-warning/20 text-warning text-xs font-medium mb-4">
+                    <Zap className="w-3 h-3" />
+                    Prochainement
                   </div>
 
-                  {/* Color Picker */}
-                  <div>
-                    <label className="text-xs font-medium text-text-tertiary mb-3 block">
-                      Couleur primaire <span className="text-text-quaternary">(bientôt)</span>
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {colorOptions.map((option) => (
-                        <button
-                          key={option.value}
-                          onClick={() => setPrimaryColor(option.value)}
-                          className={`p-3 rounded-lg text-xs font-medium text-white transition-all ${option.bgClass} ${
-                            primaryColor === option.value
-                              ? 'ring-2 ring-offset-2 ring-offset-bg-elevated ring-white'
-                              : 'opacity-70 hover:opacity-100'
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
+                  {/* Contenu desactive visuellement */}
+                  <div className="pointer-events-none opacity-60 space-y-4">
+                    {/* Club Name Input */}
+                    <div>
+                      <label className="text-xs font-medium text-text-tertiary mb-2 block">
+                        Nom du club
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Mon Club Esports"
+                        value={clubName}
+                        readOnly
+                        tabIndex={-1}
+                        className="w-full px-3 py-2 bg-bg-base border border-border-subtle rounded-lg text-text-primary text-sm placeholder-text-tertiary"
+                      />
                     </div>
-                  </div>
 
-                  {/* Logo Upload Placeholder */}
-                  <div className="mt-4 p-4 border-2 border-dashed border-border-subtle rounded-lg text-center bg-bg-base/50">
-                    <p className="text-sm text-text-tertiary mb-2">Logo du club</p>
-                    <Button variant="ghost" size="sm" disabled className="opacity-50">
-                      Choisir un fichier
-                    </Button>
-                    <p className="text-xs text-text-quaternary mt-1">(bientôt)</p>
+                    {/* Color Picker */}
+                    <div>
+                      <label className="text-xs font-medium text-text-tertiary mb-3 block">
+                        Couleur primaire
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {colorOptions.map((option) => (
+                          <div
+                            key={option.value}
+                            className={`p-3 rounded-lg text-xs font-medium text-white text-center ${option.bgClass} ${
+                              primaryColor === option.value
+                                ? 'ring-2 ring-offset-2 ring-offset-bg-elevated ring-white'
+                                : 'opacity-70'
+                            }`}
+                          >
+                            {option.label}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Logo Upload Placeholder */}
+                    <div className="p-4 border-2 border-dashed border-border-subtle rounded-lg text-center bg-bg-base/50">
+                      <p className="text-sm text-text-tertiary mb-2">Logo du club</p>
+                      <Button variant="ghost" size="sm" disabled>
+                        Choisir un fichier
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

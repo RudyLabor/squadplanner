@@ -171,7 +171,7 @@ export function Referrals() {
               transition={{ delay: 0.2, duration: 0.4, ease }}
               className="text-base md:text-lg text-text-secondary max-w-xl mx-auto"
             >
-              3 inscrits et ta squad grandit — plus les réductions en bonus.
+              3 inscrits et ta squad grandit — et les réductions tombent en bonus.
               Ton pote gagne 7 jours Premium. Toi, tu déverrouilles des réductions permanentes sur ton abo + 500 XP.
             </m.p>
           </div>

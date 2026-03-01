@@ -116,13 +116,25 @@ export function OnboardingStepComplete({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="text-text-secondary mb-4"
+        className="text-text-secondary mb-2"
       >
         {createdSquadId
-          ? 'Ta squad est prête. Ta première session est à une confirmation près.'
+          ? 'Ta squad est prête ! Invite tes potes et planifie ta première session.'
           : squadsLength > 0
-            ? `Tu as rejoint ${firstSquadName} ! Ta première session est à une confirmation près.`
+            ? `Tu as rejoint ${firstSquadName} ! Plus qu'à confirmer ta première session.`
             : 'Tu peux maintenant explorer ou créer ta squad'}
+      </m.p>
+      <m.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+        className="text-sm text-text-tertiary mb-4"
+      >
+        {createdSquadId
+          ? "Partage le code d'invitation, tes potes te rejoignent en 1 clic."
+          : squadsLength > 0
+            ? 'Confirme ta présence pour que ta squad sache compter sur toi.'
+            : "Des milliers de joueurs t'attendent — lance-toi !"}
       </m.p>
 
       {/* Quick stats - what you just unlocked */}

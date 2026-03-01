@@ -4,7 +4,7 @@ import { AnimatedCounter } from '../ui/AnimatedCounter'
 
 const stats = [
   {
-    end: 500,
+    end: 2000,
     suffix: '+',
     singularSuffix: undefined as string | undefined,
     label: 'gamers inscrits',
@@ -13,7 +13,7 @@ const stats = [
     prefix: '',
   },
   {
-    end: 120,
+    end: 1200,
     suffix: '+',
     singularSuffix: undefined as string | undefined,
     label: 'sessions cette semaine',

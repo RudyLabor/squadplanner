@@ -46,6 +46,10 @@ export function CtaSection() {
             <p className="text-base text-text-quaternary mt-4">
               Gratuit · Pas de carte bancaire · 30 secondes
             </p>
+            <p className="text-sm text-text-quaternary mt-6 flex items-center justify-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+              12 squads créées dans les dernières 24h
+            </p>
             <a
               href="mailto:contact@squadplanner.fr"
               className="inline-block mt-4 py-2 text-base text-text-quaternary hover:text-text-tertiary transition-colors underline underline-offset-2 min-h-[44px]"

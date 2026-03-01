@@ -19,7 +19,7 @@ const QUESTIONS = [
       { label: 'Je réorganise immédiatement avec d\'autres', type: 'stratege' },
       { label: 'J\'envoie un message pour remotiver', type: 'motivateur' },
       { label: 'Pas grave, je joue solo ou j\'attends', type: 'flexible' },
-      { label: 'Je note qui a ghost et je m\'en souviens', type: 'hardcore' },
+      { label: 'Je note qui a ghosté et je m\'en souviens', type: 'hardcore' },
     ],
   },
   {

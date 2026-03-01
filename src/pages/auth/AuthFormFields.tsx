@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Mail, Lock, User } from '../../components/icons'
 import { Input } from '../../components/ui'
 import { PasswordStrength } from './AuthHelpers'
@@ -6,6 +7,31 @@ export interface FieldErrors {
   username?: string
   email?: string
   password?: string
+}
+
+const EMAIL_TYPO_MAP: Record<string, string> = {
+  'gmial.com': 'gmail.com',
+  'gmal.com': 'gmail.com',
+  'gamil.com': 'gmail.com',
+  'gmail.fr': 'gmail.com',
+  'hotmal.com': 'hotmail.com',
+  'hotmail.fr': 'hotmail.com',
+  'outook.com': 'outlook.com',
+  'outlok.com': 'outlook.com',
+  'yahooo.com': 'yahoo.com',
+  'yaho.com': 'yahoo.com',
+  'protonmal.com': 'protonmail.com',
+  'iclud.com': 'icloud.com',
+}
+
+/** Détecte les typos dans le domaine email et suggère la correction */
+function suggestEmailCorrection(email: string): string | null {
+  const atIndex = email.indexOf('@')
+  if (atIndex < 1) return null
+  const domain = email.slice(atIndex + 1).toLowerCase()
+  const correctDomain = EMAIL_TYPO_MAP[domain]
+  if (!correctDomain) return null
+  return email.slice(0, atIndex + 1) + correctDomain
 }
 
 interface AuthFormFieldsProps {
@@ -68,6 +94,7 @@ export function AuthFormFields({
               setFieldErrors((prev) => ({ ...prev, email: undefined }))
             }}
             placeholder="Email"
+            aria-label="Adresse email"
             icon={<Mail className="w-4 h-4" />}
             required
             autoFocus={mode !== 'register'}
@@ -75,6 +102,7 @@ export function AuthFormFields({
             className={fieldErrors.email ? 'border-error focus:border-error' : ''}
           />
           {fieldErrors.email && <p className="text-error text-sm mt-1">{fieldErrors.email}</p>}
+          <EmailTypoSuggestion email={email} onAccept={setEmail} />
         </div>
       )}
 
@@ -113,5 +141,22 @@ export function AuthFormFields({
         />
       )}
     </div>
+  )
+}
+
+/** Affiche une suggestion si le domaine email contient une typo courante */
+function EmailTypoSuggestion({ email, onAccept }: { email: string; onAccept: (corrected: string) => void }) {
+  const suggested = useMemo(() => suggestEmailCorrection(email), [email])
+
+  if (!suggested) return null
+
+  return (
+    <button
+      type="button"
+      onClick={() => onAccept(suggested)}
+      className="text-xs text-primary hover:text-primary-hover mt-1 underline transition-colors"
+    >
+      Tu voulais dire {suggested} ?
+    </button>
   )
 }

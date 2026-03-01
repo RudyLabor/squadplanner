@@ -1,4 +1,4 @@
-/** Traduit les erreurs Supabase Auth en francais */
+/** Traduit les erreurs Supabase Auth en français */
 export function translateAuthError(message: string): string {
   const translations: Record<string, string> = {
     'Invalid login credentials': 'Email ou mot de passe incorrect',

@@ -32,7 +32,7 @@ const faqs = [
     id: 'migration-easy',
     question: 'Je peux importer mes données ?',
     answer:
-      "Oui. Si t'as tes squads documentés, on te facilite le move. Support direct pour une migration sans galère.",
+      "Oui. Si t'as tes squads documentées, on te facilite le move. Support direct pour une migration sans galère.",
   },
   {
     id: 'premium-worth',

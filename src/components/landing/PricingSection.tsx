@@ -48,7 +48,7 @@ const TIERS = [
       'Badge Premium violet',
       'Zéro pub',
     ],
-    cta: 'Passer Premium — 6,99€/mois',
+    cta: 'Essayer 7 jours gratuit',
     ctaStyle: 'bg-gradient-to-r from-primary to-purple text-white hover:opacity-90 shadow-glow-primary-sm',
     popular: true,
     badge: 'RECOMMANDÉ',
@@ -70,7 +70,7 @@ const TIERS = [
       'Sessions récurrentes',
       'Badge Squad Leader doré',
     ],
-    cta: 'Passer Squad Leader — 14,99€/mois',
+    cta: 'Passer Squad Leader',
     ctaStyle: 'bg-gradient-to-r from-warning to-warning/80 text-bg-base hover:opacity-90',
     popular: false,
     badge: null,
@@ -89,7 +89,7 @@ const TIERS = [
       'Support prioritaire 8h',
       'Badge Clan bleu',
     ],
-    cta: 'Passer Clan — 24,99€/mois',
+    cta: 'Passer Clan',
     ctaStyle: 'bg-gradient-to-r from-info to-info/80 text-white hover:opacity-90',
     popular: false,
     badge: null,
@@ -110,7 +110,7 @@ const TIERS = [
       'Support prioritaire 24h',
       'Facture pro dispo',
     ],
-    cta: 'Passer Club — 39,99€/mois',
+    cta: "Contacter l'équipe",
     ctaStyle: 'border border-primary text-primary hover:bg-primary-10',
     popular: false,
     badge: 'B2B',
@@ -164,6 +164,14 @@ export function PricingSection() {
               </span>
             </button>
           </div>
+
+          {/* Badge de garantie */}
+          <div className="flex items-center justify-center gap-2 mt-4 mb-2">
+            <svg className="w-5 h-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span className="text-sm font-medium text-success">Satisfait ou remboursé — 30 jours, sans condition</span>
+          </div>
         </m.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-3">
@@ -204,7 +212,7 @@ export function PricingSection() {
                   {tier.popular && <Crown className="w-4 h-4 text-warning" />}
                   {tier.popular && (
                     <span className="px-2 py-0.5 rounded-full bg-success/15 text-success text-xs font-semibold">
-                      Essai 7 jours gratuits
+                      Essai gratuit 7 jours
                     </span>
                   )}
                 </div>
@@ -219,15 +227,17 @@ export function PricingSection() {
                   <span className="text-text-quaternary text-sm">/mois</span>
                 </div>
 
-                {isYearly && tier.monthlyPrice > 0 && (
-                  <p className="text-xs text-success mb-2">
-                    {yearlyTotal.toFixed(2)}€/an · Économise{' '}
-                    {Math.round(
-                      ((tier.monthlyPrice * 12 - yearlyTotal) / (tier.monthlyPrice * 12)) * 100
-                    )}
-                    %
-                  </p>
-                )}
+                {isYearly && tier.monthlyPrice > 0 && (() => {
+                  const savingsPercent = Math.round(
+                    ((tier.monthlyPrice * 12 - yearlyTotal) / (tier.monthlyPrice * 12)) * 100
+                  )
+                  const savingsEuros = (tier.monthlyPrice * 12 - yearlyTotal).toFixed(2)
+                  return (
+                    <p className="text-xs text-success mb-2 font-medium">
+                      {yearlyTotal.toFixed(2)}€/an · Économise {savingsPercent}% · soit {savingsEuros}€ de moins par an
+                    </p>
+                  )
+                })()}
 
                 {tier.dailyPrice && (
                   <p className="text-xs text-text-quaternary mb-2">
@@ -317,7 +327,12 @@ export function PricingSection() {
             </svg>
             Paiement sécurisé Stripe
           </span>
-          <span className="flex items-center gap-1.5">Remboursé sur demande sous 30 jours</span>
+          <span className="flex items-center gap-1.5">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Remboursé sous 30 jours
+          </span>
         </div>
       </div>
     </section>

@@ -115,13 +115,13 @@ export function LandingFooter() {
 
       {/* ── Zone 2 : Grille de liens (5 colonnes) ── */}
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-14">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-x-12 gap-y-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-x-4 md:gap-x-12 gap-y-10">
           {/* Produit */}
           <div>
-            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider flex items-center gap-1.5">
+            <p className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-normal md:tracking-wider flex items-center gap-1.5">
               <Crown className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
               Produit
-            </h3>
+            </p>
             <ul className="space-y-0.5">
               <li>
                 <Link to="/auth?mode=register&redirect=onboarding" className={linkClass}>
@@ -148,9 +148,9 @@ export function LandingFooter() {
 
           {/* Fonctionnalités */}
           <div>
-            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider">
+            <p className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-normal md:tracking-wider">
               Fonctionnalités
-            </h3>
+            </p>
             <ul className="space-y-0.5">
               <li>
                 <Link to="/how-it-works" className={linkClass}>
@@ -182,10 +182,10 @@ export function LandingFooter() {
 
           {/* Jeux populaires */}
           <div>
-            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider flex items-center gap-1.5">
+            <p className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-normal md:tracking-wider flex items-center gap-1.5">
               <Gamepad2 className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
               Jeux populaires
-            </h3>
+            </p>
             <ul className="space-y-0.5">
               {FOOTER_GAMES.map((game) => (
                 <li key={game.slug}>
@@ -202,9 +202,9 @@ export function LandingFooter() {
 
           {/* Ressources */}
           <div>
-            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider">
+            <p className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-normal md:tracking-wider">
               Ressources
-            </h3>
+            </p>
             <ul className="space-y-0.5">
               <li>
                 <Link to="/help" className={`${linkClass} inline-flex items-center gap-1.5`}>
@@ -277,9 +277,9 @@ export function LandingFooter() {
 
           {/* Légal */}
           <div>
-            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider">
+            <p className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-normal md:tracking-wider">
               Légal
-            </h3>
+            </p>
             <ul className="space-y-0.5">
               <li>
                 <Link to="/legal" className={`${linkClass} inline-flex items-center gap-1.5`}>

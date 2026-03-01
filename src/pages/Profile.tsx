@@ -137,7 +137,7 @@ export function Profile() {
       }
     } catch (error) {
       if (!import.meta.env.PROD) console.error('Error claiming XP:', error)
-      showError('Erreur lors de la réclamation des XP')
+      showError('Erreur lors de la récupération des XP')
     }
   }
 

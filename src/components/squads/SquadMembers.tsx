@@ -177,7 +177,7 @@ function RoleAssignDropdown({
 
       {isOpen && (
         <div
-          className="absolute right-0 top-full mt-1 w-56 rounded-xl bg-bg-elevated border border-border-default shadow-xl z-50 py-1 overflow-hidden"
+          className="absolute left-0 md:right-0 md:left-auto top-full mt-1 w-56 rounded-xl bg-bg-active border border-border-default shadow-2xl ring-1 ring-white/10 z-50 py-1 overflow-hidden"
           role="listbox"
           aria-label="Sélectionner un rôle"
         >

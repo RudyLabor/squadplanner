@@ -414,7 +414,7 @@ export default function Home({ loaderData }: HomeProps) {
                   ? pendingRsvps > 0
                     ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} sans ta réponse — ta squad t'attend, réponds en 2 secondes`
                     : "T'es carré, toutes tes sessions sont confirmées 🔥"
-                  : "Tes potes ont voté pour la prochaine session. Ton avis compte !"}
+                  : "Pas de session prévue — crée la première et réunis ta squad !"}
               </p>
               <div className="flex items-center gap-2 mt-2">
                 <PlanBadge tier={tier} size="sm" />

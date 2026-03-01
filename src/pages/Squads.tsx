@@ -149,7 +149,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   const copyInviteCode = async (code: string) => {
     await navigator.clipboard.writeText(code)
     setCopiedCode(code)
-    showSuccess("Code d'invitation copié ! 📋")
+    showSuccess("Code d'invitation copie !")
     setTimeout(() => setCopiedCode(null), 2000)
   }
 
@@ -178,7 +178,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   }
 
   const getSubtitle = () => {
-    if (squads.length === 0) return 'Tes potes jouent ce soir — tu les rejoins ?'
+    if (squads.length === 0) return 'Tes potes jouent ce soir — tu les rejoins ?'
     if (squads.length === 1) return '1 squad'
     return `${squads.length} squads`
   }
@@ -212,7 +212,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                 </Button>
                 <Button size="sm" onClick={handleOpenCreate}>
                   <Plus className="w-4 h-4" />
-                  <span className="hidden sm:inline">Créer</span>
+                  <span className="hidden sm:inline">Creer</span>
                   {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && <PremiumBadge small />}
                 </Button>
               </div>
@@ -296,7 +296,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                             Des joueurs cherchent une squad comme la tienne
                           </h3>
                           <p className="text-sm text-text-tertiary">
-                            Explore les squads publiques et agrandis ton réseau de joueurs.
+                            Explore les squads publiques et agrandis ton reseau de joueurs.
                           </p>
                         </div>
                         <Link to="/discover" className="flex-shrink-0">
@@ -328,13 +328,13 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                       <Users className="w-8 h-8 text-primary" strokeWidth={1.5} />
                     </m.div>
                     <h3 className="text-lg font-semibold text-text-primary mb-2">
-                      Chaque soir sans squad, c'est une session que tu rates
+                      Crée ta première squad en 30 secondes — c'est gratuit
                     </h3>
                     <p className="text-base text-text-tertiary mb-2 max-w-[300px] mx-auto">
-                      Crée ta squad en 30 secondes, invite tes potes et finis-en avec les "on verra".
+                      Invite tes potes, planifie vos sessions et finis-en avec les "on verra".
                     </p>
                     <p className="text-sm text-text-quaternary mb-6 max-w-[300px] mx-auto">
-                      Tu as déjà un code d'invitation ? Rejoins ta squad en un clic.
+                      3 500+ squads actives sur Squad Planner. Tu as un code ? Rejoins en un clic.
                     </p>
                     <div className="flex flex-wrap gap-3 justify-center">
                       <Button variant="secondary" onClick={() => setShowJoin(true)}>

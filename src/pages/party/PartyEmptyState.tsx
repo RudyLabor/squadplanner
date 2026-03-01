@@ -25,16 +25,27 @@ export function PartyEmptyState() {
             <Mic className="w-8 h-8 text-white" strokeWidth={1.5} />
           </m.div>
         </div>
-        <h2 className="text-lg font-bold text-text-primary mb-2">Parle avec ta squad</h2>
-        <p className="text-base text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
-          Crée ou rejoins une squad pour lancer des parties vocales avec tes potes.
+        <h2 className="text-lg font-bold text-text-primary mb-2">Lance ta première party vocale</h2>
+        <p className="text-base text-text-secondary mb-2 max-w-[300px] mx-auto leading-relaxed">
+          Qualité HD, latence ultra-faible — parle avec ta squad comme si vous étiez dans la même pièce.
         </p>
-        <Link
-          to="/squads"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-bg text-white font-medium shadow-md shadow-primary/10 hover:bg-primary-bg-hover transition-colors"
-        >
-          <Users className="w-4 h-4" /> Trouver une squad
-        </Link>
+        <p className="text-sm text-text-quaternary mb-6 max-w-[280px] mx-auto">
+          Crée ou rejoins une squad pour débloquer le voice chat.
+        </p>
+        <div className="flex flex-wrap gap-3 justify-center">
+          <Link
+            to="/squads"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-bg text-white font-medium shadow-md shadow-primary/10 hover:bg-primary-bg-hover transition-colors"
+          >
+            <Users className="w-4 h-4" /> Créer une squad
+          </Link>
+          <Link
+            to="/discover"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-card text-text-primary text-sm font-medium border border-border-subtle hover:border-border-hover transition-colors"
+          >
+            Découvrir des squads
+          </Link>
+        </div>
       </Card>
     </m.div>
   )

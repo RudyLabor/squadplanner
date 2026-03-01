@@ -46,7 +46,7 @@ function WebhookStatusBadge({ webhook }: { webhook: Webhook }) {
     return <Badge variant="error" size="sm">En erreur</Badge>
   }
   if (webhook.failure_count > 0) {
-    return <Badge variant="warning" size="sm">{webhook.failure_count} echec{webhook.failure_count > 1 ? 's' : ''}</Badge>
+    return <Badge variant="warning" size="sm">{webhook.failure_count} échec{webhook.failure_count > 1 ? 's' : ''}</Badge>
   }
   return <Badge variant="success" size="sm">Actif</Badge>
 }
@@ -153,7 +153,7 @@ function WebhookCard({
 
       {/* Events */}
       <div className="mb-3">
-        <p className="text-xs text-text-quaternary mb-1">Evenements</p>
+        <p className="text-xs text-text-quaternary mb-1">Événements</p>
         <div className="flex flex-wrap gap-1.5">
           {webhook.events.map((event) => (
             <span
@@ -177,7 +177,7 @@ function WebhookCard({
         <span>Dernier appel : {lastTriggered}</span>
         {webhook.failure_count > 0 && (
           <span className="text-error">
-            {webhook.failure_count} echec{webhook.failure_count > 1 ? 's' : ''}
+            {webhook.failure_count} échec{webhook.failure_count > 1 ? 's' : ''}
           </span>
         )}
       </div>
@@ -311,7 +311,7 @@ function CreateWebhookForm({
         {/* Event checkboxes */}
         <div>
           <p className="text-sm font-medium text-text-secondary mb-2">
-            Evenements a ecouter
+            Événements à écouter
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {WEBHOOK_EVENTS.map((event) => (
@@ -326,7 +326,7 @@ function CreateWebhookForm({
           </div>
           {selectedEvents.length === 0 && (
             <p className="text-xs text-text-quaternary mt-1">
-              Selectionne au moins un evenement
+              Sélectionne au moins un événement
             </p>
           )}
         </div>
@@ -437,7 +437,7 @@ export function WebhookManager({ squadId: fixedSquadId }: WebhookManagerProps) {
         <div className="text-center py-8">
           <WebhookIcon className="w-10 h-10 text-text-quaternary mx-auto mb-3" />
           <p className="text-base text-text-secondary">
-            Selectionne un squad pour gerer ses webhooks
+            Sélectionne un squad pour gérer ses webhooks
           </p>
         </div>
       ) : isLoading ? (
@@ -449,7 +449,7 @@ export function WebhookManager({ squadId: fixedSquadId }: WebhookManagerProps) {
         <div className="text-center py-8">
           <p className="text-base text-error mb-2">Erreur de chargement</p>
           <p className="text-sm text-text-quaternary">
-            {(error as Error)?.message ?? 'La table webhooks n\'existe peut-etre pas encore'}
+            {(error as Error)?.message ?? 'La table webhooks n\'existe peut-être pas encore'}
           </p>
         </div>
       ) : (

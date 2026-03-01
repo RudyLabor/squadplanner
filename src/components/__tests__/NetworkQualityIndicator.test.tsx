@@ -39,7 +39,7 @@ vi.mock('framer-motion', () => ({
 vi.mock('../../hooks/useNetworkQuality', () => ({
   useNetworkQualityStore: vi.fn().mockReturnValue({ localQuality: 'good' }),
   QUALITY_INFO: {
-    unknown: { label: 'Inconnu', description: 'Qualite inconnue', color: '#888', bars: 0 },
+    unknown: { label: 'Inconnu', description: 'Qualité inconnue', color: '#888', bars: 0 },
     excellent: {
       label: 'Excellente',
       description: 'Connexion excellente',

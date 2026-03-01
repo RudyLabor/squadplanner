@@ -97,7 +97,7 @@ export function createOptimisticMutation<TData = unknown, TVariables = unknown>(
       const message =
         typeof config.errorMessage === 'function'
           ? config.errorMessage(error, variables)
-          : config.errorMessage || 'Erreur de connexion. Reessaie.'
+          : config.errorMessage || 'Erreur de connexion. Réessaie.'
       showError(message)
     },
 

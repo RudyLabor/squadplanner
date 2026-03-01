@@ -36,24 +36,24 @@ describe('chatbotUtils', () => {
   describe('findBestMatch', () => {
     const faqItems: FAQItem[] = [
       {
-        question: 'Comment creer une squad ?',
+        question: 'Comment créer une squad ?',
         answer: 'Va dans le menu Squads et clique sur le bouton +',
         category: 'squads',
       },
       {
-        question: 'Comment fonctionne le score de fiabilite ?',
-        answer: 'Le score est calcule en fonction de ta presence aux sessions',
+        question: 'Comment fonctionne le score de fiabilité ?',
+        answer: 'Le score est calculé en fonction de ta présence aux sessions',
         category: 'profile',
       },
       {
         question: 'Comment passer Premium ?',
-        answer: 'Va dans les parametres et choisis Premium',
+        answer: 'Va dans les paramètres et choisis Premium',
         category: 'premium',
       },
     ]
 
     it('returns an answer when a match is found', () => {
-      const result = findBestMatch('comment creer squad', faqItems)
+      const result = findBestMatch('comment créer squad', faqItems)
       expect(result).toBeTruthy()
       expect(result).toContain('bouton')
     })

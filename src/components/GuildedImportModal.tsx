@@ -265,7 +265,7 @@ export function GuildedImportModal({ open, onClose }: GuildedImportModalProps) {
                 className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary placeholder-text-quaternary focus:outline-none focus:border-primary transition-interactive resize-none font-mono text-sm"
               />
               <p className="text-xs text-text-quaternary mt-1">
-                Tu pourras leur envoyer le code d'invitation apres la creation.
+                Tu pourras leur envoyer le code d'invitation après la création.
               </p>
             </div>
 

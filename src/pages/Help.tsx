@@ -56,6 +56,7 @@ export function Help() {
           <div>
             <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">Aide & FAQ</h1>
             <p className="text-base text-text-secondary">Réponse en moins de 24h — cherche d'abord ici, c'est souvent plus rapide</p>
+            <p className="text-sm text-text-tertiary mt-1">Pas trouvé ta réponse ? Écris-nous à <a href="mailto:contact@squadplanner.fr" className="text-primary hover:underline">contact@squadplanner.fr</a></p>
           </div>
         </header>
 

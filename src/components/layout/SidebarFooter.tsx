@@ -7,6 +7,7 @@ import { Tooltip } from '../ui/Tooltip'
 import { StatusSelector } from '../StatusSelector'
 import { PlanBadge } from '../PlanBadge'
 import { usePremiumStore } from '../../hooks/usePremium'
+import { trackEvent } from '../../utils/analytics'
 
 const XPProgressBar = lazy(() => import('../XPProgressBar'))
 
@@ -117,7 +118,8 @@ export const SidebarFooter = memo(function SidebarFooter({
           >
             <Link
               to="/premium"
-              aria-label="Passer Premium - Heatmaps de présence, IA coach, audio HD"
+              aria-label="Passer Premium — 6,99€/mois — Coach IA, audio HD, squads illimitées"
+              onClick={() => trackEvent('premium_cta_clicked', { source: 'sidebar' })}
             >
               <m.div
                 className="p-4 rounded-xl bg-gradient-to-br from-primary-10 to-purple/3 border border-primary/10 cursor-pointer"
@@ -126,13 +128,13 @@ export const SidebarFooter = memo(function SidebarFooter({
               >
                 <div className="flex items-center gap-2 mb-2">
                   <Zap className="w-4 h-4 text-warning" />
-                  <span className="text-base font-semibold text-text-primary">Passe Premium</span>
+                  <span className="text-base font-semibold text-text-primary">Passe Premium — 6,99€/mois</span>
                 </div>
                 <p className="text-sm text-text-secondary mb-3">
-                  Heatmaps de présence, IA coach, audio HD
+                  Coach IA, audio HD, squads illimitées — essai 7j gratuit
                 </p>
                 <span className="text-sm font-semibold text-primary hover:text-purple transition-colors duration-300">
-                  Découvrir →
+                  Essayer gratuitement →
                 </span>
               </m.div>
             </Link>
@@ -152,7 +154,7 @@ export const SidebarFooter = memo(function SidebarFooter({
             position="right"
             delay={300}
           >
-            <Link to="/premium" aria-label={isPaid ? 'Mon abonnement' : 'Passer Premium'}>
+            <Link to="/premium" aria-label={isPaid ? 'Mon abonnement' : 'Passer Premium'} onClick={() => { if (!isPaid) trackEvent('premium_cta_clicked', { source: 'sidebar_collapsed' }) }}>
               <m.div
                 className="flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-xl hover:bg-surface-card transition-colors"
                 whileHover={{ scale: 1.1 }}

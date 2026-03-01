@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
+import { Link } from 'react-router'
 import { Plus, Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
 import { Button } from '../components/ui'
@@ -25,31 +26,50 @@ interface SessionsProps {
 
 function SessionLimitBanner({ sessionsThisWeek }: { sessionsThisWeek: number }) {
   const remaining = 2 - sessionsThisWeek
-  if (remaining > 0) return null
 
-  return (
-    <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-warning/10 to-primary/5 border border-warning/20">
-      <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-xl bg-warning/15 flex items-center justify-center flex-shrink-0">
-          <Plus className="w-5 h-5 text-warning" />
-        </div>
-        <div className="flex-1">
-          <h3 className="text-base font-semibold text-text-primary mb-1">
-            Limite de 2 sessions atteinte cette semaine
-          </h3>
-          <p className="text-sm text-text-tertiary mb-3">
-            Passe Premium pour planifier des sessions illimitées et ne plus jamais rater un créneau avec ta squad.
-          </p>
-          <a
-            href="/premium"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-warning to-warning/80 text-bg-base text-sm font-bold hover:shadow-md transition-all"
-          >
-            Essaie 7 jours gratuits
-          </a>
+  // Nudge when approaching the limit (1/2 used)
+  if (remaining === 1) {
+    return (
+      <Link
+        to="/premium"
+        className="flex items-center gap-3 px-4 py-3 rounded-xl bg-warning/5 border border-warning/20 mb-4 hover:bg-warning/10 transition-colors"
+      >
+        <span className="text-sm text-text-secondary">
+          <strong className="text-warning">{sessionsThisWeek}/2 sessions</strong> utilisées cette semaine
+        </span>
+        <span className="text-xs font-medium text-primary ml-auto whitespace-nowrap">Passer illimité →</span>
+      </Link>
+    )
+  }
+
+  // Hard limit reached
+  if (remaining <= 0) {
+    return (
+      <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-warning/10 to-primary/5 border border-warning/20">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-xl bg-warning/15 flex items-center justify-center flex-shrink-0">
+            <Plus className="w-5 h-5 text-warning" />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-base font-semibold text-text-primary mb-1">
+              Tu as utilisé tes 2 sessions gratuites cette semaine
+            </h3>
+            <p className="text-sm text-text-tertiary mb-3">
+              Passe Premium pour des sessions illimitées — essai 7 jours gratuit, sans engagement.
+            </p>
+            <a
+              href="/premium"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-warning to-warning/80 text-bg-base text-sm font-bold hover:shadow-md transition-all"
+            >
+              Essayer gratuit 7 jours
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  return null
 }
 
 export function Sessions({ loaderData: _loaderData }: SessionsProps) {

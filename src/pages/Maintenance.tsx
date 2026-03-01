@@ -93,7 +93,7 @@ export default function Maintenance() {
           transition={{ delay: 0.1, duration: 0.3 }}
           className="text-2xl font-bold font-display text-text-primary mb-3"
         >
-          Maintenance en cours
+          Nous améliorons Squad Planner
         </m.h1>
 
         {/* Message */}
@@ -103,7 +103,7 @@ export default function Maintenance() {
           transition={{ delay: 0.2, duration: 0.3 }}
           className="text-base text-text-secondary mb-4"
         >
-          On fait une petite maintenance. Squad Planner revient très vite.
+          On améliore l'app pour toi. Squad Planner est de retour très bientôt.
         </m.p>
 
         {/* ETA */}

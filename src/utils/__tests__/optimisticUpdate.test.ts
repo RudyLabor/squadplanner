@@ -212,7 +212,7 @@ describe('optimisticUpdate', () => {
 
         handlers.onError(new Error('fail'), {}, undefined)
 
-        expect(mockShowError).toHaveBeenCalledWith('Erreur de connexion. Reessaie.')
+        expect(mockShowError).toHaveBeenCalledWith('Erreur de connexion. Réessaie.')
       })
 
       it('shows custom string error message', () => {

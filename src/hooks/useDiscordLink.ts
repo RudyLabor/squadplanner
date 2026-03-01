@@ -29,7 +29,7 @@ export function useDiscordLink() {
       const {
         data: { session },
       } = await supabase.auth.getSession()
-      if (!session) throw new Error('Non connecte')
+      if (!session) throw new Error('Non connecté')
 
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/discord-oauth`,

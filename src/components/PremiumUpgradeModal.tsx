@@ -146,7 +146,8 @@ export function PremiumUpgradeModal({
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Débloque cette fonctionnalité</h2>
-            <p className="text-base text-white/80">Essaie 7 jours gratuits — sans carte bancaire</p>
+            <p className="text-base text-white/80">Essai 7 jours gratuit — sans engagement</p>
+            <p className="text-xs text-white/60 mt-0.5">Utilisé par 2 000+ squads actives</p>
           </div>
         </div>
 
@@ -248,12 +249,12 @@ export function PremiumUpgradeModal({
           ) : (
             <>
               {activeTier.popular ? <Crown className="w-5 h-5" /> : <Zap className="w-5 h-5" />}
-              Passer {activeTier.name} — {totalLabel}
+              Essai gratuit 7 jours — {totalLabel}
             </>
           )}
         </Button>
         <p className="text-xs text-text-tertiary text-center mt-3">
-          Annulation en 1 clic. Remboursé sous 30 jours. Zéro risque.
+          Sans engagement — annule en 1 clic. Remboursé sous 30 jours.
         </p>
       </div>
     </ResponsiveModal>

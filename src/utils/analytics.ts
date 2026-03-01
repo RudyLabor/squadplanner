@@ -76,10 +76,32 @@ export type UserEvent =
   | 'message_sent'
   | 'voice_call_started'
   | 'voice_call_ended'
+  // Premium conversion (extended)
+  | 'premium_cta_clicked'
+  | 'premium_trial_started'
+  | 'premium_gate_shown'
+  | 'feature_limit_hit'
   // Engagement
   | 'command_palette_opened'
   | 'search_performed'
   | 'notification_clicked'
+  // Growth & Virality
+  | 'referral_link_copied'
+  | 'referral_invite_sent'
+  | 'share_session'
+  | 'share_profile'
+  | 'share_wrapped'
+  // Gamification
+  | 'challenge_claimed'
+  | 'streak_milestone'
+  | 'level_up'
+  | 'badge_unlocked'
+  // Retention
+  | 'streak_broken'
+  | 'cta_clicked'
+  // Signup
+  | 'signup_completed'
+  | 'login_completed'
 
 // ---------------------------------------------------------------------------
 // Configuration
@@ -228,7 +250,7 @@ export function initAnalytics(): void {
   if (import.meta.env.DEV) {
     console.info('[Analytics] PostHog initialized:', {
       host: POSTHOG_HOST,
-      consent: hasAnalyticsConsent() ? '✅ Granted' : '❌ Not granted',
+      consent: hasAnalyticsConsent() ? '\u2705 Granted' : '\u274C Not granted',
     })
   }
 }

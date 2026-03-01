@@ -86,17 +86,17 @@ export const QUALITY_INFO: Record<
     label: 'Inconnue',
     color: 'var(--color-text-tertiary)',
     bars: 0,
-    description: "Qualite en cours d'evaluation",
+    description: "Qualité en cours d'évaluation",
   },
 }
 
-// Etat du store
+// État du store
 interface NetworkQualityState {
-  // Qualite reseau locale (uplink)
+  // Qualité réseau locale (uplink)
   localQuality: NetworkQualityLevel
   localQualityScore: number // Score 0-4 (mapped from LiveKit)
 
-  // Qualite reseau distante (downlink)
+  // Qualité réseau distante (downlink)
   remoteQuality: NetworkQualityLevel
   remoteQualityScore: number
 

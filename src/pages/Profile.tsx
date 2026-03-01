@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
-import { useSearchParams } from 'react-router'
-import { LogOut } from '../components/icons'
+import { useSearchParams, Link } from 'react-router'
+import { LogOut, Sparkles } from '../components/icons'
 import { ProfileSkeleton } from '../components/ui'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { useAuthStore, usePremiumStore } from '../hooks'
@@ -131,9 +131,9 @@ export function Profile() {
       const remaining = nextThreshold ? nextThreshold - newXP : 0
 
       if (remaining > 0) {
-        showSuccess(`+${xpReward} XP ! Plus que ${remaining} XP pour le niveau ${lvl + 1}`)
+        showSuccess(`+${xpReward} XP ! Plus que ${remaining} XP pour le niveau ${lvl + 1} 🎯`)
       } else {
-        showSuccess(`+${xpReward} XP ! Tu es au top, continue comme ça !`)
+        showSuccess(`+${xpReward} XP ! Tu es au top, continue comme ça !`)
       }
     } catch (error) {
       if (!import.meta.env.PROD) console.error('Error claiming XP:', error)
@@ -146,6 +146,7 @@ export function Profile() {
   }
 
   const profileReady = !!profile && isInitialized
+  const isFreeUser = tier === 'free' || !tier
 
   // Loading state with skeleton
   if (!isInitialized || (isLoading && !profile)) {
@@ -184,7 +185,19 @@ export function Profile() {
         />
 
         <div className="px-4 md:px-6 lg:px-8 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-          <PlanBadge tier={tier} size="md" className="mb-4" />
+          <div className="flex items-center gap-3 mb-4">
+            <PlanBadge tier={tier} size="md" />
+            {isFreeUser && (
+              <Link
+                to="/premium"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                onClick={() => setShowPremiumModal(false)}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Débloquer les stats avancées
+              </Link>
+            )}
+          </div>
 
           {/* XP Bar — Uses profile.xp from the profiles table.
             NOTE: Squad-level XP (e.g. squad_members.xp) is computed per-squad and may differ
@@ -196,7 +209,7 @@ export function Profile() {
             <XPBar currentXP={profile?.xp || 0} level={profile?.level || 1} className="mb-5" />
           )}
 
-          {/* Recherche de squad — Matchmaking toggle */}
+          {/* Recherche de squad -- Matchmaking toggle */}
           <MatchmakingToggle
             profile={profile as any}
             updateProfile={updateProfile}
@@ -210,7 +223,7 @@ export function Profile() {
 
           {/* Challenges Section - moved up for visibility */}
           {challenges.length > 0 && (
-            <section className="mb-5" aria-label="Défis">
+            <section className="mb-5" aria-label="Defis">
               <Challenges challenges={challenges} onClaimXP={handleClaimXP} />
             </section>
           )}

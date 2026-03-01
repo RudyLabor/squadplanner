@@ -41,12 +41,12 @@ describe('toast', () => {
   describe('showSuccess', () => {
     it('should call toast.success with correct message', async () => {
       const { showSuccess } = await import('../toast')
-      showSuccess('Operation reussie')
+      showSuccess('Opération réussie')
 
       expect(mockToast.success).toHaveBeenCalledWith(
-        'Operation reussie',
+        'Opération réussie',
         expect.objectContaining({
-          id: 'success-Operation reussie',
+          id: 'success-Opération réussie',
           duration: 4000,
         })
       )

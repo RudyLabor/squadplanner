@@ -12,6 +12,7 @@ import { translateAuthError } from './auth/AuthHelpers'
 import { AuthGoogleButton } from './auth/AuthGoogleButton'
 import { AuthFormFields } from './auth/AuthFormFields'
 import type { FieldErrors } from './auth/AuthFormFields'
+import { trackEvent } from '../utils/analytics'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -96,6 +97,8 @@ export default function Auth() {
     if (error) {
       setError(translateAuthError(error.message))
       setIsSubmitting(false)
+    } else {
+      trackEvent('login_completed', { method: 'google' })
     }
   }
 
@@ -138,6 +141,7 @@ export default function Auth() {
         setError(translateAuthError(error.message))
         setIsSubmitting(false)
       } else {
+        trackEvent('login_completed', { method: 'email' })
         const redirectUrl = sessionStorage.getItem('redirectAfterAuth')
         if (redirectUrl) {
           sessionStorage.removeItem('redirectAfterAuth')
@@ -163,6 +167,7 @@ export default function Auth() {
         setError(translateAuthError(error.message))
         setIsSubmitting(false)
       } else {
+        trackEvent('signup_completed', { method: 'email' })
         // Process referral code if present in URL (?ref=CODE)
         if (referralCode) {
           try {

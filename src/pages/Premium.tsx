@@ -10,6 +10,7 @@ import { PremiumFeaturesTable } from './premium/PremiumFeaturesTable'
 import { PremiumTestimonials } from './premium/PremiumTestimonials'
 import { PremiumFAQ } from './premium/PremiumFAQ'
 import type { SubscriptionTier } from '../types/database'
+import { trackEvent } from '../utils/analytics'
 
 export function Premium() {
   const navigate = useNavigate()
@@ -28,6 +29,7 @@ export function Premium() {
       current_tier: tier,
       source: 'direct_navigation',
     })
+    trackEvent('premium_gate_shown', { source: 'premium_page' })
   }, [analytics, hasPremium, tier])
 
   const handleUpgrade = async (selectedTier: SubscriptionTier, interval: 'monthly' | 'yearly') => {
@@ -45,6 +47,7 @@ export function Premium() {
       interval,
       price: plan?.price ?? 0,
     })
+    trackEvent('premium_cta_clicked', { source: 'premium_page', plan: `${selectedTier}_${interval}` })
 
     setIsLoading(true)
     setError(null)

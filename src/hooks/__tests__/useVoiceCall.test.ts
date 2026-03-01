@@ -270,7 +270,7 @@ describe('useVoiceCallStore', () => {
       await act(async () => {
         await useVoiceCallStore.getState().startCall('user-2', 'User 2')
       })
-      expect(useVoiceCallStore.getState().error).toBe('Utilisateur non connecte')
+      expect(useVoiceCallStore.getState().error).toBe('Utilisateur non connecté')
     })
 
     it('starts call successfully with all data', async () => {
@@ -526,7 +526,7 @@ describe('useVoiceCallStore', () => {
         await useVoiceCallStore.getState().startCall('recv-1', 'R')
       })
 
-      expect(useVoiceCallStore.getState().error).toBe("Erreur lors du demarrage de l'appel")
+      expect(useVoiceCallStore.getState().error).toBe("Erreur lors du démarrage de l'appel")
       warnSpy.mockRestore()
     })
   })
@@ -721,7 +721,7 @@ describe('useVoiceCallStore', () => {
       await act(async () => {
         await useVoiceCallStore.getState().acceptCall()
       })
-      expect(useVoiceCallStore.getState().error).toBe('Utilisateur non connecte')
+      expect(useVoiceCallStore.getState().error).toBe('Utilisateur non connecté')
     })
 
     it('uses default username when receiver profile is null', async () => {

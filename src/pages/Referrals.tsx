@@ -20,6 +20,7 @@ import {
   Check,
   Sparkles,
 } from '../components/icons'
+import { trackEvent } from '../utils/analytics'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -76,6 +77,7 @@ export function Referrals() {
     if (success) {
       setCopied(true)
       analytics.track('referral_link_copied' as any)
+      trackEvent('referral_link_copied')
       setTimeout(() => setCopied(false), 2000)
     }
   }
@@ -86,6 +88,7 @@ export function Referrals() {
     const text = `Rejoins Squad Planner et gagne 7 jours Premium gratuits ! Moi j'économise sur mon abo grâce au parrainage. ${url}`
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
     analytics.track('referral_shared' as any, { platform: 'whatsapp' })
+    trackEvent('referral_invite_sent', { platform: 'whatsapp' })
   }
 
   const handleShareTwitter = () => {
@@ -97,6 +100,7 @@ export function Referrals() {
       '_blank'
     )
     analytics.track('referral_shared' as any, { platform: 'twitter' })
+    trackEvent('referral_invite_sent', { platform: 'twitter' })
   }
 
   // Auth is already handled by the _protected layout — no need for a redundant check
@@ -133,7 +137,7 @@ export function Referrals() {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-success/10 to-success/025 border border-success/15">
                 <Sparkles className="w-4 h-4 text-success" />
-                <span className="text-base font-medium text-success">Réductions permanentes à débloquer</span>
+                <span className="text-base font-medium text-success">Offre limitée — parraine maintenant</span>
               </div>
             </m.div>
 
@@ -171,8 +175,8 @@ export function Referrals() {
               transition={{ delay: 0.2, duration: 0.4, ease }}
               className="text-base md:text-lg text-text-secondary max-w-xl mx-auto"
             >
-              3 inscrits et ta squad grandit — et les réductions tombent en bonus.
-              Ton pote gagne 7 jours Premium. Toi, tu déverrouilles des réductions permanentes sur ton abo + 500 XP.
+              Invite tes potes et gagne 1 mois Premium gratuit pour chaque inscription.
+              Ton pote recoit 7 jours Premium. Toi, tu deverrouilles des reductions permanentes sur ton abo + 500 XP.
             </m.p>
           </div>
         </div>

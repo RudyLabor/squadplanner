@@ -162,20 +162,25 @@ export function CallHistoryList({
           <Phone className="w-10 h-10 text-primary" />
         </m.div>
         <h3 className="text-lg font-semibold text-text-primary mb-2">
-          {filter === 'all' ? 'Prêt à appeler ta squad ?' : 'Rien pour le moment'}
+          {filter === 'all' ? 'Ton historique est vide — pour l\'instant' : 'Rien pour le moment'}
         </h3>
-        <p className="text-base text-text-tertiary text-center max-w-[280px] mb-6">
+        <p className="text-base text-text-tertiary text-center max-w-[300px] mb-2">
           {filter === 'all'
-            ? 'Lance un appel vocal avec tes potes depuis la party !'
-            : `Aucun appel ${filter === 'incoming' ? 'entrant' : filter === 'outgoing' ? 'sortant' : 'manqué'} pour le moment`}
+            ? 'Ton historique d\'appels apparaîtra ici après ta première party vocale.'
+            : `Aucun appel ${filter === 'incoming' ? 'entrant' : filter === 'outgoing' ? 'sortant' : 'manqué'} pour le moment.`}
         </p>
         {filter === 'all' && (
-          <Link to="/party">
-            <Button variant="secondary">
-              <Phone className="w-4 h-4" />
-              Aller en party vocale
-            </Button>
-          </Link>
+          <>
+            <p className="text-sm text-text-quaternary text-center max-w-[280px] mb-6">
+              Qualité HD, latence ultra-faible — lance-toi !
+            </p>
+            <Link to="/party">
+              <Button variant="secondary">
+                <Phone className="w-4 h-4" />
+                Lancer une party vocale
+              </Button>
+            </Link>
+          </>
         )}
       </m.div>
     )

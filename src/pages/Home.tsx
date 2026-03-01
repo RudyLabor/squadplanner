@@ -10,8 +10,8 @@ import {
 } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { m } from 'framer-motion'
-import { TrendingUp, Loader2, AlertCircle, Star } from '../components/icons'
-import { useNavigate } from 'react-router'
+import { TrendingUp, Loader2, AlertCircle, Star, Sparkles } from '../components/icons'
+import { useNavigate, Link } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { Tooltip, CrossfadeTransition, SkeletonHomePage } from '../components/ui'
@@ -66,6 +66,7 @@ import {
 } from '../components/home'
 import { PlanBadge } from '../components/PlanBadge'
 import { usePremium, usePremiumStore } from '../hooks/usePremium'
+import { trackEvent } from '../utils/analytics'
 import type { Profile } from '../types/database'
 import type { SquadWithMembers } from '../hooks/queries/useSquadsQuery'
 import type { SessionWithDetails } from '../hooks/queries/useSessionFetchers'
@@ -93,10 +94,10 @@ interface UpcomingSession {
   total_members: number
 }
 
-// Badge fiabilité avec glow subtil et tooltip
+// Badge fiabilit\u00e9 avec glow subtil et tooltip
 function ReliabilityBadge({ score }: { score: number }) {
   const tooltipText =
-    'Ton score de fiabilité montre si tu tiens parole. +5 % quand tu confirmes. -10 % si tu ghost. Au-dessus de 95 %, tu es invité en priorité.'
+    'Ton score de fiabilit\u00e9 montre si tu tiens parole. +5 % quand tu confirmes. -10 % si tu ghost. Au-dessus de 95 %, tu es invit\u00e9 en priorit\u00e9.'
 
   const getBadgeContent = () => {
     if (score >= 95) {
@@ -206,7 +207,7 @@ export default function Home({ loaderData }: HomeProps) {
     setGreeting(g)
     // UI #1: Sync document title with dynamic greeting
     const username = profile?.username || user?.user_metadata?.username || ''
-    document.title = username ? `${g} ${username} — Squad Planner` : 'Accueil — Squad Planner'
+    document.title = username ? `${g} ${username} \u2014 Squad Planner` : 'Accueil \u2014 Squad Planner'
     return () => {
       rsvpTimers.current.forEach(clearTimeout)
     }
@@ -274,16 +275,16 @@ export default function Home({ loaderData }: HomeProps) {
         if (response === 'present') {
           haptic.success()
           fireConfetti()
-          setSuccessMessage("Confirmé ! Ta squad sait qu'elle peut compter sur toi 🔥")
+          setSuccessMessage("Confirm\u00e9 ! Ta squad sait qu'elle peut compter sur toi \uD83D\uDD25")
           rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 5000))
         } else {
-          setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
+          setSuccessMessage(response === 'absent' ? 'Absence enregistr\u00e9e' : 'R\u00e9ponse enregistr\u00e9e')
           rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 3000))
         }
       } catch (error) {
         haptic.error()
         if (!import.meta.env.PROD) console.error('RSVP error:', error)
-        setSuccessMessage("Erreur : ta réponse n'a pas pu être enregistrée")
+        setSuccessMessage("Erreur : ta r\u00e9ponse n'a pas pu \u00eatre enregistr\u00e9e")
         rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 4000))
       }
     },
@@ -308,34 +309,34 @@ export default function Home({ loaderData }: HomeProps) {
     return null
   }
 
-  // New player with no sessions → effective score is 0 regardless of DB value
+  // New player with no sessions \u2192 effective score is 0 regardless of DB value
   const totalSessions = profile?.total_sessions || 0
   const reliabilityScore = totalSessions === 0 ? 0 : (profile?.reliability_score ?? 0)
   const pendingRsvps = upcomingSessions.filter((s) => !s.my_rsvp).length
 
-  // R16 — Contextual nudge (1 at a time, priority order)
+  // R16 \u2014 Contextual nudge (1 at a time, priority order)
   const homeNudge = useMemo(() => {
     if (squads.length === 0) return null
     if (pendingRsvps > 0)
       return {
-        icon: '⚡',
-        text: `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} attend${pendingRsvps > 1 ? 'ent' : ''} ta réponse. Ta squad t'attend — réponds en 2 secondes.`,
-        cta: 'Répondre maintenant',
+        icon: '\u26A1',
+        text: `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} attend${pendingRsvps > 1 ? 'ent' : ''} ta r\u00e9ponse. Ta squad t'attend \u2014 r\u00e9ponds en 2 secondes.`,
+        cta: 'R\u00e9pondre maintenant',
         action: () => navigate(`/session/${upcomingSessions.find((s) => !s.my_rsvp)?.id}`),
         color: 'warning' as const,
       }
     if (sessionsThisWeek === 0)
       return {
-        icon: '📅',
-        text: "Pas encore de session cette semaine — crée la première et ta squad sera prévenue.",
-        cta: 'Créer une session',
+        icon: '\uD83D\uDCC5',
+        text: "Pas encore de session cette semaine \u2014 cr\u00e9e la premi\u00e8re et ta squad sera pr\u00e9venue.",
+        cta: 'Cr\u00e9er une session',
         action: openCreateSessionModal,
         color: 'primary' as const,
       }
     if (reliabilityScore > 0 && reliabilityScore < 70)
       return {
-        icon: '📉',
-        text: `Ton score est à ${reliabilityScore}%. Confirme ta prochaine session pour le remonter.`,
+        icon: '\uD83D\uDCC9',
+        text: `Ton score est \u00e0 ${reliabilityScore}%. Confirme ta prochaine session pour le remonter.`,
         cta: 'Voir les sessions',
         action: () => navigate('/sessions'),
         color: 'error' as const,
@@ -346,8 +347,8 @@ export default function Home({ loaderData }: HomeProps) {
       squads.length === 1
     )
       return {
-        icon: '👋',
-        text: `Bienvenue dans ${squads[0].name} ! Invite tes potes pour compléter ta squad.`,
+        icon: '\uD83D\uDC4B',
+        text: `Bienvenue dans ${squads[0].name} ! Invite tes potes pour compl\u00e9ter ta squad.`,
         cta: 'Inviter',
         action: () => navigate(`/squad/${squads[0].id}`),
         color: 'success' as const,
@@ -362,6 +363,9 @@ export default function Home({ loaderData }: HomeProps) {
           participantCount: remoteUsers.length + 1,
         }
       : null
+
+  // Show premium CTA for free-tier users
+  const showPremiumCTA = tier === 'free' || !tier
 
   return (
     <main className="min-h-0 bg-bg-base mesh-bg pb-6 page-enter" aria-label="Accueil">
@@ -405,16 +409,16 @@ export default function Home({ loaderData }: HomeProps) {
               <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary mb-1">
                 {greeting}
                 {profile?.username
-                  ? ` ${profile.username.length > 15 ? profile.username.slice(0, 15) + '…' : profile.username}`
+                  ? ` ${profile.username.length > 15 ? profile.username.slice(0, 15) + '\u2026' : profile.username}`
                   : ''}{' '}
                 !
               </h1>
               <p className="text-sm text-text-tertiary">
                 {upcomingSessions.length > 0
                   ? pendingRsvps > 0
-                    ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} sans ta réponse — ta squad t'attend, réponds en 2 secondes`
-                    : "T'es carré, toutes tes sessions sont confirmées 🔥"
-                  : "Pas de session prévue — crée la première et réunis ta squad !"}
+                    ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} sans ta r\u00e9ponse \u2014 ta squad t'attend, r\u00e9ponds en 2 secondes`
+                    : "T'es carr\u00e9, toutes tes sessions sont confirm\u00e9es \uD83D\uDD25"
+                  : "Pas de session pr\u00e9vue \u2014 cr\u00e9e la premi\u00e8re et r\u00e9unis ta squad !"}
               </p>
               <div className="flex items-center gap-2 mt-2">
                 <PlanBadge tier={tier} size="sm" />
@@ -422,7 +426,7 @@ export default function Home({ loaderData }: HomeProps) {
               </div>
             </m.header>
 
-            {/* R16 — Contextual nudge */}
+            {/* R16 \u2014 Contextual nudge */}
             {homeNudge && (
               <m.div
                 initial={{ opacity: 0, y: -8 }}
@@ -558,6 +562,39 @@ export default function Home({ loaderData }: HomeProps) {
             >
               <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />
             </m.div>
+
+            {/* CTA Premium discret pour les utilisateurs free */}
+            {showPremiumCTA && (
+              <m.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Link
+                  to="/premium"
+                  className="block bg-primary/5 border border-primary/20 rounded-xl p-4 hover:bg-primary/10 transition-colors group"
+                  onClick={() => trackEvent('cta_clicked', { source: 'home_premium_banner' })}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <Sparkles className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-text-primary">
+                        D\u00e9bloque tout Squad Planner
+                      </p>
+                      <p className="text-xs text-text-tertiary">
+                        Essai gratuit 7 jours — aucun engagement, annule quand tu veux
+                      </p>
+                      <span className="text-xs text-warning font-medium">Plus de 2 000 gamers d\u00e9j\u00e0 Premium</span>
+                    </div>
+                    <span className="text-xs font-semibold text-primary group-hover:underline flex-shrink-0">
+                      Essayer gratuit
+                    </span>
+                  </div>
+                </Link>
+              </m.div>
+            )}
           </div>
         </CrossfadeTransition>
       </PullToRefresh>

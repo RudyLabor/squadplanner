@@ -64,7 +64,7 @@ export function useGuildedImport() {
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      if (!user) throw new Error('Non authentifie')
+      if (!user) throw new Error('Non authentifié')
 
       // Ensure profile exists
       const { data: existingProfile } = await supabase

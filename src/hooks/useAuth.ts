@@ -7,6 +7,7 @@ import { updateDailyStreak } from './useAuthStreak'
 import { usePremiumStore } from './usePremium'
 import { useGamificationStore } from '../stores/useGamificationStore'
 import { showSuccess } from '../lib/toast'
+import { identifyUser } from '../utils/analytics'
 
 interface AuthState {
   user: User | null
@@ -68,6 +69,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           isLoading: false,
           isInitialized: true,
         })
+        // Identify user for analytics after successful initialization
+        if (updatedProfile) {
+          identifyUser(session.user.id, {
+            tier: updatedProfile.subscription_tier || 'free',
+            username: updatedProfile.username,
+            created_at: updatedProfile.created_at,
+          })
+        }
       } else {
         set({ isLoading: false, isInitialized: true })
       }
@@ -92,6 +101,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           }
           // Refresh premium status on every sign-in
           usePremiumStore.getState().fetchPremiumStatus()
+          // Identify user for analytics on sign-in
+          if (updatedProfile) {
+            identifyUser(session.user.id, {
+              tier: updatedProfile.subscription_tier || 'free',
+              username: updatedProfile.username,
+              created_at: updatedProfile.created_at,
+            })
+          }
           // Show welcome toast for OAuth sign-in (Google redirect)
           if (session.user.app_metadata?.provider === 'google') {
             const isNewUser =

@@ -589,7 +589,7 @@ describe('useRsvpMutation', () => {
     }
 
     await waitFor(() => {
-      expect(mockShowError).toHaveBeenCalledWith('Erreur de connexion. Reessaie.')
+      expect(mockShowError).toHaveBeenCalledWith('Erreur de connexion. Réessaie.')
     })
   })
 })

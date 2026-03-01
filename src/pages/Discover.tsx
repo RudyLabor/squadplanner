@@ -58,6 +58,9 @@ export function Discover() {
         className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24 page-enter mesh-bg"
       >
         <MobilePageHeader title="Découvrir" />
+        {/* Social proof - visible on mobile */}
+        <p className="text-sm text-text-tertiary mb-4 lg:hidden">Rejoins plus de 3 500 gamers qui organisent leurs sessions</p>
+
         {/* Header - hidden on mobile where MobilePageHeader is shown */}
         <div className="hidden lg:flex items-center gap-3 mb-6">
           <div className="w-10 h-10 rounded-xl bg-primary-10 flex items-center justify-center">
@@ -65,7 +68,7 @@ export function Discover() {
           </div>
           <div>
             <h1 className="text-xl lg:text-2xl font-bold font-display text-text-primary">Découvrir</h1>
-            <p className="text-sm text-text-tertiary">Trouve des squads et joueurs</p>
+            <p className="text-sm text-text-tertiary">Rejoins plus de 3 500 gamers qui organisent leurs sessions</p>
           </div>
         </div>
 

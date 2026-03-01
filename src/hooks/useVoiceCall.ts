@@ -86,7 +86,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) {
-        set({ error: 'Utilisateur non connecte' })
+        set({ error: 'Utilisateur non connecté' })
         return
       }
 
@@ -150,7 +150,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       // instead of just setting status to idle, which would leave timers active
       get().resetCall()
       set({
-        error: error instanceof Error ? error.message : "Erreur lors du demarrage de l'appel",
+        error: error instanceof Error ? error.message : "Erreur lors du démarrage de l'appel",
       })
     }
   },
@@ -188,7 +188,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) {
-        set({ error: 'Utilisateur non connecte' })
+        set({ error: 'Utilisateur non connecté' })
         return
       }
 

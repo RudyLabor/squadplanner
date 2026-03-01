@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { Share2, ChevronLeft, ChevronRight } from '../components/icons'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
+import { trackEvent } from '../utils/analytics'
 
 interface WrappedStats {
   totalHours: number
@@ -138,6 +139,7 @@ export function Wrapped() {
 
   const handleShare = async () => {
     if (!stats) return
+    trackEvent('share_wrapped')
 
     const shareText = `🎮 Mon Gaming Wrapped 2026 : ${stats.sessionCount} sessions, ${stats.totalHours} heures, fiabilité ${stats.reliabilityScore}% ! Découvre le tien sur squadplanner.fr/wrapped`
 

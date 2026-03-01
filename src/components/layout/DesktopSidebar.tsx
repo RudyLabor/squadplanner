@@ -314,7 +314,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           <div className="h-px bg-gradient-to-r from-transparent via-border-default to-transparent" />
           {isExpanded && (
             <div className="mt-2 px-2 text-[10px] font-semibold uppercase tracking-widest text-text-quaternary">
-              Plus
+              Outils
             </div>
           )}
         </div>
@@ -347,7 +347,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
         <NavLink
           path="/referrals"
           icon={Gift}
-          label="Parrainage"
+          label="Parrainer & gagner"
           isActive={currentPath === '/referrals' || currentPath.startsWith('/referrals/')}
           collapsed={!isExpanded}
           userId={userId}

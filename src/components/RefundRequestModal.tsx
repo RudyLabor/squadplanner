@@ -129,7 +129,7 @@ export function RefundRequestModal({ open, onClose }: RefundRequestModalProps) {
                   <textarea
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    placeholder="Ton retour nous aide a nous ameliorer..."
+                    placeholder="Ton retour nous aide à nous améliorer..."
                     rows={3}
                     className="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-border-default text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary resize-none transition-colors"
                   />

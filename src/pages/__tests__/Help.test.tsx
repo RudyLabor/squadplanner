@@ -95,7 +95,7 @@ vi.mock('../../components/HelpChatbot', () => ({
 vi.mock('../help/HelpFAQData', () => ({
   FAQ_ITEMS: [
     {
-      question: 'Comment creer une squad ?',
+      question: 'Comment créer une squad ?',
       answer: 'Clique sur le bouton +',
       category: 'General',
     },
@@ -136,7 +136,7 @@ describe('Help', () => {
 
   it('renders FAQ questions', () => {
     render(createElement(Help))
-    expect(screen.getByText('Comment creer une squad ?')).toBeTruthy()
+    expect(screen.getByText('Comment créer une squad ?')).toBeTruthy()
     expect(screen.getByText('Comment inviter des amis ?')).toBeTruthy()
   })
 

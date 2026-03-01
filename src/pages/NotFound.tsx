@@ -54,6 +54,17 @@ export function NotFound() {
             </Button>
           </div>
 
+          {/* Help CTA */}
+          <div className="mb-6">
+            <Link
+              to="/help"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface-card border border-border-subtle text-sm font-medium text-text-secondary hover:text-text-primary hover:border-border-hover transition-interactive"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Besoin d'aide ?
+            </Link>
+          </div>
+
           {/* Page suggestions */}
           <div className="border-t border-border-subtle pt-6">
             <p className="text-sm text-text-tertiary mb-4">Pages populaires</p>

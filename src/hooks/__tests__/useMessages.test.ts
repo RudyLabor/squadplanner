@@ -691,7 +691,7 @@ describe('useMessagesStore', () => {
       })
 
       expect(result.error).toBeTruthy()
-      expect(mockShowError).toHaveBeenCalledWith('Message non envoye. Appuie pour reessayer.')
+      expect(mockShowError).toHaveBeenCalledWith('Message non envoyé. Appuie pour réessayer.')
       // The optimistic message should be marked as failed
       const failedMsg = useMessagesStore
         .getState()

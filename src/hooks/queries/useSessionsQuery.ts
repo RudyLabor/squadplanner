@@ -217,7 +217,7 @@ export function useRsvpMutation() {
           context.previousSession
         )
       }
-      showError('Erreur de connexion. Reessaie.')
+      showError('Erreur de connexion. Réessaie.')
     },
     onSuccess: async (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })

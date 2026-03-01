@@ -137,8 +137,8 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
       } = await supabase.auth.getUser()
 
       if (!user) {
-        set({ status: 'error', error: 'Utilisateur non authentifie' })
-        return { success: false, error: 'Utilisateur non authentifie' }
+        set({ status: 'error', error: 'Utilisateur non authentifié' })
+        return { success: false, error: 'Utilisateur non authentifié' }
       }
 
       const { data, error } = await supabase.functions.invoke('validate-iap-receipt', {
@@ -151,8 +151,8 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
       })
 
       if (error) {
-        set({ status: 'error', error: error.message || 'Erreur de validation du recu' })
-        return { success: false, error: error.message || 'Erreur de validation du recu' }
+        set({ status: 'error', error: error.message || 'Erreur de validation du reçu' })
+        return { success: false, error: error.message || 'Erreur de validation du reçu' }
       }
 
       const tier = (data?.tier as SubscriptionTier) || getTierFromProductKey(productKey)
@@ -195,8 +195,8 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
       } = await supabase.auth.getUser()
 
       if (!user) {
-        set({ status: 'error', error: 'Utilisateur non authentifie' })
-        return { success: false, tier: null, error: 'Utilisateur non authentifie' }
+        set({ status: 'error', error: 'Utilisateur non authentifié' })
+        return { success: false, tier: null, error: 'Utilisateur non authentifié' }
       }
 
       // Find the highest-tier purchase to restore
@@ -217,7 +217,7 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
 
       if (!bestReceipt || bestTier === 'free') {
         set({ status: 'idle', error: null })
-        return { success: false, tier: null, error: 'Aucun achat valide trouve.' }
+        return { success: false, tier: null, error: 'Aucun achat valide trouvé.' }
       }
 
       // Validate with server

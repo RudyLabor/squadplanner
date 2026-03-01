@@ -37,9 +37,9 @@ vi.mock('framer-motion', () => ({
 }))
 
 vi.mock('../help/chatbotUtils', () => ({
-  QUICK_ACTIONS: ['Comment creer un squad ?', 'Comment planifier une session ?'],
+  QUICK_ACTIONS: ['Comment créer un squad ?', 'Comment planifier une session ?'],
   GREETING_MESSAGE: { id: 'greeting', role: 'bot', text: 'Salut !', timestamp: Date.now() },
-  findBestMatch: vi.fn().mockReturnValue('Voici la reponse'),
+  findBestMatch: vi.fn().mockReturnValue('Voici la réponse'),
   getNoMatchResponse: vi.fn().mockReturnValue('Je ne comprends pas'),
 }))
 

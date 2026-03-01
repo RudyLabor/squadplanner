@@ -15,6 +15,7 @@ import { useSquadMembersQuery } from '../hooks/queries/useSquadMembers'
 import { hasPermission, type SquadRole } from '../lib/roles'
 import type { MentionUser } from '../components/MentionInput'
 import type { PollData } from '../components/ChatPoll'
+import { Link } from 'react-router'
 import { CrossfadeTransition, SkeletonChatPage } from '../components/ui'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { ConversationList } from '../components/messages/ConversationList'
@@ -604,9 +605,19 @@ export function Messages() {
                   <h3 className="text-xl lg:text-2xl font-semibold font-display text-text-primary mb-2">
                     Ta squad t'attend
                   </h3>
-                  <p className="text-base text-text-quaternary max-w-[250px] mx-auto">
-                    Choisis une conversation pour retrouver tes potes.
+                  <p className="text-base text-text-quaternary max-w-[280px] mx-auto">
+                    {squadConversations.length > 0 || dmConversations.length > 0
+                      ? 'Choisis une conversation pour retrouver tes potes.'
+                      : 'Crée ou rejoins un squad pour commencer à chatter avec ta team.'}
                   </p>
+                  {squadConversations.length === 0 && dmConversations.length === 0 && (
+                    <Link
+                      to="/discover"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-bg text-white text-sm font-medium hover:bg-primary-bg-hover transition-colors mt-4"
+                    >
+                      Trouver des joueurs
+                    </Link>
+                  )}
                 </div>
               </div>
             )}

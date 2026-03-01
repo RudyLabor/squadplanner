@@ -131,7 +131,7 @@ export const SessionCard = memo(function SessionCard({
                     e.preventDefault()
                     onRsvp(session.id, 'maybe')
                   }}
-                  aria-label="Marquer comme peut-etre"
+                  aria-label="Marquer comme peut-être"
                   aria-pressed={session.my_rsvp === 'maybe'}
                   className={`flex-1 min-w-0 flex items-center justify-center px-3 py-2.5 min-h-[44px] rounded-lg text-sm font-medium whitespace-nowrap transition-interactive ${
                     session.my_rsvp === 'maybe'

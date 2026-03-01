@@ -57,7 +57,7 @@ export function LandingFooter() {
         <div className="max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full badge-shimmer border border-primary/20 mb-5">
             <Users className="w-3.5 h-3.5 text-primary" />
-            <span className="text-sm font-medium text-primary">+2{' '}000 gamers s'organisent déjà</span>
+            <span className="text-sm font-medium text-primary">+2{' '}000 gamers s'organisent déjà</span>
           </div>
           <h3 className="text-lg md:text-xl font-bold text-text-primary mb-2">
             Sois le premier informé
@@ -106,16 +106,16 @@ export function LandingFooter() {
             )}
             {newsletterSuccess && (
               <p role="status" className="text-success text-sm mt-2">
-                Merci ! Tu recevras nos actus.
+                Merci ! Tu recevras nos actus.
               </p>
             )}
           </form>
         </div>
       </div>
 
-      {/* ── Zone 2 : Grille de liens (4 colonnes) ── */}
+      {/* ── Zone 2 : Grille de liens (5 colonnes) ── */}
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-14">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-x-12 gap-y-10">
           {/* Produit */}
           <div>
             <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider flex items-center gap-1.5">
@@ -141,6 +141,40 @@ export function LandingFooter() {
               <li>
                 <Link to="/ambassador" className={linkClass}>
                   Programme Ambassadeur
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Fonctionnalités */}
+          <div>
+            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider">
+              Fonctionnalités
+            </h3>
+            <ul className="space-y-0.5">
+              <li>
+                <Link to="/how-it-works" className={linkClass}>
+                  Comment ça marche
+                </Link>
+              </li>
+              <li>
+                <Link to="/features/score-fiabilite" className={linkClass}>
+                  Score de fiabilité
+                </Link>
+              </li>
+              <li>
+                <Link to="/features/gamification" className={linkClass}>
+                  Gamification
+                </Link>
+              </li>
+              <li>
+                <Link to="/features/coach-ia" className={linkClass}>
+                  Coach IA
+                </Link>
+              </li>
+              <li>
+                <Link to="/features/analytics" className={linkClass}>
+                  Analytics
                 </Link>
               </li>
             </ul>
@@ -224,9 +258,19 @@ export function LandingFooter() {
                 </Link>
               </li>
               <li>
-                <a href="mailto:contact@squadplanner.fr" className={linkClass}>
+                <Link to="/solutions/clubs-esport" className={linkClass}>
+                  Clubs esport
+                </Link>
+              </li>
+              <li>
+                <Link to="/solutions/streamers" className={linkClass}>
+                  Streamers
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className={linkClass}>
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

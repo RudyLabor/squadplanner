@@ -15,7 +15,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Glossaire complet du vocabulaire gaming et esport : RSVP, ghost, IGL, squad, scrim, clutch, carry. Tous les termes expliques.',
+        'Glossaire complet du vocabulaire gaming et esport : RSVP, ghost, IGL, squad, scrim, clutch, carry. Tous les termes expliqués.',
     },
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `${baseUrl}/glossaire` },
@@ -23,11 +23,16 @@ export function meta() {
     { property: 'og:title', content: 'Glossaire Gaming - Squad Planner' },
     {
       property: 'og:description',
-      content: 'Tous les termes gaming expliques simplement.',
+      content: 'Tous les termes gaming expliqués simplement.',
     },
     { property: 'og:url', content: `${baseUrl}/glossaire` },
     { property: 'og:image', content: `${baseUrl}/og-image.png` },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Glossaire Gaming - Squad Planner' },
+    { name: 'twitter:description', content: 'Tous les termes gaming expliqués simplement.' },
+    { name: 'twitter:image', content: `${baseUrl}/og-image.png` },
     { httpEquiv: 'content-language', content: 'fr' },
     {
       'script:ld+json': {

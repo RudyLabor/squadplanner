@@ -50,8 +50,28 @@ export function meta() {
       content: `${baseUrl}/og-image.png`,
     },
     {
+      property: 'og:image:width',
+      content: '1200',
+    },
+    {
+      property: 'og:image:height',
+      content: '630',
+    },
+    {
       name: 'twitter:card',
       content: 'summary_large_image',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Analytics Squad - Squad Planner',
+    },
+    {
+      name: 'twitter:description',
+      content: 'Heatmaps, fiabilité par joueur, tendances sessions. Les analytics pour optimiser ta squad.',
+    },
+    {
+      name: 'twitter:image',
+      content: `${baseUrl}/og-image.png`,
     },
     {
       httpEquiv: 'content-language',

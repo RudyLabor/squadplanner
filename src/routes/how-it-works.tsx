@@ -50,8 +50,28 @@ export function meta() {
       content: `${baseUrl}/og-image.png`,
     },
     {
+      property: 'og:image:width',
+      content: '1200',
+    },
+    {
+      property: 'og:image:height',
+      content: '630',
+    },
+    {
       name: 'twitter:card',
       content: 'summary_large_image',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Comment ça marche - Squad Planner',
+    },
+    {
+      name: 'twitter:description',
+      content: '4 étapes pour organiser tes sessions gaming sans prise de tête.',
+    },
+    {
+      name: 'twitter:image',
+      content: `${baseUrl}/og-image.png`,
     },
     {
       httpEquiv: 'content-language',

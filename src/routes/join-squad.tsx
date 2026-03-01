@@ -10,8 +10,10 @@ export function headers(_args: HeadersArgs) {
 export function meta() {
   return [
     { title: 'Rejoindre une squad - Squad Planner' },
-    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/join' },
-    { property: 'og:url', content: 'https://squadplanner.fr/join' },
+    { name: 'description', content: 'Rejoins une squad gaming sur Squad Planner via un code d\'invitation.' },
+    { name: 'robots', content: 'noindex, nofollow' },
+    { property: 'og:title', content: 'Rejoindre une squad - Squad Planner' },
+    { property: 'og:description', content: 'Rejoins une squad gaming sur Squad Planner via un code d\'invitation.' },
   ]
 }
 

@@ -50,8 +50,28 @@ export function meta() {
       content: `${baseUrl}/og-image.png`,
     },
     {
+      property: 'og:image:width',
+      content: '1200',
+    },
+    {
+      property: 'og:image:height',
+      content: '630',
+    },
+    {
       name: 'twitter:card',
       content: 'summary_large_image',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Coach IA - Squad Planner',
+    },
+    {
+      name: 'twitter:description',
+      content: 'Un coach IA qui analyse tes habitudes et te donne des tips personnalisés pour tes sessions.',
+    },
+    {
+      name: 'twitter:image',
+      content: `${baseUrl}/og-image.png`,
     },
     {
       httpEquiv: 'content-language',

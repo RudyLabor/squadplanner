@@ -50,8 +50,28 @@ export function meta() {
       content: `${baseUrl}/og-image.png`,
     },
     {
+      property: 'og:image:width',
+      content: '1200',
+    },
+    {
+      property: 'og:image:height',
+      content: '630',
+    },
+    {
       name: 'twitter:card',
       content: 'summary_large_image',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Gamification XP & Challenges - Squad Planner',
+    },
+    {
+      name: 'twitter:description',
+      content: 'XP, challenges, streaks et badges pour rendre tes sessions gaming encore plus fun.',
+    },
+    {
+      name: 'twitter:image',
+      content: `${baseUrl}/og-image.png`,
     },
     {
       httpEquiv: 'content-language',

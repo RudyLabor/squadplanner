@@ -15,18 +15,20 @@ export function meta() {
     { title: 'Google Calendar vs Squad Planner - Planification Gaming 2026' },
     {
       name: 'description',
-      content: 'Google Calendar vs Squad Planner pour organiser tes sessions gaming. Comparaison RSVP, fiabilite, notifications, analytics gaming.',
+      content: 'Google Calendar vs Squad Planner pour organiser tes sessions gaming. Comparaison RSVP, fiabilité, notifications, analytics gaming.',
     },
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `${baseUrl}/vs/google-calendar-vs-squad-planner` },
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: 'Google Calendar vs Squad Planner - Gaming' },
-    { property: 'og:description', content: 'Google Calendar est generaliste. Squad Planner est fait pour les gamers. Decouvre pourquoi.' },
+    { property: 'og:description', content: 'Google Calendar est généraliste. Squad Planner est fait pour les gamers. Découvre pourquoi.' },
     { property: 'og:url', content: `${baseUrl}/vs/google-calendar-vs-squad-planner` },
     { property: 'og:image', content: `${baseUrl}/og-image.png` },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: 'Google Calendar vs Squad Planner' },
-    { name: 'twitter:description', content: 'Google Calendar pour la vie, Squad Planner pour le gaming. Comparaison complete.' },
+    { name: 'twitter:description', content: 'Google Calendar pour la vie, Squad Planner pour le gaming. Comparaison complète.' },
     { httpEquiv: 'content-language', content: 'fr' },
     {
       'script:ld+json': {

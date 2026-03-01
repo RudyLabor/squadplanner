@@ -12,11 +12,11 @@ export function headers() {
 export function meta() {
   const baseUrl = 'https://squadplanner.fr'
   return [
-    { title: 'Discord vs Squad Planner - Comparaison Organisation Gaming 2026' },
+    { title: 'Discord vs Squad Planner - Organisation Gaming 2026' },
     {
       name: 'description',
       content:
-        'Discord vs Squad Planner : lequel est le meilleur pour organiser tes sessions gaming ? Comparaison complete calendrier, RSVP, fiabilite, analytics.',
+        'Discord vs Squad Planner : lequel est le meilleur pour organiser tes sessions gaming ? Comparaison complète calendrier, RSVP, fiabilité, analytics.',
     },
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `${baseUrl}/vs/discord-vs-squad-planner` },
@@ -25,16 +25,18 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        "Discord gere la communication. Squad Planner gere l'organisation gaming. Decouvre pourquoi les deux sont complementaires.",
+        "Discord gère la communication. Squad Planner gère l'organisation gaming. Découvre pourquoi les deux sont complémentaires.",
     },
     { property: 'og:url', content: `${baseUrl}/vs/discord-vs-squad-planner` },
     { property: 'og:image', content: `${baseUrl}/og-image.png` },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Discord vs Squad Planner - Comparaison 2026' },
+    { name: 'twitter:title', content: 'Discord vs Squad Planner - Organisation Gaming 2026' },
     {
       name: 'twitter:description',
       content:
-        "Discord pour la commu, Squad Planner pour l'organisation. Decouvre la comparaison complete.",
+        "Discord pour la commu, Squad Planner pour l'organisation. Découvre la comparaison complète.",
     },
     { httpEquiv: 'content-language', content: 'fr' },
     {

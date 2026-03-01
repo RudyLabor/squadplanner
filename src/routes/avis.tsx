@@ -15,7 +15,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Decouvrez les avis des joueurs sur Squad Planner : organisation de sessions, fiabilite, analytics, gamification. +4.8/5 de moyenne.',
+        'Découvrez les avis des joueurs sur Squad Planner : organisation de sessions, fiabilité, analytics, gamification. +4.8/5 de moyenne.',
     },
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `${baseUrl}/avis` },
@@ -27,7 +27,12 @@ export function meta() {
     },
     { property: 'og:url', content: `${baseUrl}/avis` },
     { property: 'og:image', content: `${baseUrl}/og-image.png` },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Avis Squad Planner - Ce que disent les joueurs' },
+    { name: 'twitter:description', content: 'Ce que les gamers pensent de Squad Planner. +4.8/5 de moyenne.' },
+    { name: 'twitter:image', content: `${baseUrl}/og-image.png` },
     { httpEquiv: 'content-language', content: 'fr' },
     {
       'script:ld+json': {

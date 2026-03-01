@@ -15,7 +15,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Organise tes sessions gaming avec ta communaute. Sessions planifiees, RSVP fiable, widget embeddable, programme ambassadeur. La solution pour les streamers.',
+        'Organise tes sessions gaming avec ta communauté. Sessions planifiées, RSVP fiable, widget embeddable, programme ambassadeur. La solution pour les streamers.',
     },
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `${baseUrl}/solutions/streamers` },
@@ -28,7 +28,12 @@ export function meta() {
     },
     { property: 'og:url', content: `${baseUrl}/solutions/streamers` },
     { property: 'og:image', content: `${baseUrl}/og-image.png` },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Squad Planner pour les Streamers' },
+    { name: 'twitter:description', content: 'Organise tes games avec ta commu. Widget stream, RSVP, programme ambassadeur.' },
+    { name: 'twitter:image', content: `${baseUrl}/og-image.png` },
     { httpEquiv: 'content-language', content: 'fr' },
     {
       'script:ld+json': {

@@ -64,10 +64,10 @@ export function Premium() {
       })
       const errorMessage = error.message
       if (errorMessage.includes('Edge Function') || errorMessage.includes('non-2xx'))
-        setError('Une erreur est survenue. Réessaye dans quelques instants.')
+        setError('Une erreur est survenue. Réessaie dans quelques instants.')
       else if (errorMessage.includes('network') || errorMessage.includes('fetch'))
         setError('Problème de connexion. Vérifie ta connexion internet.')
-      else setError('Une erreur est survenue. Réessaye dans quelques instants.')
+      else setError('Une erreur est survenue. Réessaie dans quelques instants.')
     } finally {
       setIsLoading(false)
     }

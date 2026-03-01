@@ -1,4 +1,4 @@
-import type { LoaderFunction, MetaFunction } from 'react-router'
+import type { HeadersFunction, LoaderFunction, MetaFunction } from 'react-router'
 import { Link, useLoaderData } from 'react-router'
 import { m } from 'framer-motion'
 import { getBlogPostBySlug, getRelatedPosts, type BlogPost } from '../data/blog-posts'
@@ -6,6 +6,10 @@ import { ArrowLeft, Calendar, Clock, Hash, ArrowRight, Sparkles } from '../compo
 import { NewsletterCTA } from '../components/landing/NewsletterCTA'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
+
+export const headers: HeadersFunction = () => ({
+  'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+})
 
 export const loader: LoaderFunction = ({ params }) => {
   const { slug } = params

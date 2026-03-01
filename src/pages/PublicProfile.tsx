@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { useParams, Link } from 'react-router'
 import { m } from 'framer-motion'
 import {
@@ -32,6 +33,8 @@ function getTier(score: number) {
 export function PublicProfile() {
   const { username } = useParams<{ username: string }>()
   const { data: profile, isLoading } = usePublicProfileQuery(username)
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'public_profile' }) }, [])
 
   const tier = useMemo(() => {
     if (!profile) return TIERS[0]

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { m } from 'framer-motion'
-import { Loader2 } from '../components/icons'
+import { Loader2, Mic } from '../components/icons'
+import { Link } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { useAuthStore, usePremiumStore } from '../hooks'
@@ -15,6 +16,7 @@ import { PartySquadCard } from './party/PartySquadCard'
 import { PartyToast } from './party/PartyToast'
 import { PartyEmptyState } from './party/PartyEmptyState'
 import { PartySingleSquad, PartyStatsCard } from './party/PartySingleSquad'
+import { trackEvent } from '../utils/analytics'
 
 export function Party() {
   const { user, profile } = useAuthStore()
@@ -137,6 +139,7 @@ export function Party() {
         hasPremium
       )
       if (success) {
+        trackEvent('party_joined', { squad_id: squadId, squad_name: squad?.name })
         setToastMessage(`Tu as rejoint la party ${squad?.name || ''}`)
         setToastVariant('success')
         setShowToast(true)
@@ -163,6 +166,7 @@ export function Party() {
   }
 
   const handleLeaveParty = async () => {
+    trackEvent('party_left', { squad_id: activeSquadId || undefined })
     try {
       await leaveChannel()
     } catch (err) {
@@ -368,6 +372,39 @@ export function Party() {
                   </div>
                 )}
               </>
+            )}
+
+            {/* CTA Premium pour voice HD */}
+            {!hasPremium && squads.length > 0 && (
+              <m.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="mt-6"
+              >
+                <Link
+                  to="/premium"
+                  className="block bg-primary/5 border border-primary/20 rounded-xl p-4 hover:bg-primary/10 transition-colors group"
+                  onClick={() => trackEvent('premium_cta_clicked', { source: 'party' })}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <Mic className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-text-primary">
+                        Passe en qualité HD
+                      </p>
+                      <p className="text-xs text-text-tertiary">
+                        Audio HD, latence réduite, enregistrement — essai 7 jours gratuit
+                      </p>
+                    </div>
+                    <span className="text-xs font-semibold text-primary group-hover:underline flex-shrink-0">
+                      Essayer →
+                    </span>
+                  </div>
+                </Link>
+              </m.div>
             )}
           </div>
         </div>

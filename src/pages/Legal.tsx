@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { ArrowLeft, Shield, FileText } from '../components/icons'
 import { Link, useSearchParams } from 'react-router'
 import { ScrollProgress } from '../components/ui/ScrollProgress'
@@ -12,6 +14,9 @@ type LegalTab = 'cgu' | 'privacy'
 export function Legal() {
   const [searchParams] = useSearchParams()
   useHashNavigation()
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'legal' }) }, [])
+
   const initialTab = searchParams.get('tab') === 'privacy' ? 'privacy' : 'cgu'
   const [activeTab, setActiveTab] = useStatePersistence<LegalTab>('legal_tab', initialTab)
 

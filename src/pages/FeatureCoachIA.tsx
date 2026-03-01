@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { ArrowRight, Check, Sparkles, Clock, Users } from '../components/icons'
@@ -41,6 +43,8 @@ const steps = [
 ]
 
 export default function FeatureCoachIA() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'feature_coach_ia' }) }, [])
+
   return (
     <PublicPageShell>
       {/* Hero */}

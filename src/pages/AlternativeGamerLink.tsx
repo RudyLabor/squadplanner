@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { Check, ArrowRight, Users, Sparkles, Zap } from '../components/icons'
@@ -89,6 +91,8 @@ const advantages = [
 ]
 
 export default function AlternativeGamerLink() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'alternative_gamerlink' }) }, [])
+
   return (
     <PublicPageShell>
       {/* Hero */}

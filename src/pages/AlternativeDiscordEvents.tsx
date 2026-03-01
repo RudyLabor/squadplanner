@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { Check, ArrowRight, Calendar, Users, Sparkles, Shield, Zap } from '../components/icons'
@@ -59,6 +61,8 @@ const advantages = [
 ]
 
 export default function AlternativeDiscordEvents() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'alternative_discord_events' }) }, [])
+
   return (
     <PublicPageShell>
       {/* Hero */}

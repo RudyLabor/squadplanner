@@ -22,6 +22,7 @@ import { GhostCalculator } from '../components/landing/GhostCalculator'
 import { SocialProofNotification } from '../components/SocialProofNotification'
 import { ArrowRight } from '../components/icons'
 import { Link } from 'react-router'
+import { trackEvent } from '../utils/analytics'
 
 // ─── LAZY SECTION (PERF 6 — reduces initial DOM from ~946 to ~400 elements) ──
 function LazySection({
@@ -76,6 +77,11 @@ export default function Landing() {
 
   const isLoggedIn = !!user
 
+  // Track landing page view
+  useEffect(() => {
+    trackEvent('page_viewed', { page: 'landing' })
+  }, [])
+
   return (
     <div
       className="min-h-screen bg-bg-base landing-page landing-noise mesh-bg"
@@ -115,6 +121,7 @@ export default function Landing() {
           to="/auth?mode=register&redirect=onboarding"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary/10 text-primary-hover font-medium hover:bg-primary/20 transition-colors border border-primary/20"
           data-track="mid_cta_click"
+          onClick={() => trackEvent('landing_cta_clicked', { position: 'mid_page', label: 'cree_ta_squad' })}
         >
           Fini les excuses — Crée ta squad maintenant
           <ArrowRight className="w-4 h-4" />

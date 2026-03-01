@@ -15,6 +15,7 @@ import { OnboardingStepProfile } from './onboarding/OnboardingStepProfile'
 import { OnboardingStepInvite } from './onboarding/OnboardingStepInvite'
 import { OnboardingStepComplete } from './onboarding/OnboardingStepComplete'
 import { OnboardingProgress } from './onboarding/OnboardingProgress'
+import { trackEvent } from '../utils/analytics'
 
 type OnboardingStep =
   | 'splash'
@@ -39,6 +40,11 @@ export function Onboarding() {
     }
   }, [squads, navigate])
 
+  // Track onboarding start
+  useEffect(() => {
+    trackEvent('onboarding_started', { source: 'signup' })
+  }, [])
+
   const [step, setStep] = useState<OnboardingStep>('squad-choice')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -59,6 +65,7 @@ export function Onboarding() {
         setInviteCode('')
       }
       setStep(newStep)
+      trackEvent('onboarding_step_completed', { step: newStep })
       setTimeout(() => setIsNavigating(false), 400)
     },
     [isNavigating]
@@ -94,6 +101,7 @@ export function Onboarding() {
 
   useEffect(() => {
     if (step === 'complete') {
+      trackEvent('onboarding_finished', { has_squad: !!createdSquadId })
       setShowMiniConfetti(true)
       setToastMessage(createdSquadId ? '🎉 Squad créée !' : '🎉 Bienvenue !')
       setShowToast(true)

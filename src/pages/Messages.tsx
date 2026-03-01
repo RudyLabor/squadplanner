@@ -16,6 +16,7 @@ import { hasPermission, type SquadRole } from '../lib/roles'
 import type { MentionUser } from '../components/MentionInput'
 import type { PollData } from '../components/ChatPoll'
 import { Link } from 'react-router'
+import { trackEvent } from '../utils/analytics'
 import { CrossfadeTransition, SkeletonChatPage } from '../components/ui'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { ConversationList } from '../components/messages/ConversationList'
@@ -246,6 +247,7 @@ export function Messages() {
         ? await sendDMMessage(newMessage, activeDMConv.other_user_id)
         : null
     if (ok && !ok.error) {
+      trackEvent('message_sent', { type: activeSquadConv ? 'squad' : 'dm' })
       setNewMessage('')
       setReplyingTo(null)
     }

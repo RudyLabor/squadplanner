@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { ArrowRight, Star } from '../components/icons'
@@ -110,6 +112,8 @@ function AverageRating() {
 }
 
 export default function Avis() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'avis' }) }, [])
+
   return (
     <PublicPageShell>
       {/* Hero */}

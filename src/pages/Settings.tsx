@@ -38,6 +38,7 @@ import { RefundRequestModal } from '../components/RefundRequestModal'
 import { OnboardingCallBooking } from '../components/OnboardingCallBooking'
 import { InvoiceManager } from '../components/InvoiceManager'
 import { PremiumGate } from '../components/PremiumGate'
+import { trackEvent } from '../utils/analytics'
 
 const LazyWebhookManager = lazy(() => import('../components/webhooks/WebhookManager'))
 
@@ -122,9 +123,15 @@ export function Settings() {
 
   const hasMounted = useRef(false)
   const saveToastTimeout = useRef<ReturnType<typeof setTimeout>>(undefined)
+  // Track settings page view
+  useEffect(() => {
+    trackEvent('page_viewed', { page: 'settings' })
+  }, [])
+
   const showSaveToast = useCallback(() => {
     if (!hasMounted.current) return
     clearTimeout(saveToastTimeout.current)
+    trackEvent('settings_changed', { source: 'settings' })
     saveToastTimeout.current = setTimeout(() => showSuccess('Paramètres sauvegardés'), 400)
   }, [])
   useEffect(() => {

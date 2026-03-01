@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { useParams } from 'react-router'
 import { m } from 'framer-motion'
 import { BarChart3, Sparkles, Calendar, AlertCircle, TrendingUp } from '../components/icons'
@@ -76,6 +77,8 @@ export default function SquadAnalytics() {
   const { fetchPremiumStatus } = usePremiumStore()
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'squad_analytics' }) }, [])
 
   useEffect(() => {
     if (isInitialized && user?.id) {

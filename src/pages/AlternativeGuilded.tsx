@@ -14,6 +14,7 @@ import {
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 import { useState, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { GuildedImportModal } from '../components/GuildedImportModal'
 
 const features = [
@@ -95,6 +96,8 @@ function GuildedCountdown() {
 export default function AlternativeGuilded() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
   const [showImportModal, setShowImportModal] = useState(false)
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'alternative_guilded' }) }, [])
 
   return (
     <PublicPageShell>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { m, AnimatePresence } from 'framer-motion'
 import {
   Building2,
@@ -54,6 +55,9 @@ export function ClubDashboard() {
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const userId = user?.id
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'club_dashboard' }) }, [])
+
   const [squads, setSquads] = useState<Squad[]>([])
   const [clubStats, setClubStats] = useState<ClubStats>({
     totalMembers: 0,

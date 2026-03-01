@@ -13,6 +13,7 @@ import {
 import { Link } from 'react-router'
 import { Card, Button } from '../../components/ui'
 import { Tooltip } from '../../components/ui/Tooltip'
+import { trackEvent } from '../../utils/analytics'
 import { formatDuration, formatRelativeTime } from '../../hooks/useCallHistory'
 
 const PAGE_SIZE = 10
@@ -47,6 +48,11 @@ export function CallHistoryList({
 
   const totalCalls = filteredCalls.length
   const hasMore = displayCount < totalCalls
+
+  // Track page view
+  useEffect(() => {
+    trackEvent('page_viewed', { page: 'call_history', total_calls: totalCalls })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setDisplayCount(PAGE_SIZE)

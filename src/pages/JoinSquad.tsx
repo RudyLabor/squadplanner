@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { useParams, useNavigate, Link } from 'react-router'
 import { m } from 'framer-motion'
 import { Users, Loader2, CheckCircle2, XCircle, LogIn } from '../components/icons'
@@ -26,6 +27,8 @@ export function JoinSquad() {
   const navigate = useNavigate()
   const { user, isInitialized } = useAuthStore()
   const { joinSquad, fetchSquads } = useSquadsStore()
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'join_squad' }) }, [])
 
   const [status, setStatus] = useState<
     'loading' | 'preview' | 'joining' | 'success' | 'error' | 'not-found'

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { AnimatePresence } from 'framer-motion'
 import { ArrowLeft } from '../components/icons'
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router'
@@ -36,6 +37,8 @@ export default function SquadDetail() {
 
   const { user, isInitialized } = useAuthStore()
   const { canAccessFeature, fetchPremiumStatus, isSquadPremium } = usePremiumStore()
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'squad_detail' }) }, [])
 
   const { data: currentSquad, isLoading: squadLoading } = useSquadQuery(id)
   const { data: sessions, isLoading: sessionsLoading } = useSquadSessionsQuery(id, user?.id)

@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { ArrowRight, Search } from '../components/icons'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
@@ -36,6 +37,8 @@ const glossaryTerms: GlossaryTerm[] = [
 ]
 
 export default function Glossaire() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'glossaire' }) }, [])
+
   const [search, setSearch] = useState('')
 
   const filtered = glossaryTerms.filter(

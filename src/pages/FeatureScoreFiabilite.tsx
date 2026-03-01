@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { ArrowRight, Check, ShieldCheck, Target, TrendingUp } from '../components/icons'
@@ -41,6 +43,8 @@ const benefits = [
 ]
 
 export default function FeatureScoreFiabilite() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'feature_score_fiabilite' }) }, [])
+
   return (
     <PublicPageShell>
       {/* Hero */}

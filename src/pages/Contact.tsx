@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { m } from 'framer-motion'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { Card } from '../components/ui/Card'
@@ -26,6 +27,8 @@ interface ContactFormData {
 }
 
 export function Contact() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'contact' }) }, [])
+
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',

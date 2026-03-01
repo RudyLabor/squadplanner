@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { m, AnimatePresence } from 'framer-motion'
 import { HelpCircle, ChevronDown, Search, ArrowLeft } from '../components/icons'
 import { useNavigate } from 'react-router'
@@ -15,6 +16,9 @@ import { HelpContactSection } from './help/HelpContactSection'
 export function Help() {
   const navigate = useNavigate()
   useHashNavigation()
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'help' }) }, [])
+
   const [searchQuery, setSearchQuery] = useState('')
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [selectedCategory, setSelectedCategory] = useStatePersistence<string | null>(

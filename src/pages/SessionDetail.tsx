@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import {
   ArrowLeft,
   CheckCircle2,
@@ -76,6 +77,8 @@ function CelebrationToast({
 export default function SessionDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'session_detail' }) }, [])
 
   const [rsvpLoading, setRsvpLoading] = useState<RsvpResponse | null>(null)
   const [checkinLoading, setCheckinLoading] = useState(false)

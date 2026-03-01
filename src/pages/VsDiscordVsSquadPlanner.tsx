@@ -3,7 +3,8 @@ import { m } from 'framer-motion'
 import { Check, X, ArrowRight, ChevronDown } from '../components/icons'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 
 const features = [
   { category: 'Organisation', items: [
@@ -92,6 +93,8 @@ function CellIcon({ value }: { value: boolean | string }) {
 
 export default function VsDiscordVsSquadPlanner() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'vs_discord' }) }, [])
 
   const allItems = features.flatMap((g) => g.items.map((item) => ({ ...item, category: g.category })))
 

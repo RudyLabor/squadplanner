@@ -3,7 +3,8 @@ import { m } from 'framer-motion'
 import { Check, X, ArrowRight, ChevronDown } from '../components/icons'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 
 const features = [
   { category: 'Planification', name: 'Événements récurrents', gcal: true, sp: true },
@@ -69,6 +70,8 @@ const faqs = [
 
 export default function VsGoogleCalendarVsSquadPlanner() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'vs_google_calendar' }) }, [])
 
   return (
     <PublicPageShell>

@@ -10,6 +10,7 @@ import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
 import { queryClient } from '../lib/queryClient'
 import { useCreateSessionModal } from '../components/CreateSessionModal'
+import { trackEvent } from '../utils/analytics'
 import { NeedsResponseSection, AllCaughtUp } from './sessions/NeedsResponseSection'
 import { AISlotSuggestions, CoachTipsSection } from './sessions/AISuggestions'
 import { ConfirmedSessions, HowItWorksSection } from './sessions/ConfirmedSessions'
@@ -26,6 +27,11 @@ interface SessionsProps {
 
 function SessionLimitBanner({ sessionsThisWeek }: { sessionsThisWeek: number }) {
   const remaining = 2 - sessionsThisWeek
+
+  // Track feature limit hit
+  if (remaining <= 0) {
+    trackEvent('feature_limit_hit', { feature: 'sessions', used: sessionsThisWeek, limit: 2 })
+  }
 
   // Nudge when approaching the limit (1/2 used)
   if (remaining === 1) {

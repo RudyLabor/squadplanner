@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useSearchParams, Link } from 'react-router'
+import { trackEvent } from '../utils/analytics'
 import { LogOut, Sparkles } from '../components/icons'
 import { ProfileSkeleton } from '../components/ui'
 import { PullToRefresh } from '../components/PullToRefresh'
@@ -27,6 +28,8 @@ export function Profile() {
   const { tier, hasPremium, canAccessFeature, fetchPremiumStatus } = usePremiumStore()
   const [searchParams] = useSearchParams()
   const autoActivateMatchmaking = searchParams.get('activate') === 'matchmaking'
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'profile' }) }, [])
 
   const handleRefresh = useCallback(async () => {
     await refreshProfile()

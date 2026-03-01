@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { ArrowRight, Check, Users, Calendar, CheckCircle, Gamepad2 } from '../components/icons'
@@ -40,6 +42,8 @@ const highlights = [
 ]
 
 export default function HowItWorks() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'how_it_works' }) }, [])
+
   return (
     <PublicPageShell>
       {/* Hero */}

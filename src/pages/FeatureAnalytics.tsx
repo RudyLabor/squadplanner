@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { ArrowRight, Check, BarChart3, ShieldCheck, TrendingUp, Clock } from '../components/icons'
@@ -35,6 +37,8 @@ const highlights = [
 ]
 
 export default function FeatureAnalytics() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'feature_analytics' }) }, [])
+
   return (
     <PublicPageShell>
       {/* Hero */}

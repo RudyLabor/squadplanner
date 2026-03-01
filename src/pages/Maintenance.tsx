@@ -5,6 +5,7 @@
  * Auto-refreshes every 30 seconds and shows a countdown.
  */
 import { useState, useEffect, useCallback } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { m } from 'framer-motion'
 import { Wrench, RefreshCw, ExternalLink } from '../components/icons'
 import { useSearchParams } from 'react-router'
@@ -15,6 +16,8 @@ export default function Maintenance() {
   const [searchParams] = useSearchParams()
   const eta = searchParams.get('eta') // Optional ETA from URL
   const [secondsSinceCheck, setSecondsSinceCheck] = useState(0)
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'maintenance' }) }, [])
   const [ariaSeconds, setAriaSeconds] = useState(0)
 
   // Auto-refresh countdown

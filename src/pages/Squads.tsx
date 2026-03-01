@@ -19,6 +19,7 @@ import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
 import { GuildedImportModal } from '../components/GuildedImportModal'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { FREE_SQUAD_LIMIT } from '../hooks/usePremium'
+import { trackEvent } from '../utils/analytics'
 import { SquadCard, type SquadNextSession } from './squads/SquadCard'
 import { JoinSquadForm, CreateSquadForm } from './squads/SquadForms'
 import type { SquadWithMembers } from '../hooks/queries/useSquadsQuery'
@@ -115,6 +116,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
     }
     try {
       await createSquadMutation.mutateAsync({ name, game })
+      trackEvent('squad_created', { game })
       setShowCreate(false)
       setName('')
       setGame('')
@@ -125,8 +127,12 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   }
 
   const handleOpenCreate = () => {
-    if (!canCreateSquad()) setShowPremiumModal(true)
-    else setShowCreate(true)
+    if (!canCreateSquad()) {
+      trackEvent('feature_limit_hit', { feature: 'squads', used: userSquadCount, limit: FREE_SQUAD_LIMIT })
+      setShowPremiumModal(true)
+    } else {
+      setShowCreate(true)
+    }
   }
 
   const handleJoinSquad = async (e: React.FormEvent) => {
@@ -138,6 +144,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
     }
     try {
       await joinSquadMutation.mutateAsync(inviteCode)
+      trackEvent('squad_joined', { source: 'invite_code' })
       setShowJoin(false)
       setInviteCode('')
       fireConfetti()

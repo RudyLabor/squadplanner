@@ -102,6 +102,18 @@ export type UserEvent =
   // Signup
   | 'signup_completed'
   | 'login_completed'
+  // Landing page funnel
+  | 'landing_cta_clicked'
+  | 'landing_section_viewed'
+  // Page views & navigation
+  | 'page_viewed'
+  | 'discover_tab_changed'
+  | 'discover_filter_applied'
+  // Settings
+  | 'settings_changed'
+  // Party / Voice
+  | 'party_joined'
+  | 'party_left'
 
 // ---------------------------------------------------------------------------
 // Configuration

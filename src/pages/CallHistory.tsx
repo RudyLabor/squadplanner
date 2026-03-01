@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { AnimatePresence } from 'framer-motion'
 import { Phone, ArrowLeft, RefreshCw } from '../components/icons'
 import { useNavigate } from 'react-router'
@@ -48,6 +49,9 @@ const filterOptions: { value: CallType; label: string }[] = [
 
 export function CallHistory() {
   const navigate = useNavigate()
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'call_history' }) }, [])
+
   const { isLoading, error, filter, fetchCallHistory, setFilter, getFilteredCalls } =
     useCallHistoryStore()
   // LAZY LOAD: useVoiceCall sera importé dans handleCall

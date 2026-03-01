@@ -4,6 +4,7 @@ import { Check, ArrowRight, ChevronDown, Sparkles } from '../components/icons'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 import { useState, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 
 const features = [
   { category: 'Organisation', name: "Calendrier d'événements", guilded: true, squadPlanner: true },
@@ -78,6 +79,8 @@ function VsGuildedCountdown() {
 
 export default function VsGuildedVsSquadPlanner() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'vs_guilded' }) }, [])
 
   return (
     <PublicPageShell>

@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { ArrowRight, Check, Users, BarChart3, Palette, Webhook } from '../components/icons'
@@ -50,6 +52,8 @@ const features = [
 ]
 
 export default function SolutionClubsEsport() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'solution_clubs_esport' }) }, [])
+
   return (
     <PublicPageShell>
       {/* Hero */}

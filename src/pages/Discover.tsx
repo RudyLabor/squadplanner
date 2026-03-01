@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react'
+import { memo, useState, useCallback, useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Compass, Plus, Sparkles, Users, Gamepad2 } from '../components/icons'
 import { Link } from 'react-router'
@@ -9,11 +9,13 @@ import { DiscoverSquadCard } from '../components/discover/DiscoverSquadCard'
 import { GlobalLeaderboard } from '../components/discover/GlobalLeaderboard'
 import { MatchmakingSection } from '../components/discover/MatchmakingSection'
 import { useBrowseSquadsQuery } from '../hooks/queries'
+import { usePremium } from '../hooks/usePremium'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { queryClient } from '../lib/queryClient'
 import type { PublicSquadResult } from '../types/database'
 import { useStatePersistence } from '../hooks/useStatePersistence'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
+import { trackEvent } from '../utils/analytics'
 type Tab = 'squads' | 'joueurs' | 'classement'
 
 const TABS: { value: Tab; label: string }[] = [
@@ -46,6 +48,23 @@ export function Discover() {
   const [game, setGame] = useStatePersistence('discover_game', '')
   const [region, setRegion] = useStatePersistence('discover_region', '')
 
+  // Track page view + tab changes
+  useEffect(() => {
+    trackEvent('page_viewed', { page: 'discover' })
+  }, [])
+  const handleTabChange = useCallback((newTab: Tab) => {
+    setTab(newTab)
+    trackEvent('discover_tab_changed', { tab: newTab })
+  }, [])
+  const handleGameFilter = useCallback((v: string) => {
+    setGame(v)
+    if (v) trackEvent('discover_filter_applied', { filter: 'game', value: v })
+  }, [setGame])
+  const handleRegionFilter = useCallback((v: string) => {
+    setRegion(v)
+    if (v) trackEvent('discover_filter_applied', { filter: 'region', value: v })
+  }, [setRegion])
+
   const handleRefresh = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey: ['browse-squads'] })
   }, [])
@@ -74,7 +93,7 @@ export function Discover() {
 
         {/* Tabs */}
         <div className="mb-4">
-          <SegmentedControl value={tab} onChange={setTab} options={TABS} />
+          <SegmentedControl value={tab} onChange={handleTabChange} options={TABS} />
         </div>
 
         {/* Filters */}
@@ -83,7 +102,7 @@ export function Discover() {
             <Select
               options={GAME_OPTIONS}
               value={game || undefined}
-              onChange={(v) => setGame(v as string)}
+              onChange={(v) => handleGameFilter(v as string)}
               placeholder="Tous les jeux"
               clearable
               size="sm"
@@ -93,7 +112,7 @@ export function Discover() {
             <Select
               options={REGION_OPTIONS}
               value={region || undefined}
-              onChange={(v) => setRegion(v as string)}
+              onChange={(v) => handleRegionFilter(v as string)}
               placeholder="Toutes les régions"
               clearable
               size="sm"
@@ -109,6 +128,9 @@ export function Discover() {
         {tab === 'classement' && (
           <GlobalLeaderboard game={game || undefined} region={region || undefined} />
         )}
+
+        {/* CTA Premium discret */}
+        <DiscoverPremiumCTA />
       </m.div>
     </PullToRefresh>
   )
@@ -245,5 +267,35 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
     </div>
   )
 })
+
+// CTA Premium en bas de la page Discover
+function DiscoverPremiumCTA() {
+  const { tier } = usePremium()
+  if (tier !== 'free' && tier) return null
+  return (
+    <Link
+      to="/premium"
+      className="block mt-6 bg-primary/5 border border-primary/20 rounded-xl p-4 hover:bg-primary/10 transition-colors group"
+      onClick={() => trackEvent('premium_cta_clicked', { source: 'discover' })}
+    >
+      <div className="flex items-center gap-3">
+        <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+          <Sparkles className="w-5 h-5 text-primary" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-text-primary">
+            Squads illimitées + matchmaking avancé
+          </p>
+          <p className="text-xs text-text-tertiary">
+            Essai gratuit 7 jours — plus de 2 000 gamers déjà Premium
+          </p>
+        </div>
+        <span className="text-xs font-semibold text-primary group-hover:underline flex-shrink-0">
+          Essayer →
+        </span>
+      </div>
+    </Link>
+  )
+}
 
 export default Discover

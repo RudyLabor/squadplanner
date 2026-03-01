@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { ArrowRight, Check, Flame, Sparkles, Star, Trophy } from '../components/icons'
@@ -35,6 +37,8 @@ const benefits = [
 ]
 
 export default function FeatureGamification() {
+  useEffect(() => { trackEvent('page_viewed', { page: 'feature_gamification' }) }, [])
+
   return (
     <PublicPageShell>
       {/* Hero */}

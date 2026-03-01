@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { m, useInView } from 'framer-motion'
+import { trackEvent } from '../utils/analytics'
 import { useAnalytics, useAuthStore } from '../hooks'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
@@ -203,6 +204,8 @@ export function Ambassador() {
   const user = useAuthStore((s) => s.user)
   const { hasApplied, isPending: isApplicationPending, isAmbassador, stats, isLoading: isProfileLoading } = useAmbassador()
   const applyMutation = useApplyAsAmbassador()
+
+  useEffect(() => { trackEvent('page_viewed', { page: 'ambassador' }) }, [])
 
   const [formData, setFormData] = useState<FormData>({
     pseudo: '',

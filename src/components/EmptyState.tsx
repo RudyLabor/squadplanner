@@ -69,14 +69,14 @@ const EMPTY_STATE_CONFIG: Record<
   no_sessions: {
     icon: <CalendarPlus className="w-12 h-12" />,
     title: 'Aucune session prévue',
-    message: "Ta squad t'attend ! Planifie une session et fini les « on verra ».",
+    message: "Ta squad t'attend ! Crée une session en 30 secondes et fini les « on verra ».",
     color: 'var(--color-info)',
     defaultActionLabel: 'Planifier maintenant',
   },
   no_messages: {
     icon: <Send className="w-12 h-12" />,
     title: 'Pas encore de messages',
-    message: 'Envoie le premier message à ta squad pour lancer la conversation !',
+    message: 'Brise la glace ! Envoie le premier message pour lancer la conversation avec ta squad.',
     color: 'var(--color-success)',
   },
   no_friends: {
@@ -96,13 +96,13 @@ const EMPTY_STATE_CONFIG: Record<
   no_challenges: {
     icon: <Gamepad2 className="w-12 h-12" />,
     title: 'Aucun défi disponible',
-    message: 'Les défis se renouvellent chaque jour. Reviens demain pour de nouvelles missions !',
+    message: 'Les défis se renouvellent chaque jour à minuit. Reviens demain pour gagner encore plus de XP !',
     color: 'var(--color-error)',
   },
   no_notifications: {
     icon: <PartyPopper className="w-12 h-12" />,
     title: 'Tout est lu !',
-    message: 'Aucune notification en attente. Profites-en pour planifier ta prochaine session.',
+    message: 'Aucune notification en attente. Profites-en pour planifier ta prochaine session ou relever un défi !',
     color: 'var(--color-primary)',
   },
   no_search_results: {

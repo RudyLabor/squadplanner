@@ -204,6 +204,26 @@ export function LandingFooter() {
                 </Link>
               </li>
               <li>
+                <Link to="/vs/discord-vs-squad-planner" className={linkClass}>
+                  Discord vs Squad Planner
+                </Link>
+              </li>
+              <li>
+                <Link to="/vs/google-calendar-vs-squad-planner" className={linkClass}>
+                  Google Calendar vs SP
+                </Link>
+              </li>
+              <li>
+                <Link to="/glossaire" className={linkClass}>
+                  Glossaire gaming
+                </Link>
+              </li>
+              <li>
+                <Link to="/avis" className={linkClass}>
+                  Avis joueurs
+                </Link>
+              </li>
+              <li>
                 <a href="mailto:contact@squadplanner.fr" className={linkClass}>
                   Contact
                 </a>

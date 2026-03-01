@@ -279,17 +279,91 @@ export const GAMES: GameInfo[] = [
     lfgSpecificCopy: 'Cherche des joueurs pour braquages, courses ou délires',
     testimonial: { quote: "Nos braquages du dimanche sont devenus un rituel. 4 joueurs, zéro annulation depuis 2 mois.", author: 'Leo_GTA', rank: 'Niveau 300+', role: 'Joueur GTA Online' },
   },
+  {
+    slug: 'palworld',
+    name: 'Palworld',
+    description:
+      'Survie en monde ouvert avec capture de créatures (Pals). Craft, combat et base-building en coop, par Pocketpair.',
+    seoDescription:
+      'Organise tes sessions Palworld avec Squad Planner. Coordonne ta squad pour explorer, capturer des Pals et construire votre base ensemble.',
+    genre: 'Survie / Coop',
+    players: 'Jusqu\'à 32 joueurs',
+    platforms: ['PC', 'Xbox'],
+    icon: '🦎',
+    estimatedPlayers: '25M+ joueurs',
+    color: 'emerald',
+    tags: ['survie', 'coop', 'créatures', 'base-building'],
+    specificPainPoint: 'Ton serveur coop avance sans toi parce que personne ne se synchronise',
+    specificUseCase: 'Coordonne tes sessions Palworld pour explorer et construire ensemble',
+    specificFeatures: ['Sessions coop longues (2h+)', 'Coordination serveur multi-joueurs', 'Planification de raids boss'],
+    lfgSpecificCopy: 'Cherche des joueurs pour survie coop ou raids de boss',
+    testimonial: { quote: "On a monté une base incroyable en 3 semaines parce que tout le monde jouait aux mêmes heures. Plus de chaos.", author: 'Hugo_PW', rank: 'Niveau 50+', role: 'Joueur Palworld' },
+  },
+  {
+    slug: 'helldivers-2',
+    name: 'Helldivers 2',
+    description:
+      'Shooter coop TPS par Arrowhead. Plonge dans des missions tactiques à 4 joueurs pour défendre la Super Terre.',
+    seoDescription:
+      'Planifie tes sessions Helldivers 2 avec Squad Planner. Forme ta squad de 4 et accomplissez les missions les plus difficiles ensemble.',
+    genre: 'TPS Coop',
+    players: 'Squads de 4',
+    platforms: ['PC', 'PlayStation'],
+    icon: '🪖',
+    estimatedPlayers: '12M+ joueurs',
+    color: 'amber',
+    tags: ['coop', 'tps', 'tactique', 'pve'],
+    specificPainPoint: 'Les missions Helldive à 4 deviennent impossibles quand il manque un joueur',
+    specificUseCase: 'Assure-toi que ta squad de 4 est complète avant chaque mission',
+    specificFeatures: ['Squads de 4 optimisées', 'Sessions mission planifiées', 'Check-in avant déploiement'],
+    lfgSpecificCopy: 'Cherche des Helldivers pour missions difficiles ou super samples',
+    testimonial: { quote: "Les missions Helldive réussies sont passées de 40% à 90% depuis qu'on joue avec la même squad fiable.", author: 'Clara_HD', rank: 'Helldiver Veteran', role: 'Joueuse Helldivers 2' },
+  },
+  {
+    slug: 'marvel-rivals',
+    name: 'Marvel Rivals',
+    description:
+      'Hero shooter 6v6 par NetEase avec les héros Marvel. Chaque personnage a des pouvoirs uniques pour des combats spectaculaires.',
+    seoDescription:
+      'Organise tes sessions Marvel Rivals avec Squad Planner. Compose ta team de héros, planifie tes ranked et grimpe ensemble.',
+    genre: 'Hero Shooter',
+    players: '6v6',
+    platforms: ['PC', 'PlayStation', 'Xbox'],
+    icon: '🦸‍♂️',
+    estimatedPlayers: '20M+ joueurs',
+    color: 'red',
+    tags: ['hero-shooter', 'fps', 'compétitif', 'marvel'],
+    specificPainPoint: 'Composer une team de 6 avec les bons héros quand personne ne confirme son pick',
+    specificUseCase: 'Compose ta team Marvel par rôle et grimpe en ranked avec ta squad fixe',
+    specificFeatures: ['Composition par rôle (Vanguard, Duelist, Strategist)', 'Sessions ranked planifiées', 'Coordination picks de héros'],
+    lfgSpecificCopy: 'Cherche des joueurs pour ranked ou quickplay Marvel Rivals',
+    testimonial: { quote: "On a notre team de 6 avec des mains sur chaque rôle. Le ranked n'a jamais été aussi fun.", author: 'Tom_MR', rank: 'Grand Master', role: 'Joueur Marvel Rivals' },
+  },
 ]
 
 /** Map slug → GameInfo for fast lookups */
 export const GAMES_MAP = new Map(GAMES.map((g) => [g.slug, g]))
+
+/** Slug aliases for SEO redirects (e.g. /games/ea-sports-fc → /games/fifa) */
+const SLUG_ALIASES: Record<string, string> = {
+  'ea-sports-fc': 'fifa',
+  'eafc': 'fifa',
+  'fc25': 'fifa',
+  'lol': 'league-of-legends',
+  'cod': 'call-of-duty',
+  'ow2': 'overwatch-2',
+  'gta': 'gta-online',
+  'counter-strike-2': 'cs2',
+  'counter-strike': 'cs2',
+}
 
 /** Get all slugs for prerendering */
 export function getAllGameSlugs(): string[] {
   return GAMES.map((g) => g.slug)
 }
 
-/** Find a game by slug */
+/** Find a game by slug (supports aliases like ea-sports-fc → fifa) */
 export function getGameBySlug(slug: string): GameInfo | undefined {
-  return GAMES_MAP.get(slug)
+  const resolved = SLUG_ALIASES[slug] || slug
+  return GAMES_MAP.get(resolved)
 }

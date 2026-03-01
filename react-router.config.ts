@@ -38,6 +38,19 @@ export default {
       '/alternative/gamerlink',
       '/alternative/discord-events',
       '/vs/guilded-vs-squad-planner',
+      '/vs/discord-vs-squad-planner',
+      '/vs/google-calendar-vs-squad-planner',
+      // Feature pages
+      '/features/score-fiabilite',
+      '/features/gamification',
+      '/features/coach-ia',
+      '/features/analytics',
+      '/how-it-works',
+      // Solutions & content pages
+      '/glossaire',
+      '/solutions/clubs-esport',
+      '/solutions/streamers',
+      '/avis',
       // Ambassador program
       '/ambassador',
       // Blog (all articles dynamically)

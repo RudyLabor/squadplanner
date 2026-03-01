@@ -164,9 +164,9 @@ export function SquadSessionsList({
         ) : (
           <Card className="p-6 text-center">
             <Calendar className="w-10 h-10 mx-auto mb-3 text-text-quaternary" strokeWidth={1} />
-            <p className="text-base text-text-tertiary mb-1">Pas encore de session prévue</p>
+            <p className="text-base text-text-tertiary mb-1">Aucune session prévue — crée la première !</p>
             <p className="text-sm text-text-quaternary mb-4">
-              Propose un créneau pour jouer avec ta squad
+              Propose un créneau et ta squad recevra une notification pour confirmer
             </p>
             <Button type="button" size="sm" onClick={() => openCreateSession(squadId)}>
               <Plus className="w-4 h-4" />

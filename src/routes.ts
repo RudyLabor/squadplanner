@@ -21,6 +21,21 @@ export default [
   route('alternative/gamerlink', './routes/alternative.gamerlink.tsx'),
   route('alternative/discord-events', './routes/alternative.discord-events.tsx'),
   route('vs/guilded-vs-squad-planner', './routes/vs.guilded-vs-squad-planner.tsx'),
+  route('vs/discord-vs-squad-planner', './routes/vs.discord-vs-squad-planner.tsx'),
+  route('vs/google-calendar-vs-squad-planner', './routes/vs.google-calendar-vs-squad-planner.tsx'),
+
+  // SEO: Feature pages (pre-rendered)
+  route('features/score-fiabilite', './routes/features.score-fiabilite.tsx'),
+  route('features/gamification', './routes/features.gamification.tsx'),
+  route('features/coach-ia', './routes/features.coach-ia.tsx'),
+  route('features/analytics', './routes/features.analytics.tsx'),
+  route('how-it-works', './routes/how-it-works.tsx'),
+
+  // SEO: Solutions, glossaire, avis (pre-rendered)
+  route('glossaire', './routes/glossaire.tsx'),
+  route('solutions/clubs-esport', './routes/solutions.clubs-esport.tsx'),
+  route('solutions/streamers', './routes/solutions.streamers.tsx'),
+  route('avis', './routes/avis.tsx'),
 
   // Blog pages (pre-rendered)
   route('blog', './routes/blog._index.tsx'),

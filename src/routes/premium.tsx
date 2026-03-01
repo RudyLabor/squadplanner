@@ -71,6 +71,43 @@ export function meta() {
             ],
           },
           {
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'Je peux annuler quand je veux ?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: "Oui ! Tu peux annuler ton abonnement à tout moment depuis ton profil. Tu garderas l'accès jusqu'à la fin de ta période payée. Zéro engagement, zéro frais cachés.",
+                },
+              },
+              {
+                '@type': 'Question',
+                name: "C'est quoi la différence entre Premium et Squad Leader ?",
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: "Premium est pour les joueurs réguliers qui veulent plus de squads et de features. Squad Leader est pour les capitaines qui gèrent des équipes — avec dashboard analytics, sessions récurrentes, audio HD et rôles avancés.",
+                },
+              },
+              {
+                '@type': 'Question',
+                name: "Y a-t-il une période d'essai ?",
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: "Oui ! Tu bénéficies de 7 jours d'essai gratuit sans carte bancaire. À la fin de l'essai, tu choisis ton plan. On offre aussi une garantie satisfait ou remboursé de 30 jours.",
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Comment demander un remboursement ?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: "Garantie satisfait ou remboursé de 30 jours, sans condition et sans justification. Contacte-nous via le formulaire dans tes paramètres, et on te rembourse sous 48h.",
+                },
+              },
+            ],
+          },
+          {
             '@type': 'BreadcrumbList',
             itemListElement: [
               { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },

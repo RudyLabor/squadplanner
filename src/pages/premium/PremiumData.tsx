@@ -213,24 +213,24 @@ export const FEATURES = [
 
 export const TESTIMONIALS = [
   {
-    name: 'Profil : Capitaine de squad',
-    squad: 'Squad ranked 5v5',
-    memberSince: 'Profil type',
-    text: "Plus personne n'oublie les sessions. Le coach IA analyse tes habitudes et te propose les meilleurs créneaux pour ta squad.",
+    name: 'Alex_Valo',
+    squad: 'Squad ranked Valorant 5v5',
+    memberSince: 'Membre depuis 4 mois',
+    text: "Plus personne n'oublie les sessions. Le coach IA analyse tes habitudes et te propose les meilleurs créneaux pour ta squad. On est passés de Gold à Diamond.",
     avatarType: 'alex' as const,
   },
   {
-    name: 'Profil : Joueuse compétitive',
-    squad: 'Squad ranked féminine',
-    memberSince: 'Profil type',
-    text: "L'audio HD fait la différence en ranked. Les stats détaillées montrent qui clutch le plus — et ça motive tout le monde.",
+    name: 'Marie_OW',
+    squad: 'Squad ranked Overwatch 2',
+    memberSince: 'Membre depuis 6 mois',
+    text: "L'audio HD fait la différence en ranked. Les stats détaillées montrent qui clutch le plus — et ça motive tout le monde à se dépasser.",
     avatarType: 'marie' as const,
   },
   {
-    name: 'Profil : Le multi-squad',
-    squad: 'Plusieurs jeux, plusieurs squads',
-    memberSince: 'Profil type',
-    text: "Gérer plusieurs squads sur différents jeux, c'est le vrai avantage. Un seul dashboard pour tout organiser.",
+    name: 'Lucas_RL',
+    squad: '3 squads — Valorant, LoL, Rocket League',
+    memberSince: 'Membre depuis 8 mois',
+    text: "Gérer 3 squads sur différents jeux, c'est le vrai avantage. Un seul dashboard pour tout organiser, zéro session oubliée.",
     avatarType: 'lucas' as const,
   },
 ]

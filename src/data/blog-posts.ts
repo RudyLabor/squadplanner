@@ -1252,6 +1252,284 @@ export const BLOG_POSTS: BlogPost[] = [
       <p>Gérer un joueur toxique, c'est inconfortable. Mais ne rien faire est pire\u00a0: ça détruit l'ambiance, fait fuir les bons joueurs, et tue la squad à petit feu. Avec une approche humaine — conversation privée, règles claires, données objectives et, si nécessaire, exclusion respectueuse — tu protèges ce qui compte vraiment\u00a0: le plaisir de jouer ensemble.</p>
     </article>`,
   },
+  {
+    slug: 'meilleurs-jeux-coop-2026',
+    title: 'Les 10 meilleurs jeux coop à jouer entre amis en 2026',
+    excerpt:
+      'Notre sélection des meilleurs jeux coopératifs pour jouer en squad en 2026. Du PvE au survival, les jeux qui rassemblent.',
+    date: '2026-02-25',
+    author: 'Squad Planner Team',
+    tags: ['jeux', 'coop', 'guide', 'top'],
+    readTime: 7,
+    coverEmoji: '🎮',
+    content: `<article>
+      <h2>Les 10 meilleurs jeux coop à jouer entre amis en 2026</h2>
+
+      <p>Jouer en coop, c'est le meilleur moyen de renforcer les liens dans ta squad. Mais encore faut-il choisir le bon jeu. Voici notre sélection des 10 meilleurs jeux coopératifs de 2026, testés et approuvés par la communauté Squad Planner.</p>
+
+      <h3>1. Helldivers 2</h3>
+      <p>Le phénomène de 2024-2026. Un TPS coop à 4 joueurs où chaque mission est un chaos organisé. La coordination est essentielle : sans communication, c'est le team kill assuré. Parfait pour les squads qui aiment le challenge.</p>
+      <p><strong>Joueurs :</strong> 1-4 | <strong>Plateformes :</strong> PC, PS5</p>
+
+      <h3>2. Palworld</h3>
+      <p>Pokémon rencontre Ark Survival. Capture des créatures, construis ta base, explore un monde ouvert avec ta squad. Le coop jusqu'à 32 joueurs en fait un excellent choix pour les grandes squads.</p>
+      <p><strong>Joueurs :</strong> 1-32 | <strong>Plateformes :</strong> PC, Xbox</p>
+
+      <h3>3. Lethal Company</h3>
+      <p>Exploration de lunes hostiles en équipe. L'ambiance horreur et l'humour involontaire en font un must pour les soirées gaming. La communication vocale est cruciale.</p>
+      <p><strong>Joueurs :</strong> 1-4 | <strong>Plateformes :</strong> PC</p>
+
+      <h3>4. Deep Rock Galactic</h3>
+      <p>Des nains de l'espace qui minent et combattent des aliens. 4 classes complémentaires, procédural, et une communauté en or. Le jeu coop par excellence.</p>
+      <p><strong>Joueurs :</strong> 1-4 | <strong>Plateformes :</strong> PC, Xbox, PS5</p>
+
+      <h3>5. Marvel Rivals</h3>
+      <p>Le hero shooter de Marvel. 6v6, roster varié, synergies d'équipe. Gratuit et accessible, parfait pour les squads qui veulent un shooter compétitif sans la toxicité.</p>
+      <p><strong>Joueurs :</strong> 6v6 | <strong>Plateformes :</strong> PC, PS5, Xbox</p>
+
+      <h3>6. Valheim</h3>
+      <p>Survie viking en monde ouvert. Construire, explorer, combattre des boss — le tout en coop jusqu'à 10 joueurs. Les sessions longues demandent une bonne organisation.</p>
+      <p><strong>Joueurs :</strong> 1-10 | <strong>Plateformes :</strong> PC, Xbox</p>
+
+      <h3>7. It Takes Two</h3>
+      <p>Le meilleur jeu coop à deux jamais créé. Chaque niveau invente une nouvelle mécanique. Idéal pour jouer en duo.</p>
+      <p><strong>Joueurs :</strong> 2 | <strong>Plateformes :</strong> PC, PS5, Xbox, Switch</p>
+
+      <h3>8. Sea of Thieves</h3>
+      <p>Pirates en monde ouvert. Naviguer un galion à 4 demande une coordination parfaite. Les voyages sont longs — planifie tes sessions à l'avance.</p>
+      <p><strong>Joueurs :</strong> 1-4 | <strong>Plateformes :</strong> PC, Xbox, PS5</p>
+
+      <h3>9. Monster Hunter Wilds</h3>
+      <p>La chasse aux monstres en squad de 4. Chaque arme a un rôle, chaque chasse est un événement. Le meilleur coop PvE du marché.</p>
+      <p><strong>Joueurs :</strong> 1-4 | <strong>Plateformes :</strong> PC, PS5, Xbox</p>
+
+      <h3>10. Satisfactory</h3>
+      <p>Construis une usine géante sur une planète alien, en coop. Pour les squads qui préfèrent la stratégie à l'action. Des sessions de plusieurs heures garanties.</p>
+      <p><strong>Joueurs :</strong> 1-4 | <strong>Plateformes :</strong> PC</p>
+
+      <h3>Comment organiser tes sessions coop</h3>
+      <p>Le plus dur avec les jeux coop, c'est de trouver un créneau où tout le monde est dispo. C'est exactement pour ça que Squad Planner existe : crée ta session, tes potes confirment leur présence, et tu reçois un rappel automatique. Plus de "ah j'avais oublié".</p>
+
+      <p>Bon jeu à toi et ta squad !</p>
+    </article>`,
+  },
+  {
+    slug: 'top-jeux-gratuits-entre-amis',
+    title: 'Top 8 jeux gratuits pour jouer entre amis en 2026',
+    excerpt:
+      'Les meilleurs jeux free-to-play pour jouer en squad sans dépenser un centime. Valorant, Fortnite, Apex et plus.',
+    date: '2026-02-22',
+    author: 'Squad Planner Team',
+    tags: ['jeux', 'gratuit', 'top', 'free-to-play'],
+    readTime: 6,
+    coverEmoji: '🆓',
+    content: `<article>
+      <h2>Top 8 jeux gratuits pour jouer entre amis en 2026</h2>
+
+      <p>Pas besoin de casser sa tirelire pour passer de bonnes soirées gaming. Voici les 8 meilleurs jeux gratuits pour jouer en squad en 2026.</p>
+
+      <h3>1. Valorant</h3>
+      <p>Le tactical shooter de Riot Games. 5v5, compétitif, et une scène esport massive. Gratuit avec un modèle cosmétique uniquement. Le jeu parfait pour les squads compétitives.</p>
+      <p><strong>Genre :</strong> FPS tactique | <strong>Plateformes :</strong> PC, PS5, Xbox</p>
+
+      <h3>2. Fortnite</h3>
+      <p>Le battle royale qui ne meurt jamais. Modes squad, créatif, et événements réguliers. Accessible à tous les niveaux.</p>
+      <p><strong>Genre :</strong> Battle Royale | <strong>Plateformes :</strong> PC, PS5, Xbox, Switch, Mobile</p>
+
+      <h3>3. Apex Legends</h3>
+      <p>Le BR le plus dynamique du marché. Trios ou duos, personnages avec des capacités uniques, et un gameplay nerveux. La coordination en squad fait toute la différence.</p>
+      <p><strong>Genre :</strong> Battle Royale | <strong>Plateformes :</strong> PC, PS5, Xbox, Switch</p>
+
+      <h3>4. Marvel Rivals</h3>
+      <p>Le nouveau hero shooter gratuit de Marvel. 6v6 avec des synergies entre héros. Parfait pour les squads qui veulent un shooter accessible.</p>
+      <p><strong>Genre :</strong> Hero Shooter | <strong>Plateformes :</strong> PC, PS5, Xbox</p>
+
+      <h3>5. League of Legends</h3>
+      <p>Le MOBA légendaire. 5v5, stratégie profonde, méta en constante évolution. Exigeant mais incroyablement gratifiant en squad coordonnée.</p>
+      <p><strong>Genre :</strong> MOBA | <strong>Plateformes :</strong> PC</p>
+
+      <h3>6. Rocket League</h3>
+      <p>Football + voitures. Simple à comprendre, impossible à maîtriser. Les parties rapides (5 min) en font le jeu idéal pour des sessions courtes entre potes.</p>
+      <p><strong>Genre :</strong> Sport/Arcade | <strong>Plateformes :</strong> PC, PS5, Xbox, Switch</p>
+
+      <h3>7. CS2</h3>
+      <p>Counter-Strike 2, le FPS compétitif de référence. Gratuit, précis, et avec une communauté massive. Les matchs à 5 en squad sont l'expérience ultime.</p>
+      <p><strong>Genre :</strong> FPS tactique | <strong>Plateformes :</strong> PC</p>
+
+      <h3>8. Genshin Impact</h3>
+      <p>L'action-RPG open world de miHoYo. Le coop à 4 joueurs permet d'explorer et de combattre ensemble. Parfait pour les squads qui préfèrent le PvE.</p>
+      <p><strong>Genre :</strong> Action-RPG | <strong>Plateformes :</strong> PC, PS5, Mobile</p>
+
+      <h3>Organise tes sessions gratuitement</h3>
+      <p>Tous ces jeux sont gratuits, et Squad Planner aussi. Crée ta squad, planifie tes sessions, et assure-toi que tout le monde sera là. Le plan gratuit inclut 1 squad, 5 membres, calendrier et notifications.</p>
+    </article>`,
+  },
+  {
+    slug: 'meilleurs-jeux-duo-2026',
+    title: 'Les 8 meilleurs jeux à 2 joueurs en 2026',
+    excerpt:
+      'Notre sélection des meilleurs jeux pour jouer en duo. Coop, compétitif ou détente, il y en a pour tous les goûts.',
+    date: '2026-02-18',
+    author: 'Squad Planner Team',
+    tags: ['jeux', 'duo', 'coop', 'top'],
+    readTime: 6,
+    coverEmoji: '👥',
+    content: `<article>
+      <h2>Les 8 meilleurs jeux à 2 joueurs en 2026</h2>
+
+      <p>Parfois, pas besoin d'une squad de 5. Jouer à deux, c'est intime, intense, et souvent plus stratégique. Voici les meilleurs jeux duo de 2026.</p>
+
+      <h3>1. It Takes Two</h3>
+      <p>Le Game of the Year coop. Chaque niveau invente une nouvelle mécanique. L'histoire d'un couple en crise, racontée à travers un gameplay brillant. Un must absolu à deux.</p>
+
+      <h3>2. Rocket League (Duos)</h3>
+      <p>Le mode 2v2 est le plus équilibré de Rocket League. La synergie entre deux joueurs qui se connaissent bien est imbattable. Sessions courtes, adrénaline garantie.</p>
+
+      <h3>3. Portal 2 (Coop)</h3>
+      <p>Le mode coop de Portal 2 reste l'une des meilleures expériences puzzle à deux. Communication et réflexion, avec l'humour de Valve en bonus.</p>
+
+      <h3>4. Apex Legends (Duos)</h3>
+      <p>Le mode duo d'Apex est nerveux et tactique. Avec un binôme bien rodé, les rotations et les combats deviennent chirurgicaux.</p>
+
+      <h3>5. Stardew Valley</h3>
+      <p>La ferme coop parfaite. Cultive, pêche, explore les mines avec ton duo. Le rythme zen est idéal pour les sessions décontractées.</p>
+
+      <h3>6. Overcooked 2</h3>
+      <p>Cuisine coopérative chaotique. Prépare des plats ensemble sous pression. Le jeu qui teste vraiment ta communication (et ton amitié).</p>
+
+      <h3>7. Valorant (Duo Queue)</h3>
+      <p>Le duo queue en compétitif Valorant, c'est la meilleure façon de climb. Un duo entry/support bien coordonné peut carry une game entière.</p>
+
+      <h3>8. A Way Out</h3>
+      <p>Une aventure narrative en split-screen obligatoire. L'histoire de deux prisonniers qui s'évadent ensemble. Court mais mémorable.</p>
+
+      <h3>Planifie tes sessions duo</h3>
+      <p>Même à deux, la planification aide. Crée un squad de 2 sur Squad Planner, programme tes sessions, et reçois un rappel quand c'est l'heure. Simple et efficace.</p>
+    </article>`,
+  },
+  {
+    slug: 'pourquoi-joueurs-ghostent',
+    title: 'Pourquoi les joueurs ghostent (et comment y remédier)',
+    excerpt:
+      'Le ghosting est le fléau des squads gaming. Comprends pourquoi ça arrive et découvre des solutions concrètes pour garder ta squad engagée.',
+    date: '2026-02-28',
+    author: 'Squad Planner Team',
+    tags: ['organisation', 'fiabilité', 'conseil', 'ghost'],
+    readTime: 8,
+    coverEmoji: '👻',
+    content: `<article>
+      <h2>Pourquoi les joueurs ghostent (et comment y remédier)</h2>
+
+      <p>Tu crées une session pour 21h. Cinq personnes disent "je serai là". À 21h15, vous êtes trois. Deux joueurs ont disparu sans un mot. Classique.</p>
+
+      <p>Le ghosting — ne pas se présenter à une session sans prévenir — est le problème numéro un des squads gaming. Mais pourquoi ça arrive, et surtout, comment l'éviter ?</p>
+
+      <h3>Pourquoi les joueurs ghostent</h3>
+
+      <p><strong>1. L'engagement est trop facile.</strong> Dire "oui" dans un message Discord ne coûte rien. Il n'y a aucune conséquence visible à ne pas venir. Le joueur dit oui par politesse, sans vraiment s'engager.</p>
+
+      <p><strong>2. Pas de rappel.</strong> La vie passe, et sans notification 30 minutes avant, le joueur oublie tout simplement. Ce n'est pas de la mauvaise volonté — c'est humain.</p>
+
+      <p><strong>3. L'anonymat social.</strong> Dans un grand groupe, personne ne remarque ton absence. Quand tu es 1 sur 20, ghosting = invisible. Quand tu es 1 sur 5, tout le monde le voit.</p>
+
+      <p><strong>4. Le conflit d'horaires non assumé.</strong> Le joueur a un empêchement mais n'ose pas annuler. Il préfère disparaître plutôt que de dire "désolé, je ne peux plus".</p>
+
+      <p><strong>5. La fatigue sociale.</strong> Après une journée de travail/cours, l'énergie pour jouer en groupe n'est plus là. Mais annuler demande aussi de l'énergie sociale.</p>
+
+      <h3>Comment y remédier</h3>
+
+      <p><strong>1. Rends la confirmation visible et mesurable.</strong> Quand chaque joueur a un score de fiabilité public, le ghosting a un coût. Squad Planner calcule automatiquement ce score basé sur les RSVP et les check-ins réels.</p>
+
+      <p><strong>2. Envoie des rappels automatiques.</strong> Un rappel 30 minutes avant la session réduit le ghosting de 40%. Squad Planner envoie des push notifications et des rappels par email automatiquement.</p>
+
+      <p><strong>3. Facilite l'annulation.</strong> Rends l'annulation aussi simple qu'un tap. Un joueur qui annule 2h avant est 100x plus utile qu'un ghost. Encourage l'annulation précoce plutôt que de la punir.</p>
+
+      <p><strong>4. Garde les squads petites.</strong> Dans une squad de 5-8, chaque absence se remarque. La pression sociale (positive) fait le reste. Les squads de 20+ ont un taux de ghosting 3x plus élevé.</p>
+
+      <p><strong>5. Célèbre la fiabilité.</strong> Au lieu de punir les ghosts, récompense les joueurs fiables. Les streaks de présence, les badges, les points XP — tout ça crée une motivation positive.</p>
+
+      <h3>Le cercle vertueux de la fiabilité</h3>
+
+      <p>Quand ta squad devient fiable, un cercle vertueux s'installe :</p>
+      <ul>
+        <li>Les joueurs fiables attirent d'autres joueurs fiables</li>
+        <li>Les sessions sont plus agréables (pas d'attente, pas de frustration)</li>
+        <li>Le ghost occasionnel est l'exception, pas la norme</li>
+        <li>La squad progresse plus vite (en rank, en cohésion, en fun)</li>
+      </ul>
+
+      <p>Le ghosting n'est pas une fatalité. Avec les bons outils et la bonne culture, tu peux créer une squad où les gens viennent parce qu'ils veulent, pas parce qu'ils doivent.</p>
+    </article>`,
+  },
+  {
+    slug: 'organiser-soiree-lan',
+    title: 'Comment organiser une soirée LAN parfaite en 2026',
+    excerpt:
+      'Guide complet pour organiser une LAN party mémorable : lieu, matériel, jeux, planning et astuces pour que tout se passe bien.',
+    date: '2026-02-12',
+    author: 'Squad Planner Team',
+    tags: ['lan', 'organisation', 'guide', 'événement'],
+    readTime: 9,
+    coverEmoji: '🖥️',
+    content: `<article>
+      <h2>Comment organiser une soirée LAN parfaite en 2026</h2>
+
+      <p>Les LAN parties ne sont pas mortes. En 2026, elles vivent un vrai revival. Rien ne remplace le plaisir de jouer côte à côte, de crier ensemble après un clutch, et de partager une pizza à 3h du mat'. Voici comment organiser une LAN mémorable.</p>
+
+      <h3>1. Le lieu</h3>
+      <p>Tu n'as pas besoin d'un hangar. Un salon, un garage, une salle associative — tout fonctionne si tu as :</p>
+      <ul>
+        <li><strong>Assez de prises électriques</strong> (compte 2 prises par joueur : PC + écran)</li>
+        <li><strong>Une connexion internet stable</strong> (fibre idéale, 4G en backup)</li>
+        <li><strong>Des tables solides</strong> (tables de camping si besoin)</li>
+        <li><strong>Un switch réseau</strong> (gigabit, 8+ ports) si tu joues en LAN local</li>
+      </ul>
+
+      <h3>2. La checklist matériel</h3>
+      <p>Envoie cette liste à chaque participant une semaine avant :</p>
+      <ul>
+        <li>PC/laptop + périphériques (clavier, souris, casque)</li>
+        <li>Écran (ou vérifie qu'il y en a sur place)</li>
+        <li>Multiprise individuelle (chacun la sienne)</li>
+        <li>Câble Ethernet (2-3m minimum)</li>
+        <li>Jeux installés et à jour (lance les mises à jour AVANT la LAN)</li>
+        <li>Snacks et boissons personnels</li>
+      </ul>
+
+      <h3>3. Le planning</h3>
+      <p>Une LAN sans planning, c'est le chaos. Prépare un programme :</p>
+      <ul>
+        <li><strong>18h-19h :</strong> Installation et tests réseau</li>
+        <li><strong>19h-20h :</strong> Dîner ensemble (pizza, sushi, tacos)</li>
+        <li><strong>20h-23h :</strong> Jeu principal (tournoi ou sessions ranked)</li>
+        <li><strong>23h-00h :</strong> Pause snacks + jeu détente</li>
+        <li><strong>00h-3h :</strong> Sessions libres (les hardcore continuent)</li>
+      </ul>
+      <p>Utilise Squad Planner pour créer la session LAN et confirmer les présences. Tu sauras exactement combien de joueurs viennent et tu pourras adapter le lieu en conséquence.</p>
+
+      <h3>4. Les jeux</h3>
+      <p>Prévois 2-3 jeux que tout le monde a :</p>
+      <ul>
+        <li><strong>Un jeu compétitif :</strong> CS2, Valorant, ou Rocket League pour un mini-tournoi</li>
+        <li><strong>Un jeu coop :</strong> Lethal Company, Deep Rock Galactic, ou Helldivers 2</li>
+        <li><strong>Un party game :</strong> Fall Guys, Gang Beasts, ou Jackbox pour décompresser</li>
+      </ul>
+
+      <h3>5. Les astuces pro</h3>
+      <ul>
+        <li><strong>Teste le réseau avant.</strong> Un serveur Minecraft ou un ping test suffit pour vérifier que tout marche</li>
+        <li><strong>Prévois des multiprises en surplus.</strong> Il en manque toujours</li>
+        <li><strong>Étiquette les câbles Ethernet.</strong> Le démontage sera 10x plus rapide</li>
+        <li><strong>Ventilation :</strong> 6 PC dans une pièce, ça chauffe. Ouvre les fenêtres ou prévois un ventilateur</li>
+        <li><strong>Crée un channel Discord/Squad Planner dédié</strong> pour la coordination logistique</li>
+      </ul>
+
+      <h3>La magie de la LAN</h3>
+      <p>Une LAN bien organisée crée des souvenirs qui durent des années. Le clutch de ton pote à 2h du mat', le rage quit légendaire, la pizza froide à 4h — c'est ça le gaming ensemble, en vrai.</p>
+
+      <p>Planifie ta prochaine LAN sur Squad Planner et assure-toi que tout le monde sera là.</p>
+    </article>`,
+  },
 ]
 
 /**

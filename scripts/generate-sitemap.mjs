@@ -44,6 +44,9 @@ const gameSlugs = [
   'overwatch-2',
   'destiny-2',
   'gta-online',
+  'palworld',
+  'helldivers-2',
+  'marvel-rivals',
 ]
 
 // Static pages
@@ -67,6 +70,25 @@ const altPages = [
   buildUrl('/alternative/gamerlink', '0.7', 'monthly'),
   buildUrl('/alternative/discord-events', '0.7', 'monthly'),
   buildUrl('/vs/guilded-vs-squad-planner', '0.8', 'monthly'),
+  buildUrl('/vs/discord-vs-squad-planner', '0.8', 'monthly'),
+  buildUrl('/vs/google-calendar-vs-squad-planner', '0.8', 'monthly'),
+]
+
+// Feature pages
+const featurePages = [
+  buildUrl('/features/score-fiabilite', '0.8', 'monthly'),
+  buildUrl('/features/gamification', '0.8', 'monthly'),
+  buildUrl('/features/coach-ia', '0.8', 'monthly'),
+  buildUrl('/features/analytics', '0.8', 'monthly'),
+  buildUrl('/how-it-works', '0.9', 'monthly'),
+]
+
+// Solutions & content pages
+const contentPages = [
+  buildUrl('/glossaire', '0.7', 'monthly'),
+  buildUrl('/solutions/clubs-esport', '0.8', 'monthly'),
+  buildUrl('/solutions/streamers', '0.8', 'monthly'),
+  buildUrl('/avis', '0.8', 'weekly'),
 ]
 
 // Blog pages (dynamically extracted from blog-posts.ts)
@@ -81,7 +103,7 @@ const programPages = [buildUrl('/ambassador', '0.7', 'monthly')]
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...staticPages, ...gamePages, ...altPages, ...blogPages, ...programPages].join('\n')}
+${[...staticPages, ...gamePages, ...altPages, ...featurePages, ...contentPages, ...blogPages, ...programPages].join('\n')}
 </urlset>`
 
 const outPath = resolve(__dirname, '..', 'public', 'sitemap.xml')

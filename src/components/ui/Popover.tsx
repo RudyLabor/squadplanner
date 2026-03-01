@@ -300,12 +300,12 @@ export function Popover({
                   zIndex: 50,
                 }}
                 role="dialog"
-                className={`bg-surface-card border border-border-default rounded-xl shadow-dropdown ${className}`}
+                className={`bg-bg-elevated border border-border-default rounded-xl shadow-dropdown ${className}`}
               >
                 {children}
                 {showArrow && triggerRect && (
                   <div
-                    className="bg-surface-card border-border-default"
+                    className="bg-bg-elevated border-border-default"
                     style={getArrowStyle(coords.actualSide, triggerRect, coords.x, coords.y)}
                     aria-hidden="true"
                   />

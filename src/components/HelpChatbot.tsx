@@ -78,10 +78,10 @@ export function HelpChatbot({ faqItems }: HelpChatbotProps) {
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 10 }}
-              className="absolute right-16 top-1/2 -translate-y-1/2 whitespace-nowrap bg-surface-card border border-border-subtle rounded-xl px-3 py-2 shadow-lg text-sm text-text-primary"
+              className="absolute right-16 top-1/2 -translate-y-1/2 whitespace-nowrap bg-bg-elevated border border-border-subtle rounded-xl px-3 py-2 shadow-lg text-sm text-text-primary"
             >
               Besoin d'aide ?
-              <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 bg-surface-card border-r border-b border-border-subtle rotate-[-45deg]" />
+              <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 bg-bg-elevated border-r border-b border-border-subtle rotate-[-45deg]" />
             </m.div>
           )}
         </AnimatePresence>

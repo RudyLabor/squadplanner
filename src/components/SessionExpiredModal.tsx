@@ -62,7 +62,7 @@ export function SessionExpiredModal({ isOpen, onReconnect, onDismiss }: SessionE
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="w-full max-w-sm bg-surface-card border border-border-subtle rounded-2xl shadow-xl overflow-hidden"
+            className="w-full max-w-sm bg-bg-elevated border border-border-subtle rounded-2xl shadow-xl overflow-hidden"
           >
             <div className="p-6 text-center">
               {/* Icon */}

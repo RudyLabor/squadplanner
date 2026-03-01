@@ -165,7 +165,7 @@ export function Slider({
         >
           {/* Tooltip */}
           {(showTooltip || isDragging) && (
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-text-primary bg-surface-card border border-border-default rounded-lg shadow-dropdown whitespace-nowrap pointer-events-none">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-text-primary bg-bg-elevated border border-border-default rounded-lg shadow-dropdown whitespace-nowrap pointer-events-none">
               {displayValue}
             </div>
           )}

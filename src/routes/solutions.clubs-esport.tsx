@@ -15,7 +15,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Gérez vos squads esport avec Squad Planner : dashboard multi-squads, analytics cross-squad, branding personnalisé, export CSV. La solution pour les clubs esport.',
+        'Gère tes squads esport avec Squad Planner : dashboard multi-squads, analytics cross-squad, branding personnalisé, export CSV. La solution pour les clubs esport.',
     },
     { name: 'robots', content: 'index, follow' },
     { tagName: 'link', rel: 'canonical', href: `${baseUrl}/solutions/clubs-esport` },
@@ -24,7 +24,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        'La solution tout-en-un pour gérer vos équipes esport. Analytics, planning, engagement.',
+        'La solution tout-en-un pour gérer tes équipes esport. Analytics, planning, engagement.',
     },
     { property: 'og:url', content: `${baseUrl}/solutions/clubs-esport` },
     { property: 'og:locale', content: 'fr_FR' },
@@ -34,7 +34,7 @@ export function meta() {
     { property: 'og:image:height', content: '630' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: 'Squad Planner pour les Clubs Esport' },
-    { name: 'twitter:description', content: 'La solution tout-en-un pour gérer vos équipes esport. Analytics, planning, engagement.' },
+    { name: 'twitter:description', content: 'La solution tout-en-un pour gérer tes équipes esport. Analytics, planning, engagement.' },
     { name: 'twitter:image', content: `${baseUrl}/og-image.png` },
     { httpEquiv: 'content-language', content: 'fr' },
     {

@@ -154,7 +154,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   logo: 'https://squadplanner.fr/favicon.svg',
                   sameAs: [
                     'https://x.com/squadplannerfr',
-                    'https://discord.gg/squadplanner',
+                    'https://discord.gg/FN6AXPgbyr',
                   ],
                   contactPoint: {
                     '@type': 'ContactPoint',

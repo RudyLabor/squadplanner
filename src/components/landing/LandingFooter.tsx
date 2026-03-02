@@ -321,7 +321,7 @@ export function LandingFooter() {
               </li>
               <li>
                 <a
-                  href="https://discord.gg/squadplanner"
+                  href="https://discord.gg/FN6AXPgbyr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${linkClass} inline-flex items-center gap-1.5`}
